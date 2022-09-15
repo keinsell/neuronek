@@ -4,6 +4,7 @@ import { Journal } from "../../journal/entities/journal.entity";
 import { PhaseType } from "../../substance/entities/phase.entity";
 import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
 import { Substance } from "../../substance/entities/substance.entity";
+import { User } from "../../user/entities/user.entity";
 
 export interface IngestionProperties {
   substance: Substance;
@@ -14,7 +15,7 @@ export interface IngestionProperties {
   purpose?: string;
   set?: string;
   setting?: string;
-  linkedJournalId?: string;
+  user: User;
 }
 
 export class Ingestion extends Entity implements IngestionProperties {
@@ -26,7 +27,7 @@ export class Ingestion extends Entity implements IngestionProperties {
   purpose?: string | undefined;
   setting?: string | undefined;
   set?: string | undefined;
-  linkedJournalId?: string;
+  user: User;
 
   constructor(properties: IngestionProperties, id?: string | number) {
     super(id);
@@ -38,7 +39,7 @@ export class Ingestion extends Entity implements IngestionProperties {
     this.purpose = properties.purpose;
     this.setting = properties.setting;
     this.set = properties.set;
-    this.linkedJournalId = properties.linkedJournalId;
+    this.user = properties.user;
   }
 
   getTimeSinceIngestion(): number {

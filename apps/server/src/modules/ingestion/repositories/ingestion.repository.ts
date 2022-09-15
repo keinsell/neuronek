@@ -1,6 +1,7 @@
 import { IMapper } from "../../../common/mapper/mapper.common";
 import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
+import { User } from "../../user/entities/user.entity";
 import { Ingestion } from "../entities/ingestion.entity";
 import { ingestionMapper } from "../mappers/ingestion.mapper";
 
@@ -18,7 +19,8 @@ export class IngestionRepository implements Repository<Ingestion> {
       const created = await this.db.ingestion.create({
         data: presistence,
         include: {
-          substance: {
+          Ingester: true,
+          Substance: {
             include: {
               routesOfAdministraton: true,
             },
@@ -34,7 +36,8 @@ export class IngestionRepository implements Repository<Ingestion> {
           id: String(entity.id),
         },
         include: {
-          substance: {
+          Ingester: true,
+          Substance: {
             include: {
               routesOfAdministraton: true,
             },
@@ -69,11 +72,12 @@ export class IngestionRepository implements Repository<Ingestion> {
         id: String(id),
       },
       include: {
-        substance: {
+        Substance: {
           include: {
             routesOfAdministraton: true,
           },
         },
+        Ingester: true,
       },
     });
 
@@ -82,6 +86,28 @@ export class IngestionRepository implements Repository<Ingestion> {
     } else {
       return this.mapper.toDomain(findIngestionById);
     }
+  }
+
+  async findIngestionsByIngester(ingester: User) {
+    const entires = await this.db.ingestion.findMany({
+      where: {
+        ingesterId: String(ingester.id),
+      },
+      include: {
+        Substance: {
+          include: {
+            routesOfAdministraton: true,
+          },
+        },
+        Ingester: true,
+      },
+    });
+
+    const domainEntries = entires.map((entry) => {
+      return this.mapper.toDomain(entry);
+    });
+
+    return domainEntries;
   }
 }
 
