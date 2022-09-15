@@ -1,0 +1,2 @@
+ln -s ../../.env packages/database/.env
+rm ./packages/database/.env

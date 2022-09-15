@@ -1,0 +1,18 @@
+{
+  "name": "@neuroneek/eslint-config-node",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "index.js",
+  "dependencies": {
+    "@typescript-eslint/parser": "^5.27.1",
+    "eslint": "^8.16.0",
+    "eslint-plugin-diff": "^2.0.0",
+    "eslint-plugin-jsdoc": "^39.3.2",
+    "eslint-plugin-json-format": "^2.0.1",
+    "eslint-plugin-neverthrow": "^1.1.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-sonarjs": "^0.15.0",
+    "eslint-plugin-unicorn": "^43.0.0",
+    "typescript": "4.8.0-dev.20220809"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "inputs": ["src/**/*.test.ts"],
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "public/dist/**"],
+      "cache": true
+    },
+    "dev": {
+      "cache": false,
+      "inputs": ["src/**/*.ts", "lib/**/*.ts"]
+    },
+    "db:migrate:deploy": {
+      "outputs": []
+    },
+    "db:push": {
+      "outputs": []
+    },
+    "db:seed": {
+      "outputs": []
+    },
+    "db:studio": {
+      "outputs": []
+    },
+    "db:generate": {
+      "dependsOn": ["^db:generate"]
+    }
+  }
+}

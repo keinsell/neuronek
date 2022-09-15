@@ -1,0 +1,15 @@
+{
+  "name": "@neuroneek/tsconfig",
+  "version": "1.0.0",
+  "description": "",
+  "main": "core.json",
+  "files": [
+    "node.json"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "4.8.0-dev.20220809"
+  }
+}

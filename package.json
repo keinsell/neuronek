@@ -1,0 +1,56 @@
+{
+  "name": "neuroneek",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "db:generate": "turbo run db:generate",
+    "db:migrate:deploy": "turbo run db:migrate:deploy",
+    "db:push": "turbo run db:push",
+    "db:seed": "turbo run db:seed",
+    "db:studio": "turbo run db:studio",
+    "dev": "turbo run dev --parallel",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "pre-commit": "lint-staged",
+    "prepare": "is-ci || husky install",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "@changesets/changelog-git": "0.1.12",
+    "@changesets/changelog-github": "0.4.6",
+    "@changesets/cli": "2.24.3",
+    "@commitlint/cli": "17.0.3",
+    "@commitlint/config-conventional": "17.0.3",
+    "@neuroneek/prettier-config": "*",
+    "@typescript-eslint/eslint-plugin": "5.36.2",
+    "@typescript-eslint/parser": "5.36.2",
+    "ava": "4.3.1",
+    "eslint": "8.22.0",
+    "esm": "3.2.25",
+    "husky": "8.0.1",
+    "is-ci": "3.0.1",
+    "jshint": "2.13.5",
+    "lint-staged": "13.0.3",
+    "rome": "next",
+    "tsx": "3.8.2",
+    "turbo": "latest",
+    "typescript": "4.8.0-dev.20220809"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "volta": {
+    "node": "18.7.0",
+    "yarn": "1.18.0"
+  },
+  "prisma": {
+    "schema": "apps/server/prisma/schema.prisma",
+    "seed": "tsx packages/database-prisma/src/seed.ts"
+  }
+}

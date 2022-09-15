@@ -1,0 +1,10 @@
+{
+  "quiet": true,
+  "watch": ["src"],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "events": {
+    "start": "clear"
+  },
+  "exec": "tsx src/index.ts"
+}
