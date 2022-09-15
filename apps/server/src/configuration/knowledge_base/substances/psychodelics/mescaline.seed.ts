@@ -27,9 +27,9 @@ export const Mescaline: Substance = new Substance(
         bioavailability: 0.8,
         dosage: {
           thereshold: 50,
-          light: 200,
-          moderate: 400,
-          strong: 800,
+          light: 100,
+          moderate: 200,
+          strong: 400,
           heavy: 800,
           overdose: 1000,
         },

@@ -12,21 +12,16 @@ generator client {
 }
 
 model User {
-    id            Int       @id @default(sequence())
-    firstName     String?
-    lastName      String?
-    username      String?   @unique
-    /// Stands for user's email.
-    email         String?   @unique
-    dateOfBirth   DateTime?
-    weight        Int?
-    height        Int?
-    password      String
-    publicRsaKey  String?
-    /// In future we should not store private keys (even encrypted ones) in our database because of sensivity of information of our users. Even through we don't require personal information in our application.
-    privateRsaKey String?
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @default(now())
+    id          String      @id @default(cuid())
+    firstName   String?
+    lastName    String?
+    username    String      @unique
+    email       String?     @unique
+    dateOfBirth DateTime?
+    weight      Int?
+    height      Int?
+    password    String
+    Ingestion   Ingestion[]
 }
 
 model Ingestion {
@@ -46,15 +41,22 @@ model Ingestion {
     set     String?
     setting String?
 
-    substance Substance @relation(fields: [substanceName], references: [name])
-    Journal   Journal?  @relation(fields: [journalId], references: [id])
-    journalId String?
+    ingesterId String
+
+    Substance Substance @relation(fields: [substanceName], references: [name])
+    Ingester  User      @relation(fields: [ingesterId], references: [id])
+    // Journal   Journal?  @relation(fields: [journalId], references: [id])
+    // journalId String?
 }
 
-model Journal {
-    id        String      @id @default(cuid())
-    ingestion Ingestion[]
-}
+// model Journal {
+//     id      String @id @default(cuid())
+//     ownerId String
+//     name    String
+
+//     Ingestions Ingestion[]
+//     Owner      User        @relation(fields: [ownerId], references: [id])
+// }
 
 model RouteOfAdministration {
     id              String  @id @default(cuid())

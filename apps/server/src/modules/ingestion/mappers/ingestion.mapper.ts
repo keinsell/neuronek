@@ -3,16 +3,19 @@ import {
   Ingestion as PersistenceIngestion,
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
+  User as PersistenceUser,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
 import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
 import { substanceMapper } from "../../substance/mappers/substance.mapper";
+import { userMapper } from "../../user/mappers/user.mapper";
 import { Ingestion } from "../entities/ingestion.entity";
 
 export class IngestionMapper implements IMapper {
   toDomain(
     entity: PersistenceIngestion & {
-      substance: PersistenceSubstance & {
+      Ingester: PersistenceUser;
+      Substance: PersistenceSubstance & {
         routesOfAdministraton: PersistenceRouteOfAdministration[];
       };
     }
@@ -26,8 +29,8 @@ export class IngestionMapper implements IMapper {
         setting: entity.setting ?? undefined,
         purpose: entity.purpose ?? undefined,
         purity: entity.purity ?? undefined,
-        substance: substanceMapper.toDomain(entity.substance),
-        linkedJournalId: entity.journalId ?? undefined,
+        substance: substanceMapper.toDomain(entity.Substance),
+        user: userMapper.toDomain(entity.Ingester),
       },
       entity.id
     );
@@ -42,14 +45,14 @@ export class IngestionMapper implements IMapper {
       setting: entity.setting,
       purpose: entity.purpose,
       purity: entity.purity,
-      substance: {
+      Substance: {
         connect: {
           name: entity.substance.name,
         },
       },
-      Journal: {
+      Ingester: {
         connect: {
-          id: String(entity.linkedJournalId),
+          id: String(entity.user.id),
         },
       },
     };

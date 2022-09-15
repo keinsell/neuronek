@@ -13,6 +13,11 @@ import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/n
 import { journalMapper } from "./modules/journal/mappers/journal.mapper";
 import { journalRepository } from "./modules/journal/repositories/journal.repository";
 import { IDRA21 } from "./configuration/knowledge_base/substances/nootropics/IDRA-21.seed";
+import { userRepository } from "./modules/user/repositories/user.repository";
+import { Keinsell } from "./configuration/seed/Keinsell.seed";
+import { PrismaInstance } from "./infrastructure/prisma.infra";
+
+export const keinsell = await userRepository.save(Keinsell);
 
 export async function syncPersonalJournal() {
   const amphetamine = await substanceRepository.save(Amphetamine);
@@ -21,27 +26,34 @@ export async function syncPersonalJournal() {
   const nicotine = await substanceRepository.save(Nicotine);
   const idra21 = await substanceRepository.save(IDRA21);
 
+  await PrismaInstance.ingestion.deleteMany();
+
   const ingestions: Ingestion[] = [];
 
+  console.log(keinsell);
+
   async function ingestPuff(count: number = 1, date: Date) {
-    const ingestion = await ingestionService.ingestSubstance({
-      substance: "Nicotine",
-      route: RouteOfAdministrationType.smoked,
-      dosage: count * 0.15,
-      date,
-    });
+    const ingestion = await ingestionService.ingestSubstance(
+      {
+        substance: "Nicotine",
+        route: RouteOfAdministrationType.smoked,
+        dosage: count * 0.15,
+        date,
+      },
+      keinsell
+    );
     ingestions.push(ingestion);
   }
 
-  // console.log(
-  //   await ingestionService.planIngestion({
-  //     substance: "Amphetamine",
-  //     dosage: 20,
-  //     route: RouteOfAdministrationType.insufflated,
-  //     date: chrono.parseDate("14 September 2022 12:45"),
-  //   })
-  // );
-
+  await ingestPuff(8, chrono.parseDate("15 September 2022 6:15"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:53"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:52"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:51"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:50"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:49"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:48"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:47"));
+  await ingestPuff(8, chrono.parseDate("15 September 2022 1:46"));
   await ingestPuff(4, chrono.parseDate("15 September 2022 1:45"));
   await ingestPuff(10, chrono.parseDate("15 September 2022 00:15"));
   await ingestPuff(1, chrono.parseDate("14 September 2022 23:20"));
@@ -59,79 +71,102 @@ export async function syncPersonalJournal() {
   await ingestPuff(1, chrono.parseDate("14 September 2022 14:23"));
 
   ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Caffeine",
-      dosage: 60,
-      route: RouteOfAdministrationType.oral,
-      date: chrono.parseDate("14 September 2022 14:43"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Caffeine",
-      dosage: 20,
-      route: RouteOfAdministrationType.oral,
-      date: chrono.parseDate("14 September 2022 13:58"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Caffeine",
-      dosage: 20,
-      route: RouteOfAdministrationType.oral,
-      date: chrono.parseDate("14 September 2022 12:45"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Caffeine",
-      dosage: 60,
-      route: RouteOfAdministrationType.oral,
-      date: new Date("2022-09-14T05:14:39.175Z"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Caffeine",
-      dosage: 80,
-      route: RouteOfAdministrationType.oral,
-      date: new Date("2022-09-13T12:14:39.175Z"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Fet",
-      dosage: 10,
-      route: RouteOfAdministrationType.insufflated,
-      date: new Date("2022-09-13T11:10:39.175Z"),
-    })
-  );
-  ingestions.push(
-    await ingestionService.ingestSubstance({
-      substance: "Fet",
-      dosage: 10,
-      route: RouteOfAdministrationType.insufflated,
-      date: new Date("2022-09-12T07:10:39.175Z"),
-    })
-  );
-  ingestions.push(
-    new Ingestion(
+    await ingestionService.ingestSubstance(
       {
-        substance: caffeine,
+        substance: "Caffeine",
+        dosage: 60,
+        route: RouteOfAdministrationType.oral,
+        date: chrono.parseDate("14 September 2022 14:43"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        dosage: 20,
+        route: RouteOfAdministrationType.oral,
+        date: chrono.parseDate("14 September 2022 13:58"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        dosage: 20,
+        route: RouteOfAdministrationType.oral,
+        date: chrono.parseDate("14 September 2022 12:45"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        dosage: 60,
+        route: RouteOfAdministrationType.oral,
+        date: new Date("2022-09-14T05:14:39.175Z"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
         dosage: 80,
+        route: RouteOfAdministrationType.oral,
+        date: new Date("2022-09-13T12:14:39.175Z"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Fet",
+        dosage: 10,
+        route: RouteOfAdministrationType.insufflated,
+        date: new Date("2022-09-13T11:10:39.175Z"),
+      },
+      keinsell
+    )
+  );
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Fet",
+        dosage: 10,
+        route: RouteOfAdministrationType.insufflated,
+        date: new Date("2022-09-12T07:10:39.175Z"),
+      },
+      keinsell
+    )
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        dosage: 10,
         route: RouteOfAdministrationType.oral,
         purpose: "Addiction.",
         setting: "Home",
         date: new Date("2022-09-11T15:16:23.592Z"),
       },
-      "cl7xdwugl00706cd5ufxjjb1o"
+      keinsell
     )
   );
+
   ingestions.push(
-    new Ingestion(
+    await ingestionService.ingestSubstance(
       {
-        substance: mescaline,
-        dosage: 40,
+        substance: "Mescaline",
+        dosage: 10,
         route: RouteOfAdministrationType.oral,
         purpose:
           "Trying to archieve a mild euthymia in order to reduce depression.",
@@ -139,21 +174,22 @@ export async function syncPersonalJournal() {
         set: "Extermally bad mood.",
         date: new Date("2022-09-11T11:16:23.592Z"),
       },
-      "cl7xd1p080046hpd57k1e71wm"
+      keinsell
     )
   );
+
   ingestions.push(
-    new Ingestion(
+    await ingestionService.ingestSubstance(
       {
-        substance: amphetamine,
+        substance: "Amphetamine",
         dosage: 5,
         route: RouteOfAdministrationType.insufflated,
-        set: "Extermally tired",
         purpose: "As usual, ignoring body tiredness.",
         setting: "Home",
+        set: "Extermally bad mood & tired.",
         date: new Date("2022-09-10T14:09:02.944Z"),
       },
-      "cl7xd1p080045hpd5qrrqo6i5"
+      keinsell
     )
   );
 
@@ -163,8 +199,12 @@ export async function syncPersonalJournal() {
     ingestions[ingestions.indexOf(ingestion)] = savedIngestion;
   }
 
+  // const dbIngestions = await ingestionRepository.findIngestionsByIngester(
+  //   keinsell
+  // );
+
   const journal = new Journal({
-    ingestions,
+    ingestions: ingestions,
   });
 
   journal.getProgressionOfActiveIngestions();
@@ -174,7 +214,7 @@ export async function syncPersonalJournal() {
   ingestedSubstances.map((substance) => {
     journal
       .filterIngestions({ substance: substance.name })
-      .getAverageDosagePerDay();
+      .getAverageTimeBetween();
   });
 
   journal.exportJournalToLocalTextFile();

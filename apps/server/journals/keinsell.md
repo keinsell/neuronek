@@ -1,3 +1,12 @@
+* Thu Sep 15 2022 06:15:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:53:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:52:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:51:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:50:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:49:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:48:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:47:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
+* Thu Sep 15 2022 01:46:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.2mg
 * Thu Sep 15 2022 01:45:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 0.6mg
 * Thu Sep 15 2022 00:15:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 1.5mg
 * Wed Sep 14 2022 23:20:00 GMT+0200 (Central European Summer Time) - Nicotine - smoked - 0.15mg
@@ -20,6 +29,6 @@
 * Tue Sep 13 2022 14:14:39 GMT+0200 (Central European Summer Time) - Caffeine - oral - 80mg
 * Tue Sep 13 2022 13:10:39 GMT+0200 (Central European Summer Time) - Amphetamine - insufflated - 10mg
 * Mon Sep 12 2022 09:10:39 GMT+0200 (Central European Summer Time) - Amphetamine - insufflated - 10mg
-* Sun Sep 11 2022 17:16:23 GMT+0200 (Central European Summer Time) - Caffeine - oral - 80mg
-* Sun Sep 11 2022 13:16:23 GMT+0200 (Central European Summer Time) - Mescaline - oral - 40mg
+* Sun Sep 11 2022 17:16:23 GMT+0200 (Central European Summer Time) - Caffeine - oral - 10mg
+* Sun Sep 11 2022 13:16:23 GMT+0200 (Central European Summer Time) - Mescaline - oral - 10mg
 * Sat Sep 10 2022 16:09:02 GMT+0200 (Central European Summer Time) - Amphetamine - insufflated - 5mg

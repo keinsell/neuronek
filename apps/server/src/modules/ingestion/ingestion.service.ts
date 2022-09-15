@@ -1,7 +1,9 @@
+import { keinsell } from "../../personal-journal";
 import { Journal } from "../journal/entities/journal.entity";
 import { RouteOfAdministrationType } from "../substance/entities/route-of-administration.entity";
 import { substanceRepository } from "../substance/repositories/substance.repository";
 import { SubstanceService } from "../substance/substance.service";
+import { User } from "../user/entities/user.entity";
 import { Ingestion } from "./entities/ingestion.entity";
 import { ingestionRepository } from "./repositories/ingestion.repository";
 
@@ -20,7 +22,7 @@ export class IngestionService {
   ingestionRepository = ingestionRepository;
   substanceService = new SubstanceService();
 
-  async ingestSubstance(ingestion: IngestSubstanceDTO) {
+  async ingestSubstance(ingestion: IngestSubstanceDTO, user: User) {
     const { substance, dosage, purity, date, route, set, setting, purpose } =
       ingestion;
 
@@ -41,6 +43,7 @@ export class IngestionService {
       setting,
       purpose,
       date: date || new Date(),
+      user: user,
     });
 
     const created = await this.ingestionRepository.save(dedicatedIngestion);
@@ -69,6 +72,7 @@ export class IngestionService {
       setting,
       purpose,
       date: date || new Date(),
+      user: keinsell,
     });
 
     return dedicatedIngestion.getIngestionProgression();

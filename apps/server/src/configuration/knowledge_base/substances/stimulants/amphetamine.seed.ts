@@ -27,11 +27,11 @@ export const Amphetamine: Substance = new Substance(
         substanceName: "Amphetamine",
         bioavailability: 0.8,
         dosage: {
-          thereshold: 4,
-          light: 6,
-          moderate: 15,
-          strong: 30,
-          heavy: 50,
+          thereshold: 2.5,
+          light: 5,
+          moderate: 10,
+          strong: 20,
+          heavy: 40,
           overdose: 100,
         },
         duration: {
