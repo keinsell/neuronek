@@ -1,3 +1,4 @@
+import { PrismaInstance } from "../../infrastructure/prisma.infra";
 import { keinsell } from "../../personal-journal";
 import { Journal } from "../journal/entities/journal.entity";
 import { RouteOfAdministrationType } from "../substance/entities/route-of-administration.entity";

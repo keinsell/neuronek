@@ -26,6 +26,7 @@ export async function syncPersonalJournal() {
   const nicotine = await substanceRepository.save(Nicotine);
   await substanceRepository.save(IDRA_21);
 
+  console.log(`Ingestions: ${await PrismaInstance.ingestion.count()}`);
   await PrismaInstance.ingestion.deleteMany();
 
   const ingestions: Ingestion[] = [];
@@ -42,6 +43,19 @@ export async function syncPersonalJournal() {
     );
     ingestions.push(ingestion);
   }
+
+  // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
+  // Puff Counter: 5472
+  ingestions.push(
+    ...(await ingestionService.autofillPastIngestionsByAmountAndDosages(
+      nicotine,
+      5,
+      chrono.parseDate("16 September 2022 19:51"),
+      chrono.parseDate("16 September 2022 22:32"),
+      5472 - 5398,
+      keinsell
+    ))
+  );
 
   // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
   // Puff Counter: 5398
@@ -74,7 +88,7 @@ export async function syncPersonalJournal() {
       {
         substance: "Amphetamine",
         route: RouteOfAdministrationType.insufflated,
-        dosage: 300,
+        dosage: 5,
         purity: 0.89,
         date: chrono.parseDate("16 September 2022 16:29"),
       },
@@ -271,17 +285,7 @@ export async function syncPersonalJournal() {
     )
   );
 
-  for await (const ingestion of ingestions) {
-    const savedIngestion = await ingestionRepository.save(ingestion);
-    // Update ingestion inside array
-    ingestions[ingestions.indexOf(ingestion)] = savedIngestion;
-  }
-
-  // const dbIngestions = await ingestionRepository.findIngestionsByIngester(
-  //   keinsell
-  // );
-
-  const journal = new Journal({
+  let journal = new Journal({
     ingestions: ingestions,
   });
 
@@ -291,7 +295,10 @@ export async function syncPersonalJournal() {
 
   ingestedSubstances.map((substance) => {
     journal
-      .filterIngestions({ substance: substance.name, timeSince: ms("7d") })
+      .filterIngestions({
+        substance: substance.name,
+        timeSince: ms("31d"),
+      })
       .getAverageDosagePerDay();
   });
 }

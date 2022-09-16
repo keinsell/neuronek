@@ -24,10 +24,6 @@ export class Journal extends Entity implements JournalProperties {
   constructor(properties: JournalProperties, id?: string | number) {
     super(id);
     this.ingestions = properties.ingestions;
-
-    console.log(
-      "Created Journal with " + this.ingestions.length + " ingestions."
-    );
   }
 
   getIngestedSubstances() {

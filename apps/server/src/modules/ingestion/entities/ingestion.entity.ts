@@ -7,6 +7,7 @@ import { RouteOfAdministrationType } from "../../substance/entities/route-of-adm
 import { Substance } from "../../substance/entities/substance.entity";
 import { User } from "../../user/entities/user.entity";
 import { IngestionDosage } from "../dtos/ingestion-dosage.dto";
+import { IngestionPlan } from "../dtos/ingestion-plan.dto";
 
 export interface IngestionProperties {
   substance: Substance;
@@ -183,7 +184,6 @@ export class Ingestion extends Entity implements IngestionProperties {
     };
   }
 
-  // TODO: Should also return classification of dosage ex. light, moderate
   getIngestionDosage(): IngestionDosage {
     const { substance, route, dosage, purity } = this;
 
@@ -229,6 +229,16 @@ export class Ingestion extends Entity implements IngestionProperties {
     const passedTime = this.getTimeSinceIngestion();
 
     return passedTime < totalTime;
+  }
+
+  getIngestionPlan(): IngestionPlan {
+    const { substance, route, dosage, purity, purpose, setting, set } = this;
+
+    const ingestionDosage = this.getIngestionDosage();
+
+    const ingestionProgression = this.getIngestionProgression();
+
+    throw Error("Not implemented");
   }
 
   //   getIngestionProgression(): number {}
