@@ -24,6 +24,10 @@ export class Journal extends Entity implements JournalProperties {
   constructor(properties: JournalProperties, id?: string | number) {
     super(id);
     this.ingestions = properties.ingestions;
+
+    console.log(
+      "Created Journal with " + this.ingestions.length + " ingestions."
+    );
   }
 
   getIngestedSubstances() {
@@ -84,13 +88,18 @@ export class Journal extends Entity implements JournalProperties {
 
   /** Get average dosage of ingestions. */
   getAverageDosage() {
-    const totalDosage = this.ingestions.reduce((a, v) => a + v.dosage, 0);
+    const totalDosage = this.ingestions.reduce(
+      (a, v) => a + v.getIngestionDosage().dosage,
+      0
+    );
     const averageDosage = totalDosage / this.ingestions.length;
-    return averageDosage;
   }
 
   getSumDosage() {
-    const totalDosage = this.ingestions.reduce((a, v) => a + v.dosage, 0);
+    const totalDosage = this.ingestions.reduce(
+      (a, v) => a + v.getIngestionDosage().dosage,
+      0
+    );
     return totalDosage;
   }
 
@@ -146,6 +155,27 @@ export class Journal extends Entity implements JournalProperties {
     return lastIngestion.date;
   }
 
+  getHighestDosage() {
+    const ingestions = this.ingestions.sort(
+      (a, b) => a.date.getTime() - b.date.getTime()
+    );
+
+    const highestDosage = ingestions.reduce((a, v) => {
+      if (v.dosage > a) {
+        return v.getIngestionDosage().dosage;
+      }
+      return a;
+    }, 0);
+
+    console.info(
+      `Analysed ${this.ingestions.length} ingestions of ${
+        this.ingestions[0].substance.name
+      } - Highest dosage: ${highestDosage.toFixed(2)}mg`
+    );
+
+    return highestDosage;
+  }
+
   /** Get average dosage per day since first ingestion. */
   getAverageDosagePerDay() {
     const totalDosage = this.getSumDosage();
@@ -157,58 +187,21 @@ export class Journal extends Entity implements JournalProperties {
 
     const averageDosagePerDay = totalDosage / timeSinceFirstIngestionInDays;
 
+    const { substance } = this.ingestions[0];
+
     console.info(
       `Analysed ${this.ingestions.length} ingestions of ${
         this.ingestions[0].substance.name
       } in ${timeSinceFirstIngestionInDays.toFixed(
         2
-      )} days. - Dosage per day: ${averageDosagePerDay.toFixed(2)}mg`
+      )} days. - Dosage per day: ${averageDosagePerDay.toFixed(
+        2
+      )}mg (${substance.getDosageClassification(
+        averageDosagePerDay,
+        this.ingestions[0].route
+      )})`
     );
 
     return averageDosagePerDay;
-  }
-
-  exportJournalToLocalTextFile() {
-    const ingestions = this.ingestions.sort(
-      (a, b) => b.date.getTime() - a.date.getTime()
-    );
-
-    const text = ingestions
-      .map((v) => {
-        return `* ${v.date.toString()} - ${v.substance.name} - ${v.route} - ${
-          v.dosage
-        }mg`;
-      })
-      .join("\n");
-
-    fs.writeFileSync(`journals/keinsell.md`, text);
-  }
-
-  async importJournalfromLocalTextFile() {
-    const text = fs.readFileSync(`journals/keinsell.md`, "utf8");
-    const lines = text.split("\n");
-
-    const ingestions = lines.map(async (v) => {
-      const [date, substance, route, dosage] = v.split(" - ");
-
-      const foundSubstance = await substanceService.findSubstanceByName(
-        substance
-      );
-
-      if (!foundSubstance) {
-        throw new Error(`Could not find substance ${substance}`);
-      }
-
-      return new Ingestion({
-        substance: foundSubstance,
-        route: route as RouteOfAdministrationType,
-        dosage: Number(dosage.replace("mg", "")),
-        date: new Date(date.replace("* ", "")),
-      });
-    });
-
-    this.ingestions = await Promise.all(ingestions);
-
-    return new Journal({ ingestions: this.ingestions });
   }
 }

@@ -12,7 +12,7 @@ import { substanceRepository } from "./modules/substance/repositories/substance.
 import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/nicotine.seed";
 import { journalMapper } from "./modules/journal/mappers/journal.mapper";
 import { journalRepository } from "./modules/journal/repositories/journal.repository";
-import { IDRA21 } from "./configuration/knowledge_base/substances/nootropics/IDRA-21.seed";
+import { IDRA_21 } from "./configuration/knowledge_base/substances/nootropics/IDRA-21.seed";
 import { userRepository } from "./modules/user/repositories/user.repository";
 import { Keinsell } from "./configuration/seed/Keinsell.seed";
 import { PrismaInstance } from "./infrastructure/prisma.infra";
@@ -20,17 +20,15 @@ import { PrismaInstance } from "./infrastructure/prisma.infra";
 export const keinsell = await userRepository.save(Keinsell);
 
 export async function syncPersonalJournal() {
-  const amphetamine = await substanceRepository.save(Amphetamine);
-  const mescaline = await substanceRepository.save(Mescaline);
-  const caffeine = await substanceRepository.save(Caffeine);
+  await substanceRepository.save(Amphetamine);
+  await substanceRepository.save(Mescaline);
+  await substanceRepository.save(Caffeine);
   const nicotine = await substanceRepository.save(Nicotine);
-  const idra21 = await substanceRepository.save(IDRA21);
+  await substanceRepository.save(IDRA_21);
 
   await PrismaInstance.ingestion.deleteMany();
 
   const ingestions: Ingestion[] = [];
-
-  console.log(keinsell);
 
   async function ingestPuff(count: number = 1, date: Date) {
     const ingestion = await ingestionService.ingestSubstance(
@@ -44,6 +42,85 @@ export async function syncPersonalJournal() {
     );
     ingestions.push(ingestion);
   }
+
+  // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
+  // Puff Counter: 5398
+  ingestions.push(
+    ...(await ingestionService.autofillPastIngestionsByAmountAndDosages(
+      nicotine,
+      15,
+      chrono.parseDate("16 September 2022 6:29"),
+      chrono.parseDate("16 September 2022 19:51"),
+      113,
+      keinsell
+    ))
+  );
+
+  // Import of my past amphetamine usage
+  // Sadly it's a lot but it's needed to keep track of it.
+  ingestions.push(
+    ...(await ingestionService.autofillPastIngestionsByAmountAndDosages(
+      Amphetamine,
+      3_000,
+      chrono.parseDate("1 September 2021 0:00"),
+      chrono.parseDate("1 August 2022 0:00"),
+      undefined,
+      keinsell
+    ))
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Amphetamine",
+        route: RouteOfAdministrationType.insufflated,
+        dosage: 300,
+        purity: 0.89,
+        date: chrono.parseDate("16 September 2022 16:29"),
+      },
+      keinsell
+    )
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        route: RouteOfAdministrationType.oral,
+        dosage: 89,
+        purity: 1,
+        date: chrono.parseDate("16 September 2022 9:53"),
+      },
+      keinsell
+    )
+  );
+
+  await ingestPuff(12, chrono.parseDate("15 September 2022 5:07"));
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Mescaline",
+        route: RouteOfAdministrationType.oral,
+        dosage: 50,
+        purity: 0.87,
+        date: chrono.parseDate("16 September 2022 5:17"),
+      },
+      keinsell
+    )
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        dosage: 80,
+        route: RouteOfAdministrationType.oral,
+        date: chrono.parseDate("15 September 2022 13:43"),
+      },
+      keinsell
+    )
+  );
 
   await ingestPuff(8, chrono.parseDate("15 September 2022 6:15"));
   await ingestPuff(8, chrono.parseDate("15 September 2022 1:53"));
@@ -81,6 +158,7 @@ export async function syncPersonalJournal() {
       keinsell
     )
   );
+
   ingestions.push(
     await ingestionService.ingestSubstance(
       {
@@ -166,7 +244,7 @@ export async function syncPersonalJournal() {
     await ingestionService.ingestSubstance(
       {
         substance: "Mescaline",
-        dosage: 10,
+        dosage: 50,
         route: RouteOfAdministrationType.oral,
         purpose:
           "Trying to archieve a mild euthymia in order to reduce depression.",
@@ -213,9 +291,7 @@ export async function syncPersonalJournal() {
 
   ingestedSubstances.map((substance) => {
     journal
-      .filterIngestions({ substance: substance.name })
-      .getAverageTimeBetween();
+      .filterIngestions({ substance: substance.name, timeSince: ms("7d") })
+      .getAverageDosagePerDay();
   });
-
-  journal.exportJournalToLocalTextFile();
 }

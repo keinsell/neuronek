@@ -40,4 +40,47 @@ export class Substance extends Entity implements SubstanceProperties {
       (entity) => entity.route
     );
   }
+
+  getDosageClassification(dosage: number, route: RouteOfAdministrationType) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw Error("No route of administration found");
+    }
+
+    const { dosage: substanceDosage } = routeOfAdministration;
+
+    let classification = "unknown";
+
+    if (
+      dosage > substanceDosage.thereshold ||
+      dosage < substanceDosage.thereshold
+    ) {
+      classification = "thereshold";
+    }
+
+    if (dosage >= substanceDosage.light) {
+      classification = "light";
+    }
+
+    if (dosage >= substanceDosage.moderate) {
+      classification = "moderate";
+    }
+
+    if (dosage >= substanceDosage.strong) {
+      classification = "strong";
+    }
+
+    if (dosage >= substanceDosage.heavy) {
+      classification = "heavy";
+    }
+
+    if (dosage > substanceDosage.overdose) {
+      classification = "overdose";
+    }
+
+    return classification;
+  }
 }
