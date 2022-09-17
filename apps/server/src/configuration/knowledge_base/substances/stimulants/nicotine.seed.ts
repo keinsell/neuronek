@@ -1,7 +1,7 @@
 import ms from "ms";
-import { idText } from "typescript";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
@@ -18,7 +18,7 @@ export const Nicotine: Substance = new Substance(
       systematicName: "(S)-3-[1-Methylpyrrolidin-2-yl]pyridine",
     }),
     classMembership: new ClassMembership({
-      psychoactiveClass: "stimulant",
+      psychoactiveClass: PsychoactiveClass.stimulant,
       chemicalClass: "pyridine",
     }),
     administrationRoutes: [

@@ -1,7 +1,7 @@
 import ms from "ms";
-import { idText } from "typescript";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
@@ -19,7 +19,7 @@ export const Coluracetam: Substance = new Substance(
       systematicName: "",
     }),
     classMembership: new ClassMembership({
-      psychoactiveClass: "psychodelic",
+      psychoactiveClass: PsychoactiveClass.nootropic,
       chemicalClass: "phenetylamine",
     }),
     administrationRoutes: [

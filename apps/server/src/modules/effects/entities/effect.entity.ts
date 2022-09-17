@@ -1,5 +1,4 @@
 import { Entity } from "../../../common/entity/entity.common";
-import { Substance } from "../../substance/entities/substance.entity";
 
 export enum EffectType {
   enhancement = "enhancement",

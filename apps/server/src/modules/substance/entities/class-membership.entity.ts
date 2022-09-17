@@ -1,10 +1,13 @@
+import { PsychoactiveClass } from "./psychoactive-class.enum";
+
 interface ClassMembershipProperties {
-  psychoactiveClass: string;
+  psychoactiveClass: PsychoactiveClass;
   chemicalClass: string;
 }
 
+// TODO(#25, #26) We should think how to manage psychoactive and chemical classes well.
 export class ClassMembership implements ClassMembershipProperties {
-  psychoactiveClass: string;
+  psychoactiveClass: PsychoactiveClass;
   chemicalClass: string;
 
   constructor(properties: ClassMembershipProperties) {
