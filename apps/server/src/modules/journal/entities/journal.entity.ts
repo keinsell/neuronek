@@ -3,6 +3,7 @@ import { Entity } from "../../../common/entity/entity.common";
 import { Ingestion } from "../../ingestion/entities/ingestion.entity";
 import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
 import { PsychoactiveClass } from "../../substance/entities/psychoactive-class.enum";
+import { User } from "../../user/entities/user.entity";
 
 export type JournalFilter = {
   substance?: string;
@@ -15,17 +16,20 @@ export type JournalFilter = {
 
 export interface JournalProperties {
   ingestions: Ingestion[];
+  owner: User;
   filters?: JournalFilter;
 }
 
 export class Journal extends Entity implements JournalProperties {
   ingestions: Ingestion[];
   filters?: JournalFilter;
+  owner: User;
 
   constructor(properties: JournalProperties, id?: string | number) {
     super(id);
     this.ingestions = properties.ingestions;
     this.filters = properties.filters;
+    this.owner = properties.owner;
   }
 
   getIngestedSubstances() {
@@ -86,7 +90,7 @@ export class Journal extends Entity implements JournalProperties {
       return true;
     });
 
-    return new Journal({ ingestions });
+    return new Journal({ ingestions, owner: this.owner, filters: filers });
   }
 
   /** Get average dosage of ingestions. */

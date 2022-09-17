@@ -13,6 +13,7 @@ import { userRepository } from "./modules/user/repositories/user.repository";
 import { Keinsell } from "./configuration/seed/Keinsell.seed";
 import { PrismaInstance } from "./infrastructure/prisma.infra";
 import { PsychoactiveClass } from "./modules/substance/entities/psychoactive-class.enum";
+import { JournalModule } from "./modules/journal/journal.module";
 
 export const keinsell = await userRepository.save(Keinsell);
 
@@ -348,6 +349,7 @@ export async function syncPersonalJournal() {
 
   let journal = new Journal({
     ingestions: ingestions,
+    owner: keinsell,
   });
 
   journal.getProgressionOfActiveIngestions();
@@ -368,4 +370,12 @@ export async function syncPersonalJournal() {
       })
       .getAverageDosagePerDay();
   });
+
+  const importedJournal = await JournalModule.repository.findJournalById(
+    "cl866y10j20550dod5k0n2v4yo"
+  );
+
+  if (importedJournal) {
+    console.log(importedJournal);
+  }
 }

@@ -4,8 +4,8 @@ import { Journal } from "../entities/journal.entity";
 import { journalMapper } from "../mappers/journal.mapper";
 
 export class JournalRepository extends Repository<Journal> {
-  db = PrismaInstance;
-  mapper = journalMapper;
+  override db = PrismaInstance;
+  override mapper = journalMapper;
 
   async exists(entity: Journal): Promise<boolean> {
     const exists = await this.db.journal.findUnique({
@@ -30,13 +30,15 @@ export class JournalRepository extends Repository<Journal> {
         },
         data: persistence,
         include: {
-          ingestion: {
+          Owner: true,
+          Ingestions: {
             include: {
-              substance: {
+              Substance: {
                 include: {
                   routesOfAdministraton: true,
                 },
               },
+              Ingester: true,
             },
           },
         },
@@ -47,13 +49,15 @@ export class JournalRepository extends Repository<Journal> {
       const created = await this.db.journal.create({
         data: persistence,
         include: {
-          ingestion: {
+          Owner: true,
+          Ingestions: {
             include: {
-              substance: {
+              Substance: {
                 include: {
                   routesOfAdministraton: true,
                 },
               },
+              Ingester: true,
             },
           },
         },
@@ -72,15 +76,39 @@ export class JournalRepository extends Repository<Journal> {
         where: {
           id: String(entity.id),
         },
-        include: {
-          ingestion: true,
-        },
       });
 
       return exists;
     } else {
       return false;
     }
+  }
+
+  async findJournalById(id: string): Promise<Journal | undefined> {
+    const journal = await this.db.journal.findUnique({
+      where: {
+        id: String(id),
+      },
+      include: {
+        Owner: true,
+        Ingestions: {
+          include: {
+            Substance: {
+              include: {
+                routesOfAdministraton: true,
+              },
+            },
+            Ingester: true,
+          },
+        },
+      },
+    });
+
+    if (!journal) {
+      return undefined;
+    }
+
+    return this.mapper.toDomain(journal);
   }
 }
 

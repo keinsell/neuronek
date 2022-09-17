@@ -22,6 +22,7 @@ model User {
     height      Int?
     password    String
     Ingestion   Ingestion[]
+    Journal     Journal[]
 }
 
 model Ingestion {
@@ -47,16 +48,17 @@ model Ingestion {
     Ingester  User      @relation(fields: [ingesterId], references: [id])
     // Journal   Journal?  @relation(fields: [journalId], references: [id])
     // journalId String?
+    Journal   Journal[]
 }
 
-// model Journal {
-//     id      String @id @default(cuid())
-//     ownerId String
-//     name    String
+model Journal {
+    id      String @id @default(cuid())
+    ownerId String
+    name    String
 
-//     Ingestions Ingestion[]
-//     Owner      User        @relation(fields: [ownerId], references: [id])
-// }
+    Ingestions Ingestion[]
+    Owner      User        @relation(fields: [ownerId], references: [id])
+}
 
 model RouteOfAdministration {
     id              String  @id @default(cuid())
