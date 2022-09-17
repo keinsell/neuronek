@@ -12,6 +12,7 @@ import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/n
 import { userRepository } from "./modules/user/repositories/user.repository";
 import { Keinsell } from "./configuration/seed/Keinsell.seed";
 import { PrismaInstance } from "./infrastructure/prisma.infra";
+import { PsychoactiveClass } from "./modules/substance/entities/psychoactive-class.enum";
 
 export const keinsell = await userRepository.save(Keinsell);
 
@@ -351,12 +352,18 @@ export async function syncPersonalJournal() {
 
   journal.getProgressionOfActiveIngestions();
 
-  const ingestedSubstances = journal.getIngestedSubstances();
+  const filteredJournal = journal.filterIngestions({
+    psychoactiveClass: PsychoactiveClass.stimulant,
+    timeSince: ms("7d"),
+  });
+
+  const ingestedSubstances = filteredJournal.getIngestedSubstances();
 
   ingestedSubstances.map((substance) => {
     journal
       .filterIngestions({
         substance: substance.name,
+        psychoactiveClass: PsychoactiveClass.stimulant,
         timeSince: ms("7d"),
       })
       .getAverageDosagePerDay();

@@ -8,9 +8,6 @@ export enum PhaseType {
   /** The offset phase can be defined as the amount of time in between the conclusion of the peak and shifting into a sober state. This is colloquially referred to as "coming down." */
   offset = "offset",
   /**
-   * The after effects can be defined as any residual effects which may remain after the experience has reached its conclusion. This is colloquially known as a "hangover" or an "afterglow" depending on the substance and usage.
-   *
-   * It should be noted that the after effects of the substances listed on this site are not included as part of the total duration.
-   */
+   * The after effects can be defined as any residual effects which may remain after the experience has reached its conclusion. This is colloquially known as a "hangover" or an "afterglow" depending on the substance and usage. */
   aftereffects = "aftereffects",
 }
