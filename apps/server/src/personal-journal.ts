@@ -5,14 +5,10 @@ import { Amphetamine } from "./configuration/knowledge_base/substances/stimulant
 import { Caffeine } from "./configuration/knowledge_base/substances/stimulants/caffeine.seed";
 import { Ingestion } from "./modules/ingestion/entities/ingestion.entity";
 import { ingestionService } from "./modules/ingestion/ingestion.service";
-import { ingestionRepository } from "./modules/ingestion/repositories/ingestion.repository";
 import { Journal } from "./modules/journal/entities/journal.entity";
 import { RouteOfAdministrationType } from "./modules/substance/entities/route-of-administration.entity";
 import { substanceRepository } from "./modules/substance/repositories/substance.repository";
 import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/nicotine.seed";
-import { journalMapper } from "./modules/journal/mappers/journal.mapper";
-import { journalRepository } from "./modules/journal/repositories/journal.repository";
-import { IDRA_21 } from "./configuration/knowledge_base/substances/nootropics/IDRA-21.seed";
 import { userRepository } from "./modules/user/repositories/user.repository";
 import { Keinsell } from "./configuration/seed/Keinsell.seed";
 import { PrismaInstance } from "./infrastructure/prisma.infra";
@@ -24,7 +20,6 @@ export async function syncPersonalJournal() {
   await substanceRepository.save(Mescaline);
   await substanceRepository.save(Caffeine);
   const nicotine = await substanceRepository.save(Nicotine);
-  await substanceRepository.save(IDRA_21);
 
   console.log(`Ingestions: ${await PrismaInstance.ingestion.count()}`);
   await PrismaInstance.ingestion.deleteMany();
@@ -43,6 +38,71 @@ export async function syncPersonalJournal() {
     );
     ingestions.push(ingestion);
   }
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Caffeine",
+        route: RouteOfAdministrationType.oral,
+        dosage: 80,
+        purity: 1,
+        date: chrono.parseDate("17 September 2022 16:14"),
+      },
+      keinsell
+    )
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Amphetamine",
+        route: RouteOfAdministrationType.insufflated,
+        dosage: 7.5,
+        purity: 0.89,
+        date: chrono.parseDate("17 September 2022 16:14"),
+      },
+      keinsell
+    )
+  );
+
+  ingestions.push(
+    await ingestionService.ingestSubstance(
+      {
+        substance: "Amphetamine",
+        route: RouteOfAdministrationType.insufflated,
+        dosage: 5,
+        purity: 0.89,
+        date: chrono.parseDate("17 September 2022 12:27"),
+      },
+      keinsell
+    )
+  );
+
+  // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
+  // Puff Counter: 5624
+  ingestions.push(
+    ...(await ingestionService.autofillPastIngestionsByAmountAndDosages(
+      nicotine,
+      5,
+      chrono.parseDate("17 September 2022 16:15"),
+      chrono.parseDate("17 September 2022 12:45"),
+      5624 - 5550,
+      keinsell
+    ))
+  );
+
+  // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
+  // Puff Counter: 5550
+  ingestions.push(
+    ...(await ingestionService.autofillPastIngestionsByAmountAndDosages(
+      nicotine,
+      5,
+      chrono.parseDate("16 September 2022 22:32"),
+      chrono.parseDate("17 September 2022 12:45"),
+      5550 - 5398,
+      keinsell
+    ))
+  );
 
   // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
   // Puff Counter: 5472
@@ -297,7 +357,7 @@ export async function syncPersonalJournal() {
     journal
       .filterIngestions({
         substance: substance.name,
-        timeSince: ms("31d"),
+        timeSince: ms("7d"),
       })
       .getAverageDosagePerDay();
   });

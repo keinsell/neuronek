@@ -4,13 +4,13 @@ export abstract class Controller {
   protected req!: Request;
   protected res!: Response;
 
-  protected abstract executeImpl(): Promise<Response>;
+  protected abstract executeImplementation(): Promise<Response>;
 
   public execute(request: Request, response: Response): any {
     this.req = request;
     this.res = response;
 
-    this.executeImpl();
+    this.executeImplementation();
   }
 
   public static jsonResponse(
