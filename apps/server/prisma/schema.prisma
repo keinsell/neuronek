@@ -84,6 +84,19 @@ model RouteOfAdministration {
     Substance     Substance @relation(fields: [substanceName], references: [name])
 }
 
+model Effect {
+    id          String @id @default(cuid())
+    name        String
+    description String
+    type        String
+}
+
+// TODO: Effect Occurance
+// This should be a junction table between Effects and Ingestions and Substances where we can define a occurance of Effect under specific conditions, there is altrnative way for this - we can create EffectCondition table and connect it to Effect and Ingestion/Substance
+model OccuranceOfEffect {
+    id String @id @default(cuid())
+}
+
 model Substance {
     id String @id @default(cuid())
 

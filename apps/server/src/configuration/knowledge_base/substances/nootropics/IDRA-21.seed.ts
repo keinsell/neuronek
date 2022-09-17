@@ -9,7 +9,7 @@ import {
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
 import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
 
-export const IDRA21: Substance = new Substance(
+export const IDRA_21: Substance = new Substance(
   {
     name: "IDRA-21",
     chemnicalNomencalture: new ChemicalNomenclature({
