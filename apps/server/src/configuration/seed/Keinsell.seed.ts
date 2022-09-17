@@ -7,5 +7,5 @@ export const Keinsell: User = new User({
   firstName: "Jakub",
   lastName: "Olan",
   height: 182,
-  weight: 62,
+  weight: 65,
 });
