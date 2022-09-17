@@ -57,7 +57,7 @@
     "@faker-js/faker": "7.4.0",
     "@neuroneek/eslint-config-node": "*",
     "@swc/cli": "0.1.57",
-    "@swc/core": "1.2.233",
+    "@swc/core": "1.3.1",
     "@types/config": "3.3.0",
     "@types/consola": "2.2.5",
     "@types/cuid": "2.0.1",
