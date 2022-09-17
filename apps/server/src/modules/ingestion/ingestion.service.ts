@@ -18,6 +18,20 @@ export interface IngestSubstanceDTO {
   setting?: string;
 }
 
+export interface MassIngestSubstanceDTO {
+  substance: string;
+  totalDosage: number;
+  route: RouteOfAdministrationType;
+  purity?: number;
+  startingDate: Date;
+  endingDate: Date;
+  dosages?: number;
+  interval?: number;
+  purpose?: string;
+  set?: string;
+  setting?: string;
+}
+
 export class IngestionService {
   ingestionRepository = ingestionRepository;
   substanceService = new SubstanceService();
@@ -83,13 +97,30 @@ export class IngestionService {
   }
 
   async autofillPastIngestionsByAmountAndDosages(
-    substance: Substance,
-    amount: number,
-    startingDate: Date,
-    endingDate: Date,
-    dosages: number | undefined,
+    ingestion: MassIngestSubstanceDTO,
     user: User
   ) {
+    let {
+      substance,
+      totalDosage,
+      purity,
+      startingDate,
+      endingDate,
+      route,
+      set,
+      setting,
+      purpose,
+      dosages,
+    } = ingestion;
+
+    const substanceEntity = await this.substanceService.findSubstanceByName(
+      substance
+    );
+
+    if (!substanceEntity) {
+      throw new Error("Substance not found.");
+    }
+
     const dateDifference = endingDate.getTime() - startingDate.getTime();
 
     if (!dosages) {
@@ -104,14 +135,18 @@ export class IngestionService {
     for (let i = 0; i < dosages; i++) {
       const ingestionDate = new Date(startingDate.getTime() + interval * i);
 
-      if (!substance.administrationRoutes[0]) {
+      if (!substanceEntity.administrationRoutes[0]) {
         throw new Error("No administration routes found.");
       }
 
       const ingestion = new Ingestion({
-        substance,
-        route: substance.administrationRoutes[0].route,
-        dosage: amount / dosages,
+        substance: substanceEntity,
+        route: route,
+        set: set,
+        purity: purity,
+        setting: setting,
+        purpose: purpose,
+        dosage: totalDosage / dosages,
         date: ingestionDate,
         user,
       });
