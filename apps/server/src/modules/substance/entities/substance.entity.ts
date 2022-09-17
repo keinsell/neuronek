@@ -109,7 +109,13 @@ export class Substance extends Entity implements SubstanceProperties {
     }
 
     const personaliseDosage = (dosage: number) => {
-      return Math.round((dosage / 80) * weight);
+      const weightAveragedDosage = Math.round((dosage / 80) * weight);
+
+      if (weightAveragedDosage > dosage) {
+        return dosage;
+      }
+
+      return weightAveragedDosage;
     };
 
     // TODO: Can be mapped by some array I think.
