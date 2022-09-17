@@ -1,0 +1,22 @@
+{
+  "extends": "@neuroneek/tsconfig/node.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "target": "ESNext",
+    "emitDecoratorMetadata": true,
+    "isolatedModules": true,
+    "composite": true
+  },
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "src/scratch.ts",
+    "src/qscratch.js",
+    "*.md"
+  ]
+}

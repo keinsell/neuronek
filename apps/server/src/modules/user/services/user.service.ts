@@ -1,5 +1,4 @@
 import { RegisterUserDTO } from "../dtos/register-user.dto";
-import { User } from "../entities/user.entity";
 import { userMapper } from "../mappers/user.mapper";
 import { userRepository } from "../repositories/user.repository";
 
