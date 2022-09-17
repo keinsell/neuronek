@@ -3,18 +3,22 @@ import {
   Ingestion as PersistenceIngestion,
   RouteOfAdministration as PersistenceRouteOfAdministration,
   Substance as PersistenceSubstance,
+  User as PersistenceUser,
   Prisma,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
 import { ingestionMapper } from "../../ingestion/mappers/ingestion.mapper";
+import { userMapper } from "../../user/mappers/user.mapper";
 import { Journal } from "../entities/journal.entity";
 
 type JournalWithIngestionWithSubstanceAndRouteOfAdministration =
   PersistenceJournal & {
-    ingestion: (PersistenceIngestion & {
-      substance: PersistenceSubstance & {
+    Owner: PersistenceUser;
+    Ingestions: (PersistenceIngestion & {
+      Substance: PersistenceSubstance & {
         routesOfAdministraton: PersistenceRouteOfAdministration[];
       };
+      Ingester: PersistenceUser;
     })[];
   };
 
@@ -24,7 +28,8 @@ export class JournalMapper implements IMapper {
   ): Journal {
     return new Journal(
       {
-        ingestions: entity.ingestion.map((ingestion) =>
+        owner: userMapper.toDomain(entity.Owner),
+        ingestions: entity.Ingestions.map((ingestion) =>
           ingestionMapper.toDomain(ingestion)
         ),
       },
@@ -46,8 +51,14 @@ export class JournalMapper implements IMapper {
     });
 
     return {
-      ingestion: {
+      name: String(entity.id),
+      Ingestions: {
         connectOrCreate: createOrConnectManyIngestions,
+      },
+      Owner: {
+        connect: {
+          username: entity.owner.username,
+        },
       },
     };
   }
