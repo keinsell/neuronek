@@ -1,7 +1,8 @@
-import { syncPersonalJournal } from "./personal-journal";
+import { HttpApplication } from "./application/http.application";
 
 export async function main() {
-  await syncPersonalJournal();
+  new HttpApplication().bootstrap();
+  // await syncPersonalJournal();
 }
 
 await main();

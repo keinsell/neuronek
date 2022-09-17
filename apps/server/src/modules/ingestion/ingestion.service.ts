@@ -1,9 +1,6 @@
-import { PrismaInstance } from "../../infrastructure/prisma.infra";
 import { keinsell } from "../../personal-journal";
-import { Journal } from "../journal/entities/journal.entity";
 import { RouteOfAdministrationType } from "../substance/entities/route-of-administration.entity";
 import { Substance } from "../substance/entities/substance.entity";
-import { substanceRepository } from "../substance/repositories/substance.repository";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
 import { Ingestion } from "./entities/ingestion.entity";
@@ -106,6 +103,11 @@ export class IngestionService {
 
     for (let i = 0; i < dosages; i++) {
       const ingestionDate = new Date(startingDate.getTime() + interval * i);
+
+      if (!substance.administrationRoutes[0]) {
+        throw new Error("No administration routes found.");
+      }
+
       const ingestion = new Ingestion({
         substance,
         route: substance.administrationRoutes[0].route,
