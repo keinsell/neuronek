@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@ava/typescript": "3.0.1",
-    "@faker-js/faker": "7.4.0",
+    "@faker-js/faker": "7.5.0",
     "@neuroneek/eslint-config-node": "*",
     "@swc/cli": "0.1.57",
     "@swc/core": "1.2.233",
