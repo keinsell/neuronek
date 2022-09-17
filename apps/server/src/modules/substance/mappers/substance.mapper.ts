@@ -7,8 +7,8 @@ import {
 } from "@prisma/client";
 import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
 import { ClassMembership } from "../entities/class-membership.entity";
-import { RouteOfAdministration } from "../entities/route-of-administration.entity";
 import { routeOfAdministrationMapper } from "./route-of-administration.mapper";
+import { PsychoactiveClass } from "../entities/psychoactive-class.enum";
 
 export class SubstanceMapper implements IMapper {
   toDomain(
@@ -25,7 +25,8 @@ export class SubstanceMapper implements IMapper {
           commonNames: entity.commonNomenclature,
         }),
         classMembership: new ClassMembership({
-          psychoactiveClass: entity.psychoactiveClass ?? "",
+          psychoactiveClass:
+            (entity.psychoactiveClass as PsychoactiveClass) ?? "",
           chemicalClass: entity.chemicalClass ?? "",
         }),
         administrationRoutes: entity.routesOfAdministraton.map((roa) =>

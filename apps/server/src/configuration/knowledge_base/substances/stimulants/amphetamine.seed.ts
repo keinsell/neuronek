@@ -2,6 +2,7 @@ import ms from "ms";
 import { idText } from "typescript";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
@@ -18,7 +19,7 @@ export const Amphetamine: Substance = new Substance(
       systematicName: "(RS)-1-Phenylpropan-2-amine",
     }),
     classMembership: new ClassMembership({
-      psychoactiveClass: "stimulant",
+      psychoactiveClass: PsychoactiveClass.stimulant,
       chemicalClass: "phenetylamine",
     }),
     administrationRoutes: [

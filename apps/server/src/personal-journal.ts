@@ -22,7 +22,7 @@ export async function syncPersonalJournal() {
   const nicotine = await substanceRepository.save(Nicotine);
 
   console.log(`Ingestions: ${await PrismaInstance.ingestion.count()}`);
-  await PrismaInstance.ingestion.deleteMany();
+  // await PrismaInstance.ingestion.deleteMany();
 
   const ingestions: Ingestion[] = [];
 

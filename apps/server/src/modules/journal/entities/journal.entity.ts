@@ -2,13 +2,12 @@ import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
 import { Ingestion } from "../../ingestion/entities/ingestion.entity";
 import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
-import fs from "fs";
-import { substanceService } from "../../substance/substance.service";
+import { PsychoactiveClass } from "../../substance/entities/psychoactive-class.enum";
 
 export type JournalFilter = {
   substance?: string;
   route?: RouteOfAdministrationType;
-  psychoactiveClass?: string;
+  psychoactiveClass?: PsychoactiveClass;
   timeSince?: number;
 };
 
@@ -89,6 +88,7 @@ export class Journal extends Entity implements JournalProperties {
       0
     );
     const averageDosage = totalDosage / this.ingestions.length;
+    return averageDosage;
   }
 
   getSumDosage() {
@@ -104,12 +104,14 @@ export class Journal extends Entity implements JournalProperties {
     const ingestions = this.ingestions.sort(
       (a, b) => a.date.getTime() - b.date.getTime()
     );
+
     const timeBetweenIngestions = ingestions.map((v, i, a) => {
       if (i === 0) {
         return 0;
       }
       return a[i].date.getTime() - a[i - 1].date.getTime();
     });
+
     const averageTimeBetweenIngestions =
       timeBetweenIngestions.reduce((a, v) => a + v, 0) /
       timeBetweenIngestions.length;

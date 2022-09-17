@@ -2,6 +2,7 @@ import ms from "ms";
 import { idText } from "typescript";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
@@ -19,7 +20,7 @@ export const IDRA_21: Substance = new Substance(
         "7-chloro-3-methyl-3,4-dihydro-2H-1λ6,2,4-benzothiadiazine 1,1-dioxide",
     }),
     classMembership: new ClassMembership({
-      psychoactiveClass: "nootropic",
+      psychoactiveClass: PsychoactiveClass.nootropic,
       chemicalClass: "phenetylamine",
     }),
     administrationRoutes: [

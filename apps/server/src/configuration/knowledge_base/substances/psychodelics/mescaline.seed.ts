@@ -1,6 +1,7 @@
 import ms from "ms";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
@@ -16,7 +17,7 @@ export const Mescaline: Substance = new Substance(
       systematicName: "2-(3,4,5-Trimethoxyphenyl)ethanamine",
     }),
     classMembership: new ClassMembership({
-      psychoactiveClass: "psychodelic",
+      psychoactiveClass: PsychoactiveClass.psychedelic,
       chemicalClass: "phenetylamine",
     }),
     administrationRoutes: [
