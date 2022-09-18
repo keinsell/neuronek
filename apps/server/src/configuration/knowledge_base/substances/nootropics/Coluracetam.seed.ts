@@ -1,11 +1,12 @@
 import ms from "ms";
+import { EffectOccurance } from "../../../../modules/effects/entities/effect-occurance.entity";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
 import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/substance/entities/route-of-administration.entity";
+} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
 import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
 
@@ -25,7 +26,7 @@ export const Coluracetam: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.oral,
-        substanceName: "Coluracetam",
+        _substance: "Coluracetam",
         bioavailability: 0.8,
         dosage: {
           thereshold: 1,
@@ -44,7 +45,11 @@ export const Coluracetam: Substance = new Substance(
         },
       }),
     ],
-    effects: [AnalysisEnhancement],
+    effects: [
+      new EffectOccurance({
+        effect: AnalysisEnhancement,
+      }),
+    ],
   },
   "coluracetam"
 );

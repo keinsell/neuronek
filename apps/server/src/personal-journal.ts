@@ -9,7 +9,7 @@ import {
   MassIngestSubstanceDTO,
 } from "./modules/ingestion/ingestion.service";
 import { Journal } from "./modules/journal/entities/journal.entity";
-import { RouteOfAdministrationType } from "./modules/substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "./modules/route-of-administration/entities/route-of-administration.entity.js";
 import { substanceRepository } from "./modules/substance/repositories/substance.repository";
 import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/nicotine.seed";
 import { userRepository } from "./modules/user/repositories/user.repository";
@@ -28,6 +28,15 @@ export async function syncPersonalJournal() {
   await substanceRepository.save(Nicotine);
 
   const ingestions: IngestSubstanceDTO[] = [
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
+      dosage: 40,
+      purity: 1,
+      date: chrono.parseDate("18 September 2022 13:33"),
+      set: "Sleepy & Tired",
+      setting: "Home",
+    },
     {
       substance: "Caffeine",
       route: RouteOfAdministrationType.oral,
@@ -149,6 +158,18 @@ export async function syncPersonalJournal() {
 
   // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
   const massIngestions: MassIngestSubstanceDTO[] = [
+    // Puff Counter: 6095
+    {
+      substance: "Nicotine",
+      route: RouteOfAdministrationType.smoked,
+      totalDosage: 10,
+      purity: 1,
+      // Actual time
+      endingDate: chrono.parseDate("18 September 2022 06:53"),
+      // Time of last tank refill
+      startingDate: chrono.parseDate("18 September 2022 00:46"),
+      dosages: 6095 - 5924,
+    },
     // Puff Counter: 5924
     {
       substance: "Nicotine",
@@ -268,7 +289,7 @@ export async function syncPersonalJournal() {
   journalek.getProgressionOfActiveIngestions();
 
   const journalOfLast7Days = journalek.filterIngestions({
-    timeSince: ms("7d"),
+    timeSince: ms("14d"),
   });
 
   const substancesIngestedInLast7Days =
@@ -278,7 +299,7 @@ export async function syncPersonalJournal() {
     journalek
       .filterIngestions({
         substance: substance.name,
-        timeSince: ms("7d"),
+        timeSince: ms("14d"),
       })
       .getAverageDosagePerDay();
   });

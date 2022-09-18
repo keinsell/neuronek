@@ -1,7 +1,7 @@
 import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
 import { Ingestion } from "../../ingestion/entities/ingestion.entity";
-import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
 import { PsychoactiveClass } from "../../substance/entities/psychoactive-class.enum";
 import { User } from "../../user/entities/user.entity";
 

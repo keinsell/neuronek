@@ -1,3 +1,6 @@
+import { OccuranceOfEffect } from "@prisma/client";
+import { RouteOfAdministration } from "../route-of-administration/entities/route-of-administration.entity";
+import { Substance } from "./entities/substance.entity";
 import { substanceRepository } from "./repositories/substance.repository";
 
 export class SubstanceService {

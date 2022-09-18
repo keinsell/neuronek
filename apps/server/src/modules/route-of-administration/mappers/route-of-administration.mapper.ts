@@ -1,12 +1,9 @@
 import { IMapper } from "../../../common/mapper/mapper.common";
-import { Substance } from "../entities/substance.entity";
 import {
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
   Prisma,
 } from "@prisma/client";
-import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
-import { ClassMembership } from "../entities/class-membership.entity";
 import { RouteOfAdministration } from "../entities/route-of-administration.entity";
 
 export class RouteOfAdministrationMapper implements IMapper {
@@ -15,7 +12,7 @@ export class RouteOfAdministrationMapper implements IMapper {
       {
         route: entity.type as any,
         bioavailability: entity.bioavailability ?? 100,
-        substanceName: entity.substanceName,
+        _substance: entity.substanceName,
         dosage: {
           thereshold: entity.theresholdDosage,
           light: entity.lightDosage,
@@ -60,7 +57,7 @@ export class RouteOfAdministrationMapper implements IMapper {
       aftereffects: entity.duration.aftereffects,
       Substance: {
         connect: {
-          name: entity.substanceName,
+          name: entity._substance,
         },
       },
     };

@@ -5,9 +5,8 @@ import { PsychoactiveClass } from "../../../../modules/substance/entities/psycho
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/substance/entities/route-of-administration.entity";
+} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
 
 export const Nicotine: Substance = new Substance(
   {
@@ -24,7 +23,7 @@ export const Nicotine: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.smoked,
-        substanceName: "Nicotine",
+        _substance: "Nicotine",
         bioavailability: 0.8,
         dosage: {
           thereshold: 0.2,
@@ -43,7 +42,7 @@ export const Nicotine: Substance = new Substance(
         },
       }),
     ],
-    effects: [AnalysisEnhancement],
+    effects: [],
   },
   "nicotine"
 );

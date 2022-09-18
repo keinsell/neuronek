@@ -1,5 +1,5 @@
 import { keinsell } from "../../personal-journal";
-import { RouteOfAdministrationType } from "../substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../substance/entities/substance.entity";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
@@ -71,16 +71,16 @@ export class IngestionService {
     const { substance, dosage, purity, date, route, set, setting, purpose } =
       ingestion;
 
-    const substanceEntity = await this.substanceService.findSubstanceByName(
+    const interalSubstance = await this.substanceService.findSubstanceByName(
       substance
     );
 
-    if (!substanceEntity) {
+    if (!interalSubstance) {
       throw new Error("Substance not found.");
     }
 
     const dedicatedIngestion = new Ingestion({
-      substance: substanceEntity,
+      substance: interalSubstance,
       route,
       dosage,
       purity,

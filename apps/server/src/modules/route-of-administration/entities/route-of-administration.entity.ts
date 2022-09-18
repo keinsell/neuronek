@@ -1,6 +1,6 @@
 import { Entity } from "../../../common/entity/entity.common";
-import { DosageClassification } from "./dosage.entity";
-import { PhaseType } from "./phase.entity";
+import { DosageClassification } from "../../substance/entities/dosage.entity";
+import { PhaseType } from "../../substance/entities/phase.entity";
 
 export enum RouteOfAdministrationType {
   oral = "oral",
@@ -24,7 +24,7 @@ export interface RouteOfAdministrationProperties {
   duration: {
     [duration in PhaseType]: number;
   };
-  substanceName: string;
+  _substance: string;
 }
 
 export class RouteOfAdministration
@@ -39,7 +39,7 @@ export class RouteOfAdministration
   duration: {
     [duration in PhaseType]: number;
   };
-  substanceName: string;
+  _substance: string;
 
   constructor(
     properties: RouteOfAdministrationProperties,
@@ -50,6 +50,6 @@ export class RouteOfAdministration
     this.bioavailability = properties.bioavailability;
     this.dosage = properties.dosage;
     this.duration = properties.duration;
-    this.substanceName = properties.substanceName;
+    this._substance = properties._substance;
   }
 }

@@ -1,9 +1,8 @@
 import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
-import { Journal } from "../../journal/entities/journal.entity";
 import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { PhaseType } from "../../substance/entities/phase.entity";
-import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../substance/entities/substance.entity";
 import { User } from "../../user/entities/user.entity";
 import { IngestionDosage } from "../dtos/ingestion-dosage.dto";
@@ -50,7 +49,7 @@ export class Ingestion extends Entity implements IngestionProperties {
   }
 
   getIngestionStages() {
-    const { date, substance, route, dosage } = this;
+    const { date, substance, route } = this;
     const { administrationRoutes } = substance;
 
     const administrationRoute = administrationRoutes.find(
@@ -128,9 +127,6 @@ export class Ingestion extends Entity implements IngestionProperties {
     if (!administrationRoute?.duration) {
       throw Error("No duration found for route of administration");
     }
-
-    const { onset, comeup, peak, offset, aftereffects } =
-      administrationRoute.duration;
 
     const stages = this.getIngestionStages();
 
@@ -232,12 +228,6 @@ export class Ingestion extends Entity implements IngestionProperties {
   }
 
   getIngestionPlan(): IngestionPlan {
-    const { substance, route, dosage, purity, purpose, setting, set } = this;
-
-    const ingestionDosage = this.getIngestionDosage();
-
-    const ingestionProgression = this.getIngestionProgression();
-
     throw Error("Not implemented");
   }
 

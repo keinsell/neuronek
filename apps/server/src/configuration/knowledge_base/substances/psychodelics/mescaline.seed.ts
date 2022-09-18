@@ -5,7 +5,7 @@ import { PsychoactiveClass } from "../../../../modules/substance/entities/psycho
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/substance/entities/route-of-administration.entity";
+} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
 
 export const Mescaline: Substance = new Substance(
@@ -23,7 +23,7 @@ export const Mescaline: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.oral,
-        substanceName: "Mescaline",
+        _substance: "Mescaline",
         bioavailability: 0.8,
         dosage: {
           thereshold: 50,

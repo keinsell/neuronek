@@ -1,5 +1,5 @@
 import { Entity } from "../../../common/entity/entity.common";
-import { Effect } from "../../effects/entities/effect.entity";
+import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
 import { User } from "../../user/entities/user.entity";
 import { ChemicalDetails } from "./chemical-details.entity";
 import { ChemicalNomenclature } from "./chemical-nomenclature";
@@ -8,7 +8,7 @@ import { DosageClassification } from "./dosage.entity";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "./route-of-administration.entity";
+} from "../../route-of-administration/entities/route-of-administration.entity";
 
 export interface SubstanceProperties {
   name: string;
@@ -16,7 +16,7 @@ export interface SubstanceProperties {
   chemicalDetails?: ChemicalDetails;
   classMembership: ClassMembership;
   administrationRoutes: RouteOfAdministration[];
-  effects: Effect[];
+  effects: EffectOccurance[];
 }
 
 export class Substance extends Entity implements SubstanceProperties {
@@ -25,7 +25,7 @@ export class Substance extends Entity implements SubstanceProperties {
   chemicalDetails?: ChemicalDetails | undefined;
   classMembership: ClassMembership;
   administrationRoutes: RouteOfAdministration[];
-  effects: Effect[];
+  effects: EffectOccurance[];
 
   constructor(properties: SubstanceProperties, id?: string | number) {
     super(id);
@@ -104,11 +104,11 @@ export class Substance extends Entity implements SubstanceProperties {
 
     const { weight } = user;
 
-    if (!weight) {
-      throw Error("User has no weight");
-    }
-
     const personaliseDosage = (dosage: number) => {
+      if (!weight) {
+        return dosage;
+      }
+
       const weightAveragedDosage = Math.round((dosage / 80) * weight);
 
       if (weightAveragedDosage > dosage) {
