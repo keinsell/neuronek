@@ -8,7 +8,7 @@ import {
   RouteOfAdministrationType,
 } from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
+import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement.seed";
 
 export const IDRA_21: Substance = new Substance(
   {

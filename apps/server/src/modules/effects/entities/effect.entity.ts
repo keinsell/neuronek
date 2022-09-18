@@ -18,6 +18,8 @@ export interface EffectProperties {
   category: EffectCategory;
   summary: string;
   page?: string;
+  externals?: string[];
+  references?: string[];
 }
 
 export class Effect extends Entity implements EffectProperties {
@@ -26,6 +28,8 @@ export class Effect extends Entity implements EffectProperties {
   category: EffectCategory;
   summary: string;
   page?: string;
+  externals?: string[];
+  references?: string[];
 
   constructor(properties: EffectProperties, id?: string | number) {
     super(id);
@@ -34,5 +38,7 @@ export class Effect extends Entity implements EffectProperties {
     this.category = properties.category;
     this.summary = properties.summary;
     this.page = properties.page;
+    this.references = properties.references;
+    this.externals = properties.externals;
   }
 }

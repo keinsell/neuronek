@@ -1,5 +1,4 @@
 import ms from "ms";
-import { idText } from "typescript";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
 import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
@@ -8,7 +7,6 @@ import {
   RouteOfAdministrationType,
 } from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
 
 export const Caffeine: Substance = new Substance(
   {

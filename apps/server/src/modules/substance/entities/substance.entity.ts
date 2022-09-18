@@ -128,4 +128,25 @@ export class Substance extends Entity implements SubstanceProperties {
       overdose: personaliseDosage(substanceDosage.overdose),
     };
   }
+
+  getEffectsForDosage(
+    dosage: number,
+    route: RouteOfAdministrationType
+  ): EffectOccurance[] {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    const { dosage: substanceDosage } = routeOfAdministration;
+
+    const classification = this.getDosageClassification(dosage, route);
+
+    return this.effects.filter(
+      (v) => v.dosage === classification || v.dosage === undefined
+    );
+  }
 }

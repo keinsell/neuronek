@@ -10,10 +10,7 @@ export async function main() {
   new HttpApplication().bootstrap();
 
   console.log(
-    Amphetamine.getPersonalisedDosageForUser(
-      keinsell,
-      RouteOfAdministrationType.insufflated
-    )
+    Amphetamine.getEffectsForDosage(30, RouteOfAdministrationType.insufflated)
   );
 
   await syncPersonalJournal();

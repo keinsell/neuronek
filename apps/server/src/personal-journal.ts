@@ -31,7 +31,7 @@ export async function syncPersonalJournal() {
     {
       substance: "Caffeine",
       route: RouteOfAdministrationType.oral,
-      dosage: 40,
+      dosage: 80,
       purity: 1,
       date: chrono.parseDate("18 September 2022 13:33"),
       set: "Sleepy & Tired",
@@ -158,6 +158,18 @@ export async function syncPersonalJournal() {
 
   // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
   const massIngestions: MassIngestSubstanceDTO[] = [
+    // Puff Counter: 6350
+    {
+      substance: "Nicotine",
+      route: RouteOfAdministrationType.smoked,
+      totalDosage: 10,
+      purity: 1,
+      // Actual time
+      endingDate: chrono.parseDate("18 September 2022 21:47"),
+      // Time of last tank refill
+      startingDate: chrono.parseDate("18 September 2022 06:53"),
+      dosages: 6350 - 6095,
+    },
     // Puff Counter: 6095
     {
       substance: "Nicotine",

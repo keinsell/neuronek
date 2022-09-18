@@ -2,7 +2,7 @@ import {
   Effect,
   EffectCategory,
   EffectType,
-} from "../../../../modules/effects/entities/effect.entity";
+} from "../../../../../modules/effects/entities/effect.entity";
 
 export const MotivationEnhancement: Effect = new Effect({
   name: "Motivation enhancement",
@@ -11,4 +11,6 @@ export const MotivationEnhancement: Effect = new Effect({
   summary:
     "Motivation enhancement is defined as an increased desire to perform tasks and accomplish goals in a productive manner. This includes tasks and goals that would normally be considered too monotonous or overwhelming to fully commit oneself to.",
   page: "",
+  externals: ["https://psychonautwiki.org/wiki/Motivation_enhancement"],
+  references: [],
 });

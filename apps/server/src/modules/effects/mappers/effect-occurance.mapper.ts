@@ -3,8 +3,8 @@ import {
   Effect as PersistenceEffect,
   Substance as PersistenceSubstance,
   RouteOfAdministration as PerisstenceROA,
-} from ".prisma/client";
-import { Prisma } from "@prisma/client";
+  Prisma,
+} from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
 import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";

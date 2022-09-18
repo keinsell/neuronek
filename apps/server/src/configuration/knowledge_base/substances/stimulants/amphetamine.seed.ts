@@ -9,11 +9,13 @@ import {
   RouteOfAdministrationType,
 } from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
-import { MotivationEnhancement } from "../../effects/cognitive/motivation-enhancement.seed";
+import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement.seed";
+import { MotivationEnhancement } from "../../effects/cognitive/enhancements/motivation-enhancement.seed";
 import { Stimulation } from "../../effects/physical/stimulation.seed";
-import { MotivationSupression } from "../../effects/cognitive/motivation-suppression.seed";
+import { MotivationSupression } from "../../effects/cognitive/supressions/motivation-suppression.seed";
 import { PhaseType } from "../../../../modules/substance/entities/phase.entity";
+import { FocusEnhancement } from "../../effects/cognitive/enhancements/focus.enhancement.seed";
+import { Anxiety } from "../../effects/cognitive/enhancements/anxiety.seed";
 
 export const Amphetamine: Substance = new Substance(
   {
@@ -56,7 +58,22 @@ export const Amphetamine: Substance = new Substance(
         dosage: DosageClassification.light,
       }),
       new EffectOccurance({
+        effect: AnalysisEnhancement,
+        substance: "Amphetamine",
+        dosage: DosageClassification.moderate,
+      }),
+      new EffectOccurance({
         effect: MotivationEnhancement,
+        substance: "Amphetamine",
+        dosage: DosageClassification.moderate,
+      }),
+      new EffectOccurance({
+        effect: FocusEnhancement,
+        substance: "Amphetamine",
+        dosage: DosageClassification.light,
+      }),
+      new EffectOccurance({
+        effect: FocusEnhancement,
         substance: "Amphetamine",
         dosage: DosageClassification.moderate,
       }),
@@ -75,6 +92,13 @@ export const Amphetamine: Substance = new Substance(
         intensivity: 3,
         description:
           "Experiences can range from mild demotivation to extreme states of disinterest. This effect is more prominent at common and heavy doses.",
+        phase: PhaseType.aftereffects,
+      }),
+      new EffectOccurance({
+        effect: Anxiety,
+        substance: "Amphetamine",
+        description:
+          "Anxiety can reach severe levels during the comedown in some users.",
         phase: PhaseType.aftereffects,
       }),
     ],
