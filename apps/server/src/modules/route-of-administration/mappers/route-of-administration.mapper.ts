@@ -1,12 +1,9 @@
 import { IMapper } from "../../../common/mapper/mapper.common";
-import { Substance } from "../entities/substance.entity";
 import {
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
   Prisma,
 } from "@prisma/client";
-import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
-import { ClassMembership } from "../entities/class-membership.entity";
 import { RouteOfAdministration } from "../entities/route-of-administration.entity";
 
 export class RouteOfAdministrationMapper implements IMapper {

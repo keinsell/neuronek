@@ -6,7 +6,7 @@ import { PsychoactiveClass } from "../../../../modules/substance/entities/psycho
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/substance/entities/route-of-administration.entity";
+} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
 import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
 
@@ -44,7 +44,7 @@ export const Caffeine: Substance = new Substance(
         },
       }),
     ],
-    effects: [AnalysisEnhancement],
+    effects: [],
   },
   "caffeine"
 );

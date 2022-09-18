@@ -16,13 +16,7 @@ export interface EffectProperties {
   type: EffectType;
   category: EffectCategory;
   summary: string;
-  description: string;
-  /** @deprecated I have no idea how to do this rn */
-  cognitingEffects?: Effect[];
-  /** @deprecated I have no idea how to do this rn */
-  conditingEffectsOnHighDosage?: Effect[];
-  /** @deprecated I have no idea how to do this rn */
-  conditingEffectsOnLowDosage?: Effect[];
+  page?: string;
 }
 
 export class Effect extends Entity implements EffectProperties {
@@ -30,18 +24,14 @@ export class Effect extends Entity implements EffectProperties {
   type: EffectType;
   category: EffectCategory;
   summary: string;
-  description: string;
-  conditingEffectsOnHighDosage?: Effect[] | undefined;
-  conditingEffectsOnLowDosage?: Effect[] | undefined;
+  page?: string;
 
   constructor(properties: EffectProperties, id?: string | number) {
     super(id);
-    this.name = properties.name.replace(` `, "-").toLowerCase();
+    this.name = properties.name;
     this.type = properties.type;
     this.category = properties.category;
     this.summary = properties.summary;
-    this.description = properties.description;
-    this.conditingEffectsOnHighDosage = properties.conditingEffectsOnHighDosage;
-    this.conditingEffectsOnLowDosage = properties.conditingEffectsOnLowDosage;
+    this.page = properties.page;
   }
 }

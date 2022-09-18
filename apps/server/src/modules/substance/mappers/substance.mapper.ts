@@ -3,17 +3,19 @@ import { Substance } from "../entities/substance.entity";
 import {
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
+  OccuranceOfEffect as PersistenceOccuranceOfEffect,
   Prisma,
 } from "@prisma/client";
 import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
 import { ClassMembership } from "../entities/class-membership.entity";
-import { routeOfAdministrationMapper } from "./route-of-administration.mapper";
+import { routeOfAdministrationMapper } from "../../route-of-administration/mappers/route-of-administration.mapper";
 import { PsychoactiveClass } from "../entities/psychoactive-class.enum";
 
 export class SubstanceMapper implements IMapper {
   toDomain(
     entity: PersistenceSubstance & {
       routesOfAdministraton: PersistenceRouteOfAdministration[];
+      OccuranceOfEffect: PersistenceOccuranceOfEffect[];
     }
   ): Substance {
     return new Substance(
@@ -49,5 +51,3 @@ export class SubstanceMapper implements IMapper {
     };
   }
 }
-
-export const substanceMapper = new SubstanceMapper();

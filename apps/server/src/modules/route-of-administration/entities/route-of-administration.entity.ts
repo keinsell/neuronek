@@ -1,6 +1,6 @@
 import { Entity } from "../../../common/entity/entity.common";
-import { DosageClassification } from "./dosage.entity";
-import { PhaseType } from "./phase.entity";
+import { DosageClassification } from "../../substance/entities/dosage.entity";
+import { PhaseType } from "../../substance/entities/phase.entity";
 
 export enum RouteOfAdministrationType {
   oral = "oral",

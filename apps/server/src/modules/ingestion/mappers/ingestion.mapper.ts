@@ -6,8 +6,8 @@ import {
   User as PersistenceUser,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
-import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
-import { substanceMapper } from "../../substance/mappers/substance.mapper";
+import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
+import { SubstanceMapper } from "../../substance/mappers/substance.mapper";
 import { userMapper } from "../../user/mappers/user.mapper";
 import { Ingestion } from "../entities/ingestion.entity";
 
@@ -29,7 +29,7 @@ export class IngestionMapper implements IMapper {
         setting: entity.setting ?? undefined,
         purpose: entity.purpose ?? undefined,
         purity: entity.purity ?? undefined,
-        substance: substanceMapper.toDomain(entity.Substance),
+        substance: new SubstanceMapper().toDomain(entity.Substance),
         user: userMapper.toDomain(entity.Ingester),
       },
       entity.id

@@ -1,14 +1,14 @@
-import { IMapper } from "../../../common/mapper/mapper.common";
 import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
-import { RouteOfAdministration } from "../entities/route-of-administration.entity";
+import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
+import { EffectOccuranceRepository } from "../../effects/repositories/effect-occurance.repository";
 import { Substance } from "../entities/substance.entity";
-import { substanceMapper } from "../mappers/substance.mapper";
-import { routeOfAdministrationRepository } from "./route-of-administration.repository";
+import { SubstanceMapper } from "../mappers/substance.mapper";
+import { routeOfAdministrationRepository } from "../../route-of-administration/repositories/route-of-administration.repository";
 
 export class SubstanceRepository implements Repository<Substance> {
   db = PrismaInstance;
-  mapper = substanceMapper;
+  mapper = new SubstanceMapper();
 
   async save(entity: Substance): Promise<Substance> {
     const presistence = this.mapper.toPersistence(entity);
@@ -23,6 +23,11 @@ export class SubstanceRepository implements Repository<Substance> {
         data: presistence,
         include: {
           routesOfAdministraton: true,
+          OccuranceOfEffect: {
+            include: {
+              Effect: true,
+            },
+          },
         },
       });
 
@@ -35,6 +40,11 @@ export class SubstanceRepository implements Repository<Substance> {
         data: presistence,
         include: {
           routesOfAdministraton: true,
+          OccuranceOfEffect: {
+            include: {
+              Effect: true,
+            },
+          },
         },
       });
 
@@ -45,6 +55,10 @@ export class SubstanceRepository implements Repository<Substance> {
 
     for (const routeOfAdministration of routesOfAdministration) {
       await routeOfAdministrationRepository.save(routeOfAdministration);
+    }
+
+    for (const effect of entity.effects) {
+      await new EffectOccuranceRepository().save(effect);
     }
 
     const aggregateSubstance = await this.findSubstanceByName(entity.name);
@@ -81,6 +95,11 @@ export class SubstanceRepository implements Repository<Substance> {
       },
       include: {
         routesOfAdministraton: true,
+        OccuranceOfEffect: {
+          include: {
+            Effect: true,
+          },
+        },
       },
     });
 
@@ -105,6 +124,11 @@ export class SubstanceRepository implements Repository<Substance> {
       },
       include: {
         routesOfAdministraton: true,
+        OccuranceOfEffect: {
+          include: {
+            Effect: true,
+          },
+        },
       },
     });
 

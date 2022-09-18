@@ -1,9 +1,8 @@
 import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
-import { Journal } from "../../journal/entities/journal.entity";
 import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { PhaseType } from "../../substance/entities/phase.entity";
-import { RouteOfAdministrationType } from "../../substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../substance/entities/substance.entity";
 import { User } from "../../user/entities/user.entity";
 import { IngestionDosage } from "../dtos/ingestion-dosage.dto";

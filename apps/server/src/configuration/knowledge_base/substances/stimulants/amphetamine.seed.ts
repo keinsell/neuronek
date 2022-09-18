@@ -1,14 +1,16 @@
 import ms from "ms";
-import { idText } from "typescript";
+import { EffectOccurance } from "../../../../modules/effects/entities/effect-occurance.entity";
 import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
 import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
+import { DosageClassification } from "../../../../modules/substance/entities/dosage.entity";
 import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/substance/entities/route-of-administration.entity";
+} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
 import { AnalysisEnhancement } from "../../effects/cognitive/analysis-enhancement.seed";
+import { MotivationEnhancement } from "../../effects/cognitive/motivation-enhancement.seed";
 
 export const Amphetamine: Substance = new Substance(
   {
@@ -44,7 +46,20 @@ export const Amphetamine: Substance = new Substance(
         },
       }),
     ],
-    effects: [AnalysisEnhancement],
+    effects: [
+      new EffectOccurance({
+        effect: AnalysisEnhancement,
+        substance: "Amphetamine",
+        dosage: DosageClassification.light,
+        description: "dfsfds?",
+      }),
+      new EffectOccurance({
+        effect: MotivationEnhancement,
+        substance: "Amphetamine",
+        dosage: DosageClassification.moderate,
+        description: "d?",
+      }),
+    ],
   },
   "amphetamine"
 );

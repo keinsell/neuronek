@@ -1,11 +1,7 @@
-import { rules } from "../../../../../../packages/eslint-config-node";
-import { IMapper } from "../../../common/mapper/mapper.common";
 import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
 import { RouteOfAdministration } from "../entities/route-of-administration.entity";
-import { Substance } from "../entities/substance.entity";
 import { routeOfAdministrationMapper } from "../mappers/route-of-administration.mapper";
-import { substanceMapper } from "../mappers/substance.mapper";
 
 export class RouteOfAdministrationRepository
   implements Repository<RouteOfAdministration>
@@ -42,7 +38,6 @@ export class RouteOfAdministrationRepository
   }
 
   async exists(entity: RouteOfAdministration): Promise<boolean> {
-    const presistence = this.mapper.toPersistence(entity);
     const findRouteOfAdministrationById =
       await this.db.routeOfAdministration.findFirst({
         where: {
