@@ -1,5 +1,5 @@
 import { keinsell } from "../../personal-journal";
-import { RouteOfAdministrationType } from "../substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../substance/entities/substance.entity";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
