@@ -1,6 +1,5 @@
 import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
-import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
 import { EffectOccuranceRepository } from "../../effects/repositories/effect-occurance.repository";
 import { Substance } from "../entities/substance.entity";
 import { SubstanceMapper } from "../mappers/substance.mapper";

@@ -1,5 +1,5 @@
 {
-  "name": "@neuroneek/eslint-config-node",
+  "name": "eslint-config-node",
   "version": "0.0.0",
   "type": "commonjs",
   "main": "index.js",
@@ -12,7 +12,7 @@
     "eslint-plugin-neverthrow": "^1.1.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-sonarjs": "^0.15.0",
-    "eslint-plugin-unicorn": "^43.0.0",
+    "eslint-plugin-unicorn": "^43.0.2",
     "typescript": "4.8.3"
   }
 }
