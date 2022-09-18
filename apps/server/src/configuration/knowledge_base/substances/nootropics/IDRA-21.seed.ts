@@ -26,7 +26,7 @@ export const IDRA_21: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.oral,
-        substanceName: "IDRA-21",
+        _substance: "IDRA-21",
         bioavailability: 0.8,
         dosage: {
           thereshold: 1,

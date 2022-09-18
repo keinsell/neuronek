@@ -27,7 +27,7 @@ export const Amphetamine: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.insufflated,
-        substanceName: "Amphetamine",
+        _substance: "Amphetamine",
         bioavailability: 0.8,
         dosage: {
           thereshold: 4,

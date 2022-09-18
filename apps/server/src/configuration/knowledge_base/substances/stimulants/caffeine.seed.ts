@@ -25,7 +25,7 @@ export const Caffeine: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.oral,
-        substanceName: "Caffeine",
+        _substance: "Caffeine",
         bioavailability: 0.8,
         dosage: {
           thereshold: 10,

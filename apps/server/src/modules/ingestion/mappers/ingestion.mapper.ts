@@ -3,6 +3,7 @@ import {
   Ingestion as PersistenceIngestion,
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
+  OccuranceOfEffect as PersistenceOccuranceOfEffect,
   User as PersistenceUser,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
@@ -17,6 +18,7 @@ export class IngestionMapper implements IMapper {
       Ingester: PersistenceUser;
       Substance: PersistenceSubstance & {
         routesOfAdministraton: PersistenceRouteOfAdministration[];
+        OccuranceOfEffect: PersistenceOccuranceOfEffect[];
       };
     }
   ): Ingestion {

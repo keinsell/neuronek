@@ -3,7 +3,6 @@ import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { PhaseType } from "../../substance/entities/phase.entity";
 import { PsychoactiveClass } from "../../substance/entities/psychoactive-class.enum";
 import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../../substance/entities/substance.entity";
 import { Effect } from "./effect.entity";
 
 // TODO: This is actually a pretty huge concept as even PsychonautWiki doesn't present such detailed information - I'm not sure if I should even bother with this, but I'll not be myself when I would drop this idea.

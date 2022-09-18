@@ -4,20 +4,22 @@ import {
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,
   OccuranceOfEffect as PersistenceOccuranceOfEffect,
+  Effect as PersistenceEffect,
   Prisma,
 } from "@prisma/client";
 import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
 import { ClassMembership } from "../entities/class-membership.entity";
 import { routeOfAdministrationMapper } from "../../route-of-administration/mappers/route-of-administration.mapper";
 import { PsychoactiveClass } from "../entities/psychoactive-class.enum";
+import { EffectOccuranceMapper } from "../../effects/mappers/effect-occurance.mapper";
+
+export type PersistenceSubstanceWithRelations = PersistenceSubstance & {
+  routesOfAdministraton: PersistenceRouteOfAdministration[];
+  OccuranceOfEffect: PersistenceOccuranceOfEffect[];
+};
 
 export class SubstanceMapper implements IMapper {
-  toDomain(
-    entity: PersistenceSubstance & {
-      routesOfAdministraton: PersistenceRouteOfAdministration[];
-      OccuranceOfEffect: PersistenceOccuranceOfEffect[];
-    }
-  ): Substance {
+  toDomain(entity: PersistenceSubstanceWithRelations): Substance {
     return new Substance(
       {
         name: entity.name,

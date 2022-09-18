@@ -12,7 +12,7 @@ export class RouteOfAdministrationMapper implements IMapper {
       {
         route: entity.type as any,
         bioavailability: entity.bioavailability ?? 100,
-        substanceName: entity.substanceName,
+        _substance: entity.substanceName,
         dosage: {
           thereshold: entity.theresholdDosage,
           light: entity.lightDosage,
@@ -57,7 +57,7 @@ export class RouteOfAdministrationMapper implements IMapper {
       aftereffects: entity.duration.aftereffects,
       Substance: {
         connect: {
-          name: entity.substanceName,
+          name: entity._substance,
         },
       },
     };

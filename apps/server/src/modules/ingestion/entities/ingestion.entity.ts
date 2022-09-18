@@ -49,7 +49,7 @@ export class Ingestion extends Entity implements IngestionProperties {
   }
 
   getIngestionStages() {
-    const { date, substance, route, dosage } = this;
+    const { date, substance, route } = this;
     const { administrationRoutes } = substance;
 
     const administrationRoute = administrationRoutes.find(
@@ -127,9 +127,6 @@ export class Ingestion extends Entity implements IngestionProperties {
     if (!administrationRoute?.duration) {
       throw Error("No duration found for route of administration");
     }
-
-    const { onset, comeup, peak, offset, aftereffects } =
-      administrationRoute.duration;
 
     const stages = this.getIngestionStages();
 
@@ -231,12 +228,6 @@ export class Ingestion extends Entity implements IngestionProperties {
   }
 
   getIngestionPlan(): IngestionPlan {
-    const { substance, route, dosage, purity, purpose, setting, set } = this;
-
-    const ingestionDosage = this.getIngestionDosage();
-
-    const ingestionProgression = this.getIngestionProgression();
-
     throw Error("Not implemented");
   }
 

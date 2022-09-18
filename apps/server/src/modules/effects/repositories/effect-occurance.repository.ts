@@ -3,7 +3,6 @@ import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
 import { EffectOccurance } from "../entities/effect-occurance.entity";
 import { EffectOccuranceMapper } from "../mappers/effect-occurance.mapper";
-import { EffectMapper } from "../mappers/effect.mapper";
 
 export class EffectOccuranceRepository extends Repository<EffectOccurance> {
   override db = PrismaInstance.occuranceOfEffect;

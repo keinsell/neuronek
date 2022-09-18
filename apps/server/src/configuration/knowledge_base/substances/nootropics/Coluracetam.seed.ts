@@ -26,7 +26,7 @@ export const Coluracetam: Substance = new Substance(
     administrationRoutes: [
       new RouteOfAdministration({
         route: RouteOfAdministrationType.oral,
-        substanceName: "Coluracetam",
+        _substance: "Coluracetam",
         bioavailability: 0.8,
         dosage: {
           thereshold: 1,
