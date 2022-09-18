@@ -9,6 +9,7 @@ export enum EffectType {
 
 export enum EffectCategory {
   cognitive = "cognitive",
+  physical = "physical",
 }
 
 export interface EffectProperties {

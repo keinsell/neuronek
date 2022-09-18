@@ -27,7 +27,7 @@ export class RouteOfAdministrationRepository
 
       await this.db.routeOfAdministration.updateMany({
         where: {
-          substanceName: entity.substanceName,
+          substanceName: entity._substance,
           type: entity.route,
         },
         data: updatePayload,
@@ -41,7 +41,7 @@ export class RouteOfAdministrationRepository
     const findRouteOfAdministrationById =
       await this.db.routeOfAdministration.findFirst({
         where: {
-          substanceName: entity.substanceName,
+          substanceName: entity._substance,
           type: entity.route,
         },
       });

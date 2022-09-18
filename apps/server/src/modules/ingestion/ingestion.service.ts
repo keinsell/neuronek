@@ -71,16 +71,16 @@ export class IngestionService {
     const { substance, dosage, purity, date, route, set, setting, purpose } =
       ingestion;
 
-    const substanceEntity = await this.substanceService.findSubstanceByName(
+    const interalSubstance = await this.substanceService.findSubstanceByName(
       substance
     );
 
-    if (!substanceEntity) {
+    if (!interalSubstance) {
       throw new Error("Substance not found.");
     }
 
     const dedicatedIngestion = new Ingestion({
-      substance: substanceEntity,
+      substance: interalSubstance,
       route,
       dosage,
       purity,

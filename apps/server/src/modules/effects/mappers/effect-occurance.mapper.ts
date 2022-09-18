@@ -35,12 +35,13 @@ export class EffectOccuranceMapper implements IMapper {
   }
 
   toPersistence(entity: EffectOccurance): Prisma.OccuranceOfEffectCreateInput {
-    console.log(entity);
-
     let effectOccurance: Prisma.OccuranceOfEffectCreateInput = {
       Effect: {
-        connect: {
-          name: new EffectMapper().stringifyEffectName(entity.effect.name),
+        connectOrCreate: {
+          where: {
+            name: new EffectMapper().stringifyEffectName(entity.effect.name),
+          },
+          create: new EffectMapper().toPersistence(entity.effect),
         },
       },
       description: entity.description,

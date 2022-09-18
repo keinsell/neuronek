@@ -31,6 +31,15 @@ export async function syncPersonalJournal() {
     {
       substance: "Caffeine",
       route: RouteOfAdministrationType.oral,
+      dosage: 40,
+      purity: 1,
+      date: chrono.parseDate("18 September 2022 13:33"),
+      set: "Sleepy & Tired",
+      setting: "Home",
+    },
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
       dosage: 80,
       purity: 1,
       date: chrono.parseDate("17 September 2022 16:14"),
@@ -280,7 +289,7 @@ export async function syncPersonalJournal() {
   journalek.getProgressionOfActiveIngestions();
 
   const journalOfLast7Days = journalek.filterIngestions({
-    timeSince: ms("7d"),
+    timeSince: ms("14d"),
   });
 
   const substancesIngestedInLast7Days =
@@ -290,7 +299,7 @@ export async function syncPersonalJournal() {
     journalek
       .filterIngestions({
         substance: substance.name,
-        timeSince: ms("7d"),
+        timeSince: ms("14d"),
       })
       .getAverageDosagePerDay();
   });
