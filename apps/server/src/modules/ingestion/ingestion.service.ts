@@ -67,6 +67,7 @@ export class IngestionService {
     return created;
   }
 
+  // TODO: Domain Case - Disadvise usage of drugs if were not prescripted by doctor if user is under 24 years old as brain is still developing
   async planIngestion(ingestion: IngestSubstanceDTO) {
     const { substance, dosage, purity, date, route, set, setting, purpose } =
       ingestion;

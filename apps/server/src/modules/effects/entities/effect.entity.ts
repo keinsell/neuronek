@@ -5,6 +5,7 @@ export enum EffectType {
   supression = "supression",
   distortion = "distortion",
   alternation = "alternation",
+  novel = "novel",
 }
 
 export enum EffectCategory {

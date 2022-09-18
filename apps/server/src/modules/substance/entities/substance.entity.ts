@@ -129,10 +129,7 @@ export class Substance extends Entity implements SubstanceProperties {
     };
   }
 
-  getEffectsForDosage(
-    dosage: number,
-    route: RouteOfAdministrationType
-  ): EffectOccurance[] {
+  getEffectsForDosage(dosage: number, route: RouteOfAdministrationType) {
     const routeOfAdministration = this.administrationRoutes.find(
       (v) => v.route === route
     );
@@ -141,12 +138,6 @@ export class Substance extends Entity implements SubstanceProperties {
       throw new Error("No route of administration found");
     }
 
-    const { dosage: substanceDosage } = routeOfAdministration;
-
-    const classification = this.getDosageClassification(dosage, route);
-
-    return this.effects.filter(
-      (v) => v.dosage === classification || v.dosage === undefined
-    );
+    console.log(this.effects.map((v) => v.effect.name));
   }
 }
