@@ -3,17 +3,25 @@ import { Amphetamine } from "./configuration/knowledge_base/substances/stimulant
 import { RouteOfAdministrationType } from "./modules/route-of-administration/entities/route-of-administration.entity";
 import { keinsell, syncPersonalJournal } from "./personal-journal";
 import logProcessErrors from "log-process-errors";
+import { IngestionService } from "./modules/ingestion/ingestion.service";
+import { SubstanceRepository } from "./modules/substance/repositories/substance.repository";
 
 logProcessErrors();
 
 export async function main() {
   new HttpApplication().bootstrap();
-
-  console.log(
-    Amphetamine.getEffectsForDosage(30, RouteOfAdministrationType.insufflated)
-  );
-
   await syncPersonalJournal();
+
+  await new SubstanceRepository().save(Amphetamine);
+
+  const y = await new IngestionService().planIngestion({
+    substance: "Amphetamine",
+    route: RouteOfAdministrationType.insufflated,
+    dosage: 50,
+    purity: 1,
+  });
+
+  console.log(y);
 }
 
 await main();

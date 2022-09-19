@@ -30,7 +30,6 @@ export class HttpApplication {
 
   public async bootstrap() {
     this.application.listen(3000);
-
-    console.log(3000);
+    console.log("🚀 Server ready at: http://localhost:3000");
   }
 }

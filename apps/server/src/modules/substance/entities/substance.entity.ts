@@ -138,6 +138,47 @@ export class Substance extends Entity implements SubstanceProperties {
       throw new Error("No route of administration found");
     }
 
-    console.log(this.effects.map((v) => v.effect.name));
+    return this.effects.map((v) => v.effect.name);
+  }
+
+  getDurationOfEffectsForRouteOfAdministration(
+    route: RouteOfAdministrationType
+  ) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    // sum phase durations
+    return (
+      routeOfAdministration.duration.onset +
+      routeOfAdministration.duration.comeup +
+      routeOfAdministration.duration.peak +
+      routeOfAdministration.duration.offset
+    );
+  }
+
+  getDurationOfEffectsWithAftereffectsForRouteOfAdministration(
+    route: RouteOfAdministrationType
+  ) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    // sum phase durations
+    return (
+      routeOfAdministration.duration.onset +
+      routeOfAdministration.duration.comeup +
+      routeOfAdministration.duration.peak +
+      routeOfAdministration.duration.offset +
+      routeOfAdministration.duration.aftereffects
+    );
   }
 }

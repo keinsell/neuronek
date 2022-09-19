@@ -1,6 +1,8 @@
+import ms from "ms";
+import { Amphetamine } from "../../configuration/knowledge_base/substances/stimulants/amphetamine.seed";
 import { keinsell } from "../../personal-journal";
 import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../substance/entities/substance.entity";
+import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
 import { Ingestion } from "./entities/ingestion.entity";
@@ -30,6 +32,20 @@ export interface MassIngestSubstanceDTO {
   purpose?: string;
   set?: string;
   setting?: string;
+}
+
+export interface IngestionPlanDTO {
+  // Basic information about planned ingestion
+  substance: string;
+  dosage: string;
+  route: string;
+
+  // Analitical information about planned ingestion
+  substanceWillPromoteEffectsFor: string;
+  substanceWillPromoteAfterEffectsFor: string;
+
+  // Takedowns on planned ingestion
+  takedowns: string[];
 }
 
 export class IngestionService {
@@ -80,21 +96,101 @@ export class IngestionService {
       throw new Error("Substance not found.");
     }
 
-    const dedicatedIngestion = new Ingestion({
-      substance: interalSubstance,
-      route,
-      dosage,
-      purity,
-      set,
-      setting,
-      purpose,
-      date: date || new Date(),
-      user: keinsell,
-    });
+    const dosageClassifcation = interalSubstance.getDosageClassification(
+      dosage * (purity ?? 1),
+      route
+    );
 
-    console.log(dedicatedIngestion);
+    const timeOfPostiveEffectsPromotedByIngestion =
+      interalSubstance.getDurationOfEffectsForRouteOfAdministration(route);
 
-    return dedicatedIngestion.getIngestionProgression();
+    const timeOfPositiveAndNegativeEffectsPromotedByIngestion =
+      interalSubstance.getDurationOfEffectsWithAftereffectsForRouteOfAdministration(
+        route
+      );
+
+    const takedowns: string[] = [];
+
+    takedowns.push(
+      `Ingestion will promote positive effects for ${ms(
+        timeOfPostiveEffectsPromotedByIngestion,
+        { long: true }
+      )} and afterwards aftereffects for ${ms(
+        timeOfPositiveAndNegativeEffectsPromotedByIngestion -
+          timeOfPostiveEffectsPromotedByIngestion,
+        { long: true }
+      )}, in total - effects of substance may be felt for ${ms(
+        timeOfPositiveAndNegativeEffectsPromotedByIngestion,
+        { long: true }
+      )}.`
+    );
+
+    // TODO: Harm-reduction-like cases should be moved out to separate harm-reduction dedicated module
+
+    // Guard against StimulantUsageAtNightOrEvening
+    if (
+      interalSubstance.classMembership.psychoactiveClass ===
+        PsychoactiveClass.stimulant &&
+      (new Date().getHours() > 14 || new Date().getHours() < 8)
+    ) {
+      takedowns.push(
+        `It's not recommended to ingest stimulants in the evening or at night, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
+          Date.now() + timeOfPositiveAndNegativeEffectsPromotedByIngestion
+        ).toLocaleTimeString()}`
+      );
+    }
+
+    // Guard against theresholdDosage
+    if (dosageClassifcation === "thereshold") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a thereshold dosage, which may not produce any subjective effects.`
+      );
+    }
+
+    // Guard against stronger dosages
+    if (dosageClassifcation === "heavy" || dosageClassifcation === "strong") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a ${dosageClassifcation} dosage, which may produce overwhelming subjective effects along with unecessary strain for one's body which may lead to serious health issues.`
+      );
+    }
+
+    // Guard against overdoses
+    if (dosageClassifcation === "overdose") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a overdose, which doesn't have any positive effects and may produce overwhelming subjective effects along with serious (unreversable) health risks and even death.`
+      );
+    }
+
+    if (interalSubstance.getEffectsForDosage(dosage, route).length > 0) {
+      takedowns.push(
+        `${
+          interalSubstance.name
+        } in ${dosageClassifcation} dosage may produce following effects: ${interalSubstance
+          .getEffectsForDosage(dosage, route)
+          .join(", ")
+          .toLowerCase()}`
+      );
+    } else {
+      takedowns.push(
+        `There are no known effects in our system of ${interalSubstance.name} in ${dosageClassifcation} dosage. THIS DOESN'T MEAN THAT THERE ARE NO EFFECTS, IT MEANS THAT WE DON'T KNOW ABOUT THEM. You should most likely lookup other relatable sources such as PsychonautWiki, Tripsit or Erowid`
+      );
+    }
+
+    const ingestionPlan: IngestionPlanDTO = {
+      substance: interalSubstance.name,
+      dosage: dosageClassifcation,
+      route: route,
+      substanceWillPromoteEffectsFor: ms(
+        timeOfPostiveEffectsPromotedByIngestion
+      ),
+      substanceWillPromoteAfterEffectsFor: ms(
+        timeOfPositiveAndNegativeEffectsPromotedByIngestion -
+          timeOfPostiveEffectsPromotedByIngestion
+      ),
+      takedowns: takedowns,
+    };
+
+    return ingestionPlan;
   }
 
   async autofillPastIngestionsByAmountAndDosages(

@@ -31,6 +31,15 @@ export async function syncPersonalJournal() {
     {
       substance: "Caffeine",
       route: RouteOfAdministrationType.oral,
+      dosage: 60,
+      purity: 1,
+      date: chrono.parseDate("19 September 2022 3:35"),
+      set: "Idk, why I've drinked this shit",
+      setting: "Home",
+    },
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
       dosage: 80,
       purity: 1,
       date: chrono.parseDate("18 September 2022 13:33"),
