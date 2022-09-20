@@ -1,3 +1,4 @@
+/* eslint-disable node/file-extension-in-import */
 import ms from "ms";
 import {
   EffectIntensivity,
@@ -12,13 +13,14 @@ import {
   RouteOfAdministrationType,
 } from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement.seed";
 import { MotivationEnhancement } from "../../effects/cognitive/enhancements/motivation-enhancement.seed";
 import { Stimulation } from "../../effects/physical/stimulation.seed";
 import { MotivationSupression } from "../../effects/cognitive/supressions/motivation-suppression.seed";
 import { PhaseType } from "../../../../modules/substance/entities/phase.entity";
-import { FocusEnhancement } from "../../effects/cognitive/enhancements/focus.enhancement.seed";
 import { Anxiety } from "../../effects/cognitive/enhancements/anxiety.seed";
+import { FocusEnhancement } from "../../effects/cognitive/enhancements/focus-enhancement/focus-enchancement";
+import { SpontaneousBodilySensations } from "../../effects/tactile/spontaneous-bodily-sensations";
+import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement/analysis-enchancement";
 
 export const Amphetamine: Substance = new Substance(
   {
@@ -79,6 +81,7 @@ export const Amphetamine: Substance = new Substance(
         effect: AnalysisEnhancement,
         substance: "Amphetamine",
         dosages: [DosageClassification.light, DosageClassification.moderate],
+        phases: [PhaseType.comeup, PhaseType.peak],
       }),
       new EffectOccurance({
         effect: MotivationEnhancement,
@@ -88,11 +91,13 @@ export const Amphetamine: Substance = new Substance(
           DosageClassification.strong,
           DosageClassification.heavy,
         ],
+        phases: [PhaseType.comeup, PhaseType.peak],
       }),
       new EffectOccurance({
         effect: FocusEnhancement,
         substance: "Amphetamine",
         dosages: [DosageClassification.light, DosageClassification.moderate],
+        phases: [PhaseType.comeup, PhaseType.peak],
       }),
       new EffectOccurance({
         effect: Stimulation,
@@ -121,6 +126,18 @@ export const Amphetamine: Substance = new Substance(
         intensivity: EffectIntensivity.moderate,
         description:
           "Experiences can range from mild demotivation to extreme states of disinterest. This effect is more prominent at common and heavy doses.",
+      }),
+      new EffectOccurance({
+        effect: SpontaneousBodilySensations,
+        substance: "Amphetamine",
+        phases: [PhaseType.onset, PhaseType.peak],
+        // TODO: Not sure about this one, but according to experiences nobody experienced such at lower dosages, I would also doubt moderate dosage causes this effect.
+        dosages: [
+          DosageClassification.moderate,
+          DosageClassification.strong,
+          DosageClassification.heavy,
+        ],
+        description: `The "body high" of amphetamine can be described as a moderate euphoric tingling sensation that encompasses the entire body. This sensation maintains a consistent presence that steadily rises with the onset and hits its limit once the peak has been reached.`,
       }),
       new EffectOccurance({
         effect: Anxiety,

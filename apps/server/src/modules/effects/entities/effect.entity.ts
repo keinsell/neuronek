@@ -6,12 +6,19 @@ export enum EffectType {
   distortion = "distortion",
   alternation = "alternation",
   novel = "novel",
+  psychological = "psychological",
+  hallucinatoryState = "hallucinatory-state",
+  geometry = "geometry",
+  transpersonal = "transpersonal",
 }
 
 export enum EffectCategory {
   cognitive = "cognitive",
   physical = "physical",
+  tactile = "tactile",
 }
+
+export const EffectTypesConsideredAsNegative = [EffectType.supression];
 
 export interface EffectProperties {
   name: string;

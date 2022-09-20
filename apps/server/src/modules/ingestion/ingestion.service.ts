@@ -1,6 +1,8 @@
+import collect from "collect.js";
 import ms from "ms";
 import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
 import { DosageClassification } from "../substance/entities/dosage.entity";
+import { PhaseType } from "../substance/entities/phase.entity";
 import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
@@ -99,6 +101,8 @@ export class IngestionService {
       route
     );
 
+    // TODO: We should query journal of user (for past 3 months maybe because that's the longest possible time for a substance to be in the system) and check if he has ingested this substance before - analyze if this ingestion will match with abuse prevention and maybe it's redose. Messy functionality a bit.
+
     const timeOfPostiveEffectsPromotedByIngestion =
       interalSubstance.getDurationOfEffectsForRouteOfAdministrationToPeak(
         route
@@ -170,6 +174,27 @@ export class IngestionService {
       route
     );
 
+    const effectsConsideredAsProducedBySubstance = collect(effects)
+      .filter(
+        (v) =>
+          v.phases?.includes(PhaseType.comeup) ||
+          v.phases?.includes(PhaseType.peak) ||
+          v.phases?.length === 0 ||
+          false
+      )
+      .all();
+
+    const effectsConsideredAsAftereffects = collect(effects)
+      .filter(
+        (v) =>
+          v.phases?.includes(PhaseType.aftereffects) ||
+          v.phases?.length === 0 ||
+          false
+      )
+      .all();
+
+    console.log(effectsConsideredAsAftereffects.map((v) => v.effect.name));
+
     // TODO: We should split effects into positive and negative I think
 
     if (
@@ -181,7 +206,13 @@ export class IngestionService {
       takedowns.push(
         `${
           interalSubstance.name
-        } in ${dosageClassifcation} dosage may produce following effects: ${effects
+        } in ${dosageClassifcation} dosage may produce following effects: ${effectsConsideredAsProducedBySubstance
+          .map((v) => v.effect.name)
+          .join(", ")
+          .toLowerCase()}`,
+        `${
+          interalSubstance.name
+        } in ${dosageClassifcation} dosage may lead to following effects that can be considered negative after or during experience: ${effectsConsideredAsAftereffects
           .map((v) => v.effect.name)
           .join(", ")
           .toLowerCase()}`
