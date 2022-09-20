@@ -15,7 +15,9 @@ import { EffectOccuranceMapper } from "../../effects/mappers/effect-occurance.ma
 
 export type PersistenceSubstanceWithRelations = PersistenceSubstance & {
   routesOfAdministraton: PersistenceRouteOfAdministration[];
-  OccuranceOfEffect: PersistenceOccuranceOfEffect[];
+  OccuranceOfEffect: (PersistenceOccuranceOfEffect & {
+    Effect: PersistenceEffect;
+  })[];
 };
 
 export class SubstanceMapper implements IMapper {
@@ -36,7 +38,11 @@ export class SubstanceMapper implements IMapper {
         administrationRoutes: entity.routesOfAdministraton.map((roa) =>
           routeOfAdministrationMapper.toDomain(roa)
         ),
-        effects: [],
+        effects: entity.OccuranceOfEffect
+          ? entity.OccuranceOfEffect.map((occurance) =>
+              new EffectOccuranceMapper().toDomain(occurance)
+            )
+          : [],
       },
       entity.id
     );

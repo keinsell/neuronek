@@ -2,10 +2,10 @@ import {
   Effect,
   EffectCategory,
   EffectType,
-} from "../../../../../modules/effects/entities/effect.entity";
+} from "../../../../../../modules/effects/entities/effect.entity";
 
 export const FocusEnhancement: Effect = new Effect({
-  name: "Cognitive euphoria",
+  name: "Focus Enchancement",
   type: EffectType.enhancement,
   category: EffectCategory.cognitive,
   summary:

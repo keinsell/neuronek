@@ -27,7 +27,54 @@ export async function syncPersonalJournal() {
   await substanceRepository.save(Caffeine);
   await substanceRepository.save(Nicotine);
 
+  const caffeineSET = "Usually, daily caffeine addiction";
+
   const ingestions: IngestSubstanceDTO[] = [
+    {
+      substance: "Amphetamine",
+      route: RouteOfAdministrationType.insufflated,
+      dosage: 10,
+      purity: 0.89,
+      date: chrono.parseDate("20 September 2022 22:32"),
+      set: "Literally no focus even when hard try to, constantly switching tasks and losing motivation.",
+      setting: "Home",
+    },
+    {
+      substance: "Amphetamine",
+      route: RouteOfAdministrationType.insufflated,
+      dosage: 8,
+      purity: 0.89,
+      date: chrono.parseDate("20 September 2022 10:06"),
+      set: "Literally no focus even when hard try to, constantly switching tasks and losing motivation.",
+      setting: "Home",
+    },
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
+      dosage: 80,
+      purity: 1,
+      date: chrono.parseDate("20 September 2022 12:21"),
+      set: caffeineSET,
+      setting: "Home",
+    },
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
+      dosage: 80,
+      purity: 1,
+      date: chrono.parseDate("19 September 2022 13:04"),
+      set: "Usually, daily caffeine addiction",
+      setting: "Home",
+    },
+    {
+      substance: "Caffeine",
+      route: RouteOfAdministrationType.oral,
+      dosage: 80,
+      purity: 1,
+      date: chrono.parseDate("19 September 2022 3:35"),
+      set: "Idk, why I've drinked this shit",
+      setting: "Home",
+    },
     {
       substance: "Caffeine",
       route: RouteOfAdministrationType.oral,
@@ -158,6 +205,42 @@ export async function syncPersonalJournal() {
 
   // As my Nicotine addiction is pretty heavy, it's extremally hard to keep track of it, instead I'll use a estimation method and puff counter on my vape device. Every refill of tank should be noted and puff counter should be read.
   const massIngestions: MassIngestSubstanceDTO[] = [
+    // Puff Counter: 7123
+    {
+      substance: "Nicotine",
+      route: RouteOfAdministrationType.smoked,
+      totalDosage: 5,
+      purity: 1,
+      // Actual time
+      endingDate: chrono.parseDate("20 September 2022 11:08"),
+      // Time of last tank refill
+      startingDate: chrono.parseDate("19 September 2022 22:07"),
+      dosages: 7123 - 7000,
+    },
+    // Puff Counter: 7000
+    {
+      substance: "Nicotine",
+      route: RouteOfAdministrationType.smoked,
+      totalDosage: 7,
+      purity: 1,
+      // Actual time
+      endingDate: chrono.parseDate("19 September 2022 22:07"),
+      // Time of last tank refill
+      startingDate: chrono.parseDate("19 September 2022 15:53"),
+      dosages: 7000 - 6790,
+    },
+    // Puff Counter: 6790
+    {
+      substance: "Nicotine",
+      route: RouteOfAdministrationType.smoked,
+      totalDosage: 10,
+      purity: 1,
+      // Actual time
+      endingDate: chrono.parseDate("19 September 2022 15:53"),
+      // Time of last tank refill
+      startingDate: chrono.parseDate("18 September 2022 21:47"),
+      dosages: 6790 - 6350,
+    },
     // Puff Counter: 6350
     {
       substance: "Nicotine",

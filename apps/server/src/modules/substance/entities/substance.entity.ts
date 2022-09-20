@@ -1,3 +1,4 @@
+/* eslint-disable node/no-extraneous-import */
 import { Entity } from "../../../common/entity/entity.common";
 import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
 import { User } from "../../user/entities/user.entity";
@@ -9,7 +10,7 @@ import {
   RouteOfAdministration,
   RouteOfAdministrationType,
 } from "../../route-of-administration/entities/route-of-administration.entity";
-
+import { collect } from "collect.js";
 export interface SubstanceProperties {
   name: string;
   chemnicalNomencalture: ChemicalNomenclature;
@@ -129,10 +130,10 @@ export class Substance extends Entity implements SubstanceProperties {
     };
   }
 
-  getEffectsForDosage(
-    dosage: number,
+  getIngestionSpecificEffects(
+    dosage: DosageClassification,
     route: RouteOfAdministrationType
-  ): EffectOccurance[] {
+  ) {
     const routeOfAdministration = this.administrationRoutes.find(
       (v) => v.route === route
     );
@@ -141,12 +142,53 @@ export class Substance extends Entity implements SubstanceProperties {
       throw new Error("No route of administration found");
     }
 
-    const { dosage: substanceDosage } = routeOfAdministration;
+    const availableEffects = collect(this.effects);
 
-    const classification = this.getDosageClassification(dosage, route);
+    return availableEffects
+      .filter(
+        (effect) => effect.routes?.includes(route) || effect.routes?.length == 0
+      )
+      .filter(
+        (effect) =>
+          effect.dosages?.includes(dosage) || effect.routes?.length == 0
+      )
+      .toArray<EffectOccurance>();
+  }
 
-    return this.effects.filter(
-      (v) => v.dosage === classification || v.dosage === undefined
+  getDurationOfEffectsForRouteOfAdministrationToPeak(
+    route: RouteOfAdministrationType
+  ) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    // sum phase durations
+    return (
+      routeOfAdministration.duration.onset +
+      routeOfAdministration.duration.comeup +
+      routeOfAdministration.duration.peak
+    );
+  }
+
+  getDurationOfEffectsForRouteOfAdministrationAfterPeak(
+    route: RouteOfAdministrationType
+  ) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    // sum phase durations
+    return (
+      routeOfAdministration.duration.offset +
+      routeOfAdministration.duration.aftereffects
     );
   }
 }

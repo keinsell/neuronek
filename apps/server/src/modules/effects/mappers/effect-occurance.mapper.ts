@@ -10,6 +10,7 @@ import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
 import { EffectOccurance } from "../entities/effect-occurance.entity";
 import { EffectMapper } from "./effect.mapper";
+import { PhaseType } from "../../substance/entities/phase.entity";
 
 export class EffectOccuranceMapper implements IMapper {
   toDomain(
@@ -24,10 +25,11 @@ export class EffectOccuranceMapper implements IMapper {
       {
         effect: new EffectMapper().toDomain(entity.Effect),
         substance: entity.substance ?? undefined,
-        dosage: (entity.dosage as DosageClassification) ?? undefined,
-        route:
-          (entity.routeOfAdministration as RouteOfAdministrationType) ??
+        dosages: (entity.dosage as DosageClassification[]) ?? undefined,
+        routes:
+          (entity.routeOfAdministration as RouteOfAdministrationType[]) ??
           undefined,
+        phases: (entity.phase as PhaseType[]) ?? undefined,
         description: entity.description ?? undefined,
       },
       entity.id
@@ -45,10 +47,10 @@ export class EffectOccuranceMapper implements IMapper {
         },
       },
       description: entity.description,
-      dosage: entity.dosage,
-      phase: entity.phase,
+      dosage: entity.dosages,
+      phase: entity.phases,
       psychoactiveGroup: entity.psychoactiveClass,
-      routeOfAdministration: entity.route,
+      routeOfAdministration: entity.routes,
     };
 
     if (entity.substance) {
@@ -77,20 +79,40 @@ export class EffectOccuranceMapper implements IMapper {
       effectOccuranceWhereQuery.substance = String(entity.substance);
     }
 
-    if (entity.dosage) {
-      effectOccuranceWhereQuery.dosage = entity.dosage;
+    if (entity.dosages) {
+      effectOccuranceWhereQuery = {
+        ...effectOccuranceWhereQuery,
+        dosage: {
+          hasSome: entity.dosages,
+        },
+      };
     }
 
-    if (entity.route) {
-      effectOccuranceWhereQuery.routeOfAdministration = entity.route;
+    if (entity.routes) {
+      effectOccuranceWhereQuery = {
+        ...effectOccuranceWhereQuery,
+        routeOfAdministration: {
+          hasSome: entity.routes,
+        },
+      };
     }
 
-    if (entity.phase) {
-      effectOccuranceWhereQuery.phase = entity.phase;
+    if (entity.phases) {
+      effectOccuranceWhereQuery = {
+        ...effectOccuranceWhereQuery,
+        phase: {
+          hasSome: entity.phases,
+        },
+      };
     }
 
     if (entity.psychoactiveClass) {
-      effectOccuranceWhereQuery.psychoactiveGroup = entity.psychoactiveClass;
+      effectOccuranceWhereQuery = {
+        ...effectOccuranceWhereQuery,
+        psychoactiveGroup: {
+          hasSome: entity.psychoactiveClass,
+        },
+      };
     }
 
     return effectOccuranceWhereQuery;

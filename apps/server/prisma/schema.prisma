@@ -105,10 +105,10 @@ model OccuranceOfEffect {
 
     effect                String
     substance             String?
-    dosage                String?
-    routeOfAdministration String?
-    phase                 String?
-    psychoactiveGroup     String?
+    dosage                String[]
+    routeOfAdministration String[]
+    phase                 String[]
+    psychoactiveGroup     String[]
     intensivity           String?
     description           String?
 

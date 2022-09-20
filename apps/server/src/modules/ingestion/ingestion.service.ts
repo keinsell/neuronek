@@ -1,8 +1,12 @@
-import { keinsell } from "../../personal-journal";
+import collect from "collect.js";
+import ms from "ms";
 import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../substance/entities/substance.entity";
+import { DosageClassification } from "../substance/entities/dosage.entity";
+import { PhaseType } from "../substance/entities/phase.entity";
+import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
+import { IngestionPlan } from "./dtos/ingestion-plan.dto";
 import { Ingestion } from "./entities/ingestion.entity";
 import { IngestedSubstanceEvent } from "./events/ingested-substance.event";
 import { ingestionRepository } from "./repositories/ingestion.repository";
@@ -30,6 +34,20 @@ export interface MassIngestSubstanceDTO {
   purpose?: string;
   set?: string;
   setting?: string;
+}
+
+export interface IngestionPlanDTO {
+  // Basic information about planned ingestion
+  substance: string;
+  dosage: string;
+  route: string;
+
+  // Analitical information about planned ingestion
+  substanceWillPromoteEffectsFor: string;
+  substanceWillPromoteAfterEffectsFor: string;
+
+  // Takedowns on planned ingestion
+  takedowns: string[];
 }
 
 export class IngestionService {
@@ -67,9 +85,9 @@ export class IngestionService {
     return created;
   }
 
+  // TODO: Domain Case - Disadvise usage of drugs if were not prescripted by doctor if user is under 24 years old as brain is still developing
   async planIngestion(ingestion: IngestSubstanceDTO) {
-    const { substance, dosage, purity, date, route, set, setting, purpose } =
-      ingestion;
+    const { substance, dosage, purity, route } = ingestion;
 
     const interalSubstance = await this.substanceService.findSubstanceByName(
       substance
@@ -79,21 +97,147 @@ export class IngestionService {
       throw new Error("Substance not found.");
     }
 
-    const dedicatedIngestion = new Ingestion({
-      substance: interalSubstance,
-      route,
-      dosage,
-      purity,
-      set,
-      setting,
-      purpose,
-      date: date || new Date(),
-      user: keinsell,
-    });
+    const dosageClassifcation = interalSubstance.getDosageClassification(
+      dosage * (purity ?? 1),
+      route
+    ) as DosageClassification;
 
-    console.log(dedicatedIngestion);
+    // TODO: We should query journal of user (for past 3 months maybe because that's the longest possible time for a substance to be in the system) and check if he has ingested this substance before - analyze if this ingestion will match with abuse prevention and maybe it's redose. Messy functionality a bit.
 
-    return dedicatedIngestion.getIngestionProgression();
+    const timeOfPostiveEffectsPromotedByIngestion =
+      interalSubstance.getDurationOfEffectsForRouteOfAdministrationToPeak(
+        route
+      );
+
+    const timeOfNegativeEffectsPromotedByIngestion =
+      interalSubstance.getDurationOfEffectsForRouteOfAdministrationAfterPeak(
+        route
+      );
+
+    const totalTimeOfEffectsPromotedByIngestion =
+      timeOfNegativeEffectsPromotedByIngestion +
+      timeOfPostiveEffectsPromotedByIngestion;
+
+    const takedowns: string[] = [];
+
+    takedowns.push(
+      `Ingestion will promote positive effects for ${ms(
+        timeOfPostiveEffectsPromotedByIngestion,
+        { long: true }
+      )} and afterwards aftereffects for ${ms(
+        totalTimeOfEffectsPromotedByIngestion -
+          timeOfPostiveEffectsPromotedByIngestion,
+        { long: true }
+      )}, in total - effects of substance may be felt for ${ms(
+        totalTimeOfEffectsPromotedByIngestion,
+        { long: true }
+      )}.`
+    );
+
+    // TODO: Harm-reduction-like cases should be moved out to separate harm-reduction dedicated module
+
+    // Guard against StimulantUsageAtNightOrEvening
+    if (
+      interalSubstance.classMembership.psychoactiveClass ===
+        PsychoactiveClass.stimulant &&
+      (new Date().getHours() > 14 || new Date().getHours() < 8)
+    ) {
+      takedowns.push(
+        `It's not recommended to ingest stimulants in the evening or at night, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
+          Date.now() + totalTimeOfEffectsPromotedByIngestion
+        ).toLocaleTimeString()}`
+      );
+    }
+
+    // Guard against theresholdDosage
+    if (dosageClassifcation === "thereshold") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a thereshold dosage, which may not produce any subjective effects.`
+      );
+    }
+
+    // Guard against stronger dosages
+    if (dosageClassifcation === "heavy" || dosageClassifcation === "strong") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a ${dosageClassifcation} dosage, which may produce overwhelming subjective effects along with unecessary strain for one's body which may lead to serious health issues.`
+      );
+    }
+
+    // Guard against overdoses
+    if (dosageClassifcation === "overdose") {
+      takedowns.push(
+        `Dosage of ${dosage}mg is considered to be a overdose, which doesn't have any positive effects and may produce overwhelming subjective effects along with serious (unreversable) health risks and even death.`
+      );
+    }
+
+    const effects = interalSubstance.getIngestionSpecificEffects(
+      dosageClassifcation as DosageClassification,
+      route
+    );
+
+    const effectsConsideredAsProducedBySubstance = collect(effects)
+      .filter(
+        (v) =>
+          v.phases?.includes(PhaseType.comeup) ||
+          v.phases?.includes(PhaseType.peak) ||
+          v.phases?.length === 0 ||
+          false
+      )
+      .all();
+
+    const effectsConsideredAsAftereffects = collect(effects)
+      .filter(
+        (v) =>
+          v.phases?.includes(PhaseType.aftereffects) ||
+          v.phases?.length === 0 ||
+          false
+      )
+      .all();
+
+    console.log(effectsConsideredAsAftereffects.map((v) => v.effect.name));
+
+    // TODO: We should split effects into positive and negative I think
+
+    if (
+      interalSubstance.getIngestionSpecificEffects(
+        dosageClassifcation as DosageClassification,
+        route
+      ).length > 0
+    ) {
+      takedowns.push(
+        `${
+          interalSubstance.name
+        } in ${dosageClassifcation} dosage may produce following effects: ${effectsConsideredAsProducedBySubstance
+          .map((v) => v.effect.name)
+          .join(", ")
+          .toLowerCase()}`,
+        `${
+          interalSubstance.name
+        } in ${dosageClassifcation} dosage may lead to following effects that can be considered negative after or during experience: ${effectsConsideredAsAftereffects
+          .map((v) => v.effect.name)
+          .join(", ")
+          .toLowerCase()}`
+      );
+    } else {
+      takedowns.push(
+        `There are no known effects in our system of ${interalSubstance.name} in ${dosageClassifcation} dosage. THIS DOESN'T MEAN THAT THERE ARE NO EFFECTS, IT MEANS THAT WE DON'T KNOW ABOUT THEM. You should most likely lookup other relatable sources such as PsychonautWiki, Tripsit or Erowid`
+      );
+    }
+
+    const ingestionPlan: IngestionPlanDTO = {
+      substance: interalSubstance.name,
+      dosage: dosageClassifcation,
+      route: route,
+      substanceWillPromoteEffectsFor: ms(
+        timeOfPostiveEffectsPromotedByIngestion
+      ),
+      substanceWillPromoteAfterEffectsFor: ms(
+        timeOfNegativeEffectsPromotedByIngestion
+      ),
+      takedowns: takedowns,
+    };
+
+    return ingestionPlan;
   }
 
   async autofillPastIngestionsByAmountAndDosages(

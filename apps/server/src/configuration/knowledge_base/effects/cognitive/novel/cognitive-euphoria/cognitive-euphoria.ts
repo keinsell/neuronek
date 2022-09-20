@@ -2,7 +2,7 @@ import {
   Effect,
   EffectCategory,
   EffectType,
-} from "../../../../../modules/effects/entities/effect.entity";
+} from "../../../../../../modules/effects/entities/effect.entity";
 
 export const CognitiveEuphoria: Effect = new Effect({
   name: "Cognitive euphoria",

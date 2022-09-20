@@ -11,21 +11,19 @@ import { Effect } from "./effect.entity";
 // - As everybody knows it burns as hell
 
 export enum EffectIntensivity {
-  thereshold = 5,
-  light = 4,
-  moderate = 3,
-  strong = 2,
-  heavy = 1,
+  mild = "mild",
+  moderate = "moderate",
+  strong = "strong",
 }
 
 export interface EffectOccuranceProperties {
   effect: Effect;
   intensivity?: EffectIntensivity;
   substance?: string;
-  psychoactiveClass?: PsychoactiveClass;
-  dosage?: DosageClassification;
-  phase?: PhaseType;
-  route?: RouteOfAdministrationType;
+  psychoactiveClass?: PsychoactiveClass[];
+  dosages?: DosageClassification[];
+  phases?: PhaseType[];
+  routes?: RouteOfAdministrationType[];
   /** @example "Caffeine improves analitics." */
   description?: string;
 }
@@ -37,10 +35,10 @@ export class EffectOccurance
   effect: Effect;
   intensivity?: EffectIntensivity | undefined;
   substance?: string;
-  psychoactiveClass?: PsychoactiveClass | undefined;
-  dosage?: DosageClassification | undefined;
-  phase?: PhaseType | undefined;
-  route?: RouteOfAdministrationType | undefined;
+  psychoactiveClass?: PsychoactiveClass[] | undefined;
+  dosages?: DosageClassification[] | undefined;
+  phases?: PhaseType[] | undefined;
+  routes?: RouteOfAdministrationType[] | undefined;
   description?: string | undefined;
 
   constructor(properties: EffectOccuranceProperties, id?: string | number) {
@@ -49,9 +47,9 @@ export class EffectOccurance
     this.intensivity = properties.intensivity;
     this.substance = properties.substance;
     this.psychoactiveClass = properties.psychoactiveClass;
-    this.dosage = properties.dosage;
-    this.phase = properties.phase;
-    this.route = properties.route;
+    this.dosages = properties.dosages;
+    this.phases = properties.phases;
+    this.routes = properties.routes;
     this.description = properties.description;
   }
 }
