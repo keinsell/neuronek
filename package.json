@@ -31,7 +31,7 @@
     "@typescript-eslint/eslint-plugin": "5.36.2",
     "@typescript-eslint/parser": "5.36.2",
     "ava": "4.3.3",
-    "eslint": "8.22.0",
+    "eslint": "8.23.1",
     "esm": "3.2.25",
     "husky": "8.0.1",
     "is-ci": "3.0.1",
