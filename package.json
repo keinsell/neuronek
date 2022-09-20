@@ -54,6 +54,6 @@
     "seed": "tsx packages/database-prisma/src/seed.ts"
   },
   "dependencies": {
-    "collect.js": "^4.34.3"
+    "collect.js": "4.34.3"
   }
 }
