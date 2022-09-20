@@ -4,7 +4,7 @@ export abstract class Controller {
   protected req!: Request;
   protected res!: Response;
 
-  protected abstract executeImplementation(): Promise<void | any>;
+  protected abstract executeImplementation(): Promise<Response>;
 
   public async execute(request: Request, response: Response) {
     this.req = request;
