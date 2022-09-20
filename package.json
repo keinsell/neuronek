@@ -52,5 +52,8 @@
   "prisma": {
     "schema": "apps/server/prisma/schema.prisma",
     "seed": "tsx packages/database-prisma/src/seed.ts"
+  },
+  "dependencies": {
+    "collect.js": "^4.34.3"
   }
 }

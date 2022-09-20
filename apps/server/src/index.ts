@@ -17,7 +17,7 @@ export async function main() {
   const y = await new IngestionService().planIngestion({
     substance: "Amphetamine",
     route: RouteOfAdministrationType.insufflated,
-    dosage: 50,
+    dosage: 9,
     purity: 1,
   });
 

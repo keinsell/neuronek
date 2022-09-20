@@ -1,7 +1,6 @@
 import ms from "ms";
-import { Amphetamine } from "../../configuration/knowledge_base/substances/stimulants/amphetamine.seed";
-import { keinsell } from "../../personal-journal";
 import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
+import { DosageClassification } from "../substance/entities/dosage.entity";
 import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
@@ -85,8 +84,7 @@ export class IngestionService {
 
   // TODO: Domain Case - Disadvise usage of drugs if were not prescripted by doctor if user is under 24 years old as brain is still developing
   async planIngestion(ingestion: IngestSubstanceDTO) {
-    const { substance, dosage, purity, date, route, set, setting, purpose } =
-      ingestion;
+    const { substance, dosage, purity, route } = ingestion;
 
     const interalSubstance = await this.substanceService.findSubstanceByName(
       substance
@@ -102,12 +100,18 @@ export class IngestionService {
     );
 
     const timeOfPostiveEffectsPromotedByIngestion =
-      interalSubstance.getDurationOfEffectsForRouteOfAdministration(route);
-
-    const timeOfPositiveAndNegativeEffectsPromotedByIngestion =
-      interalSubstance.getDurationOfEffectsWithAftereffectsForRouteOfAdministration(
+      interalSubstance.getDurationOfEffectsForRouteOfAdministrationToPeak(
         route
       );
+
+    const timeOfNegativeEffectsPromotedByIngestion =
+      interalSubstance.getDurationOfEffectsForRouteOfAdministrationAfterPeak(
+        route
+      );
+
+    const totalTimeOfEffectsPromotedByIngestion =
+      timeOfNegativeEffectsPromotedByIngestion +
+      timeOfPostiveEffectsPromotedByIngestion;
 
     const takedowns: string[] = [];
 
@@ -116,11 +120,11 @@ export class IngestionService {
         timeOfPostiveEffectsPromotedByIngestion,
         { long: true }
       )} and afterwards aftereffects for ${ms(
-        timeOfPositiveAndNegativeEffectsPromotedByIngestion -
+        totalTimeOfEffectsPromotedByIngestion -
           timeOfPostiveEffectsPromotedByIngestion,
         { long: true }
       )}, in total - effects of substance may be felt for ${ms(
-        timeOfPositiveAndNegativeEffectsPromotedByIngestion,
+        totalTimeOfEffectsPromotedByIngestion,
         { long: true }
       )}.`
     );
@@ -135,7 +139,7 @@ export class IngestionService {
     ) {
       takedowns.push(
         `It's not recommended to ingest stimulants in the evening or at night, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
-          Date.now() + timeOfPositiveAndNegativeEffectsPromotedByIngestion
+          Date.now() + totalTimeOfEffectsPromotedByIngestion
         ).toLocaleTimeString()}`
       );
     }
@@ -161,12 +165,24 @@ export class IngestionService {
       );
     }
 
-    if (interalSubstance.getEffectsForDosage(dosage, route).length > 0) {
+    const effects = interalSubstance.getIngestionSpecificEffects(
+      dosageClassifcation as DosageClassification,
+      route
+    );
+
+    // TODO: We should split effects into positive and negative I think
+
+    if (
+      interalSubstance.getIngestionSpecificEffects(
+        dosageClassifcation as DosageClassification,
+        route
+      ).length > 0
+    ) {
       takedowns.push(
         `${
           interalSubstance.name
-        } in ${dosageClassifcation} dosage may produce following effects: ${interalSubstance
-          .getEffectsForDosage(dosage, route)
+        } in ${dosageClassifcation} dosage may produce following effects: ${effects
+          .map((v) => v.effect.name)
           .join(", ")
           .toLowerCase()}`
       );
@@ -184,8 +200,7 @@ export class IngestionService {
         timeOfPostiveEffectsPromotedByIngestion
       ),
       substanceWillPromoteAfterEffectsFor: ms(
-        timeOfPositiveAndNegativeEffectsPromotedByIngestion -
-          timeOfPostiveEffectsPromotedByIngestion
+        timeOfNegativeEffectsPromotedByIngestion
       ),
       takedowns: takedowns,
     };

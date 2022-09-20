@@ -53,6 +53,26 @@ export const Amphetamine: Substance = new Substance(
           aftereffects: ms("4h"),
         },
       }),
+      new RouteOfAdministration({
+        route: RouteOfAdministrationType.oral,
+        _substance: "Amphetamine",
+        bioavailability: 0.75,
+        dosage: {
+          thereshold: 2.5,
+          light: 5,
+          moderate: 10,
+          strong: 25,
+          heavy: 50,
+          overdose: 100,
+        },
+        duration: {
+          onset: ms("45m"),
+          comeup: ms("135m"),
+          peak: ms("4h"),
+          offset: ms("3h"),
+          aftereffects: ms("6h"),
+        },
+      }),
     ],
     effects: [
       new EffectOccurance({

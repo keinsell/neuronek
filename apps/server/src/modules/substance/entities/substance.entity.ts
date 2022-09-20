@@ -1,3 +1,4 @@
+/* eslint-disable node/no-extraneous-import */
 import { Entity } from "../../../common/entity/entity.common";
 import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
 import { User } from "../../user/entities/user.entity";
@@ -9,7 +10,7 @@ import {
   RouteOfAdministration,
   RouteOfAdministrationType,
 } from "../../route-of-administration/entities/route-of-administration.entity";
-
+import { collect } from "collect.js";
 export interface SubstanceProperties {
   name: string;
   chemnicalNomencalture: ChemicalNomenclature;
@@ -129,7 +130,10 @@ export class Substance extends Entity implements SubstanceProperties {
     };
   }
 
-  getEffectsForDosage(dosage: number, route: RouteOfAdministrationType) {
+  getIngestionSpecificEffects(
+    dosage: DosageClassification,
+    route: RouteOfAdministrationType
+  ) {
     const routeOfAdministration = this.administrationRoutes.find(
       (v) => v.route === route
     );
@@ -138,10 +142,20 @@ export class Substance extends Entity implements SubstanceProperties {
       throw new Error("No route of administration found");
     }
 
-    return this.effects.map((v) => v.effect.name);
+    const availableEffects = collect(this.effects);
+
+    return availableEffects
+      .filter(
+        (effect) => effect.routes?.includes(route) || effect.routes?.length == 0
+      )
+      .filter(
+        (effect) =>
+          effect.dosages?.includes(dosage) || effect.routes?.length == 0
+      )
+      .toArray<EffectOccurance>();
   }
 
-  getDurationOfEffectsForRouteOfAdministration(
+  getDurationOfEffectsForRouteOfAdministrationToPeak(
     route: RouteOfAdministrationType
   ) {
     const routeOfAdministration = this.administrationRoutes.find(
@@ -156,12 +170,11 @@ export class Substance extends Entity implements SubstanceProperties {
     return (
       routeOfAdministration.duration.onset +
       routeOfAdministration.duration.comeup +
-      routeOfAdministration.duration.peak +
-      routeOfAdministration.duration.offset
+      routeOfAdministration.duration.peak
     );
   }
 
-  getDurationOfEffectsWithAftereffectsForRouteOfAdministration(
+  getDurationOfEffectsForRouteOfAdministrationAfterPeak(
     route: RouteOfAdministrationType
   ) {
     const routeOfAdministration = this.administrationRoutes.find(
@@ -174,9 +187,6 @@ export class Substance extends Entity implements SubstanceProperties {
 
     // sum phase durations
     return (
-      routeOfAdministration.duration.onset +
-      routeOfAdministration.duration.comeup +
-      routeOfAdministration.duration.peak +
       routeOfAdministration.duration.offset +
       routeOfAdministration.duration.aftereffects
     );
