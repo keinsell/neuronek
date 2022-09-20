@@ -6,6 +6,7 @@ import { PhaseType } from "../substance/entities/phase.entity";
 import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { SubstanceService } from "../substance/substance.service";
 import { User } from "../user/entities/user.entity";
+import { IngestionPlan } from "./dtos/ingestion-plan.dto";
 import { Ingestion } from "./entities/ingestion.entity";
 import { IngestedSubstanceEvent } from "./events/ingested-substance.event";
 import { ingestionRepository } from "./repositories/ingestion.repository";
@@ -99,7 +100,7 @@ export class IngestionService {
     const dosageClassifcation = interalSubstance.getDosageClassification(
       dosage * (purity ?? 1),
       route
-    );
+    ) as DosageClassification;
 
     // TODO: We should query journal of user (for past 3 months maybe because that's the longest possible time for a substance to be in the system) and check if he has ingested this substance before - analyze if this ingestion will match with abuse prevention and maybe it's redose. Messy functionality a bit.
 
