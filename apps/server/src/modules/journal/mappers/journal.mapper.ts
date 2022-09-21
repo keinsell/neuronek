@@ -5,6 +5,7 @@ import {
   Substance as PersistenceSubstance,
   User as PersistenceUser,
   OccuranceOfEffect as PersistenceOccuranceOfEffect,
+  Effect as PersistenceEffect,
   Prisma,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
@@ -18,7 +19,9 @@ type JournalWithIngestionWithSubstanceAndRouteOfAdministration =
     Ingestions: (PersistenceIngestion & {
       Substance: PersistenceSubstance & {
         routesOfAdministraton: PersistenceRouteOfAdministration[];
-        OccuranceOfEffect: PersistenceOccuranceOfEffect[];
+        OccuranceOfEffect: (PersistenceOccuranceOfEffect & {
+          Effect: PersistenceEffect;
+        })[];
       };
       Ingester: PersistenceUser;
     })[];

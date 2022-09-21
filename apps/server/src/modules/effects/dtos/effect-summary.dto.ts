@@ -1,4 +1,4 @@
 export interface EffectSummaryDTO {
   name: string;
-  summary: string;
+  summary?: string;
 }
