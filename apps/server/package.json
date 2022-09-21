@@ -71,7 +71,7 @@
     "@types/ms": "0.7.31",
     "@types/nodemon": "1.19.2",
     "@types/sinon": "10.0.13",
-    "@typescript-eslint/parser": "5.37.0",
+    "@typescript-eslint/parser": "5.38.0",
     "ava": "4.3.3",
     "c8": "7.12.0",
     "eslint": "8.23.1",
