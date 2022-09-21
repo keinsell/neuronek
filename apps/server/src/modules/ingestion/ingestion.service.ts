@@ -1,3 +1,4 @@
+import { Chrono } from "chrono-node";
 import collect from "collect.js";
 import ms from "ms";
 import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
@@ -102,7 +103,20 @@ export class IngestionService {
       route
     ) as DosageClassification;
 
-    // TODO: We should query journal of user (for past 3 months maybe because that's the longest possible time for a substance to be in the system) and check if he has ingested this substance before - analyze if this ingestion will match with abuse prevention and maybe it's redose. Messy functionality a bit.
+    const plannedIngestion: Partial<IngestionPlan> = {};
+
+    plannedIngestion.substance = interalSubstance.name;
+    plannedIngestion.dosage = dosageClassifcation;
+
+    const ingestionRoute = interalSubstance.getRouteOfAdministraiton(route);
+
+    if (!ingestionRoute) {
+      throw new Error("Route of administration not found.");
+    }
+
+    plannedIngestion.route = route;
+
+    // Information about substance duration
 
     const timeOfPostiveEffectsPromotedByIngestion =
       interalSubstance.getDurationOfEffectsForRouteOfAdministrationToPeak(
@@ -114,13 +128,61 @@ export class IngestionService {
         route
       );
 
+    const timeNeededToNoticeFirstEffects = ingestionRoute.duration.onset;
+
     const totalTimeOfEffectsPromotedByIngestion =
+      timeNeededToNoticeFirstEffects +
       timeOfNegativeEffectsPromotedByIngestion +
       timeOfPostiveEffectsPromotedByIngestion;
 
-    const takedowns: string[] = [];
+    const dateOfFirstEffects = Date.now() + timeNeededToNoticeFirstEffects;
 
-    takedowns.push(
+    plannedIngestion.effectsWillStartAt = new Date(dateOfFirstEffects);
+
+    plannedIngestion.effectsWillWearOffAt = new Date(
+      dateOfFirstEffects + timeOfPostiveEffectsPromotedByIngestion
+    );
+
+    plannedIngestion.aftereffectsWillWearOffAt = new Date(
+      dateOfFirstEffects + totalTimeOfEffectsPromotedByIngestion
+    );
+
+    // eslint-disable-next-line sonarjs/no-unused-collection
+    const stages: [
+      {
+        stage: PhaseType;
+        willStartAt: Date;
+        willEndAt: Date;
+        description?: string | undefined;
+        effects?: string | undefined;
+      }?
+    ] = [];
+
+    for (const phase of Object.values(PhaseType)) {
+      const timeToPhase = interalSubstance.getTimeToSpecificPhase(route, phase);
+      const phaseDuration = interalSubstance.getDurationOfSpecificPhase(
+        route,
+        phase
+      );
+
+      console.log(
+        new Chrono().parse(new Date(Date.now() + timeToPhase).toISOString())[0]
+          ?.start
+      );
+
+      stages.push({
+        stage: phase,
+        willStartAt: new Date(Date.now() + timeToPhase),
+        willEndAt: new Date(Date.now() + timeToPhase + phaseDuration),
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    plannedIngestion.stages = stages as any;
+
+    plannedIngestion.takedowns = [];
+
+    plannedIngestion.takedowns.push(
       `Ingestion will promote positive effects for ${ms(
         timeOfPostiveEffectsPromotedByIngestion,
         { long: true }
@@ -142,7 +204,7 @@ export class IngestionService {
         PsychoactiveClass.stimulant &&
       (new Date().getHours() > 14 || new Date().getHours() < 8)
     ) {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `It's not recommended to ingest stimulants in the evening or at night, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
           Date.now() + totalTimeOfEffectsPromotedByIngestion
         ).toLocaleTimeString()}`
@@ -151,21 +213,21 @@ export class IngestionService {
 
     // Guard against theresholdDosage
     if (dosageClassifcation === "thereshold") {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `Dosage of ${dosage}mg is considered to be a thereshold dosage, which may not produce any subjective effects.`
       );
     }
 
     // Guard against stronger dosages
     if (dosageClassifcation === "heavy" || dosageClassifcation === "strong") {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `Dosage of ${dosage}mg is considered to be a ${dosageClassifcation} dosage, which may produce overwhelming subjective effects along with unecessary strain for one's body which may lead to serious health issues.`
       );
     }
 
     // Guard against overdoses
     if (dosageClassifcation === "overdose") {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `Dosage of ${dosage}mg is considered to be a overdose, which doesn't have any positive effects and may produce overwhelming subjective effects along with serious (unreversable) health risks and even death.`
       );
     }
@@ -204,7 +266,7 @@ export class IngestionService {
         route
       ).length > 0
     ) {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `${
           interalSubstance.name
         } in ${dosageClassifcation} dosage may produce following effects: ${effectsConsideredAsProducedBySubstance
@@ -219,25 +281,16 @@ export class IngestionService {
           .toLowerCase()}`
       );
     } else {
-      takedowns.push(
+      plannedIngestion.takedowns.push(
         `There are no known effects in our system of ${interalSubstance.name} in ${dosageClassifcation} dosage. THIS DOESN'T MEAN THAT THERE ARE NO EFFECTS, IT MEANS THAT WE DON'T KNOW ABOUT THEM. You should most likely lookup other relatable sources such as PsychonautWiki, Tripsit or Erowid`
       );
     }
 
-    const ingestionPlan: IngestionPlanDTO = {
-      substance: interalSubstance.name,
-      dosage: dosageClassifcation,
-      route: route,
-      substanceWillPromoteEffectsFor: ms(
-        timeOfPostiveEffectsPromotedByIngestion
-      ),
-      substanceWillPromoteAfterEffectsFor: ms(
-        timeOfNegativeEffectsPromotedByIngestion
-      ),
-      takedowns: takedowns,
-    };
+    // TODO: We should query journal of user (for past 3 months maybe because that's the longest possible time for a substance to be in the system) and check if he has ingested this substance before - analyze if this ingestion will match with abuse prevention and maybe it's redose. Messy functionality a bit.
 
-    return ingestionPlan;
+    plannedIngestion.interactions = [];
+
+    return plannedIngestion;
   }
 
   async autofillPastIngestionsByAmountAndDosages(
@@ -249,6 +302,7 @@ export class IngestionService {
       totalDosage,
       purity,
       startingDate,
+      // eslint-disable-next-line prefer-const
       endingDate,
       route,
       set,

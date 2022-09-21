@@ -11,6 +11,7 @@ import {
   RouteOfAdministrationType,
 } from "../../route-of-administration/entities/route-of-administration.entity";
 import { collect } from "collect.js";
+import { PhaseType } from "./phase.entity";
 export interface SubstanceProperties {
   name: string;
   chemnicalNomencalture: ChemicalNomenclature;
@@ -42,6 +43,35 @@ export class Substance extends Entity implements SubstanceProperties {
     return Object.values(this.administrationRoutes).map(
       (entity) => entity.route
     );
+  }
+
+  getRouteOfAdministraiton(route: RouteOfAdministrationType) {
+    return this.administrationRoutes.find((v) => v.route === route);
+  }
+
+  getDurationOfSpecificPhase(
+    route: RouteOfAdministrationType,
+    phase: PhaseType
+  ) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (routeOfAdministration) => routeOfAdministration.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error(
+        `Route of administration ${route} not found for substance ${this.name}`
+      );
+    }
+
+    const phaseDuration = routeOfAdministration.duration[phase];
+
+    if (!phaseDuration) {
+      throw new Error(
+        `Phase ${phase} not found for substance ${this.name} and route of administration ${route}`
+      );
+    }
+
+    return phaseDuration;
   }
 
   getDosageClassification(dosage: number, route: RouteOfAdministrationType) {
@@ -155,6 +185,40 @@ export class Substance extends Entity implements SubstanceProperties {
       .toArray<EffectOccurance>();
   }
 
+  getTimeToSpecificPhase(route: RouteOfAdministrationType, phase: PhaseType) {
+    const routeOfAdministration = this.administrationRoutes.find(
+      (v) => v.route === route
+    );
+
+    if (!routeOfAdministration) {
+      throw new Error("No route of administration found");
+    }
+
+    const { duration } = routeOfAdministration;
+
+    if (phase === PhaseType.onset) {
+      return 0;
+    }
+
+    if (phase === PhaseType.comeup) {
+      return duration.onset;
+    }
+
+    if (phase === PhaseType.peak) {
+      return duration.onset + duration.comeup;
+    }
+
+    if (phase === PhaseType.offset) {
+      return duration.onset + duration.comeup + duration.peak;
+    }
+
+    if (phase === PhaseType.aftereffects) {
+      return duration.onset + duration.comeup + duration.peak + duration.offset;
+    }
+
+    throw new Error("Unknown phase");
+  }
+
   getDurationOfEffectsForRouteOfAdministrationToPeak(
     route: RouteOfAdministrationType
   ) {
@@ -168,7 +232,6 @@ export class Substance extends Entity implements SubstanceProperties {
 
     // sum phase durations
     return (
-      routeOfAdministration.duration.onset +
       routeOfAdministration.duration.comeup +
       routeOfAdministration.duration.peak
     );
