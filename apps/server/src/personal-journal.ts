@@ -32,6 +32,24 @@ export async function syncPersonalJournal() {
   const ingestions: IngestSubstanceDTO[] = [
     {
       substance: "Amphetamine",
+      route: RouteOfAdministrationType.oral,
+      dosage: 10,
+      purity: 0.89,
+      date: chrono.parseDate("21 September 2022 13:06"),
+      set: "Pretty much tilted, angry and whatever.",
+      setting: "Home",
+    },
+    {
+      substance: "Amphetamine",
+      route: RouteOfAdministrationType.insufflated,
+      dosage: 5,
+      purity: 0.89,
+      date: chrono.parseDate("21 September 2022 07:31"),
+      set: "Sleepy as duck",
+      setting: "Home",
+    },
+    {
+      substance: "Amphetamine",
       route: RouteOfAdministrationType.insufflated,
       dosage: 10,
       purity: 0.89,
