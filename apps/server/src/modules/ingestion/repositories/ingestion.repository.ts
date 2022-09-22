@@ -23,6 +23,11 @@ export class IngestionRepository implements Repository<Ingestion> {
           Substance: {
             include: {
               routesOfAdministraton: true,
+              OccuranceOfEffect: {
+                include: {
+                  Effect: true,
+                },
+              },
             },
           },
         },
@@ -40,6 +45,11 @@ export class IngestionRepository implements Repository<Ingestion> {
           Substance: {
             include: {
               routesOfAdministraton: true,
+              OccuranceOfEffect: {
+                include: {
+                  Effect: true,
+                },
+              },
             },
           },
         },
@@ -63,6 +73,7 @@ export class IngestionRepository implements Repository<Ingestion> {
   }
 
   delete(entity: Ingestion): Promise<boolean> {
+    console.log(entity);
     throw new Error("Method not implemented.");
   }
 
@@ -75,6 +86,11 @@ export class IngestionRepository implements Repository<Ingestion> {
         Substance: {
           include: {
             routesOfAdministraton: true,
+            OccuranceOfEffect: {
+              include: {
+                Effect: true,
+              },
+            },
           },
         },
         Ingester: true,
@@ -97,6 +113,11 @@ export class IngestionRepository implements Repository<Ingestion> {
         Substance: {
           include: {
             routesOfAdministraton: true,
+            OccuranceOfEffect: {
+              include: {
+                Effect: true,
+              },
+            },
           },
         },
         Ingester: true,

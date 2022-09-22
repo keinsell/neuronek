@@ -36,6 +36,11 @@ export class JournalRepository extends Repository<Journal> {
               Substance: {
                 include: {
                   routesOfAdministraton: true,
+                  OccuranceOfEffect: {
+                    include: {
+                      Effect: true,
+                    },
+                  },
                 },
               },
               Ingester: true,
@@ -55,6 +60,11 @@ export class JournalRepository extends Repository<Journal> {
               Substance: {
                 include: {
                   routesOfAdministraton: true,
+                  OccuranceOfEffect: {
+                    include: {
+                      Effect: true,
+                    },
+                  },
                 },
               },
               Ingester: true,
@@ -96,6 +106,11 @@ export class JournalRepository extends Repository<Journal> {
             Substance: {
               include: {
                 routesOfAdministraton: true,
+                OccuranceOfEffect: {
+                  include: {
+                    Effect: true,
+                  },
+                },
               },
             },
             Ingester: true,

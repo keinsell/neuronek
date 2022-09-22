@@ -122,6 +122,8 @@ export class Journal extends Entity implements JournalProperties {
         return 0;
       }
 
+      console.log(v);
+
       return a[i].date.getTime() - a[i - 1].date.getTime();
     });
 

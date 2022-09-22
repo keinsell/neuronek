@@ -32,7 +32,8 @@ export class SubstanceMapper implements IMapper {
         }),
         classMembership: new ClassMembership({
           psychoactiveClass:
-            (entity.psychoactiveClass as PsychoactiveClass) ?? "",
+            (entity.psychoactiveClass as PsychoactiveClass) ??
+            ("" as PsychoactiveClass),
           chemicalClass: entity.chemicalClass ?? "",
         }),
         administrationRoutes: entity.routesOfAdministraton.map((roa) =>

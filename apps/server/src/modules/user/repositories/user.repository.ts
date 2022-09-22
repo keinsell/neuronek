@@ -121,6 +121,7 @@ export class UserRepository implements Repository<User> {
   }
 
   delete(entity: User): Promise<boolean> {
+    console.log(entity);
     throw new Error("Method not implemented.");
   }
 }

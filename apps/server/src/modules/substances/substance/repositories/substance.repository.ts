@@ -84,6 +84,7 @@ export class SubstanceRepository implements Repository<Substance> {
   }
 
   delete(entity: Substance): Promise<boolean> {
+    console.log(entity);
     throw new Error("Method not implemented.");
   }
 

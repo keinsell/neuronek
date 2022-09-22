@@ -66,6 +66,7 @@ export class EffectRepository extends Repository<Effect> {
   }
 
   async delete(entity: Effect): Promise<boolean> {
+    console.log(entity);
     throw new Error("Method not implemented.");
   }
 }

@@ -7,7 +7,7 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "build": "tsup-node src/index.ts --format esm --dts --clean --sourcemap --minify",
+    "build": "tsc -b",
     "db:generate": "prisma generate",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
@@ -18,7 +18,7 @@
     "dev": "nodemon",
     "format": "prisma format",
     "lint": "eslint ./src --fix",
-    "start": "pm2 start dist/index.js --attach",
+    "start": "pm2 start dist/src/index.js --attach",
     "test": "c8 ava"
   },
   "dependencies": {
