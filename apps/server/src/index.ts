@@ -9,19 +9,19 @@ import { SubstanceRepository } from "./modules/substances/substance/repositories
 logProcessErrors();
 
 export async function main() {
-  new HttpApplication().bootstrap();
-  await syncPersonalJournal();
+	new HttpApplication().bootstrap();
+	await syncPersonalJournal();
 
-  await new SubstanceRepository().save(Amphetamine);
+	await new SubstanceRepository().save(Amphetamine);
 
-  const y = await new IngestionService().planIngestion({
-    substance: "Amphetamine",
-    route: RouteOfAdministrationType.insufflated,
-    dosage: 9,
-    purity: 1,
-  });
+	const y = await new IngestionService().planIngestion({
+		substance: "Amphetamine",
+		route: RouteOfAdministrationType.oral,
+		dosage: 9,
+		purity: 1,
+	});
 
-  console.log(y);
+	console.log(y);
 }
 
 await main();
