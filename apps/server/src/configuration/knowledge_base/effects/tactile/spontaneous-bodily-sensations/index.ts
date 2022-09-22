@@ -2,7 +2,7 @@ import {
   Effect,
   EffectCategory,
   EffectType,
-} from "../../../../../modules/effects/entities/effect.entity";
+} from "../../../../../modules/substances/effect/entities/effect.entity";
 
 export const SpontaneousBodilySensations: Effect = new Effect({
   name: "Spontaneous bodily sensations",

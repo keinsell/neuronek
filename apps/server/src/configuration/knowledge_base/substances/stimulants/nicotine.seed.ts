@@ -1,12 +1,12 @@
 import ms from "ms";
-import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
-import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
-import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
+import { ChemicalNomenclature } from "../../../../modules/substances/substance/entities/chemical-nomenclature";
+import { ClassMembership } from "../../../../modules/substances/substance/entities/class-membership.entity";
+import { PsychoactiveClass } from "../../../../modules/substances/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../../../../modules/substance/entities/substance.entity";
+} from "../../../../modules/substances/route-of-administration/entities/route-of-administration.entity";
+import { Substance } from "../../../../modules/substances/substance/entities/substance.entity";
 
 export const Nicotine: Substance = new Substance(
   {

@@ -1,5 +1,5 @@
-import { DosageClassification } from "../../substance/entities/dosage.entity";
-import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
+import { DosageClassification } from "../../substances/substance/entities/dosage.entity";
+import { RouteOfAdministrationType } from "../../substances/route-of-administration/entities/route-of-administration.entity";
 import { StageInfo } from "./stage-info.dto";
 
 export interface IngestionPlan {

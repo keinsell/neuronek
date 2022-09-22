@@ -1,4 +1,4 @@
-import { Entity } from "../../../common/entity/entity.common";
+import { Entity } from "../../../../common/entity/entity.common";
 
 export interface ChemicalNomenclatureProperties {
   commonNames: string[];

@@ -8,8 +8,8 @@ import {
   User as PersistenceUser,
 } from "@prisma/client";
 import { IMapper } from "../../../common/mapper/mapper.common";
-import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
-import { SubstanceMapper } from "../../substance/mappers/substance.mapper";
+import { RouteOfAdministrationType } from "../../substances/route-of-administration/entities/route-of-administration.entity";
+import { SubstanceMapper } from "../../substances/substance/mappers/substance.mapper";
 import { userMapper } from "../../user/mappers/user.mapper";
 import { Ingestion } from "../entities/ingestion.entity";
 

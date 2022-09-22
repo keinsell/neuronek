@@ -1,11 +1,11 @@
 import { Chrono } from "chrono-node";
 import collect from "collect.js";
 import ms from "ms";
-import { RouteOfAdministrationType } from "../route-of-administration/entities/route-of-administration.entity";
-import { DosageClassification } from "../substance/entities/dosage.entity";
-import { PhaseType } from "../substance/entities/phase.entity";
-import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
-import { SubstanceService } from "../substance/substance.service";
+import { RouteOfAdministrationType } from "../substances/route-of-administration/entities/route-of-administration.entity";
+import { DosageClassification } from "../substances/substance/entities/dosage.entity";
+import { PhaseType } from "../substances/substance/entities/phase.entity";
+import { PsychoactiveClass } from "../substances/substance/entities/psychoactive-class.enum";
+import { SubstanceService } from "../substances/substance/substance.service";
 import { User } from "../user/entities/user.entity";
 import { IngestionPlan } from "./dtos/ingestion-plan.dto";
 import { Ingestion } from "./entities/ingestion.entity";

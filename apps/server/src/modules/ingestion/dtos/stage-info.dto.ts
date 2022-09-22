@@ -1,5 +1,5 @@
-import { EffectSummaryDTO } from "../../effects/dtos/effect-summary.dto";
-import { PhaseType } from "../../substance/entities/phase.entity";
+import { EffectSummaryDTO } from "../../substances/effect/dtos/effect-summary.dto";
+import { PhaseType } from "../../substances/substance/entities/phase.entity";
 
 export interface StageInfo {
   /** Classification of stage */

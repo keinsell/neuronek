@@ -1,7 +1,7 @@
 /* eslint-disable node/no-extraneous-import */
-import { Entity } from "../../../common/entity/entity.common";
-import { EffectOccurance } from "../../effects/entities/effect-occurance.entity";
-import { User } from "../../user/entities/user.entity";
+import { Entity } from "../../../../common/entity/entity.common";
+import { EffectOccurance } from "../../effect/entities/effect-occurance.entity";
+import { User } from "../../../user/entities/user.entity";
 import { ChemicalDetails } from "./chemical-details.entity";
 import { ChemicalNomenclature } from "./chemical-nomenclature";
 import { ClassMembership } from "./class-membership.entity";

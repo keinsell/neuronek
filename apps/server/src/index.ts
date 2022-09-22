@@ -1,10 +1,10 @@
 import { HttpApplication } from "./application/http.application";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
-import { RouteOfAdministrationType } from "./modules/route-of-administration/entities/route-of-administration.entity";
+import { RouteOfAdministrationType } from "./modules/substances/route-of-administration/entities/route-of-administration.entity";
 import { keinsell, syncPersonalJournal } from "./personal-journal";
 import logProcessErrors from "log-process-errors";
 import { IngestionService } from "./modules/ingestion/ingestion.service";
-import { SubstanceRepository } from "./modules/substance/repositories/substance.repository";
+import { SubstanceRepository } from "./modules/substances/substance/repositories/substance.repository";
 
 logProcessErrors();
 

@@ -1,6 +1,6 @@
-import { Repository } from "../../../common/repository/repository.common";
-import { PrismaInstance } from "../../../infrastructure/prisma.infra";
-import { EffectOccuranceRepository } from "../../effects/repositories/effect-occurance.repository";
+import { Repository } from "../../../../common/repository/repository.common";
+import { PrismaInstance } from "../../../../infrastructure/prisma.infra";
+import { EffectOccuranceRepository } from "../../effect/repositories/effect-occurance.repository";
 import { Substance } from "../entities/substance.entity";
 import { SubstanceMapper } from "../mappers/substance.mapper";
 import { routeOfAdministrationRepository } from "../../route-of-administration/repositories/route-of-administration.repository";

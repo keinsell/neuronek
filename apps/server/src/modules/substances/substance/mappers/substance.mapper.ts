@@ -1,4 +1,4 @@
-import { IMapper } from "../../../common/mapper/mapper.common";
+import { IMapper } from "../../../../common/mapper/mapper.common";
 import { Substance } from "../entities/substance.entity";
 import {
   Substance as PersistenceSubstance,
@@ -11,7 +11,7 @@ import { ChemicalNomenclature } from "../entities/chemical-nomenclature";
 import { ClassMembership } from "../entities/class-membership.entity";
 import { routeOfAdministrationMapper } from "../../route-of-administration/mappers/route-of-administration.mapper";
 import { PsychoactiveClass } from "../entities/psychoactive-class.enum";
-import { EffectOccuranceMapper } from "../../effects/mappers/effect-occurance.mapper";
+import { EffectOccuranceMapper } from "../../effect/mappers/effect-occurance.mapper";
 
 export type PersistenceSubstanceWithRelations = PersistenceSubstance & {
   routesOfAdministraton: PersistenceRouteOfAdministration[];

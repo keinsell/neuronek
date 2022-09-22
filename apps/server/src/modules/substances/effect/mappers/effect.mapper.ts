@@ -1,6 +1,6 @@
 import { Effect as PersistenceEffect } from ".prisma/client";
 import { Prisma } from "@prisma/client";
-import { IMapper } from "../../../common/mapper/mapper.common";
+import { IMapper } from "../../../../common/mapper/mapper.common";
 import { Effect, EffectCategory, EffectType } from "../entities/effect.entity";
 
 export class EffectMapper implements IMapper {
