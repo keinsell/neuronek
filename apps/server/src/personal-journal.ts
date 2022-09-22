@@ -9,8 +9,8 @@ import {
   MassIngestSubstanceDTO,
 } from "./modules/ingestion/ingestion.service";
 import { Journal } from "./modules/journal/entities/journal.entity";
-import { RouteOfAdministrationType } from "./modules/route-of-administration/entities/route-of-administration.entity.js";
-import { substanceRepository } from "./modules/substance/repositories/substance.repository";
+import { RouteOfAdministrationType } from "./modules/substances/route-of-administration/entities/route-of-administration.entity.js";
+import { substanceRepository } from "./modules/substances/substance/repositories/substance.repository";
 import { Nicotine } from "./configuration/knowledge_base/substances/stimulants/nicotine.seed";
 import { userRepository } from "./modules/user/repositories/user.repository";
 import { Keinsell } from "./configuration/seed/Keinsell.seed";

@@ -1,5 +1,5 @@
-import { Repository } from "../../../common/repository/repository.common";
-import { PrismaInstance } from "../../../infrastructure/prisma.infra";
+import { Repository } from "../../../../common/repository/repository.common";
+import { PrismaInstance } from "../../../../infrastructure/prisma.infra";
 import { RouteOfAdministration } from "../entities/route-of-administration.entity";
 import { routeOfAdministrationMapper } from "../mappers/route-of-administration.mapper";
 

@@ -1,4 +1,4 @@
-import { IMapper } from "../../../common/mapper/mapper.common";
+import { IMapper } from "../../../../common/mapper/mapper.common";
 import {
   Substance as PersistenceSubstance,
   RouteOfAdministration as PersistenceRouteOfAdministration,

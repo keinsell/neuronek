@@ -1,5 +1,5 @@
-import { Repository } from "../../../common/repository/repository.common";
-import { PrismaInstance } from "../../../infrastructure/prisma.infra";
+import { Repository } from "../../../../common/repository/repository.common";
+import { PrismaInstance } from "../../../../infrastructure/prisma.infra";
 import { Effect } from "../entities/effect.entity";
 import { EffectMapper } from "../mappers/effect.mapper";
 

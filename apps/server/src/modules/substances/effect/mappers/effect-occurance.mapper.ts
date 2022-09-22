@@ -5,7 +5,7 @@ import {
   RouteOfAdministration as PerisstenceROA,
   Prisma,
 } from "@prisma/client";
-import { IMapper } from "../../../common/mapper/mapper.common";
+import { IMapper } from "../../../../common/mapper/mapper.common";
 import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { RouteOfAdministrationType } from "../../route-of-administration/entities/route-of-administration.entity";
 import { EffectOccurance } from "../entities/effect-occurance.entity";

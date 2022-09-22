@@ -1,4 +1,4 @@
-import { Entity } from "../../../common/entity/entity.common";
+import { Entity } from "../../../../common/entity/entity.common";
 import { DosageClassification } from "../../substance/entities/dosage.entity";
 import { PhaseType } from "../../substance/entities/phase.entity";
 

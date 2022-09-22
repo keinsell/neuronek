@@ -1,4 +1,4 @@
-import { PhaseType } from "../../substance/entities/phase.entity";
+import { PhaseType } from "../../substances/substance/entities/phase.entity";
 
 /** Ingestion summary is data transfer object to provide human-readable details about selected ingestion. */
 export interface IngestionSummary {

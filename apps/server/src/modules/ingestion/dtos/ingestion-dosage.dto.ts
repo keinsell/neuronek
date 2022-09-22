@@ -1,4 +1,4 @@
-import { DosageClassification } from "../../substance/entities/dosage.entity";
+import { DosageClassification } from "../../substances/substance/entities/dosage.entity";
 
 export interface IngestionDosage {
   substance: string;

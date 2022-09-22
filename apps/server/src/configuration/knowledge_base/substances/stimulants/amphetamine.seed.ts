@@ -3,20 +3,20 @@ import ms from "ms";
 import {
   EffectIntensivity,
   EffectOccurance,
-} from "../../../../modules/effects/entities/effect-occurance.entity";
-import { ChemicalNomenclature } from "../../../../modules/substance/entities/chemical-nomenclature";
-import { ClassMembership } from "../../../../modules/substance/entities/class-membership.entity";
-import { DosageClassification } from "../../../../modules/substance/entities/dosage.entity";
-import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
+} from "../../../../modules/substances/effect/entities/effect-occurance.entity";
+import { ChemicalNomenclature } from "../../../../modules/substances/substance/entities/chemical-nomenclature";
+import { ClassMembership } from "../../../../modules/substances/substance/entities/class-membership.entity";
+import { DosageClassification } from "../../../../modules/substances/substance/entities/dosage.entity";
+import { PsychoactiveClass } from "../../../../modules/substances/substance/entities/psychoactive-class.enum";
 import {
   RouteOfAdministration,
   RouteOfAdministrationType,
-} from "../../../../modules/route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../../../../modules/substance/entities/substance.entity";
+} from "../../../../modules/substances/route-of-administration/entities/route-of-administration.entity";
+import { Substance } from "../../../../modules/substances/substance/entities/substance.entity";
 import { MotivationEnhancement } from "../../effects/cognitive/enhancements/motivation-enhancement.seed";
 import { Stimulation } from "../../effects/physical/stimulation.seed";
 import { MotivationSupression } from "../../effects/cognitive/supressions/motivation-suppression.seed";
-import { PhaseType } from "../../../../modules/substance/entities/phase.entity";
+import { PhaseType } from "../../../../modules/substances/substance/entities/phase.entity";
 import { Anxiety } from "../../effects/cognitive/enhancements/anxiety.seed";
 import { FocusEnhancement } from "../../effects/cognitive/enhancements/focus-enhancement/focus-enchancement";
 import { SpontaneousBodilySensations } from "../../effects/tactile/spontaneous-bodily-sensations";
