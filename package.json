@@ -22,9 +22,6 @@
     "start": "turbo run start",
     "test": "turbo run test"
   },
-  "dependencies": {
-    "collect.js": "4.34.3"
-  },
   "devDependencies": {
     "@changesets/changelog-git": "0.1.12",
     "@changesets/changelog-github": "0.4.6",
