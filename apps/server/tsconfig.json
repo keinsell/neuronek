@@ -4,12 +4,12 @@
 		/* Visit https://aka.ms/tsconfig.json to read more about this file */
 
 		/* Basic Options */
-		"target": "esnext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */,
-		"module": "esnext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
+		"target": "ESNext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */,
+		"module": "NodeNext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
 		"removeComments": true /* Do not emit comments to output. */,
 		"downlevelIteration": true /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */,
 		"isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
-		"importsNotUsedAsValues": "error",
+		// "importsNotUsedAsValues": "error",
 		"importHelpers": true,
 		"outDir": "dist",
 		"sourceMap": true,

@@ -1,12 +1,12 @@
 import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
-import { DosageClassification } from "../../substances/substance/entities/dosage.entity";
+import type { DosageClassification } from "../../substances/substance/entities/dosage.entity";
 import { PhaseType } from "../../substances/substance/entities/phase.entity";
-import { RouteOfAdministrationType } from "../../substances/route-of-administration/entities/route-of-administration.entity";
-import { Substance } from "../../substances/substance/entities/substance.entity";
-import { User } from "../../user/entities/user.entity";
-import { IngestionDosage } from "../dtos/ingestion-dosage.dto";
-import { IngestionPlan } from "../dtos/ingestion-plan.dto";
+import type { RouteOfAdministrationType } from "../../substances/route-of-administration/entities/route-of-administration.entity";
+import type { Substance } from "../../substances/substance/entities/substance.entity";
+import type { User } from "../../user/entities/user.entity";
+import type { IngestionDosage } from "../dtos/ingestion-dosage.dto";
+import type { IngestionPlan } from "../dtos/ingestion-plan.dto";
 
 export interface IngestionProperties {
   substance: Substance;
