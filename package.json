@@ -19,7 +19,11 @@
     "lint": "turbo run lint",
     "pre-commit": "lint-staged",
     "prepare": "is-ci || husky install",
+    "start": "turbo run start",
     "test": "turbo run test"
+  },
+  "dependencies": {
+    "collect.js": "4.34.3"
   },
   "devDependencies": {
     "@changesets/changelog-git": "0.1.12",
@@ -52,8 +56,5 @@
   "prisma": {
     "schema": "apps/server/prisma/schema.prisma",
     "seed": "tsx packages/database-prisma/src/seed.ts"
-  },
-  "dependencies": {
-    "collect.js": "4.34.3"
   }
 }
