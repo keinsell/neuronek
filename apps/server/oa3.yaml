@@ -1,0 +1,193 @@
+---
+openapi: 3.0.0
+servers:
+- description: JokeAPI server example
+  url: https://joke_api.example.com/
+info:
+  description: |
+    This simple Joke API allows you to publish joke and vote for you favourite!
+  version: 1.0.0
+  title: Simple Joke API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  "/joke":
+    get:
+      tags:
+      - developers
+      summary: searches jokes
+      operationId: searchJokes
+      description: |
+        By passing in the appropriate options, you can search for
+        available jokes
+      parameters:
+      - in: query
+        name: searchString
+        description: pass an optional search string for looking up inventory
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: numberofJokes
+        description: number of jokes to return
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          default: 25
+      - in: query
+        name: category
+        description: category of jokes to return
+        example: knockKnock
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: sortBy
+        description: 'Allowed: thumbsUp, thumbsDown, dateAdded.'
+        example: thumbsUp
+        required: false
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        description: 'Allowed: asc, desc. asc is ascending and sorts from A to Z.
+          desc is descending and sorts from Z to A.'
+        example: desc
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Joke"
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: adds a joke
+      operationId: addJoke
+      description: Adds a joke to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - joke
+              - punchline
+              properties:
+                joke:
+                  type: string
+                  example: Knock Knock. Who's there? Hike. Hike Who?
+                  description: The joke
+                punchline:
+                  example: I didn't know you liked Japanese poetry.
+                  description: The punchline.
+                  type: string
+                category:
+                  example: knockKnock
+                  description: category of the joke (allowed categories TBD)
+                  type: string
+      responses:
+        '201':
+          description: item created
+          content:
+            application/vnd.json:
+              schema:
+                "$ref": "#/components/schemas/Joke"
+        '400':
+          description: invalid input, object invalid
+        '409':
+          description: an existing item already exists
+  "/thumbsUp/{id}":
+    post:
+      tags:
+      - developers
+      summary: thumbsup  a joke
+      operationId: Thumbs up to a joke
+      description: Increases Thumbs up count of a joke by one.
+      parameters:
+      - name: id
+        example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
+        description: The joke ID for the joke you want to thumbsup.
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Thumbs Up added
+  "/thumbsDown/{id}":
+    post:
+      tags:
+      - developers
+      summary: thumbsdown a joke
+      operationId: Thumbs down to a joke
+      description: Increases Thumbs down count of a joke by one.
+      parameters:
+      - name: id
+        example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
+        description: The joke ID for the joke you want to thumbsdown.
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Thumbs down added
+components:
+  schemas:
+    Joke:
+      type: object
+      required:
+      - id
+      - dateAdded
+      - joke
+      - punchline
+      - thumbsUp
+      - thumbsDown
+      - category
+      properties:
+        id:
+          type: string
+          example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
+          description: The id of the Joke. Assigned when added.
+        joke:
+          type: string
+          example: What is the name to open the door?
+          description: The lead-in to the joke.
+        punchline:
+          type: string
+          example: Open your chakra
+          description: This bit should make you laugh :).
+        category:
+          type: string
+          example: Classic
+          description: the category of the joke.
+        thumbsUp:
+          type: integer
+          example: 2
+          description: Count of upvotes for the joke.
+        thumbsDown:
+          type: integer
+          example: 4
+          description: Count of down votes for the joke.
+        dateAdded:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
