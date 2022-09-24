@@ -10,12 +10,19 @@ import {
 	Body,
 	Example,
 	Path,
+	Tags,
 } from "tsoa";
 import { User } from "../../dtos/user.dto.js";
 import { RegisterUserDTO } from "../../dtos/register-user.dto.js";
 
+@Tags("User")
 @Route("user")
 export class RegisterUserController extends Controller {
+	/**
+	 * Create a new user in Neuronek system.
+	 *
+	 * @param _body
+	 */
 	@Post("register")
 	@OperationId("register-user")
 	@Response<string>(
@@ -32,7 +39,7 @@ export class RegisterUserController extends Controller {
 	@Body()
 	protected async executeImplementation(
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		@Body() _body: RegisterUserDTO
+		@Body() _body: RegisterUserDTO,
 	): Promise<any> {
 		const validateIncommingBody = RegisterUserBody.validate(this.req.body);
 
@@ -41,7 +48,7 @@ export class RegisterUserController extends Controller {
 		}
 
 		const createdUser = await new RegisterUserUsecase().execute(
-			validateIncommingBody.value
+			validateIncommingBody.value,
 		);
 
 		if (createdUser.isErr()) {

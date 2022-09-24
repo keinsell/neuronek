@@ -4,7 +4,7 @@ import { UserPassword } from "../../modules/user/vos/password.vo.js";
 export const Keinsell: User = new User({
 	username: "keinsell",
 	password: await new UserPassword(
-		"SuperDuperSecretPasswordThatEverybodyCanCrack"
+		"SuperDuperSecretPasswordThatEverybodyCanCrack",
 	).build(),
 	email: "keinsell@protonmail.com",
 	firstName: "Jakub",

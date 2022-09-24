@@ -17,7 +17,7 @@ export class UserMapper implements IMapper {
 				height: entity.height ?? undefined,
 				weight: entity.weight ?? undefined,
 			},
-			entity.id
+			entity.id,
 		);
 	}
 
@@ -57,7 +57,7 @@ export class UserMapper implements IMapper {
 				height,
 				weight,
 			},
-			undefined
+			undefined,
 		);
 	}
 }

@@ -43,12 +43,26 @@ export class HttpApplication {
 			outputDirectory: "./",
 			controllerPathGlobs: ["./**/*.controller.ts"],
 			name: "Neuronek",
+			description: "Early version of Neuronek API.",
 			version: "1.0.0",
 			schemes: ["http"],
+			contact: {
+				name: "Jakub Olan",
+				email: "keinsell@protonmail.com",
+			},
 			yaml: true,
 			specFileBaseName: "oa3",
 			spec: {
-				yaml: true,
+				tags: [
+					{
+						name: "User",
+						description: "Operations about users",
+						externalDocs: {
+							description: "Find out more about users",
+							url: "http://swagger.io",
+						},
+					},
+				],
 			},
 		};
 

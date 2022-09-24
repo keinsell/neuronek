@@ -394,7 +394,7 @@ export async function syncPersonalJournal() {
 		for (const ingestion of massIngestions) {
 			await ingestionService.autofillPastIngestionsByAmountAndDosages(
 				ingestion,
-				keinsell
+				keinsell,
 			);
 		}
 
@@ -430,11 +430,9 @@ export async function syncPersonalJournal() {
 		journalOfLast7Days.getIngestedSubstances();
 
 	substancesIngestedInLast7Days.map((substance) => {
-		journalek
-			.filterIngestions({
-				substance: substance.name,
-				timeSince: ms("14d"),
-			})
-			.getAverageDosagePerDay();
+		journalek.filterIngestions({
+			substance: substance.name,
+			timeSince: ms("14d"),
+		}).getAverageDosagePerDay();
 	});
 }
