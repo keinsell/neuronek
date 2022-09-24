@@ -4,7 +4,9 @@ export abstract class Controller {
 	protected req!: Request;
 	protected res!: Response;
 
-	protected abstract executeImplementation(): Promise<Response>;
+	protected abstract executeImplementation(
+		...arguments_: unknown[]
+	): Promise<Response>;
 
 	public async execute(request: Request, response: Response) {
 		this.req = request;
@@ -16,7 +18,7 @@ export abstract class Controller {
 	public static jsonResponse(
 		response: Response,
 		code: number,
-		message: string,
+		message: string
 	) {
 		return response.status(code).json({ message });
 	}
@@ -30,18 +32,26 @@ export abstract class Controller {
 	}
 
 	public clientError(message?: string) {
-		return Controller.jsonResponse(this.res, 400, message ?? "Unauthorized");
+		return Controller.jsonResponse(
+			this.res,
+			400,
+			message ?? "Unauthorized"
+		);
 	}
 
 	public unauthorized(message?: string) {
-		return Controller.jsonResponse(this.res, 401, message ?? "Unauthorized");
+		return Controller.jsonResponse(
+			this.res,
+			401,
+			message ?? "Unauthorized"
+		);
 	}
 
 	public paymentRequired(message?: string) {
 		return Controller.jsonResponse(
 			this.res,
 			402,
-			message ?? "Payment required",
+			message ?? "Payment required"
 		);
 	}
 
@@ -61,7 +71,7 @@ export abstract class Controller {
 		return Controller.jsonResponse(
 			this.res,
 			429,
-			message ?? "Too many requests",
+			message ?? "Too many requests"
 		);
 	}
 

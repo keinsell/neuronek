@@ -60,8 +60,9 @@ export class HttpApplication {
 		};
 
 		await generateSpec(specOptions);
-
 		await generateRoutes(routeOptions);
+
+		console.log("📝 OpenAPI 3.0 spec generated");
 	}
 
 	public async bootstrap() {

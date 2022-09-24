@@ -1,15 +1,39 @@
 import { Controller } from "../../../../common/controller/controller.common";
-import { RegisterUserBody } from "./register-user.body.js";
+import { RegisterUserBody, RegisterUserRequest } from "./register-user.body.js";
 import { RegisterUserUsecase } from "./register-user.usecase.js";
-import { OperationId, Post, Route, Response, Request, Body } from "tsoa";
+import {
+	OperationId,
+	Post,
+	Route,
+	Response,
+	Request,
+	Body,
+	Example,
+	Path,
+} from "tsoa";
+import { User } from "../../dtos/user.dto.js";
+import { RegisterUserDTO } from "../../dtos/register-user.dto.js";
 
 @Route("user")
 export class RegisterUserController extends Controller {
-	/** Creates new user */
 	@Post("register")
 	@OperationId("register-user")
-	@Response("201", "Created user successfully")
-	protected async executeImplementation(): Promise<any> {
+	@Response<string>(
+		"201",
+		"Created user successfully",
+		"cl864jzha0005ted5rfkcrik3"
+	)
+	@Example<User>({
+		id: 1,
+		email: "",
+		name: "John Doe",
+		phoneNumbers: [],
+	})
+	@Body()
+	protected async executeImplementation(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		@Body() _body: RegisterUserDTO
+	): Promise<any> {
 		const validateIncommingBody = RegisterUserBody.validate(this.req.body);
 
 		if (!validateIncommingBody.success) {
