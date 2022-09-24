@@ -11,7 +11,7 @@ export class RegisterUserController extends Controller {
 		}
 
 		const createdUser = await new RegisterUserUsecase().execute(
-			validateIncommingBody.value
+			validateIncommingBody.value,
 		);
 
 		this.ok(this.res, createdUser);

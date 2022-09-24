@@ -1,12 +1,12 @@
 export class ApplicationError {
-  error: unknown;
+	error: unknown;
 
-  public constructor(error: unknown) {
-    this.error = error;
-    this.toConsole();
-  }
+	public constructor(error: unknown) {
+		this.error = error;
+		this.toConsole();
+	}
 
-  protected toConsole() {
-    console.error(this.error);
-  }
+	protected toConsole() {
+		console.error(this.error);
+	}
 }

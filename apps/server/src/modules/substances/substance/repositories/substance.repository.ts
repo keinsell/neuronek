@@ -6,138 +6,126 @@ import { SubstanceMapper } from "../mappers/substance.mapper";
 import { routeOfAdministrationRepository } from "../../route-of-administration/repositories/route-of-administration.repository";
 
 export class SubstanceRepository implements Repository<Substance> {
-  db = PrismaInstance;
-  mapper = new SubstanceMapper();
+	db = PrismaInstance;
+	mapper = new SubstanceMapper();
 
-  async save(entity: Substance): Promise<Substance> {
-    const presistence = this.mapper.toPersistence(entity);
+	async save(entity: Substance): Promise<Substance> {
+		const presistence = this.mapper.toPersistence(entity);
 
-    const exists = await this.exists(entity);
+		const exists = await this.exists(entity);
 
-    let createdOrUpdateEntity: Substance;
+		let createdOrUpdateEntity: Substance;
 
-    if (!exists) {
-      presistence.id = undefined;
-      const created = await this.db.substance.create({
-        data: presistence,
-        include: {
-          routesOfAdministraton: true,
-          OccuranceOfEffect: {
-            include: {
-              Effect: true,
-            },
-          },
-        },
-      });
+		if (!exists) {
+			presistence.id = undefined;
+			const created = await this.db.substance.create({
+				data: presistence,
+				include: {
+					routesOfAdministraton: true,
+					OccuranceOfEffect: {
+						include: {
+							Effect: true,
+						},
+					},
+				},
+			});
 
-      createdOrUpdateEntity = this.mapper.toDomain(created);
-    } else {
-      const updated = await this.db.substance.update({
-        where: {
-          name: entity.name,
-        },
-        data: presistence,
-        include: {
-          routesOfAdministraton: true,
-          OccuranceOfEffect: {
-            include: {
-              Effect: true,
-            },
-          },
-        },
-      });
+			createdOrUpdateEntity = this.mapper.toDomain(created);
+		} else {
+			const updated = await this.db.substance.update({
+				where: {
+					name: entity.name,
+				},
+				data: presistence,
+				include: {
+					routesOfAdministraton: true,
+					OccuranceOfEffect: {
+						include: {
+							Effect: true,
+						},
+					},
+				},
+			});
 
-      createdOrUpdateEntity = this.mapper.toDomain(updated);
-    }
+			createdOrUpdateEntity = this.mapper.toDomain(updated);
+		}
 
-    const routesOfAdministration = entity.administrationRoutes;
+		const routesOfAdministration = entity.administrationRoutes;
 
-    for (const routeOfAdministration of routesOfAdministration) {
-      await routeOfAdministrationRepository.save(routeOfAdministration);
-    }
+		for (const routeOfAdministration of routesOfAdministration) {
+			await routeOfAdministrationRepository.save(routeOfAdministration);
+		}
 
-    for (const effect of entity.effects) {
-      await new EffectOccuranceRepository().save(effect);
-    }
+		for (const effect of entity.effects) {
+			await new EffectOccuranceRepository().save(effect);
+		}
 
-    const aggregateSubstance = await this.findSubstanceByName(entity.name);
+		const aggregateSubstance = await this.findSubstanceByName(entity.name);
 
-    if (aggregateSubstance) {
-      createdOrUpdateEntity = aggregateSubstance;
-    }
+		if (aggregateSubstance) {
+			createdOrUpdateEntity = aggregateSubstance;
+		}
 
-    return createdOrUpdateEntity;
-  }
+		return createdOrUpdateEntity;
+	}
 
-  async exists(entity: Substance): Promise<boolean> {
-    const findSubstanceById = await this.db.substance.findUnique({
-      where: {
-        name: entity.name,
-      },
-    });
+	async exists(entity: Substance): Promise<boolean> {
+		const findSubstanceById = await this.db.substance.findUnique({
+			where: {
+				name: entity.name,
+			},
+		});
 
-    if (findSubstanceById) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+		return findSubstanceById ? true : false;
+	}
 
-  delete(entity: Substance): Promise<boolean> {
-    console.log(entity);
-    throw new Error("Method not implemented.");
-  }
+	delete(entity: Substance): Promise<boolean> {
+		console.log(entity);
+		throw new Error("Method not implemented.");
+	}
 
-  async findSubstanceByName(name: string) {
-    const substance = await this.db.substance.findUnique({
-      where: {
-        name: name,
-      },
-      include: {
-        routesOfAdministraton: true,
-        OccuranceOfEffect: {
-          include: {
-            Effect: true,
-          },
-        },
-      },
-    });
+	async findSubstanceByName(name: string) {
+		const substance = await this.db.substance.findUnique({
+			where: {
+				name: name,
+			},
+			include: {
+				routesOfAdministraton: true,
+				OccuranceOfEffect: {
+					include: {
+						Effect: true,
+					},
+				},
+			},
+		});
 
-    if (substance) {
-      return this.mapper.toDomain(substance);
-    } else {
-      return undefined;
-    }
-  }
+		return substance ? this.mapper.toDomain(substance) : undefined;
+	}
 
-  async findSubstanceByNameOrAlias(name: string) {
-    const substance = await this.db.substance.findFirst({
-      where: {
-        OR: [
-          {
-            name: name,
-          },
-          {
-            commonNomenclature: { has: name },
-          },
-        ],
-      },
-      include: {
-        routesOfAdministraton: true,
-        OccuranceOfEffect: {
-          include: {
-            Effect: true,
-          },
-        },
-      },
-    });
+	async findSubstanceByNameOrAlias(name: string) {
+		const substance = await this.db.substance.findFirst({
+			where: {
+				OR: [
+					{
+						name: name,
+					},
+					{
+						commonNomenclature: { has: name },
+					},
+				],
+			},
+			include: {
+				routesOfAdministraton: true,
+				OccuranceOfEffect: {
+					include: {
+						Effect: true,
+					},
+				},
+			},
+		});
 
-    if (substance) {
-      return this.mapper.toDomain(substance);
-    } else {
-      return undefined;
-    }
-  }
+		return substance ? this.mapper.toDomain(substance) : undefined;
+	}
 }
 
 export const substanceRepository = new SubstanceRepository();

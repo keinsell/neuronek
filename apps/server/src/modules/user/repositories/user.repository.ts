@@ -5,125 +5,125 @@ import { User } from "../entities/user.entity";
 import { userMapper } from "../mappers/user.mapper";
 
 export class UserRepository implements Repository<User> {
-  db = PrismaInstance;
-  mapper = userMapper;
+	db = PrismaInstance;
+	mapper = userMapper;
 
-  async findUserById(id: string | number): Promise<User | undefined> {
-    const user = await this.db.user.findUnique({
-      where: {
-        id: String(id),
-      },
-    });
+	async findUserById(id: string | number): Promise<User | undefined> {
+		const user = await this.db.user.findUnique({
+			where: {
+				id: String(id),
+			},
+		});
 
-    if (!user) {
-      return undefined;
-    }
+		if (!user) {
+			return undefined;
+		}
 
-    return this.mapper.toDomain(user);
-  }
+		return this.mapper.toDomain(user);
+	}
 
-  async findUserByUsername(username: string): Promise<User | undefined> {
-    const user = await this.db.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
+	async findByUsername(username: string): Promise<User | undefined> {
+		return await this.findUserByUsername(username);
+	}
 
-    if (!user) {
-      return undefined;
-    }
+	async findUserByUsername(username: string): Promise<User | undefined> {
+		const user = await this.db.user.findUnique({
+			where: {
+				username: username,
+			},
+		});
 
-    return this.mapper.toDomain(user);
-  }
+		if (!user) {
+			return undefined;
+		}
 
-  async findUserByEmail(email: string): Promise<User | undefined> {
-    const user = await this.db.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
+		return this.mapper.toDomain(user);
+	}
 
-    if (!user) {
-      return undefined;
-    }
+	async findUserByEmail(email: string): Promise<User | undefined> {
+		const user = await this.db.user.findUnique({
+			where: {
+				email: email,
+			},
+		});
 
-    return this.mapper.toDomain(user);
-  }
+		if (!user) {
+			return undefined;
+		}
 
-  async exists(entity: User): Promise<boolean> {
-    const findUserById = await this.findUserById(entity.id);
-    const findUserByUsername = await this.findUserByUsername(entity.username);
-    // const findUserByEmail = await this.findUserByEmail(entity.email);
+		return this.mapper.toDomain(user);
+	}
 
-    if (!findUserById && !findUserByUsername) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+	async exists(entity: User): Promise<boolean> {
+		const findUserById = await this.findUserById(entity.id);
+		const findUserByUsername = await this.findUserByUsername(entity.username);
+		// const findUserByEmail = await this.findUserByEmail(entity.email);
 
-  async save(entity: User): Promise<User> {
-    const exists = await this.exists(entity);
+		return findUserById || findUserByUsername ? true : false;
+	}
 
-    let createdOrUpdateEntity: User;
+	async save(entity: User): Promise<User> {
+		const exists = await this.exists(entity);
 
-    if (!exists) {
-      const presistence = this.mapper.toPersistence(entity);
-      const created = await this.db.user.create({
-        data: presistence,
-      });
+		let createdOrUpdateEntity: User;
 
-      createdOrUpdateEntity = this.mapper.toDomain(created);
-    } else {
-      const presistence = this.mapper.toPersistence(entity);
+		if (exists) {
+			const presistence = this.mapper.toPersistence(entity);
 
-      await this.db.user.updateMany({
-        where: {
-          OR: [
-            {
-              id: String(entity.id),
-            },
-            {
-              username: entity.username,
-            },
-            {
-              email: entity.email,
-            },
-          ],
-        },
-        data: presistence,
-      });
+			await this.db.user.updateMany({
+				where: {
+					OR: [
+						{
+							id: String(entity.id),
+						},
+						{
+							username: entity.username,
+						},
+						{
+							email: entity.email,
+						},
+					],
+				},
+				data: presistence,
+			});
 
-      const updated = await this.db.user.findFirst({
-        where: {
-          OR: [
-            {
-              id: String(entity.id),
-            },
-            {
-              username: entity.username,
-            },
-            {
-              email: entity.email,
-            },
-          ],
-        },
-      });
+			const updated = await this.db.user.findFirst({
+				where: {
+					OR: [
+						{
+							id: String(entity.id),
+						},
+						{
+							username: entity.username,
+						},
+						{
+							email: entity.email,
+						},
+					],
+				},
+			});
 
-      if (!updated) {
-        throw new Error("User not found");
-      }
+			if (!updated) {
+				throw new Error("User not found");
+			}
 
-      createdOrUpdateEntity = this.mapper.toDomain(updated);
-    }
+			createdOrUpdateEntity = this.mapper.toDomain(updated);
+		} else {
+			const presistence = this.mapper.toPersistence(entity);
+			const created = await this.db.user.create({
+				data: presistence,
+			});
 
-    return createdOrUpdateEntity;
-  }
+			createdOrUpdateEntity = this.mapper.toDomain(created);
+		}
 
-  delete(entity: User): Promise<boolean> {
-    console.log(entity);
-    throw new Error("Method not implemented.");
-  }
+		return createdOrUpdateEntity;
+	}
+
+	delete(entity: User): Promise<boolean> {
+		console.log(entity);
+		throw new Error("Method not implemented.");
+	}
 }
 
 export const userRepository = new UserRepository();

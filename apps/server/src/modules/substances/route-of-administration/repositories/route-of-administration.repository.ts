@@ -4,69 +4,65 @@ import { RouteOfAdministration } from "../entities/route-of-administration.entit
 import { routeOfAdministrationMapper } from "../mappers/route-of-administration.mapper";
 
 export class RouteOfAdministrationRepository
-  implements Repository<RouteOfAdministration>
+	implements Repository<RouteOfAdministration>
 {
-  db = PrismaInstance;
-  mapper = routeOfAdministrationMapper;
+	db = PrismaInstance;
+	mapper = routeOfAdministrationMapper;
 
-  async save(entity: RouteOfAdministration): Promise<RouteOfAdministration> {
-    const presistence = this.mapper.toPersistence(entity);
+	async save(entity: RouteOfAdministration): Promise<RouteOfAdministration> {
+		const presistence = this.mapper.toPersistence(entity);
 
-    const exists = await this.exists(entity);
+		const exists = await this.exists(entity);
 
-    if (!exists) {
-      presistence.id = undefined;
-      await this.db.routeOfAdministration.create({
-        data: presistence,
-      });
-    } else {
-      const updatePayload = {
-        ...presistence,
-        Substance: undefined,
-      };
+		if (!exists) {
+			presistence.id = undefined;
+			await this.db.routeOfAdministration.create({
+				data: presistence,
+			});
+		} else {
+			const updatePayload = {
+				...presistence,
+				Substance: undefined,
+			};
 
-      await this.db.routeOfAdministration.updateMany({
-        where: {
-          substanceName: entity._substance,
-          type: entity.route,
-        },
-        data: updatePayload,
-      });
-    }
+			await this.db.routeOfAdministration.updateMany({
+				where: {
+					substanceName: entity._substance,
+					type: entity.route,
+				},
+				data: updatePayload,
+			});
+		}
 
-    return entity;
-  }
+		return entity;
+	}
 
-  async exists(entity: RouteOfAdministration): Promise<boolean> {
-    const findRouteOfAdministrationById =
-      await this.db.routeOfAdministration.findFirst({
-        where: {
-          substanceName: entity._substance,
-          type: entity.route,
-        },
-      });
+	async exists(entity: RouteOfAdministration): Promise<boolean> {
+		const findRouteOfAdministrationById =
+			await this.db.routeOfAdministration.findFirst({
+				where: {
+					substanceName: entity._substance,
+					type: entity.route,
+				},
+			});
 
-    if (!findRouteOfAdministrationById) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+		return !findRouteOfAdministrationById ? false : true;
+	}
 
-  async delete(entity: RouteOfAdministration): Promise<boolean> {
-    const exists = await this.exists(entity);
-    if (!exists) {
-      return false;
-    } else {
-      await this.db.routeOfAdministration.delete({
-        where: {
-          id: this.mapper.toPersistence(entity).id,
-        },
-      });
-      return true;
-    }
-  }
+	async delete(entity: RouteOfAdministration): Promise<boolean> {
+		const exists = await this.exists(entity);
+		if (!exists) {
+			return false;
+		} else {
+			await this.db.routeOfAdministration.delete({
+				where: {
+					id: this.mapper.toPersistence(entity).id,
+				},
+			});
+			return true;
+		}
+	}
 }
 
 export const routeOfAdministrationRepository =
-  new RouteOfAdministrationRepository();
+	new RouteOfAdministrationRepository();

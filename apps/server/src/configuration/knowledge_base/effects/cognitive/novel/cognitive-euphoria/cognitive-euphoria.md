@@ -4,24 +4,10 @@
 
 Cognitive euphoria is often accompanied by other coinciding effects such as [physical euphoria](https://psychonautwiki.org/wiki/Physical_euphoria) and [tactile enhancement](https://psychonautwiki.org/wiki/Tactile_enhancement). It is most commonly induced under the influence of [moderate](https://psychonautwiki.org/wiki/Dosage#common) [dosages](https://psychonautwiki.org/wiki/Dosage) of [opioids](https://psychonautwiki.org/wiki/Opioids), [entactogens](https://psychonautwiki.org/wiki/Entactogens), [stimulants](https://psychonautwiki.org/wiki/Stimulants), and [GABAergic](https://psychonautwiki.org/wiki/GABAergic) [depressants](https://psychonautwiki.org/wiki/Depressant). However, it can also occur to a lesser extent under the influence of [hallucinogenic](https://psychonautwiki.org/wiki/Hallucinogen) compounds such as [psychedelics](https://psychonautwiki.org/wiki/Psychedelic), [dissociatives](https://psychonautwiki.org/wiki/Dissociative), and [cannabinoids](https://psychonautwiki.org/wiki/Cannabinoid).
 
-### Psychoactive substances
-
-Compounds within our [psychoactive substance index](https://psychonautwiki.org/wiki/Psychoactive_substance_index) which may cause this effect include:
-
-[... further results](https://psychonautwiki.org/wiki/Special:Ask/-5B-5BCategory:Psychoactive-20substance-5D-5D-20-5B-5BEffect::Cognitive-20euphoria-5D-5D/mainlabel%3D/limit%3D50/offset%3D50/format%3Dul)
-
-### Experience reports
-
-Anecdotal reports which describe this effect within our [experience index](https://psychonautwiki.org/wiki/Experience_index) include:
-
-[... further results](https://psychonautwiki.org/wiki/Special:Ask/-5B-5BCategory:Experience-5D-5D-20-5B-5BEffect::Cognitive-20euphoria-5D-5D/mainlabel%3D/limit%3D50/offset%3D50/format%3Dul)
-
-### See also
-
 ### External links
 
-- [Cognition (Wikipedia)](https://en.wikipedia.org/wiki/Cognition)
-- [Euphoria (Wikipedia)](https://en.wikipedia.org/wiki/Euphoria)
+-   [Cognition (Wikipedia)](https://en.wikipedia.org/wiki/Cognition)
+-   [Euphoria (Wikipedia)](https://en.wikipedia.org/wiki/Euphoria)
 
 ### References
 

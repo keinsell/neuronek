@@ -17,7 +17,7 @@
 		"db:studio": "prisma studio",
 		"dev": "nodemon",
 		"format": "prisma format",
-		"lint": "eslint ./src --fix",
+		"lint": "rome format ./src --write && eslint ./src --fix",
 		"start": "node dist/index.js",
 		"test": "c8 ava"
 	},

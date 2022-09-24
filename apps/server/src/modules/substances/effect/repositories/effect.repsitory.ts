@@ -4,69 +4,69 @@ import { Effect } from "../entities/effect.entity";
 import { EffectMapper } from "../mappers/effect.mapper";
 
 export class EffectRepository extends Repository<Effect> {
-  override db = PrismaInstance.effect;
-  override mapper = new EffectMapper();
+	override db = PrismaInstance.effect;
+	override mapper = new EffectMapper();
 
-  async findEffectById(id: string) {
-    const effect = await this.db.findUnique({
-      where: {
-        id,
-      },
-    });
+	async findEffectById(id: string) {
+		const effect = await this.db.findUnique({
+			where: {
+				id,
+			},
+		});
 
-    if (!effect) {
-      return undefined;
-    }
+		if (!effect) {
+			return;
+		}
 
-    return effect;
-  }
+		return effect;
+	}
 
-  async findEffectByName(name: string) {
-    const effect = await this.db.findUnique({
-      where: {
-        name: this.mapper.stringifyEffectName(name),
-      },
-    });
+	async findEffectByName(name: string) {
+		const effect = await this.db.findUnique({
+			where: {
+				name: this.mapper.stringifyEffectName(name),
+			},
+		});
 
-    if (!effect) {
-      return undefined;
-    }
+		if (!effect) {
+			return;
+		}
 
-    return effect;
-  }
+		return effect;
+	}
 
-  async exists(entity: Effect): Promise<boolean> {
-    const doExist = await this.findEffectByName(entity.name);
-    return !!doExist;
-  }
+	async exists(entity: Effect): Promise<boolean> {
+		const doExist = await this.findEffectByName(entity.name);
+		return !!doExist;
+	}
 
-  async save(entity: Effect): Promise<Effect> {
-    const exists = await this.exists(entity);
+	async save(entity: Effect): Promise<Effect> {
+		const exists = await this.exists(entity);
 
-    let createdOrUpdatedEffect: Effect;
+		let createdOrUpdatedEffect: Effect;
 
-    if (exists) {
-      const updatedEffect = await this.db.update({
-        where: {
-          name: this.mapper.stringifyEffectName(entity.name),
-        },
-        data: this.mapper.toPersistence(entity),
-      });
+		if (exists) {
+			const updatedEffect = await this.db.update({
+				where: {
+					name: this.mapper.stringifyEffectName(entity.name),
+				},
+				data: this.mapper.toPersistence(entity),
+			});
 
-      createdOrUpdatedEffect = this.mapper.toDomain(updatedEffect);
-    } else {
-      const createdEffect = await this.db.create({
-        data: this.mapper.toPersistence(entity),
-      });
+			createdOrUpdatedEffect = this.mapper.toDomain(updatedEffect);
+		} else {
+			const createdEffect = await this.db.create({
+				data: this.mapper.toPersistence(entity),
+			});
 
-      createdOrUpdatedEffect = this.mapper.toDomain(createdEffect);
-    }
+			createdOrUpdatedEffect = this.mapper.toDomain(createdEffect);
+		}
 
-    return createdOrUpdatedEffect;
-  }
+		return createdOrUpdatedEffect;
+	}
 
-  async delete(entity: Effect): Promise<boolean> {
-    console.log(entity);
-    throw new Error("Method not implemented.");
-  }
+	async delete(entity: Effect): Promise<boolean> {
+		console.log(entity);
+		throw new Error("Method not implemented.");
+	}
 }

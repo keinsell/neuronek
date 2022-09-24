@@ -2,16 +2,16 @@
 // Imo that would be cool, but not sure how to do that yet.
 
 export interface InnerMeStatus {
-  cognitive: {
-    analisis: null;
-    creativity: null;
-    memory: null;
-    motivation: null;
-  };
-  body: {
-    appetite: null;
-    libido: null;
-    stamina: null;
-    energy: null;
-  };
+	cognitive: {
+		analisis: null;
+		creativity: null;
+		memory: null;
+		motivation: null;
+	};
+	body: {
+		appetite: null;
+		libido: null;
+		stamina: null;
+		energy: null;
+	};
 }

@@ -11,45 +11,42 @@ import { Effect } from "./effect.entity";
 // - As everybody knows it burns as hell
 
 export enum EffectIntensivity {
-  mild = "mild",
-  moderate = "moderate",
-  strong = "strong",
+	mild = "mild",
+	moderate = "moderate",
+	strong = "strong",
 }
 
 export interface EffectOccuranceProperties {
-  effect: Effect;
-  intensivity?: EffectIntensivity;
-  substance?: string;
-  psychoactiveClass?: PsychoactiveClass[];
-  dosages?: DosageClassification[];
-  phases?: PhaseType[];
-  routes?: RouteOfAdministrationType[];
-  /** @example "Caffeine improves analitics." */
-  description?: string;
+	effect: Effect;
+	intensivity?: EffectIntensivity;
+	substance?: string;
+	psychoactiveClass?: PsychoactiveClass[];
+	dosages?: DosageClassification[];
+	phases?: PhaseType[];
+	routes?: RouteOfAdministrationType[];
+	/** @example "Caffeine improves analitics." */
+	description?: string;
 }
 
-export class EffectOccurance
-  extends Entity
-  implements EffectOccuranceProperties
-{
-  effect: Effect;
-  intensivity?: EffectIntensivity | undefined;
-  substance?: string;
-  psychoactiveClass?: PsychoactiveClass[] | undefined;
-  dosages?: DosageClassification[] | undefined;
-  phases?: PhaseType[] | undefined;
-  routes?: RouteOfAdministrationType[] | undefined;
-  description?: string | undefined;
+export class EffectOccurance extends Entity implements EffectOccuranceProperties {
+	effect: Effect;
+	intensivity?: EffectIntensivity | undefined;
+	substance?: string;
+	psychoactiveClass?: PsychoactiveClass[] | undefined;
+	dosages?: DosageClassification[] | undefined;
+	phases?: PhaseType[] | undefined;
+	routes?: RouteOfAdministrationType[] | undefined;
+	description?: string | undefined;
 
-  constructor(properties: EffectOccuranceProperties, id?: string | number) {
-    super(id);
-    this.effect = properties.effect;
-    this.intensivity = properties.intensivity;
-    this.substance = properties.substance;
-    this.psychoactiveClass = properties.psychoactiveClass;
-    this.dosages = properties.dosages;
-    this.phases = properties.phases;
-    this.routes = properties.routes;
-    this.description = properties.description;
-  }
+	constructor(properties: EffectOccuranceProperties, id?: string | number) {
+		super(id);
+		this.effect = properties.effect;
+		this.intensivity = properties.intensivity;
+		this.substance = properties.substance;
+		this.psychoactiveClass = properties.psychoactiveClass;
+		this.dosages = properties.dosages;
+		this.phases = properties.phases;
+		this.routes = properties.routes;
+		this.description = properties.description;
+	}
 }

@@ -10,17 +10,17 @@ import zxcvbn from "zxcvbn";
 // Build strong password validator based on zxcvbn
 const Password = RString.withBrand("password")
 	.withConstraint(
-		(s) => s.length >= 8 || "Password must be at least 8 characters long"
+		(s) => s.length >= 8 || "Password must be at least 8 characters long",
 	)
 	.withConstraint(
-		(s) => s.length <= 64 || "Password must be at most 64 characters long"
+		(s) => s.length <= 64 || "Password must be at most 64 characters long",
 	)
 	.withConstraint(
 		(s) =>
 			zxcvbn(s).score > 2 ||
-			`${zxcvbn(s).feedback.warning}. ${zxcvbn(
-				s
-			).feedback.suggestions.join(", ")}`
+			`${zxcvbn(s).feedback.warning}. ${zxcvbn(s).feedback.suggestions.join(
+				", ",
+			)}`,
 	);
 
 export const RegisterUserBody = Record({
