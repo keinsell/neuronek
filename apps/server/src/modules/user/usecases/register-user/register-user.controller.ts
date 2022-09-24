@@ -1,8 +1,14 @@
 import { Controller } from "../../../../common/controller/controller.common";
 import { RegisterUserBody } from "./register-user.body.js";
 import { RegisterUserUsecase } from "./register-user.usecase.js";
+import { OperationId, Post, Route, Response, Request, Body } from "tsoa";
 
+@Route("user")
 export class RegisterUserController extends Controller {
+	/** Creates new user */
+	@Post("register")
+	@OperationId("register-user")
+	@Response("201", "Created user successfully")
 	protected async executeImplementation(): Promise<any> {
 		const validateIncommingBody = RegisterUserBody.validate(this.req.body);
 

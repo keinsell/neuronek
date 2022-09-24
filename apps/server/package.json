@@ -7,7 +7,7 @@
 	"author": "",
 	"type": "module",
 	"scripts": {
-		"build": "tsup-node src/index.ts --format esm,cjs",
+		"build": "tsoa spec-and-routes && tsup-node src/index.ts --format esm,cjs",
 		"db:generate": "prisma generate",
 		"db:migrate:deploy": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
@@ -51,6 +51,7 @@
 		"runtypes": "6.6.0",
 		"shallow-equal-object": "1.1.1",
 		"superstruct": "0.16.5",
+		"tsoa": "^4.1.2",
 		"tsup": "6.2.3",
 		"type-fest": "3.0.0",
 		"unitmath": "0.8.8",
