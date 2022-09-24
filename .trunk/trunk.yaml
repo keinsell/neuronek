@@ -27,3 +27,8 @@ lint:
     - hadolint@2.10.0
     - semgrep@0.114.0
     - eslint@8.24.0
+repo:
+  repo:
+    host: github.com
+    owner: keinsell
+    name: neuronek
