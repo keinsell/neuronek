@@ -5,7 +5,7 @@ import { Substance } from "../entities/substance.entity.js";
 export class RouteOfAdministrationNotFound extends ApplicationError {
 	constructor(
 		route?: RouteOfAdministrationType | string,
-		substance?: Substance | string
+		substance?: Substance | string,
 	) {
 		let message = "Route of administration not found.";
 

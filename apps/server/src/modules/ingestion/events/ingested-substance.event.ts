@@ -12,15 +12,13 @@ export class IngestedSubstanceEvent extends DomesticEvent<Ingestion> {
 
 	override toConsole(): void {
 		const message = `User ${Prettylogs.shortenCuid(
-			this.data.user.id.toString()
+			this.data.user.id.toString(),
 		)} ingested ${this.data.dosage}mg of ${this.data.substance.name} via ${
 			this.data.route
-		}. (${this.data.id
-			.toString()
-			.slice(
-				this.data.id.toString().length - 8,
-				this.data.id.toString().length
-			)})`;
+		}. (${this.data.id.toString().slice(
+			this.data.id.toString().length - 8,
+			this.data.id.toString().length,
+		)})`;
 
 		console.log(message);
 	}

@@ -55,9 +55,7 @@ export class UserRepository implements Repository<User> {
 
 	async exists(entity: User): Promise<boolean> {
 		const findUserById = await this.findUserById(entity.id);
-		const findUserByUsername = await this.findUserByUsername(
-			entity.username
-		);
+		const findUserByUsername = await this.findUserByUsername(entity.username);
 		// const findUserByEmail = await this.findUserByEmail(entity.email);
 
 		return findUserById || findUserByUsername ? true : false;

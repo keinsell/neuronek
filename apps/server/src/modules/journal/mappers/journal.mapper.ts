@@ -29,16 +29,16 @@ type JournalWithIngestionWithSubstanceAndRouteOfAdministration =
 
 export class JournalMapper implements IMapper {
 	async toDomain(
-		entity: JournalWithIngestionWithSubstanceAndRouteOfAdministration
+		entity: JournalWithIngestionWithSubstanceAndRouteOfAdministration,
 	): Promise<Journal> {
 		return new Journal(
 			{
 				owner: await userMapper.toDomain(entity.Owner),
-				ingestions: entity.Ingestions.map((ingestion) =>
-					ingestionMapper.toDomain(ingestion)
+				ingestions: entity.Ingestions.map(
+					(ingestion) => ingestionMapper.toDomain(ingestion),
 				),
 			},
-			entity.id
+			entity.id,
 		);
 	}
 

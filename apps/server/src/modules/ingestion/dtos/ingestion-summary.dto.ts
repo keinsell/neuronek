@@ -19,6 +19,6 @@ export interface IngestionSummary {
 			/** @example "Insufflated 2C-B causes several nasal burning, however onset of substance changes perception of felt pain so you can expect this effect to last about 5 minutes. Futher effects that you may notice are slight changes in your vision and felt body form." */
 			description?: string;
 			effects?: string[];
-		}
+		},
 	];
 }

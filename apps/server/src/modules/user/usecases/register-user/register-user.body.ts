@@ -4,8 +4,11 @@ import {
 	String as RString,
 	Number as RNumber,
 	InstanceOf,
+	Static,
 } from "runtypes";
 import zxcvbn from "zxcvbn";
+
+// TODO: Runtypes aren't good option there, we can save them for now but we should use something else as Runtypes doensn't support JSDoc and we're supposed to duplicate schema.
 
 // Build strong password validator based on zxcvbn
 const Password = RString.withBrand("password")
@@ -24,6 +27,7 @@ const Password = RString.withBrand("password")
 	);
 
 export const RegisterUserBody = Record({
+	/** Username asdassadasdsadasdasd */
 	firstName: Optional(RString),
 	lastName: Optional(RString),
 	email: Optional(RString),
@@ -33,3 +37,5 @@ export const RegisterUserBody = Record({
 	height: Optional(RNumber),
 	weight: Optional(RNumber),
 });
+
+export type RegisterUserRequest = Static<typeof RegisterUserBody>;

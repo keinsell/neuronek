@@ -13,9 +13,7 @@ export class RegisterUserUsecase extends Usecase<
 > {
 	protected service = new UserService();
 	async execute(input: RegisterUserDTO) {
-		const userExists = await this.service.checkIfUsernameExists(
-			input.username
-		);
+		const userExists = await this.service.checkIfUsernameExists(input.username);
 
 		if (userExists) {
 			return err(new UsernameAlreadyTaken(input.username));

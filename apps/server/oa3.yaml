@@ -1,193 +1,115 @@
----
-openapi: 3.0.0
-servers:
-- description: JokeAPI server example
-  url: https://joke_api.example.com/
-info:
-  description: |
-    This simple Joke API allows you to publish joke and vote for you favourite!
-  version: 1.0.0
-  title: Simple Joke API
-  contact:
-    email: you@your-company.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
-paths:
-  "/joke":
-    get:
-      tags:
-      - developers
-      summary: searches jokes
-      operationId: searchJokes
-      description: |
-        By passing in the appropriate options, you can search for
-        available jokes
-      parameters:
-      - in: query
-        name: searchString
-        description: pass an optional search string for looking up inventory
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: numberofJokes
-        description: number of jokes to return
-        schema:
-          type: integer
-          format: int32
-          minimum: 1
-          default: 25
-      - in: query
-        name: category
-        description: category of jokes to return
-        example: knockKnock
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: sortBy
-        description: 'Allowed: thumbsUp, thumbsDown, dateAdded.'
-        example: thumbsUp
-        required: false
-        schema:
-          type: string
-      - name: sortOrder
-        in: query
-        description: 'Allowed: asc, desc. asc is ascending and sorts from A to Z.
-          desc is descending and sorts from Z to A.'
-        example: desc
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: search results matching criteria
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Joke"
-        '400':
-          description: bad input parameter
-    post:
-      tags:
-      - admins
-      summary: adds a joke
-      operationId: addJoke
-      description: Adds a joke to the system
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - joke
-              - punchline
-              properties:
-                joke:
-                  type: string
-                  example: Knock Knock. Who's there? Hike. Hike Who?
-                  description: The joke
-                punchline:
-                  example: I didn't know you liked Japanese poetry.
-                  description: The punchline.
-                  type: string
-                category:
-                  example: knockKnock
-                  description: category of the joke (allowed categories TBD)
-                  type: string
-      responses:
-        '201':
-          description: item created
-          content:
-            application/vnd.json:
-              schema:
-                "$ref": "#/components/schemas/Joke"
-        '400':
-          description: invalid input, object invalid
-        '409':
-          description: an existing item already exists
-  "/thumbsUp/{id}":
-    post:
-      tags:
-      - developers
-      summary: thumbsup  a joke
-      operationId: Thumbs up to a joke
-      description: Increases Thumbs up count of a joke by one.
-      parameters:
-      - name: id
-        example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
-        description: The joke ID for the joke you want to thumbsup.
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Thumbs Up added
-  "/thumbsDown/{id}":
-    post:
-      tags:
-      - developers
-      summary: thumbsdown a joke
-      operationId: Thumbs down to a joke
-      description: Increases Thumbs down count of a joke by one.
-      parameters:
-      - name: id
-        example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
-        description: The joke ID for the joke you want to thumbsdown.
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Thumbs down added
 components:
-  schemas:
-    Joke:
-      type: object
-      required:
-      - id
-      - dateAdded
-      - joke
-      - punchline
-      - thumbsUp
-      - thumbsDown
-      - category
-      properties:
-        id:
-          type: string
-          example: ce0b9fbe-7ad8-11eb-9439-0242ac130002
-          description: The id of the Joke. Assigned when added.
-        joke:
-          type: string
-          example: What is the name to open the door?
-          description: The lead-in to the joke.
-        punchline:
-          type: string
-          example: Open your chakra
-          description: This bit should make you laugh :).
-        category:
-          type: string
-          example: Classic
-          description: the category of the joke.
-        thumbsUp:
-          type: integer
-          example: 2
-          description: Count of upvotes for the joke.
-        thumbsDown:
-          type: integer
-          example: 4
-          description: Count of down votes for the joke.
-        dateAdded:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
+    examples: {}
+    headers: {}
+    parameters: {}
+    requestBodies: {}
+    responses: {}
+    schemas:
+        RegisterUserDTO:
+            properties:
+                firstName:
+                    type: string
+                    description: 'The user''s first name'
+                    example: John
+                    maxLength: 50
+                    minLength: 1
+                    pattern: '^[a-zA-Z0-9_]*$'
+                lastName:
+                    type: string
+                    description: 'The user''s last name'
+                    example: Doe
+                    maxLength: 50
+                    minLength: 1
+                    pattern: '^[a-zA-Z0-9_]*$'
+                email:
+                    type: string
+                    description: 'The user''s email'
+                    example: john.doe@example.com
+                    pattern: '(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])'
+                password:
+                    description: 'The user''s password'
+                    example: superDuperStrongPassword
+                    maxLength: 64
+                    minLength: 6
+                username:
+                    type: string
+                    description: 'The user''s useranme.'
+                    example: johndoe
+                    maxLength: 32
+                    minLength: 1
+                dateOfBirth:
+                    type: string
+                    format: date
+                    description: 'The user''s date of birth'
+                    example: '2000-10-12'
+                height:
+                    type: integer
+                    format: int32
+                    description: 'The user''s height in centimeters'
+                    example: 182
+                    minimum: 0
+                    maximum: 300
+                weight:
+                    type: integer
+                    format: int32
+                    description: 'The user''s weight in kilograms'
+                    example: 65
+                    minimum: 0
+                    maximum: 300
+            required:
+                - password
+                - username
+            type: object
+            additionalProperties: false
+    securitySchemes: {}
+info:
+    title: Neuronek
+    version: 1.0.0
+    description: 'Early version of Neuronek API.'
+    contact:
+        name: 'Jakub Olan'
+        email: keinsell@protonmail.com
+openapi: 3.0.0
+paths:
+    /user/register:
+        post:
+            operationId: register-user
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema: {}
+                            examples:
+                                'Example 1':
+                                    value: {id: 1, email: "", name: 'John Doe', phoneNumbers: []}
+                '201':
+                    description: 'Created user successfully'
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                            examples:
+                                'Example 1':
+                                    value: cl864jzha0005ted5rfkcrik3
+            description: 'Create a new user in Neuronek system.'
+            tags:
+                - User
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterUserDTO'
+servers:
+    -
+        url: /api
+tags:
+    -
+        name: User
+        description: 'Operations about users'
+        externalDocs:
+            description: 'Find out more about users'
+            url: 'http://swagger.io'
