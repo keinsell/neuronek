@@ -13,13 +13,17 @@ runtimes:
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.3
+      ref: v0.0.4
       uri: https://github.com/trunk-io/plugins
 lint:
   enabled:
+    - actionlint@1.6.19
+    - dotenv-linter@3.2.0
+    - markdownlint@0.32.2
+    - svgo@2.8.0
     - git-diff-check@SYSTEM
-    - gitleaks@8.12.0
+    - gitleaks@8.13.0
     - prettier@2.7.1
-    - hadolint@2.6.0
-    - semgrep@0.104.0
-    - eslint@7.30.0
+    - hadolint@2.10.0
+    - semgrep@0.114.0
+    - eslint@8.24.0
