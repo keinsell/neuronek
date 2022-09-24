@@ -5,31 +5,31 @@ import cors from "cors";
 import { userRouter } from "../modules/user/routers/user.router";
 
 export class HttpApplication {
-  private application: App;
+	private application: App;
 
-  constructor() {
-    this.application = new App();
-    this.applyDevelopmentMiddleware();
-    this.applyProductionMiddleware();
-    this.applyMiddleware();
-    this.attachComponents();
-  }
+	constructor() {
+		this.application = new App();
+		this.applyDevelopmentMiddleware();
+		this.applyProductionMiddleware();
+		this.applyMiddleware();
+		this.attachComponents();
+	}
 
-  protected applyMiddleware() {
-    this.application.use(urlencoded());
-    this.application.use(lruSend());
-    this.application.options("*", cors());
-  }
+	protected applyMiddleware() {
+		this.application.use(urlencoded());
+		this.application.use(lruSend());
+		this.application.options("*", cors());
+	}
 
-  protected applyDevelopmentMiddleware() {}
-  protected applyProductionMiddleware() {}
+	protected applyDevelopmentMiddleware() {}
+	protected applyProductionMiddleware() {}
 
-  protected attachComponents() {
-    this.application.use(userRouter);
-  }
+	protected attachComponents() {
+		this.application.use(userRouter);
+	}
 
-  public async bootstrap() {
-    this.application.listen(4000);
-    console.log("🚀 Server ready at: http://localhost:3000");
-  }
+	public async bootstrap() {
+		this.application.listen(4000);
+		console.log("🚀 Server ready at: http://localhost:4000");
+	}
 }

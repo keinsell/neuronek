@@ -1,4 +1,3 @@
-import collect from "collect.js";
 import ms from "ms";
 import { Entity } from "../../../common/entity/entity.common";
 import { Ingestion } from "../../ingestion/entities/ingestion.entity";

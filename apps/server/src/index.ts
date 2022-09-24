@@ -11,14 +11,14 @@ logProcessErrors();
 
 export async function main() {
 	new HttpApplication().bootstrap();
-	await syncPersonalJournal();
+	// await syncPersonalJournal();
 
 	await new SubstanceRepository().save(Amphetamine);
 
 	const y = await new IngestionService().planIngestion({
 		substance: "Amphetamine",
-		route: RouteOfAdministrationType.oral,
-		dosage: 9,
+		route: RouteOfAdministrationType.insufflated,
+		dosage: 8,
 		purity: 1,
 	});
 

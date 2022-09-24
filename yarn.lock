@@ -1396,6 +1396,11 @@
   dependencies:
     "@types/yargs-parser" "*"
 
+"@types/zxcvbn@^4.4.1":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@types/zxcvbn/-/zxcvbn-4.4.1.tgz#46e42cbdcee681b22181478feaf4af2bc4c1abd2"
+  integrity sha512-3NoqvZC2W5gAC5DZbTpCeJ251vGQmgcWIHQJGq2J240HY6ErQ9aWKkwfoKJlHLx+A83WPNTZ9+3cd2ILxbvr1w==
+
 "@typescript-eslint/eslint-plugin@5.38.0":
   version "5.38.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.38.0.tgz"
@@ -6462,6 +6467,11 @@ run-series@^1.1.8:
   resolved "https://registry.npmjs.org/run-series/-/run-series-1.1.9.tgz"
   integrity sha512-Arc4hUN896vjkqCYrUXquBFtRZdv1PfLbTYP71efP6butxyQ0kWpiNJyAgsxscmQg1cqvHY32/UCBzXedTpU2g==
 
+runtypes@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-6.6.0.tgz#48e353d8b0f641ab5ec5d80fa96dd7bd41ea3281"
+  integrity sha512-ddM7sgB3fyboDlBzEYFQ04L674sKjbs4GyW2W32N/5Ae47NRd/GyMASPC2PFw8drPHYGEcZ0mZ26r5RcB8msfQ==
+
 rxjs@^7.5.5:
   version "7.5.6"
   resolved "https://registry.npmjs.org/rxjs/-/rxjs-7.5.6.tgz"
@@ -7860,3 +7870,8 @@ yocto-queue@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.0.0.tgz"
   integrity sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==
+
+zxcvbn@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/zxcvbn/-/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
+  integrity sha512-Bq0B+ixT/DMyG8kgX2xWcI5jUvCwqrMxSFam7m0lAf78nf04hv6lNCsyLYdyYTrCVMqNDY/206K7eExYCeSyUQ==

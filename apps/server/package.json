@@ -48,12 +48,14 @@
 		"reflect-metadata": "0.1.13",
 		"regenerator-runtime": "0.13.9",
 		"routing-controllers": "0.9.0",
+		"runtypes": "^6.6.0",
 		"shallow-equal-object": "1.1.1",
 		"superstruct": "0.16.5",
 		"tsup": "6.2.3",
 		"type-fest": "3.0.0",
 		"unitmath": "0.8.8",
-		"winston": "3.8.2"
+		"winston": "3.8.2",
+		"zxcvbn": "^4.4.2"
 	},
 	"devDependencies": {
 		"@ava/typescript": "3.0.1",
@@ -72,6 +74,7 @@
 		"@types/ms": "0.7.31",
 		"@types/nodemon": "1.19.2",
 		"@types/sinon": "10.0.13",
+		"@types/zxcvbn": "^4.4.1",
 		"@typescript-eslint/parser": "5.38.0",
 		"ava": "4.3.3",
 		"c8": "7.12.0",

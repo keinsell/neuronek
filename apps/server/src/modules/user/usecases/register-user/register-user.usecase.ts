@@ -1,9 +1,10 @@
 import { Usecase } from "../../../../common/usecase/usecase.common";
 import { RegisterUserDTO } from "../../dtos/register-user.dto";
+import { UserService } from "../../services/user.service.js";
 
 export class RegisterUserUsecase extends Usecase<RegisterUserDTO, string> {
-  execute(input: RegisterUserDTO): Promise<string> {
-    console.log(input);
-    throw new Error("Method not implemented.");
-  }
+	async execute(input: RegisterUserDTO): Promise<string> {
+		const user = await new UserService().registerUser(input);
+		return user;
+	}
 }
