@@ -2,7 +2,7 @@ import { HttpApplication } from "./application/http.application";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
 import { RouteOfAdministrationType } from "./modules/substances/route-of-administration/entities/route-of-administration.entity";
 // eslint-disable-next-line node/file-extension-in-import
-import { syncPersonalJournal } from "./personal-journal";
+import { keinsell, syncPersonalJournal } from "./personal-journal";
 import logProcessErrors from "log-process-errors";
 import { IngestionService } from "./modules/ingestion/ingestion.service";
 import { SubstanceRepository } from "./modules/substances/substance/repositories/substance.repository";
@@ -16,6 +16,13 @@ export async function main() {
 	await new SubstanceRepository().save(Amphetamine);
 	await new EffectRepository().save(CognitiveEuphoria);
 	console.log(CognitiveEuphoria);
+
+	console.log(
+		await keinsell.password.compare(
+			"SuperDuperSecretPasswordThatEverybodyCanCrack"
+		)
+	);
+
 	await syncPersonalJournal();
 
 	const y = await new IngestionService().planIngestion({

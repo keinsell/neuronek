@@ -7,7 +7,7 @@ export class UserService {
 	mapper = userMapper;
 
 	async registerUser(input: RegisterUserDTO): Promise<string> {
-		const userEntity = this.mapper.fromRegisterUserDTO(input);
+		const userEntity = await this.mapper.fromRegisterUserDTO(input);
 		const user = await this.repository.save(userEntity);
 		return String(user.id);
 	}

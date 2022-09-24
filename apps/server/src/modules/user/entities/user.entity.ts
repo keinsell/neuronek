@@ -1,10 +1,11 @@
 import { Entity } from "../../../common/entity/entity.common";
+import { UserPassword } from "../vos/password.vo.js";
 
 export interface UserProperties {
 	firstName?: string;
 	lastName?: string;
 	email?: string;
-	password: string;
+	password: UserPassword;
 	username: string;
 	dateOfBirth?: Date;
 	height?: number;
@@ -15,7 +16,7 @@ export class User extends Entity implements UserProperties {
 	firstName?: string;
 	lastName?: string;
 	email?: string;
-	password: string;
+	password: UserPassword;
 	username: string;
 	dateOfBirth?: Date;
 	height?: number;

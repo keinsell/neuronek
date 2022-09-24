@@ -1,4 +1,3 @@
-import { IMapper } from "../../../common/mapper/mapper.common";
 import { Repository } from "../../../common/repository/repository.common";
 import { PrismaInstance } from "../../../infrastructure/prisma.infra";
 import { User } from "../entities/user.entity";
@@ -56,7 +55,9 @@ export class UserRepository implements Repository<User> {
 
 	async exists(entity: User): Promise<boolean> {
 		const findUserById = await this.findUserById(entity.id);
-		const findUserByUsername = await this.findUserByUsername(entity.username);
+		const findUserByUsername = await this.findUserByUsername(
+			entity.username
+		);
 		// const findUserByEmail = await this.findUserByEmail(entity.email);
 
 		return findUserById || findUserByUsername ? true : false;
@@ -107,14 +108,14 @@ export class UserRepository implements Repository<User> {
 				throw new Error("User not found");
 			}
 
-			createdOrUpdateEntity = this.mapper.toDomain(updated);
+			createdOrUpdateEntity = await this.mapper.toDomain(updated);
 		} else {
 			const presistence = this.mapper.toPersistence(entity);
 			const created = await this.db.user.create({
 				data: presistence,
 			});
 
-			createdOrUpdateEntity = this.mapper.toDomain(created);
+			createdOrUpdateEntity = await this.mapper.toDomain(created);
 		}
 
 		return createdOrUpdateEntity;
