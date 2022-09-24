@@ -79,9 +79,14 @@ export class SubstanceRepository implements Repository<Substance> {
 		return findSubstanceById ? true : false;
 	}
 
-	delete(entity: Substance): Promise<boolean> {
-		console.log(entity);
-		throw new Error("Method not implemented.");
+	async delete(entity: Substance): Promise<boolean> {
+		const deleted = await this.db.substance.delete({
+			where: {
+				name: entity.name,
+			},
+		});
+
+		return deleted ? true : false;
 	}
 
 	async findSubstanceByName(name: string) {

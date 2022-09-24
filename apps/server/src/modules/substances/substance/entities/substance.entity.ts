@@ -12,6 +12,7 @@ import {
 } from "../../route-of-administration/entities/route-of-administration.entity";
 import { collect } from "collect.js";
 import { PhaseType } from "./phase.entity";
+import { RouteOfAdministrationNotFound } from "../errors/route-of-administration-not-found.error.js";
 export interface SubstanceProperties {
 	name: string;
 	chemnicalNomencalture: ChemicalNomenclature;
@@ -41,7 +42,7 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	getAvailableAdministrationRoutes() {
 		return Object.values(this.administrationRoutes).map(
-			(entity) => entity.route,
+			(entity) => entity.route
 		);
 	}
 
@@ -51,23 +52,21 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	getDurationOfSpecificPhase(
 		route: RouteOfAdministrationType,
-		phase: PhaseType,
+		phase: PhaseType
 	) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(routeOfAdministration) => routeOfAdministration.route === route,
+			(routeOfAdministration) => routeOfAdministration.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error(
-				`Route of administration ${route} not found for substance ${this.name}`,
-			);
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		const phaseDuration = routeOfAdministration.duration[phase];
 
 		if (!phaseDuration) {
 			throw new Error(
-				`Phase ${phase} not found for substance ${this.name} and route of administration ${route}`,
+				`Phase ${phase} not found for substance ${this.name} and route of administration ${route}`
 			);
 		}
 
@@ -76,11 +75,11 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	getDosageClassification(dosage: number, route: RouteOfAdministrationType) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		const { dosage: substanceDosage } = routeOfAdministration;
@@ -119,16 +118,16 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	getPersonalisedDosageForUser(
 		user: User,
-		route: RouteOfAdministrationType,
+		route: RouteOfAdministrationType
 	): {
 		[dosage in DosageClassification]: number;
 	} {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		const { dosage: substanceDosage } = routeOfAdministration;
@@ -164,14 +163,14 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	getIngestionSpecificEffects(
 		dosage: DosageClassification,
-		route: RouteOfAdministrationType,
+		route: RouteOfAdministrationType
 	) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound();
 		}
 
 		const availableEffects = collect(this.effects);
@@ -179,22 +178,23 @@ export class Substance extends Entity implements SubstanceProperties {
 		return availableEffects
 			.filter(
 				(effect) =>
-					effect.routes?.includes(route) || effect.routes?.length == 0,
+					effect.routes?.includes(route) || effect.routes?.length == 0
 			)
 			.filter(
 				(effect) =>
-					effect.dosages?.includes(dosage) || effect.routes?.length == 0,
+					effect.dosages?.includes(dosage) ||
+					effect.routes?.length == 0
 			)
 			.toArray<EffectOccurance>();
 	}
 
 	getTimeToSpecificPhase(route: RouteOfAdministrationType, phase: PhaseType) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		const { duration } = routeOfAdministration;
@@ -216,21 +216,26 @@ export class Substance extends Entity implements SubstanceProperties {
 		}
 
 		if (phase === PhaseType.aftereffects) {
-			return duration.onset + duration.comeup + duration.peak + duration.offset;
+			return (
+				duration.onset +
+				duration.comeup +
+				duration.peak +
+				duration.offset
+			);
 		}
 
 		throw new Error("Unknown phase");
 	}
 
 	getDurationOfEffectsForRouteOfAdministrationToPeak(
-		route: RouteOfAdministrationType,
+		route: RouteOfAdministrationType
 	) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		// sum phase durations
@@ -241,14 +246,14 @@ export class Substance extends Entity implements SubstanceProperties {
 	}
 
 	getDurationOfEffectsForRouteOfAdministrationAfterPeak(
-		route: RouteOfAdministrationType,
+		route: RouteOfAdministrationType
 	) {
 		const routeOfAdministration = this.administrationRoutes.find(
-			(v) => v.route === route,
+			(v) => v.route === route
 		);
 
 		if (!routeOfAdministration) {
-			throw new Error("No route of administration found");
+			throw new RouteOfAdministrationNotFound(route, this.name);
 		}
 
 		// sum phase durations

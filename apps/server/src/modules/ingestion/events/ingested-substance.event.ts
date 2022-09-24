@@ -2,6 +2,7 @@ import {
 	DomesticEvent,
 	KnownDomainEvents,
 } from "../../../common/event/event.common";
+import { Prettylogs } from "../../../utilities/prettylogs.util.js";
 import { Ingestion } from "../entities/ingestion.entity";
 
 export class IngestedSubstanceEvent extends DomesticEvent<Ingestion> {
@@ -10,12 +11,17 @@ export class IngestedSubstanceEvent extends DomesticEvent<Ingestion> {
 	}
 
 	override toConsole(): void {
-		console.log(
-			`IngestedSubstanceEvent(${
-				this.data.id
-			}): ${this.data.date.toISOString()} - ${this.data.substance.name} - ${
-				this.data.dosage
-			}mg`,
-		);
+		const message = `User ${Prettylogs.shortenCuid(
+			this.data.user.id.toString()
+		)} ingested ${this.data.dosage}mg of ${this.data.substance.name} via ${
+			this.data.route
+		}. (${this.data.id
+			.toString()
+			.slice(
+				this.data.id.toString().length - 8,
+				this.data.id.toString().length
+			)})`;
+
+		console.log(message);
 	}
 }

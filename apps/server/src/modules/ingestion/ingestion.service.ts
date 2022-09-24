@@ -54,11 +54,19 @@ export class IngestionService {
 	substanceService = new SubstanceService();
 
 	async ingestSubstance(ingestion: IngestSubstanceDTO, user: User) {
-		const { substance, dosage, purity, date, route, set, setting, purpose } =
-			ingestion;
+		const {
+			substance,
+			dosage,
+			purity,
+			date,
+			route,
+			set,
+			setting,
+			purpose,
+		} = ingestion;
 
 		const substanceEntity = await this.substanceService.findSubstanceByName(
-			substance,
+			substance
 		);
 
 		if (!substanceEntity) {
@@ -88,9 +96,8 @@ export class IngestionService {
 	async planIngestion(ingestion: IngestSubstanceDTO) {
 		const { substance, dosage, purity, route } = ingestion;
 
-		const interalSubstance = await this.substanceService.findSubstanceByName(
-			substance,
-		);
+		const interalSubstance =
+			await this.substanceService.findSubstanceByName(substance);
 
 		if (!interalSubstance) {
 			throw new Error("Substance not found.");
@@ -98,7 +105,7 @@ export class IngestionService {
 
 		const dosageClassifcation = interalSubstance.getDosageClassification(
 			dosage * (purity ?? 1),
-			route,
+			route
 		) as DosageClassification;
 
 		const plannedIngestion: Partial<IngestionPlan> = {};
@@ -118,12 +125,12 @@ export class IngestionService {
 
 		const timeOfPostiveEffectsPromotedByIngestion =
 			interalSubstance.getDurationOfEffectsForRouteOfAdministrationToPeak(
-				route,
+				route
 			);
 
 		const timeOfNegativeEffectsPromotedByIngestion =
 			interalSubstance.getDurationOfEffectsForRouteOfAdministrationAfterPeak(
-				route,
+				route
 			);
 
 		const timeNeededToNoticeFirstEffects = ingestionRoute.duration.onset;
@@ -138,11 +145,11 @@ export class IngestionService {
 		plannedIngestion.effectsWillStartAt = new Date(dateOfFirstEffects);
 
 		plannedIngestion.effectsWillWearOffAt = new Date(
-			dateOfFirstEffects + timeOfPostiveEffectsPromotedByIngestion,
+			dateOfFirstEffects + timeOfPostiveEffectsPromotedByIngestion
 		);
 
 		plannedIngestion.aftereffectsWillWearOffAt = new Date(
-			dateOfFirstEffects + totalTimeOfEffectsPromotedByIngestion,
+			dateOfFirstEffects + totalTimeOfEffectsPromotedByIngestion
 		);
 
 		// eslint-disable-next-line sonarjs/no-unused-collection
@@ -153,19 +160,17 @@ export class IngestionService {
 				willEndAt: Date;
 				description?: string | undefined;
 				effects?: string | undefined;
-			}?,
+			}?
 		] = [];
 
 		for (const phase of Object.values(PhaseType)) {
-			const timeToPhase = interalSubstance.getTimeToSpecificPhase(route, phase);
+			const timeToPhase = interalSubstance.getTimeToSpecificPhase(
+				route,
+				phase
+			);
 			const phaseDuration = interalSubstance.getDurationOfSpecificPhase(
 				route,
-				phase,
-			);
-
-			console.log(
-				new Chrono().parse(new Date(Date.now() + timeToPhase).toISOString())[0]
-					?.start,
+				phase
 			);
 
 			stages.push({
@@ -183,15 +188,15 @@ export class IngestionService {
 		plannedIngestion.takedowns.push(
 			`Ingestion will promote positive effects for ${ms(
 				timeOfPostiveEffectsPromotedByIngestion,
-				{ long: true },
+				{ long: true }
 			)} and afterwards aftereffects for ${ms(
 				totalTimeOfEffectsPromotedByIngestion -
 					timeOfPostiveEffectsPromotedByIngestion,
-				{ long: true },
+				{ long: true }
 			)}, in total - effects of substance may be felt for ${ms(
 				totalTimeOfEffectsPromotedByIngestion,
-				{ long: true },
-			)}.`,
+				{ long: true }
+			)}.`
 		);
 
 		// TODO: Harm-reduction-like cases should be moved out to separate harm-reduction dedicated module
@@ -204,35 +209,38 @@ export class IngestionService {
 		) {
 			plannedIngestion.takedowns.push(
 				`It's not recommended to ingest stimulants in the evening or at night, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
-					Date.now() + totalTimeOfEffectsPromotedByIngestion,
-				).toLocaleTimeString()}`,
+					Date.now() + totalTimeOfEffectsPromotedByIngestion
+				).toLocaleTimeString()}`
 			);
 		}
 
 		// Guard against theresholdDosage
 		if (dosageClassifcation === "thereshold") {
 			plannedIngestion.takedowns.push(
-				`Dosage of ${dosage}mg is considered to be a thereshold dosage, which may not produce any subjective effects.`,
+				`Dosage of ${dosage}mg is considered to be a thereshold dosage, which may not produce any subjective effects.`
 			);
 		}
 
 		// Guard against stronger dosages
-		if (dosageClassifcation === "heavy" || dosageClassifcation === "strong") {
+		if (
+			dosageClassifcation === "heavy" ||
+			dosageClassifcation === "strong"
+		) {
 			plannedIngestion.takedowns.push(
-				`Dosage of ${dosage}mg is considered to be a ${dosageClassifcation} dosage, which may produce overwhelming subjective effects along with unecessary strain for one's body which may lead to serious health issues.`,
+				`Dosage of ${dosage}mg is considered to be a ${dosageClassifcation} dosage, which may produce overwhelming subjective effects along with unecessary strain for one's body which may lead to serious health issues.`
 			);
 		}
 
 		// Guard against overdoses
 		if (dosageClassifcation === "overdose") {
 			plannedIngestion.takedowns.push(
-				`Dosage of ${dosage}mg is considered to be a overdose, which doesn't have any positive effects and may produce overwhelming subjective effects along with serious (unreversable) health risks and even death.`,
+				`Dosage of ${dosage}mg is considered to be a overdose, which doesn't have any positive effects and may produce overwhelming subjective effects along with serious (unreversable) health risks and even death.`
 			);
 		}
 
 		const effects = interalSubstance.getIngestionSpecificEffects(
 			dosageClassifcation as DosageClassification,
-			route,
+			route
 		);
 
 		const effectsConsideredAsProducedBySubstance = collect(effects)
@@ -240,25 +248,24 @@ export class IngestionService {
 				(v) =>
 					v.phases?.includes(PhaseType.comeup) ||
 					v.phases?.includes(PhaseType.peak) ||
-					v.phases?.length === 0,
+					v.phases?.length === 0
 			)
 			.all();
 
 		const effectsConsideredAsAftereffects = collect(effects)
 			.filter(
 				(v) =>
-					v.phases?.includes(PhaseType.aftereffects) || v.phases?.length === 0,
+					v.phases?.includes(PhaseType.aftereffects) ||
+					v.phases?.length === 0
 			)
 			.all();
-
-		console.log(effectsConsideredAsAftereffects.map((v) => v.effect.name));
 
 		// TODO: We should split effects into positive and negative I think
 
 		if (
 			interalSubstance.getIngestionSpecificEffects(
 				dosageClassifcation as DosageClassification,
-				route,
+				route
 			).length > 0
 		) {
 			plannedIngestion.takedowns.push(
@@ -273,11 +280,11 @@ export class IngestionService {
 				} in ${dosageClassifcation} dosage may lead to following effects that can be considered negative after or during experience: ${effectsConsideredAsAftereffects
 					.map((v) => v.effect.name)
 					.join(", ")
-					.toLowerCase()}`,
+					.toLowerCase()}`
 			);
 		} else {
 			plannedIngestion.takedowns.push(
-				`There are no known effects in our system of ${interalSubstance.name} in ${dosageClassifcation} dosage. THIS DOESN'T MEAN THAT THERE ARE NO EFFECTS, IT MEANS THAT WE DON'T KNOW ABOUT THEM. You should most likely lookup other relatable sources such as PsychonautWiki, Tripsit or Erowid`,
+				`There are no known effects in our system of ${interalSubstance.name} in ${dosageClassifcation} dosage. THIS DOESN'T MEAN THAT THERE ARE NO EFFECTS, IT MEANS THAT WE DON'T KNOW ABOUT THEM. You should most likely lookup other relatable sources such as PsychonautWiki, Tripsit or Erowid`
 			);
 		}
 
@@ -290,7 +297,7 @@ export class IngestionService {
 
 	async autofillPastIngestionsByAmountAndDosages(
 		ingestion: MassIngestSubstanceDTO,
-		user: User,
+		user: User
 	) {
 		let {
 			substance,
@@ -307,7 +314,7 @@ export class IngestionService {
 		} = ingestion;
 
 		const substanceEntity = await this.substanceService.findSubstanceByName(
-			substance,
+			substance
 		);
 
 		if (!substanceEntity) {
@@ -326,7 +333,9 @@ export class IngestionService {
 		const ingestionPromises: Ingestion[] = [];
 
 		for (let index = 0; index < dosages; index++) {
-			const ingestionDate = new Date(startingDate.getTime() + interval * index);
+			const ingestionDate = new Date(
+				startingDate.getTime() + interval * index
+			);
 
 			if (!substanceEntity.administrationRoutes[0]) {
 				throw new Error("No administration routes found.");

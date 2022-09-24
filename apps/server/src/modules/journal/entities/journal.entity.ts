@@ -36,7 +36,7 @@ export class Journal extends Entity implements JournalProperties {
 		const substances = this.ingestions.map((v) => v.substance);
 		// Remove duplicates by substance name
 		const uniqueSubstances = substances.filter(
-			(v, index, a) => a.findIndex((t) => t.name === v.name) === index,
+			(v, index, a) => a.findIndex((t) => t.name === v.name) === index
 		);
 
 		return uniqueSubstances;
@@ -50,13 +50,13 @@ export class Journal extends Entity implements JournalProperties {
 	getProgressionOfActiveIngestions() {
 		const activeIngestions = this.getActiveIngestions();
 
-		const progression = activeIngestions.map(
-			(v) => v.getIngestionProgression(),
+		const progression = activeIngestions.map((v) =>
+			v.getIngestionProgression()
 		);
 
 		progression.map((v) => {
 			console.info(
-				`S: ${v?.substance} - P: ${v?.progress} - ST: ${v?.stage} - TL: ${v?.timeLeft}`,
+				`S: ${v?.substance} - P: ${v?.progress} - ST: ${v?.stage} - TL: ${v?.timeLeft}`
 			);
 		});
 
@@ -78,7 +78,7 @@ export class Journal extends Entity implements JournalProperties {
 			if (
 				psychoactiveClass &&
 				!v.substance.classMembership.psychoactiveClass.includes(
-					psychoactiveClass,
+					psychoactiveClass
 				)
 			) {
 				return false;
@@ -97,7 +97,7 @@ export class Journal extends Entity implements JournalProperties {
 	getAverageDosage() {
 		const totalDosage = this.ingestions.reduce(
 			(a, v) => a + v.getIngestionDosage().dosage,
-			0,
+			0
 		);
 		const averageDosage = totalDosage / this.ingestions.length;
 		return averageDosage;
@@ -106,7 +106,7 @@ export class Journal extends Entity implements JournalProperties {
 	getSumDosage() {
 		const totalDosage = this.ingestions.reduce(
 			(a, v) => a + v.getIngestionDosage().dosage,
-			0,
+			0
 		);
 		return totalDosage;
 	}
@@ -115,7 +115,7 @@ export class Journal extends Entity implements JournalProperties {
 	getAverageTimeBetween() {
 		// Sort ingestions by date, oldest first.
 		const ingestions = this.ingestions.sort(
-			(a, b) => a.date.getTime() - b.date.getTime(),
+			(a, b) => a.date.getTime() - b.date.getTime()
 		);
 
 		/** Collected times between ingestions. */
@@ -139,7 +139,9 @@ export class Journal extends Entity implements JournalProperties {
 		console.info(
 			`Analysed ${this.ingestions.length} ingestions of ${
 				(this.ingestions[0] as Ingestion).substance.name
-			}. - Average time between dosages: ${ms(averageTimeBetweenIngestions)}`,
+			}. - Average time between dosages: ${ms(
+				averageTimeBetweenIngestions
+			)}`
 		);
 
 		return averageTimeBetweenIngestions;
@@ -148,7 +150,7 @@ export class Journal extends Entity implements JournalProperties {
 	/** Get time since last ingestion. */
 	getTimeSinceLast() {
 		const ingestions = this.ingestions.sort(
-			(a, b) => a.date.getTime() - b.date.getTime(),
+			(a, b) => a.date.getTime() - b.date.getTime()
 		);
 		const lastIngestion = ingestions[ingestions.length - 1];
 		const timeSinceLastIngestion = lastIngestion.getTimeSinceIngestion();
@@ -158,7 +160,7 @@ export class Journal extends Entity implements JournalProperties {
 	/** Get date of first known ingestion. */
 	getDateOfFirstIngestion() {
 		const ingestions = this.ingestions.sort(
-			(a, b) => a.date.getTime() - b.date.getTime(),
+			(a, b) => a.date.getTime() - b.date.getTime()
 		);
 		const firstIngestion = ingestions[0];
 		return firstIngestion.date;
@@ -167,7 +169,7 @@ export class Journal extends Entity implements JournalProperties {
 	/** Get date of last known ingestion. */
 	getDateOfLastIngestion() {
 		const ingestions = this.ingestions.sort(
-			(a, b) => a.date.getTime() - b.date.getTime(),
+			(a, b) => a.date.getTime() - b.date.getTime()
 		);
 		const lastIngestion = ingestions[ingestions.length - 1];
 		return lastIngestion.date;
@@ -175,7 +177,7 @@ export class Journal extends Entity implements JournalProperties {
 
 	getHighestDosage() {
 		const ingestions = this.ingestions.sort(
-			(a, b) => a.date.getTime() - b.date.getTime(),
+			(a, b) => a.date.getTime() - b.date.getTime()
 		);
 
 		const highestDosage = ingestions.reduce((a, v) => {
@@ -188,7 +190,7 @@ export class Journal extends Entity implements JournalProperties {
 		console.info(
 			`Analysed ${this.ingestions.length} ingestions of ${
 				this.ingestions[0].substance.name
-			} - Highest dosage: ${highestDosage.toFixed(2)}mg`,
+			} - Highest dosage: ${highestDosage.toFixed(2)}mg`
 		);
 
 		return highestDosage;
@@ -201,7 +203,8 @@ export class Journal extends Entity implements JournalProperties {
 		const timeSinceFirstIngestion =
 			new Date().getTime() - this.getDateOfFirstIngestion().getTime();
 
-		const timeSinceFirstIngestionInDays = timeSinceFirstIngestion / ms("1d");
+		const timeSinceFirstIngestionInDays =
+			timeSinceFirstIngestion / ms("1d");
 
 		const averageDosagePerDay = totalDosage / timeSinceFirstIngestionInDays;
 
@@ -219,13 +222,13 @@ export class Journal extends Entity implements JournalProperties {
 			`Analysed ${this.ingestions.length} ingestions of ${
 				this.ingestions[0].substance.name
 			} in ${timeSinceFirstIngestionInDays.toFixed(
-				2,
+				2
 			)} days. - Dosage per day: ${averageDosagePerDay.toFixed(
-				2,
+				2
 			)}mg (${substance.getDosageClassification(
 				averageDosagePerDay,
-				this.ingestions[0].route,
-			)})`,
+				this.ingestions[0].route
+			)})`
 		);
 
 		return averageDosagePerDay;

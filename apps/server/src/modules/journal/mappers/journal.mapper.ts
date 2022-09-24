@@ -28,21 +28,21 @@ type JournalWithIngestionWithSubstanceAndRouteOfAdministration =
 	};
 
 export class JournalMapper implements IMapper {
-	toDomain(
-		entity: JournalWithIngestionWithSubstanceAndRouteOfAdministration,
-	): Journal {
+	async toDomain(
+		entity: JournalWithIngestionWithSubstanceAndRouteOfAdministration
+	): Promise<Journal> {
 		return new Journal(
 			{
-				owner: userMapper.toDomain(entity.Owner),
-				ingestions: entity.Ingestions.map(
-					(ingestion) => ingestionMapper.toDomain(ingestion),
+				owner: await userMapper.toDomain(entity.Owner),
+				ingestions: entity.Ingestions.map((ingestion) =>
+					ingestionMapper.toDomain(ingestion)
 				),
 			},
-			entity.id,
+			entity.id
 		);
 	}
 
-	toPersistence(entity: Journal, ...arguments_: any[]): Prisma.JournalCreateInput {
+	toPersistence(entity: Journal): Prisma.JournalCreateInput {
 		const createOrConnectManyIngestions: Prisma.Enumerable<Prisma.IngestionCreateOrConnectWithoutJournalInput> =
 			[];
 

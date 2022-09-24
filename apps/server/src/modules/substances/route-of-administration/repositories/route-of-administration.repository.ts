@@ -14,12 +14,7 @@ export class RouteOfAdministrationRepository
 
 		const exists = await this.exists(entity);
 
-		if (!exists) {
-			presistence.id = undefined;
-			await this.db.routeOfAdministration.create({
-				data: presistence,
-			});
-		} else {
+		if (exists) {
 			const updatePayload = {
 				...presistence,
 				Substance: undefined,
@@ -31,6 +26,11 @@ export class RouteOfAdministrationRepository
 					type: entity.route,
 				},
 				data: updatePayload,
+			});
+		} else {
+			presistence.id = undefined;
+			await this.db.routeOfAdministration.create({
+				data: presistence,
 			});
 		}
 
@@ -46,20 +46,20 @@ export class RouteOfAdministrationRepository
 				},
 			});
 
-		return !findRouteOfAdministrationById ? false : true;
+		return findRouteOfAdministrationById ? true : false;
 	}
 
 	async delete(entity: RouteOfAdministration): Promise<boolean> {
 		const exists = await this.exists(entity);
-		if (!exists) {
-			return false;
-		} else {
+		if (exists) {
 			await this.db.routeOfAdministration.delete({
 				where: {
 					id: this.mapper.toPersistence(entity).id,
 				},
 			});
 			return true;
+		} else {
+			return false;
 		}
 	}
 }

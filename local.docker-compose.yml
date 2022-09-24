@@ -13,14 +13,14 @@ services:
       - COCKROACH_USER=${DATABASE_USER}
       - COCKROACH_PASSWORD=${DATABASE_PASSWORD}
       - COCKROACH_DATABASE=${DATABASE_NAME}
-    mem_limit: 512m
-    mem_reservation: 256M
-    cpus: 0.25
+    mem_limit: 1024m
+    mem_reservation: 512M
+    cpus: 0.5
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: 256M
+          cpus: "0.5"
+          memory: 1024m
         reservations:
-          cpus: "0.1"
-          memory: 512m
+          cpus: "0.25"
+          memory: 512M

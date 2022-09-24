@@ -66,7 +66,12 @@ export class EffectRepository extends Repository<Effect> {
 	}
 
 	async delete(entity: Effect): Promise<boolean> {
-		console.log(entity);
-		throw new Error("Method not implemented.");
+		const deletedEffect = await this.db.delete({
+			where: {
+				name: this.mapper.stringifyEffectName(entity.name),
+			},
+		});
+
+		return !!deletedEffect;
 	}
 }

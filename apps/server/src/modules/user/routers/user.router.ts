@@ -3,7 +3,7 @@ import { RegisterUserController } from "../usecases/register-user/register-user.
 
 const userRouter = new App();
 
-userRouter.get("/user/register", (req, res) => {
+userRouter.post("/user/register", (req, res) => {
 	new RegisterUserController().execute(req, res);
 });
 

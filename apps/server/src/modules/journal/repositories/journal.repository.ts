@@ -49,7 +49,7 @@ export class JournalRepository extends Repository<Journal> {
 				},
 			});
 
-			createdOrUpdated = this.mapper.toDomain(updated);
+			createdOrUpdated = await this.mapper.toDomain(updated);
 		} else {
 			const created = await this.db.journal.create({
 				data: persistence,
@@ -72,7 +72,7 @@ export class JournalRepository extends Repository<Journal> {
 					},
 				},
 			});
-			createdOrUpdated = this.mapper.toDomain(created);
+			createdOrUpdated = await this.mapper.toDomain(created);
 		}
 
 		return createdOrUpdated;

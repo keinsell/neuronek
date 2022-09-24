@@ -9,6 +9,7 @@ export const Keinsell: User = new User({
 	email: "keinsell@protonmail.com",
 	firstName: "Jakub",
 	lastName: "Olan",
+	dateOfBirth: new Date("10-12-2000"),
 	height: 182,
 	weight: 65,
 });
