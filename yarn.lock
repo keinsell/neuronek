@@ -93,13 +93,13 @@
   dependencies:
     "@changesets/types" "^5.2.0"
 
-"@changesets/changelog-github@0.4.6":
-  version "0.4.6"
-  resolved "https://registry.npmjs.org/@changesets/changelog-github/-/changelog-github-0.4.6.tgz"
-  integrity sha512-ahR/+o3OPodzfG9kucEMU/tEtBgwy6QoJiWi1sDBPme8n3WjT6pBlbhqNYpWAJKilomwfjBGY0MTUTs6r9d1RQ==
+"@changesets/changelog-github@0.4.7":
+  version "0.4.7"
+  resolved "https://registry.npmjs.org/@changesets/changelog-github/-/changelog-github-0.4.7.tgz"
+  integrity sha512-UUG5sKwShs5ha1GFnayUpZNcDGWoY7F5XxhOEHS62sDPOtoHQZsG3j1nC5RxZ3M1URHA321cwVZHeXgu99Y3ew==
   dependencies:
     "@changesets/get-github-info" "^0.5.1"
-    "@changesets/types" "^5.1.0"
+    "@changesets/types" "^5.2.0"
     dotenv "^8.1.0"
 
 "@changesets/cli@2.25.0":
