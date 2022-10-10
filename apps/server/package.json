@@ -54,7 +54,7 @@
 		"superstruct": "0.16.5",
 		"tsoa": "4.1.3",
 		"tsup": "6.2.3",
-		"type-fest": "3.0.0",
+		"type-fest": "3.1.0",
 		"unitmath": "0.8.8",
 		"winston": "3.8.2",
 		"zxcvbn": "4.4.2"
