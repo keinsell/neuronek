@@ -61,7 +61,7 @@
 	},
 	"devDependencies": {
 		"@ava/typescript": "3.0.1",
-		"@faker-js/faker": "7.5.0",
+		"@faker-js/faker": "7.6.0",
 		"@neuroneek/tsconfig": "*",
 		"@stoplight/spectral-cli": "6.5.1",
 		"@swc/cli": "0.1.57",
