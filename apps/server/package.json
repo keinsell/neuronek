@@ -47,7 +47,7 @@
 		"neverthrow": "5.0.1",
 		"prisma": "latest",
 		"reflect-metadata": "0.1.13",
-		"regenerator-runtime": "0.13.9",
+		"regenerator-runtime": "0.13.10",
 		"routing-controllers": "0.9.0",
 		"runtypes": "6.6.0",
 		"shallow-equal-object": "1.1.1",
