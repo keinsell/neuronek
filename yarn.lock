@@ -5552,15 +5552,15 @@ log-driver@^1.2.7:
   resolved "https://registry.npmjs.org/log-driver/-/log-driver-1.2.7.tgz"
   integrity sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg==
 
-log-process-errors@10.1.0:
-  version "10.1.0"
-  resolved "https://registry.npmjs.org/log-process-errors/-/log-process-errors-10.1.0.tgz"
-  integrity sha512-z3KDOxtE6/4XoX8lHUqDjth7KhkPZbDVQYyddoCxHrDgnPi+0wEYS4FfJa1FOt0MDwMHH6mISkeTa/+HKeEaWA==
+log-process-errors@10.1.1:
+  version "10.1.1"
+  resolved "https://registry.npmjs.org/log-process-errors/-/log-process-errors-10.1.1.tgz"
+  integrity sha512-4I/klxK8DYmLq9gPDCFN3JUJasJhpyqp4b0acnLMJpDk+VWT5h7vJpyig5JTERIwrE4u83YV7/d3o91PJVuU9A==
   dependencies:
     is-error-instance "^1.1.0"
     is-plain-obj "^4.1.0"
-    normalize-exception "^2.7.0"
-    set-error-message "^1.2.0"
+    normalize-exception "^2.8.1"
+    set-error-message "^1.3.1"
 
 log-update@^4.0.0:
   version "4.0.0"
@@ -6027,7 +6027,7 @@ nopt@~1.0.10:
   dependencies:
     abbrev "1"
 
-normalize-exception@^2.7.0, normalize-exception@^2.8.1:
+normalize-exception@^2.8.1:
   version "2.8.1"
   resolved "https://registry.npmjs.org/normalize-exception/-/normalize-exception-2.8.1.tgz"
   integrity sha512-4DYPWZ+YV/s+NGWk7vd+FaOHGTDLoWpTIvuiL77o82epL77CeI3UdFHTfETR5sGP6YE/VjJcedXYbKNF1brTFQ==
@@ -7163,7 +7163,7 @@ set-blocking@^2.0.0:
   resolved "https://registry.npmjs.org/set-blocking/-/set-blocking-2.0.0.tgz"
   integrity sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==
 
-set-error-message@^1.2.0:
+set-error-message@^1.3.1:
   version "1.3.1"
   resolved "https://registry.npmjs.org/set-error-message/-/set-error-message-1.3.1.tgz"
   integrity sha512-MQC7uXYopOZSsFvSluzFK0sM5EhSDzrorgboKG04liN8ByPsZWsOV2qcR0xiz9S1U688vlDVZVJsiqvmI86kxg==
