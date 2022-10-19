@@ -7887,10 +7887,10 @@ tsutils@3.21.0, tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-tsx@3.10.2:
-  version "3.10.2"
-  resolved "https://registry.npmjs.org/tsx/-/tsx-3.10.2.tgz"
-  integrity sha512-xqXmj8Fi8Cz5MpghMN8E6OYMo8P7JMCRsd3k67ORvteHy5j6iMIHr2GqiSY9QkKTzzGwWHalRY3CvH3l0dXUmw==
+tsx@3.10.4:
+  version "3.10.4"
+  resolved "https://registry.npmjs.org/tsx/-/tsx-3.10.4.tgz"
+  integrity sha512-sBxeSgUAPVqRgBPk6TY0yFiNDUlva9rA+Nj46oYEd89FXVD2MFWChFhybTtq7Qh1Ies/O75mQNwpLuO7m8gToA==
   dependencies:
     "@esbuild-kit/cjs-loader" "^2.4.0"
     "@esbuild-kit/core-utils" "^3.0.0"
