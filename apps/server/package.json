@@ -79,7 +79,7 @@
 		"@types/sinon": "10.0.13",
 		"@types/zxcvbn": "4.4.1",
 		"@typescript-eslint/parser": "5.40.1",
-		"ava": "4.3.3",
+		"ava": "5.0.1",
 		"c8": "7.12.0",
 		"eslint": "8.25.0",
 		"execa": "6.1.0",
