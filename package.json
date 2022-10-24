@@ -39,7 +39,7 @@
     "jshint": "2.13.5",
     "lint-staged": "13.0.3",
     "rome": "next",
-    "tsx": "3.10.4",
+    "tsx": "3.11.0",
     "turbo": "latest",
     "typescript": "4.8.4"
   },
