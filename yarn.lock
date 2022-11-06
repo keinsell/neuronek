@@ -7544,10 +7544,10 @@ sucrase@^3.20.3:
     pirates "^4.0.1"
     ts-interface-checker "^0.1.9"
 
-superstruct@0.16.5:
-  version "0.16.5"
-  resolved "https://registry.npmjs.org/superstruct/-/superstruct-0.16.5.tgz"
-  integrity sha512-GBa1VPdCUDAIrsoMVy2lzE/hKQnieUlc1JVoVzJ2YLx47SoPY4AqF85Ht1bPg5r+8I0v54GbaRdNTnYQ0p+T+Q==
+superstruct@0.16.7:
+  version "0.16.7"
+  resolved "https://registry.npmjs.org/superstruct/-/superstruct-0.16.7.tgz"
+  integrity sha512-4ZZTrXlP4XzCrgh4vOfPDL6dL7zZm5aPl78eczwFSrwvxtsEnKRrSGID6Sbt0agycUoo4auRdWSNTX+oQ3KFyA==
 
 supertap@^3.0.1:
   version "3.0.1"
