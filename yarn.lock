@@ -628,7 +628,7 @@
     globby "^11.0.0"
     read-yaml-file "^1.1.0"
 
-"@mapbox/node-pre-gyp@^1.0.9":
+"@mapbox/node-pre-gyp@^1.0.10":
   version "1.0.10"
   resolved "https://registry.npmjs.org/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz"
   integrity sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA==
@@ -1947,12 +1947,12 @@ arg@^4.1.0:
   resolved "https://registry.npmjs.org/arg/-/arg-4.1.3.tgz"
   integrity sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==
 
-argon2@0.29.1:
-  version "0.29.1"
-  resolved "https://registry.npmjs.org/argon2/-/argon2-0.29.1.tgz"
-  integrity sha512-bWXzAsQA0B6EFWZh5li+YBk+muoknAb8KacAi1h/bC6Gigy9p5ANbrPvpnjTIb7i9I11/8Df6FeSxpJDK3vy4g==
+argon2@0.30.1:
+  version "0.30.1"
+  resolved "https://registry.npmjs.org/argon2/-/argon2-0.30.1.tgz"
+  integrity sha512-wJYS8ebn6zHZwv4/iOOdlW1KUuLdbyIyhGsT51j6d9l5cRrHQU8pl817ubAxNgnS1jrbW/NGwegN3YrV0d5jRg==
   dependencies:
-    "@mapbox/node-pre-gyp" "^1.0.9"
+    "@mapbox/node-pre-gyp" "^1.0.10"
     "@phc/format" "^1.0.0"
     node-addon-api "^5.0.0"
 
