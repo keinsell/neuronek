@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"@logtail/node": "0.1.12",
-		"@logtail/winston": "0.1.13",
+		"@logtail/winston": "0.1.14",
 		"@prisma/client": "latest",
 		"@tinyhttp/app": "2.0.24",
 		"argon2": "0.30.1",

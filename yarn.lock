@@ -598,10 +598,10 @@
   dependencies:
     js "^0.1.0"
 
-"@logtail/winston@0.1.13":
-  version "0.1.13"
-  resolved "https://registry.npmjs.org/@logtail/winston/-/winston-0.1.13.tgz"
-  integrity sha512-o0pnptv9UiKYbsvJGg2NlPMQpzFABwJgcLfeeLYl+J/Agz1g0A3iuKlhbi0gBana2ttAZQF5imrmp8P4+3dKiA==
+"@logtail/winston@0.1.14":
+  version "0.1.14"
+  resolved "https://registry.npmjs.org/@logtail/winston/-/winston-0.1.14.tgz"
+  integrity sha512-EpDzA7nLPp2vJYkAeOGctocYEZmYIqV+kXs2cIj0fwyhnaoc2+yQLDKxNrMODvcmUS6XvRo7VZPOujHqgQXV1g==
   dependencies:
     "@logtail/types" "^0.1.12"
     winston-transport "^4.3.0"
