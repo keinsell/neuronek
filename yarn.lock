@@ -1260,10 +1260,10 @@
     es-mime-types "^0.1.4"
     negotiator "^0.6.3"
 
-"@tinyhttp/app@2.0.24":
-  version "2.0.24"
-  resolved "https://registry.npmjs.org/@tinyhttp/app/-/app-2.0.24.tgz"
-  integrity sha512-LqYo9JEyxKunXWeHWa92KipQuaJsYsNGlDsRYb/tSv6GmCsTM5RXcISeKHpqyXttHj68k2kirAmATPPrgXISEg==
+"@tinyhttp/app@2.0.25":
+  version "2.0.25"
+  resolved "https://registry.npmjs.org/@tinyhttp/app/-/app-2.0.25.tgz"
+  integrity sha512-1l9ig/bx0RE9hJoEBYwpydvzU6oywOOBP+NL1rF/nmhne/DDNTkfiJq8eXFX1WyQeOkAFyNjWLinFl9uh2i6sA==
   dependencies:
     "@tinyhttp/cookie" "2.0.5"
     "@tinyhttp/proxy-addr" "2.0.5"
