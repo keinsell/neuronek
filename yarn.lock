@@ -7800,10 +7800,10 @@ tsscmp@1.0.6:
   resolved "https://registry.npmjs.org/tsscmp/-/tsscmp-1.0.6.tgz"
   integrity sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==
 
-tsup@6.4.0:
-  version "6.4.0"
-  resolved "https://registry.npmjs.org/tsup/-/tsup-6.4.0.tgz"
-  integrity sha512-4OlbqIK/SF+cJp0mMqPM2pKULvgj/1S2Gm3I1aFoFGIryUOyIqPZBoqKkqVQT6uFtWJ5AHftIv0riXKfHox1zQ==
+tsup@6.5.0:
+  version "6.5.0"
+  resolved "https://registry.npmjs.org/tsup/-/tsup-6.5.0.tgz"
+  integrity sha512-36u82r7rYqRHFkD15R20Cd4ercPkbYmuvRkz3Q1LCm5BsiFNUgpo36zbjVhCOgvjyxNBWNKHsaD5Rl8SykfzNA==
   dependencies:
     bundle-require "^3.1.2"
     cac "^6.7.12"
