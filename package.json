@@ -31,7 +31,7 @@
     "@neuroneek/prettier-config": "*",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "5.43.0",
-    "ava": "5.0.1",
+    "ava": "5.1.0",
     "eslint": "8.27.0",
     "esm": "3.2.25",
     "husky": "8.0.2",
