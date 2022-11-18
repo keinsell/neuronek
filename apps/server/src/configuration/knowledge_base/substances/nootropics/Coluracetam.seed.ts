@@ -8,7 +8,7 @@ import {
 	RouteOfAdministrationType,
 } from "../../../../modules/substances/route-of-administration/entities/route-of-administration.entity";
 import { Substance } from "../../../../modules/substances/substance/entities/substance.entity";
-import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement/analysis-enchancement.ts";
+import { AnalysisEnhancement } from "../../effects/cognitive/enhancements/analysis-enhancement/analysis-enchancement";
 
 export const Coluracetam: Substance = new Substance(
 	{

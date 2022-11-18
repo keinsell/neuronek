@@ -16,22 +16,7 @@ export class SubstanceRepository implements Repository<Substance> {
 
 		let createdOrUpdateEntity: Substance;
 
-		if (!exists) {
-			presistence.id = undefined;
-			const created = await this.db.substance.create({
-				data: presistence,
-				include: {
-					routesOfAdministraton: true,
-					OccuranceOfEffect: {
-						include: {
-							Effect: true,
-						},
-					},
-				},
-			});
-
-			createdOrUpdateEntity = this.mapper.toDomain(created);
-		} else {
+		if (exists) {
 			const updated = await this.db.substance.update({
 				where: {
 					name: entity.name,
@@ -48,6 +33,21 @@ export class SubstanceRepository implements Repository<Substance> {
 			});
 
 			createdOrUpdateEntity = this.mapper.toDomain(updated);
+		} else {
+			presistence.id = undefined;
+			const created = await this.db.substance.create({
+				data: presistence,
+				include: {
+					routesOfAdministraton: true,
+					OccuranceOfEffect: {
+						include: {
+							Effect: true,
+						},
+					},
+				},
+			});
+
+			createdOrUpdateEntity = this.mapper.toDomain(created);
 		}
 
 		const routesOfAdministration = entity.administrationRoutes;
