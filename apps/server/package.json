@@ -28,7 +28,7 @@
 		"@prisma/client": "latest",
 		"@tinyhttp/app": "2.0.25",
 		"argon2": "0.30.2",
-		"chrono-node": "2.4.1",
+		"chrono-node": "2.4.2",
 		"class-transformer": "0.5.1",
 		"class-validator": "0.13.2",
 		"collect.js": "4.34.3",
