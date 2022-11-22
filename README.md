@@ -4,7 +4,7 @@ Neuronek is application dedicated for tracking usage of psychoactive substances 
 
 ## Why Neuronek?
 
-My life at some point filled with massive amounts of drugs which had it's own consequeneces and in my particular case it was caused mostly by lacking track of my dosages (talking about insane nicotine and caffeine addition). I would like to help other people by providing a little relief of making notes about every possible ingestion to simple in use application which will provide information about ingested substances and will suggest harm-reduction (as well track addition potential) practices to keep healthy relationship with such substances.
+My life was kinda fullfilled with massive amounts of simulants since 2017 (Caffeine and Nicotine) where Caffeine had significant impact on health of my body (doing overnights day by day and making sleep deprivation even more deep), this was caused by two points where first one was lack of information about ingested substance and no essential understanding of substance mechanism of action and second problem was with keeping track of my caffeine intake. I've decided to resolve these problems by building application.
 
 ## Features of Neuronek
 
