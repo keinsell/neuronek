@@ -19,7 +19,7 @@ export class SubstanceRepository implements Repository<Substance> {
 	constructor(
 		public database: PrismaClient = PrismaInfrastructre,
 		private substanceMapper: SubstanceMapper = new SubstanceMapper(),
-		protected routeOfAdministrationRepository: RouteOfAdministrationRepository = new RouteOfAdministrationRepository(
+		private routeOfAdministrationRepository: RouteOfAdministrationRepository = new RouteOfAdministrationRepository(
 			database,
 			new RouteOfAdministrationMapper()
 		) // protected effectRepository: EffectRepository
@@ -40,8 +40,6 @@ export class SubstanceRepository implements Repository<Substance> {
 				routesOfAdministraton: true,
 			},
 		});
-
-		console.log("existingSubstance", existingSubstance);
 
 		const substanceToBeSavedWithoutRoutesOfAdministration = {
 			...this.substanceMapper.toPersistence(entity),
@@ -99,11 +97,6 @@ export class SubstanceRepository implements Repository<Substance> {
 		}
 
 		entity.administrationBy = createdRoutesOfAdministration;
-
-		console.log(
-			"createdRoutesOfAdministration",
-			createdRoutesOfAdministration
-		);
 
 		// Once ids of routes of administration are known, we should take a look for existing substances, if there is a one in our database we should update it with new information, if there is no one we should create a new one.
 

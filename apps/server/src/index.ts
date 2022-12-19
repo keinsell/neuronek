@@ -5,6 +5,11 @@ import { PsychoactiveClass } from "./modules/substance-v2/entities/psychoactive-
 import { RouteOfAdministration } from "./modules/substance-v2/entities/route-of-administration.entity";
 import { RouteOfAdministrationClassification } from "./modules/substance-v2/entities/route-of-administration-classification.enum";
 import { SubstanceRepository } from "./modules/substance-v2/repository";
+import { Caffeine } from "./configuration/knowledge_base/substances/stimulants/caffeine.seed";
+import { Ingestion } from "./modules/ingestion-v2/entity";
+import { Chrono } from "chrono-node";
+import ms from "ms";
+import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
 logProcessErrors();
 
 export async function main() {
@@ -14,41 +19,19 @@ export async function main() {
 		console.log(process.env.DATABASE_URI);
 	}
 
-	const caffeine = new Substance({
-		name: "Caffeine",
-		chemicalNomencalture: {
-			common: ["Caffeine"],
-		},
-		psychoactiveClass: PsychoactiveClass.stimulant,
-		chemicalClass: "Alkaloid",
-		administrationBy: [
-			new RouteOfAdministration({
-				classification: RouteOfAdministrationClassification.oral,
-				dosage: {
-					thereshold: 50,
-					light: 50,
-					moderate: 200,
-					heavy: 150,
-					strong: 200,
-					overdose: 250,
-				},
-				duration: {
-					onset: 15,
-					comeup: 15,
-					peak: 60,
-					offset: 60,
-					aftereffects: 60,
-				},
-			}),
-		],
+	const caffeine = Amphetamine;
+	await new SubstanceRepository().save(caffeine);
+
+	const caffeineIngestion = new Ingestion({
+		substance: caffeine,
+		amount: 10000,
+		route: RouteOfAdministrationClassification.insufflated,
+		date: new Chrono().parseDate("Today at 21:37")!,
 	});
 
-	try {
-		const saved = await new SubstanceRepository().save(caffeine);
-		console.log(saved);
-	} catch (error) {
-		console.log(error);
-	}
+	console.log(caffeineIngestion.getCurrentPhase());
+	console.log(caffeineIngestion.dosageClassification);
+	console.log(caffeineIngestion.getIngestionPhases());
 }
 
 await main();
