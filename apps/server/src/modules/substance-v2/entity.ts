@@ -1,17 +1,14 @@
 import { Entity } from "../../common/entity/entity.common";
 import { ChemcialDetails } from "./entities/chemical-details.vo";
+import { ChemcialNomencalture } from "./entities/chemical-nomencalture.vo";
 import { PsychoactiveClass } from "./entities/psychoactive-class.enum";
-import { RouteOfAdministration } from "./entities/route-of-administration";
+import { RouteOfAdministration } from "./entities/route-of-administration.entity";
 
 export interface SubstanceProperties {
 	name: string;
 	description?: string;
-	chemicalNomencalture: {
-		common: string[];
-		substitutive: string;
-		systematic: string;
-	};
-	chemicalDetails: ChemcialDetails;
+	chemicalNomencalture: ChemcialNomencalture;
+	chemicalDetails?: ChemcialDetails;
 	chemicalClass: string;
 	psychoactiveClass: PsychoactiveClass;
 	administrationBy: RouteOfAdministration[];
@@ -30,12 +27,8 @@ export interface SubstanceProperties {
 export class Substance extends Entity implements SubstanceProperties {
 	name: string;
 	description?: string;
-	chemicalNomencalture: {
-		common: string[];
-		substitutive: string;
-		systematic: string;
-	};
-	chemicalDetails: ChemcialDetails;
+	chemicalNomencalture: ChemcialNomencalture;
+	chemicalDetails?: ChemcialDetails;
 	chemicalClass: string;
 	psychoactiveClass: PsychoactiveClass;
 	administrationBy: RouteOfAdministration[];

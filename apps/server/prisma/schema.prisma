@@ -124,8 +124,8 @@ model Substance {
 
     // Chemical nomenclature
     commonNomenclature       String[]
-    substitutiveNomenclature String
-    systematicNomenclature   String
+    substitutiveNomenclature String?
+    systematicNomenclature   String?
 
     // Substance Class
     chemicalClass     String
