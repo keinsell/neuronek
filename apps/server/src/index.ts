@@ -10,6 +10,10 @@ logProcessErrors();
 export async function main() {
 	new HttpApplication().bootstrap();
 
+	if (process.env.NODE_ENV === "development") {
+		console.log(process.env.DATABASE_URI);
+	}
+
 	const caffeine = new Substance({
 		name: "Caffeine",
 		chemicalNomencalture: {

@@ -93,7 +93,7 @@
 		"yarn": "1.22.19"
 	},
 	"prisma": {
-		"schema": "apps/server/prisma/schema.prisma",
-		"seed": "tsx src/infrastructure/prisma/seed.ts"
+		"schema": "./prisma/schema.prisma",
+		"seed": "tsx ./src/infrastructure/prisma/seed.ts"
 	}
 }

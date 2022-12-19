@@ -4,6 +4,7 @@ import { DatabaseRecords } from "../../common/lib/persistence/mapper/database-re
 import { Substance } from "./entity";
 import { RouteOfAdministrationMapper } from "./mappers/route-of-administration.mapper";
 import { PsychoactiveClass } from "./entities/psychoactive-class.enum";
+import { TimeRange } from "../../utilities/range.vo";
 
 export class SubstanceMapper
 	implements
@@ -24,6 +25,10 @@ export class SubstanceMapper
 			routesOfAdministraton: {
 				connect: [...entity.administrationBy.map((r) => r.id)],
 			},
+			timeToHalfTolerance:
+				entity.addiction?.tolerance?.toleranceReversal?.reversalToHalf?.toString(),
+			timeToZeroTolerance:
+				entity.addiction?.tolerance?.toleranceReversal?.reversalToBaseline?.toString(),
 		};
 	}
 
@@ -42,6 +47,22 @@ export class SubstanceMapper
 				administrationBy: record.routesOfAdministraton.map((r) =>
 					this.routeOfAdministrationMapper.toDomain(r)
 				),
+				addiction: {
+					tolerance: {
+						toleranceReversal: {
+							reversalToHalf: record.timeToHalfTolerance
+								? TimeRange.fromString(
+										record.timeToHalfTolerance
+								  )
+								: undefined,
+							reversalToBaseline: record.timeToZeroTolerance
+								? TimeRange.fromString(
+										record.timeToZeroTolerance
+								  )
+								: undefined,
+						},
+					},
+				},
 			},
 			record.id
 		);

@@ -1,8 +1,10 @@
 import { Entity } from "../../common/entity/entity.common";
+import { NumberRange } from "../../utilities/range.vo";
 import { ChemcialDetails } from "./entities/chemical-details.vo";
 import { ChemcialNomencalture } from "./entities/chemical-nomencalture.vo";
 import { PsychoactiveClass } from "./entities/psychoactive-class.enum";
 import { RouteOfAdministration } from "./entities/route-of-administration.entity";
+import { SubstanceAddiction } from "./entities/substance-addiction.vo";
 
 export interface SubstanceProperties {
 	name: string;
@@ -15,12 +17,7 @@ export interface SubstanceProperties {
 	pharmacology?: {};
 	toxicity?: {};
 	effects?: {};
-	addiction?: {
-		dependence?: {};
-		abusePotential?: {};
-		tolerance?: {};
-		withdrawal?: {};
-	};
+	addiction?: SubstanceAddiction;
 	legality?: {};
 }
 
@@ -35,12 +32,7 @@ export class Substance extends Entity implements SubstanceProperties {
 	pharmacology?: {};
 	toxicity?: {};
 	effects?: {};
-	addiction?: {
-		dependence?: {};
-		abusePotential?: {};
-		tolerance?: {};
-		withdrawal?: {};
-	};
+	addiction?: SubstanceAddiction;
 	legality?: {};
 
 	constructor(properties: SubstanceProperties, id?: string | number) {

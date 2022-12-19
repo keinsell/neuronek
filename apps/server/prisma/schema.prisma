@@ -134,6 +134,16 @@ model Substance {
     // Routes of administration
     routesOfAdministraton RouteOfAdministration[]
 
+    // Toxicity
+
+    // Addiction
+    addictionPotential String?
+
+    // Tolerance
+    timeToHalfTolerance  String?
+    timeToZeroTolerance  String?
+    developmentTolerance String?
+
     // Ingestions of substance
     Ingestion         Ingestion[]
     OccuranceOfEffect OccuranceOfEffect[]
