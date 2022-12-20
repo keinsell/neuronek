@@ -37,6 +37,37 @@ export class RouteOfAdministration
 		this.dosage = properties.dosage;
 		this.duration = properties.duration;
 	}
+
+	public getTimeToPhase(phase: PhaseClassification) {
+		const { duration } = this;
+
+		if (phase === PhaseClassification.onset) {
+			return 0;
+		}
+
+		if (phase === PhaseClassification.comeup) {
+			return duration.onset;
+		}
+
+		if (phase === PhaseClassification.peak) {
+			return duration.onset + duration.comeup;
+		}
+
+		if (phase === PhaseClassification.offset) {
+			return duration.onset + duration.comeup + duration.peak;
+		}
+
+		if (phase === PhaseClassification.aftereffects) {
+			return (
+				duration.onset +
+				duration.comeup +
+				duration.peak +
+				duration.offset
+			);
+		}
+
+		throw new Error("Unknown phase");
+	}
 }
 
 export class RouteOfAdministrationWithSubstance extends RouteOfAdministration {

@@ -11,7 +11,7 @@ export interface IngestionProperties {
 	route: RouteOfAdministrationClassification;
 	purity?: number;
 	date: Date;
-	user?: User;
+	user: User;
 	status?: "planned" | "active" | "finished";
 }
 
@@ -21,7 +21,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 	amount: number;
 	purity?: number;
 	date: Date;
-	user?: User;
+	user: User;
 
 	constructor(properties: IngestionProperties, id?: string | number) {
 		super(id);

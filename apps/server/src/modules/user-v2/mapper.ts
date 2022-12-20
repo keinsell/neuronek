@@ -7,11 +7,28 @@ export class UserMapper
 	implements Mapper<User, DatabaseRecords.UserCreateRecord, unknown>
 {
 	toPersistence(entity: User): Prisma.UserCreateInput {
-		throw new Error("Method not implemented.");
+		return {
+			username: entity.username,
+			recoveryKey: entity.recoveryKey,
+			weight: entity.weight,
+			height: entity.height,
+			dateOfBirth: entity.birthdate,
+		};
 	}
-	toDomain(record: any): User {
-		throw new Error("Method not implemented.");
+
+	toDomain(record: DatabaseRecords.UserRecord): User {
+		return new User(
+			{
+				username: record.username,
+				recoveryKey: record.recoveryKey,
+				weight: record.weight ?? undefined,
+				height: record.height ?? undefined,
+				birthdate: record.dateOfBirth ?? undefined,
+			},
+			record.id
+		);
 	}
+
 	toResponse?(entity: User): unknown {
 		throw new Error("Method not implemented.");
 	}

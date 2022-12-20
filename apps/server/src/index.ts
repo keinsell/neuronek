@@ -10,6 +10,7 @@ import { Ingestion } from "./modules/ingestion-v2/entity";
 import { Chrono } from "chrono-node";
 import ms from "ms";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
+import { User } from "./modules/user-v2/entity";
 logProcessErrors();
 
 export async function main() {
@@ -27,6 +28,7 @@ export async function main() {
 		amount: 5000,
 		route: RouteOfAdministrationClassification.insufflated,
 		date: new Chrono().parseDate("Today at 4:05")!,
+		user: User.generateUser(),
 	});
 
 	console.log(caffeineIngestion);

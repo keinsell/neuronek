@@ -127,4 +127,19 @@ export class Substance extends Entity implements SubstanceProperties {
 
 		return classification;
 	}
+
+	public getTimeToPhase(
+		route: RouteOfAdministrationClassification,
+		phase: PhaseClassification
+	) {
+		const routeOfAdministration = this.administrationBy.find(
+			(v) => v.classification === route
+		);
+
+		if (!routeOfAdministration) {
+			throw new Error("afsdfg");
+		}
+
+		return routeOfAdministration.getTimeToPhase(phase);
+	}
 }

@@ -12,16 +12,14 @@ generator client {
 }
 
 model User {
-    id          String    @id @default(cuid())
-    username    String    @unique
+    id          String      @id @default(cuid())
+    username    String      @unique
     dateOfBirth DateTime?
     weight      Int?
     height      Int?
-    publicKey   String
-    privateKey  String
-
-    Ingestion Ingestion[]
-    Journal   Journal[]
+    recoveryKey String      @unique
+    Ingestion   Ingestion[]
+    Journal     Journal[]
 }
 
 model Ingestion {
