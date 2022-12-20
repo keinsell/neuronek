@@ -15,23 +15,27 @@
     },
     "start": {
       "dependsOn": ["^build"],
-      "cache": true
+      "cache": false
     },
     "dev": {
       "cache": false,
       "inputs": ["src/**/*.ts", "lib/**/*.ts"]
     },
     "db:migrate:deploy": {
-      "outputs": []
+      "outputs": [],
+      "cache": false
     },
     "db:push": {
-      "outputs": []
+      "outputs": [],
+      "cache": false
     },
     "db:seed": {
-      "outputs": []
+      "outputs": [],
+      "cache": false
     },
     "db:studio": {
-      "outputs": []
+      "outputs": [],
+      "cache": false
     },
     "db:generate": {
       "dependsOn": ["^db:generate"]

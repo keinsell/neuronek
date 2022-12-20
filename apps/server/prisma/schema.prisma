@@ -12,17 +12,16 @@ generator client {
 }
 
 model User {
-    id          String      @id @default(cuid())
-    firstName   String?
-    lastName    String?
-    username    String      @unique
-    email       String?     @unique
+    id          String    @id @default(cuid())
+    username    String    @unique
     dateOfBirth DateTime?
     weight      Int?
     height      Int?
-    password    String
-    Ingestion   Ingestion[]
-    Journal     Journal[]
+    publicKey   String
+    privateKey  String
+
+    Ingestion Ingestion[]
+    Journal   Journal[]
 }
 
 model Ingestion {
@@ -36,11 +35,6 @@ model Ingestion {
     routeOfAdministration String
     /// Ingested substance
     substanceName         String
-
-    // Aditional information
-    purpose String?
-    set     String?
-    setting String?
 
     ingesterId String
 
@@ -61,10 +55,11 @@ model Journal {
 }
 
 model RouteOfAdministration {
-    id              String  @id @default(cuid())
-    type            String
+    id             String @id @default(cuid())
+    substanceName  String
+    classification String
+
     bioavailability Float?
-    isRecommended   Boolean @default(false)
 
     // Dosages specific for such route of administration
     theresholdDosage Float
@@ -72,18 +67,15 @@ model RouteOfAdministration {
     commonDosage     Float
     strongDosage     Float
     heavyDosage      Float
-    toxicDosage      Float?
-    lethalDosage     Float?
 
     // Stage Durations
-    onset        Int
-    comeup       Int
-    peak         Int
-    offset       Int
-    aftereffects Int
+    onset        String
+    comeup       String
+    peak         String
+    offset       String
+    aftereffects String
 
-    substanceName String
-    Substance     Substance @relation(fields: [substanceName], references: [name])
+    Substance Substance @relation(fields: [substanceName], references: [name])
 }
 
 model Effect {

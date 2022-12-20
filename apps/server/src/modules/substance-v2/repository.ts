@@ -1,6 +1,6 @@
 import {
 	Paginated,
-	PaginatedQueryParams,
+	PaginatedQueryParameters,
 	Repository,
 } from "../../common/lib/persistence/repository";
 import { PrismaInfrastructre } from "../../infrastructure/prisma";
@@ -22,7 +22,7 @@ export class SubstanceRepository implements Repository<Substance> {
 		private routeOfAdministrationRepository: RouteOfAdministrationRepository = new RouteOfAdministrationRepository(
 			database,
 			new RouteOfAdministrationMapper()
-		) // protected effectRepository: EffectRepository
+		)
 	) {}
 
 	async save(entity: Substance): Promise<Substance> {
@@ -133,7 +133,7 @@ export class SubstanceRepository implements Repository<Substance> {
 		throw new Error("Method not implemented.");
 	}
 	findAllPaginated(
-		parameters: PaginatedQueryParams
+		parameters: PaginatedQueryParameters
 	): Promise<Paginated<Substance>> {
 		throw new Error("Method not implemented.");
 	}

@@ -1,3 +1,4 @@
+import ms from "ms";
 import { Mapper } from "../../../common/lib/persistence/mapper";
 import { DatabaseRecords } from "../../../common/lib/persistence/mapper/database-records";
 import { RouteOfAdministrationClassification } from "../entities/route-of-administration-classification.enum";
@@ -18,17 +19,17 @@ export class RouteOfAdministrationMapper
 		entity: RouteOfAdministrationWithSubstance
 	): DatabaseRecords.RouteOfAdministrationCreateRecord {
 		return {
-			type: entity.classification,
+			classification: entity.classification,
 			theresholdDosage: entity.dosage.thereshold,
 			lightDosage: entity.dosage.light,
 			commonDosage: entity.dosage.moderate,
 			strongDosage: entity.dosage.strong,
 			heavyDosage: entity.dosage.heavy,
-			onset: entity.duration.onset,
-			comeup: entity.duration.comeup,
-			peak: entity.duration.peak,
-			offset: entity.duration.offset,
-			aftereffects: entity.duration.aftereffects,
+			onset: ms(entity.duration.onset),
+			comeup: ms(entity.duration.comeup),
+			peak: ms(entity.duration.peak),
+			offset: ms(entity.duration.offset),
+			aftereffects: ms(entity.duration.aftereffects),
 			bioavailability: entity.bioavailability,
 			Substance: {
 				connect: {
@@ -44,7 +45,7 @@ export class RouteOfAdministrationMapper
 		return new RouteOfAdministration(
 			{
 				classification:
-					record.type as RouteOfAdministrationClassification,
+					record.classification as RouteOfAdministrationClassification,
 				bioavailability: record.bioavailability ?? undefined,
 				dosage: {
 					thereshold: record.theresholdDosage,
@@ -55,11 +56,11 @@ export class RouteOfAdministrationMapper
 					overdose: record.heavyDosage * 2,
 				},
 				duration: {
-					onset: record.onset,
-					comeup: record.comeup,
-					peak: record.peak,
-					offset: record.offset,
-					aftereffects: record.aftereffects,
+					onset: ms(record.onset),
+					comeup: ms(record.comeup),
+					peak: ms(record.peak),
+					offset: ms(record.offset),
+					aftereffects: ms(record.aftereffects),
 				},
 			},
 			record.id

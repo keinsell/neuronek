@@ -24,14 +24,15 @@ export async function main() {
 
 	const caffeineIngestion = new Ingestion({
 		substance: caffeine,
-		amount: 10000,
+		amount: 5000,
 		route: RouteOfAdministrationClassification.insufflated,
-		date: new Chrono().parseDate("Today at 21:37")!,
+		date: new Chrono().parseDate("Today at 4:05")!,
 	});
 
-	console.log(caffeineIngestion.getCurrentPhase());
+	console.log(caffeineIngestion);
 	console.log(caffeineIngestion.dosageClassification);
 	console.log(caffeineIngestion.getIngestionPhases());
+	console.log(caffeineIngestion.getCurrentPhase());
 }
 
 await main();

@@ -15,7 +15,7 @@ export interface IngestSubstanceRequestDTO {
 	 *
 	 * @example "5mg"
 	 */
-	amount: number;
+	amount: string;
 	/**
 	 * @example 0.9
 	 */

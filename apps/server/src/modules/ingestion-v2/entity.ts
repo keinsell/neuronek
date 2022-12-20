@@ -112,19 +112,12 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { onset, comeup, peak, offset, aftereffects } =
 			administrationRoute.duration;
 
-		let phases: [
-			{
-				pahse: PhaseClassification;
-				isCompleted: boolean;
-				startedAt: Date;
-				endedAt: Date;
-			}
-		] = [];
+		let phases = [];
 
 		// Onset
 
 		phases.push({
-			pahse: PhaseClassification.onset,
+			phase: PhaseClassification.onset,
 			isCompleted: this.getTimeSinceIngestion() > onset,
 			startedAt: date,
 			endedAt: new Date(date.getTime() + onset),
@@ -133,7 +126,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		// Comeup
 
 		phases.push({
-			pahse: PhaseClassification.comeup,
+			phase: PhaseClassification.comeup,
 			isCompleted: this.getTimeSinceIngestion() > onset + comeup,
 			startedAt: new Date(date.getTime() + onset),
 			endedAt: new Date(date.getTime() + onset + comeup),
@@ -142,7 +135,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		// Peak
 
 		phases.push({
-			pahse: PhaseClassification.peak,
+			phase: PhaseClassification.peak,
 			isCompleted: this.getTimeSinceIngestion() > onset + comeup + peak,
 			startedAt: new Date(date.getTime() + onset + comeup),
 			endedAt: new Date(date.getTime() + onset + comeup + peak),
@@ -151,7 +144,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		// Offset
 
 		phases.push({
-			pahse: PhaseClassification.offset,
+			phase: PhaseClassification.offset,
 			isCompleted:
 				this.getTimeSinceIngestion() > onset + comeup + peak + offset,
 			startedAt: new Date(date.getTime() + onset + comeup + peak),
@@ -161,7 +154,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		// Aftereffects
 
 		phases.push({
-			pahse: PhaseClassification.aftereffects,
+			phase: PhaseClassification.aftereffects,
 			isCompleted:
 				this.getTimeSinceIngestion() >
 				onset + comeup + peak + offset + aftereffects,
@@ -176,7 +169,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		return phases;
 	}
 
-	getCurrentPhase(): PhaseClassification {
+	getCurrentPhase(): PhaseClassification | undefined {
 		const phases = this.getIngestionPhases();
 
 		const currentPhase = phases.find(
@@ -184,10 +177,10 @@ export class Ingestion extends Entity implements IngestionProperties {
 		);
 
 		if (!currentPhase) {
-			throw new Error("No phase found");
+			return undefined;
 		}
 
-		return currentPhase.pahse;
+		return currentPhase.phase;
 	}
 
 	get purityAdjustedDosage(): number {
