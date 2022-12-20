@@ -12,6 +12,7 @@ import ms from "ms";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
 import { User } from "./modules/user-v2/entity";
 import { UserRepository } from "./modules/user-v2/repository";
+import { IngestionRepository } from "./modules/ingestion-v2/repository";
 logProcessErrors();
 
 export async function main() {
@@ -37,6 +38,14 @@ export async function main() {
 	console.log(caffeineIngestion.dosageClassification);
 	console.log(caffeineIngestion.getIngestionPhases());
 	console.log(caffeineIngestion.getCurrentPhase());
+
+	await new UserRepository().save(caffeineIngestion.user);
+
+	try {
+		await new IngestionRepository().save(caffeineIngestion);
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 await main();

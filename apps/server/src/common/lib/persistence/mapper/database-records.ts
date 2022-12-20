@@ -4,6 +4,7 @@ import {
 	Substance,
 	RouteOfAdministration,
 	Effect,
+	Ingestion,
 } from "@prisma/client";
 
 /**
@@ -12,11 +13,19 @@ import {
 export namespace DatabaseRecords {
 	export type UserCreateRecord = Prisma.UserCreateInput;
 	export type UserRecord = User;
+
 	export type SubstanceCreateRecord = Prisma.SubstanceCreateInput;
 	export type SubstanceRecord = Substance & {
 		routesOfAdministraton: RouteOfAdministration[];
 	};
+
 	export type RouteOfAdministrationCreateRecord =
 		Prisma.RouteOfAdministrationCreateInput;
 	export type RouteOfAdministrationRecord = RouteOfAdministration;
+
+	export type IngestionCreateRecord = Prisma.IngestionCreateInput;
+	export type IngestionRecord = Ingestion & {
+		Substance: SubstanceRecord;
+		User: UserRecord;
+	};
 }

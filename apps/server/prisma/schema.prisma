@@ -19,36 +19,22 @@ model User {
     height      Int?
     recoveryKey String      @unique
     Ingestion   Ingestion[]
-    Journal     Journal[]
 }
 
 model Ingestion {
-    id                    String   @id @default(cuid())
+    id               String   @id @default(cuid())
     /// The date when the ingestion was performed.
-    date                  DateTime
+    date             DateTime
+    ingesterUsername String
     /// Dosage in miligrams
-    dosage                Float
-    purity                Float?
+    dosage           Float
+    route            String
     /// The route of administration of the substance.
-    routeOfAdministration String
-    /// Ingested substance
-    substanceName         String
-
-    ingesterId String
+    substanceName    String
+    purity           Float?
 
     Substance Substance @relation(fields: [substanceName], references: [name])
-    Ingester  User      @relation(fields: [ingesterId], references: [id])
-
-    Journal Journal[]
-}
-
-model Journal {
-    id      String @id @default(cuid())
-    ownerId String
-    name    String
-
-    Ingestions Ingestion[]
-    Owner      User        @relation(fields: [ownerId], references: [id])
+    User      User      @relation(fields: [ingesterUsername], references: [username])
 }
 
 model RouteOfAdministration {
@@ -73,36 +59,6 @@ model RouteOfAdministration {
     aftereffects String
 
     Substance Substance @relation(fields: [substanceName], references: [name])
-}
-
-model Effect {
-    id String @id @default(cuid())
-
-    name     String  @unique
-    category String
-    type     String?
-
-    description       String
-    page              String?
-    OccuranceOfEffect OccuranceOfEffect[]
-}
-
-// TODO: Effect Occurance
-// This should be a junction table between Effects and Ingestions and Substances where we can define a occurance of Effect under specific conditions, there is altrnative way for this - we can create EffectCondition table and connect it to Effect and Ingestion/Substance
-model OccuranceOfEffect {
-    id String @id @default(cuid())
-
-    effect                String
-    substance             String?
-    dosage                String[]
-    routeOfAdministration String[]
-    phase                 String[]
-    psychoactiveGroup     String[]
-    intensivity           String?
-    description           String?
-
-    Substance Substance? @relation(fields: [substance], references: [name])
-    Effect    Effect     @relation(fields: [effect], references: [name])
 }
 
 model Substance {
@@ -134,6 +90,5 @@ model Substance {
     developmentTolerance String?
 
     // Ingestions of substance
-    Ingestion         Ingestion[]
-    OccuranceOfEffect OccuranceOfEffect[]
+    Ingestion Ingestion[]
 }
