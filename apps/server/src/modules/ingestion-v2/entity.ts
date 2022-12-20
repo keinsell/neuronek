@@ -173,7 +173,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const phases = this.getIngestionPhases();
 
 		const currentPhase = phases.find(
-			(phase) => phase.startedAt.getTime() < Date.now()
+			(phase) => phase.endedAt.getTime() > Date.now()
 		);
 
 		if (!currentPhase) {

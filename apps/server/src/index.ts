@@ -11,6 +11,7 @@ import { Chrono } from "chrono-node";
 import ms from "ms";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
 import { User } from "./modules/user-v2/entity";
+import { UserRepository } from "./modules/user-v2/repository";
 logProcessErrors();
 
 export async function main() {
@@ -18,6 +19,7 @@ export async function main() {
 
 	if (process.env.NODE_ENV === "development") {
 		console.log(process.env.DATABASE_URI);
+		console.log(process.env.TZ);
 	}
 
 	const caffeine = Amphetamine;

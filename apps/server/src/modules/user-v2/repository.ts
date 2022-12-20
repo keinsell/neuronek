@@ -4,11 +4,45 @@ import {
 	PaginatedQueryParameters,
 	Repository,
 } from "../../common/lib/persistence/repository";
+import { PrismaClient } from "@prisma/client";
+import { PrismaInfrastructre } from "../../infrastructure/prisma";
+import { UserMapper } from "./mapper";
 
 export class UserRepository implements Repository<User> {
-	save(entity: User): Promise<User> {
-		throw new Error("Method not implemented.");
+	constructor(
+		private database: PrismaClient = PrismaInfrastructre,
+		private userMapper: UserMapper = new UserMapper()
+	) {}
+
+	async save(entity: User): Promise<User> {
+		const isUserWithUsername = await this.database.user.findUnique({
+			where: {
+				username: entity.username,
+			},
+		});
+
+		let createdOrUpdatedUser: User;
+
+		if (isUserWithUsername) {
+			const updatedUser = await this.database.user.update({
+				where: {
+					username: entity.username,
+				},
+				data: this.userMapper.toPersistence(entity),
+			});
+
+			createdOrUpdatedUser = this.userMapper.toDomain(updatedUser);
+		} else {
+			const createdUser = await this.database.user.create({
+				data: this.userMapper.toPersistence(entity),
+			});
+
+			createdOrUpdatedUser = this.userMapper.toDomain(createdUser);
+		}
+
+		return createdOrUpdatedUser;
 	}
+
 	findById(id: string): Promise<User | null> {
 		throw new Error("Method not implemented.");
 	}

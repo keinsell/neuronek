@@ -38,9 +38,8 @@ model Ingestion {
 
     Substance Substance @relation(fields: [substanceName], references: [name])
     Ingester  User      @relation(fields: [ingesterId], references: [id])
-    // Journal   Journal?  @relation(fields: [journalId], references: [id])
-    // journalId String?
-    Journal   Journal[]
+
+    Journal Journal[]
 }
 
 model Journal {
