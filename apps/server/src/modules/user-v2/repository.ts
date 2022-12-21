@@ -60,9 +60,20 @@ export class UserRepository implements Repository<User> {
 		return this.userMapper.toDomain(user);
 	}
 
-	findById(id: string): Promise<User | null> {
-		throw new Error("Method not implemented.");
+	async findById(id: string): Promise<User | null> {
+		const user = await this.database.user.findUnique({
+			where: {
+				id: id,
+			},
+		});
+
+		if (!user) {
+			return null;
+		}
+
+		return this.userMapper.toDomain(user);
 	}
+
 	findAll(): Promise<User[]> {
 		throw new Error("Method not implemented.");
 	}

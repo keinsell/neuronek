@@ -1,9 +1,10 @@
 import { Command } from "../../../common/lib/domain/command";
+import { User } from "../../../modules/user-v2/entity";
 
 export class GetUserProfileCommand extends Command {
-	public readonly username: string;
-	constructor(username: string) {
+	public readonly user: User;
+	constructor(user: User) {
 		super({});
-		this.username = username;
+		this.user = user;
 	}
 }

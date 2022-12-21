@@ -10,7 +10,7 @@ import { IngestionMapper } from "./mapper";
 
 export class IngestionRepository implements Repository<Ingestion> {
 	constructor(
-		protected database: PrismaClient = PrismaInfrastructre,
+		public database: PrismaClient = PrismaInfrastructre,
 		private ingestionMapper: IngestionMapper = new IngestionMapper()
 	) {}
 	async save(entity: Ingestion): Promise<Ingestion> {
@@ -61,6 +61,17 @@ export class IngestionRepository implements Repository<Ingestion> {
 		console.log(createdOrUpdatedIngestion);
 
 		return createdOrUpdatedIngestion;
+	}
+
+	async findAllByIngesterUsername(username: string): Promise<Ingestion[]> {}
+	async countAllByIngesterUsername(username: string): Promise<number> {
+		return await this.database.ingestion.count({
+			where: {
+				User: {
+					username: username,
+				},
+			},
+		});
 	}
 
 	findById(id: string): Promise<Ingestion | null> {

@@ -15,6 +15,7 @@ import { UserRepository } from "./modules/user-v2/repository";
 import { IngestionRepository } from "./modules/ingestion-v2/repository";
 import { RegisterUserCommandHandler } from "./features/user/register-user/service";
 import { RegisterUserCommand } from "./features/user/register-user/command";
+import { nanoid } from "nanoid";
 logProcessErrors();
 
 export async function main() {
@@ -24,6 +25,8 @@ export async function main() {
 		console.log(process.env.DATABASE_URI);
 		console.log(process.env.TZ);
 	}
+
+	console.log(nanoid(1024));
 
 	const command = new RegisterUserCommand({});
 	await new RegisterUserCommandHandler().execute(command);

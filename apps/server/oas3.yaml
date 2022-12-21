@@ -5,6 +5,34 @@ components:
     requestBodies: {}
     responses: {}
     schemas:
+        UserProfileResponseDTO:
+            properties:
+                id:
+                    type: string
+                username:
+                    type: string
+                    description: 'Automatically generated username to identify user.'
+                weight:
+                    type: number
+                    format: double
+                height:
+                    type: number
+                    format: double
+                dateOfBirth:
+                    type: string
+                    format: date-time
+                ingestionCount:
+                    type: number
+                    format: double
+                token:
+                    type: string
+            required:
+                - id
+                - username
+                - ingestionCount
+                - token
+            type: object
+            additionalProperties: false
         LoginUserResponseDTO:
             properties:
                 id:
@@ -96,6 +124,23 @@ info:
         email: keinsell@protonmail.com
 openapi: 3.0.0
 paths:
+    /user:
+        get:
+            operationId: get-user
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserProfileResponseDTO'
+            tags:
+                - User
+            security:
+                -
+                    jwt:
+                        - user
+            parameters: []
     /user/login:
         post:
             operationId: login-user
