@@ -1,9 +1,9 @@
-import { ICommandHandler } from "../../../common/lib/domain/command";
-import { ApplicationError } from "../../../common/lib/domain/error";
-import { Ingestion } from "../../../modules/ingestion-v2/entity";
-import { IngestionRepository } from "../../../modules/ingestion-v2/repository";
-import { SubstanceNotFoundError } from "../../../modules/substance/errors/substance-not-found";
-import { SubstanceRepository } from "../../../modules/substance/repository";
+import { ICommandHandler } from "../../../../common/lib/domain/command";
+import { ApplicationError } from "../../../../common/lib/domain/error";
+import { Ingestion } from "../../entity";
+import { IngestionRepository } from "../../repository";
+import { SubstanceNotFoundError } from "../../../substance/errors/substance-not-found";
+import { SubstanceRepository } from "../../../substance/repository";
 import { IngestSubstanceCommand } from "./command";
 import { IngestedSubstanceResponseDTO } from "./response";
 

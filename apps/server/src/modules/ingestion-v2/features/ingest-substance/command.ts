@@ -1,5 +1,5 @@
-import { Command } from "../../../common/lib/domain/command";
-import { User } from "../../../modules/user-v2/entity";
+import { Command } from "../../../../common/lib/domain/command";
+import { User } from "../../../user-v2/entity";
 import { IngestSubstanceRequestDTO } from "./request";
 
 export class IngestSubstanceCommand extends Command {

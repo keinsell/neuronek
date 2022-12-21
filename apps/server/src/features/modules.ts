@@ -1,4 +1,4 @@
-import { ingestionModule } from "./ingestion/submodule";
+import { ingestionModule } from "../modules/ingestion-v2/submodule";
 import { substanceModule } from "./substance/submodule";
 import { userModule } from "./user/submodule";
 

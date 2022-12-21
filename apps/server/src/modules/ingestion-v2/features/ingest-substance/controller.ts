@@ -8,8 +8,8 @@ import {
 	GetUserProfileCommandHandler,
 	IngestSubstanceCommandHandler,
 } from "./service";
-import { Controller } from "../../../common/lib/application/controller";
-import { ApplicationError } from "../../../common/lib/domain/error";
+import { Controller } from "../../../../common/lib/application/controller";
+import { ApplicationError } from "../../../../common/lib/domain/error";
 import { IngestSubstanceRequestDTO } from "./request";
 
 @Tags("Ingestion")
@@ -21,7 +21,7 @@ export class IngestSubstanceController extends Controller {
 	@OperationId("ingest-substance")
 	@Security("jwt", ["user"])
 	protected async documentation(
-		@Body() _body: IngestSubstanceRequestDTO,
+		@Body() _body: IngestSubstanceRequestDTO
 	): Promise<IngestedSubstanceResponseDTO> {
 		throw new Error("Method not implemented.");
 	}
@@ -31,7 +31,10 @@ export class IngestSubstanceController extends Controller {
 			return this.unauthorized();
 		}
 
-		const command = new IngestSubstanceCommand(this.req.body, this.req.user);
+		const command = new IngestSubstanceCommand(
+			this.req.body,
+			this.req.user
+		);
 
 		const response = await this.handler.execute(command);
 

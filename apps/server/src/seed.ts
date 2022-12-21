@@ -4,8 +4,8 @@ import { SubstanceRepository } from "./modules/substance/repository";
 import { RegisterUserCommandHandler } from "./features/user/register-user/service";
 import { RegisterUserCommand } from "./features/user/register-user/command";
 import { SAMPLE_INGESTIONS } from "./configuration/sample-ingestions";
-import { IngestSubstanceCommand } from "./features/ingestion/ingest-substance/command";
-import { IngestSubstanceCommandHandler } from "./features/ingestion/ingest-substance/service";
+import { IngestSubstanceCommand } from "./modules/ingestion-v2/features/ingest-substance/command";
+import { IngestSubstanceCommandHandler } from "./modules/ingestion-v2/features/ingest-substance/service";
 
 async function main() {
 	await PrismaInfrastructre.$connect();
