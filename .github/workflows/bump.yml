@@ -30,7 +30,7 @@ jobs:
         with:
           doc: neuronek
           token: ENoPotercqarXvd9ksqgqAusHQmLrLYZ
-          file: apps/server/oa3.yaml
+          file: apps/server/oas3.yaml
           command: diff
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
