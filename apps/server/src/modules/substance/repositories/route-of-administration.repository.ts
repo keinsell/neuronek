@@ -18,11 +18,11 @@ export class RouteOfAdministrationRepository
 {
 	constructor(
 		public database: PrismaClient = PrismaInfrastructre,
-		private routeOfAdministrationMapper: RouteOfAdministrationMapper = new RouteOfAdministrationMapper()
+		private routeOfAdministrationMapper: RouteOfAdministrationMapper = new RouteOfAdministrationMapper(),
 	) {}
 
 	async save(
-		entity: RouteOfAdministrationWithSubstance
+		entity: RouteOfAdministrationWithSubstance,
 	): Promise<RouteOfAdministration> {
 		// Assuming RouteOfAdministration should be unique by classification (RouteOfAdministrationClassification) per substance we should create a new route of administration if it does not exist for a substance and if exists we should update it.
 
@@ -45,13 +45,13 @@ export class RouteOfAdministrationRepository
 			});
 
 		const existingRoutesOfAdministrationInDomain =
-			existingRoutesOfAdministration.map((element) =>
-				this.routeOfAdministrationMapper.toDomain(element)
+			existingRoutesOfAdministration.map(
+				(element) => this.routeOfAdministrationMapper.toDomain(element),
 			);
 
 		const existingRouteOfAdministrationWithGivenClassification =
 			existingRoutesOfAdministrationInDomain.find(
-				(element) => element.classification === classification
+				(element) => element.classification === classification,
 			);
 
 		let createdOrUpdatedRouteOfAdministration: RouteOfAdministration;
@@ -85,7 +85,7 @@ export class RouteOfAdministrationRepository
 		throw new Error("Method not implemented.");
 	}
 	findAllPaginated(
-		parameters: PaginatedQueryParameters
+		parameters: PaginatedQueryParameters,
 	): Promise<Paginated<RouteOfAdministration>> {
 		throw new Error("Method not implemented.");
 	}

@@ -57,7 +57,6 @@ export const Amphetamine: Substance = new Substance({
 		}),
 	],
 });
-
 // export const Amphetamine: Substance = new Substance(
 // 	{
 // 		name: "Amphetamine",

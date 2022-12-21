@@ -12,11 +12,11 @@ export class IngestSubstanceCommandHandler
 {
 	constructor(
 		private substanceRepository: SubstanceRepository = new SubstanceRepository(),
-		private ingestionRepository: IngestionRepository = new IngestionRepository()
+		private ingestionRepository: IngestionRepository = new IngestionRepository(),
 	) {}
 
 	async execute(
-		command: IngestSubstanceCommand
+		command: IngestSubstanceCommand,
 	): Promise<IngestedSubstanceResponseDTO | ApplicationError> {
 		const request = command.request;
 		const user = command.user;
@@ -28,7 +28,7 @@ export class IngestSubstanceCommandHandler
 
 		if (!isSubstanceInDatabase) {
 			return new SubstanceNotFoundError(
-				`Substance ${substanceName} not found.`
+				`Substance ${substanceName} not found.`,
 			);
 		}
 
@@ -36,12 +36,12 @@ export class IngestSubstanceCommandHandler
 
 		// Check if substance have selected route of administration
 		if (
-			!substance.administrationBy
-				.map((roa) => roa.classification)
-				.includes(route)
+			!substance.administrationBy.map((roa) => roa.classification).includes(
+				route,
+			)
 		) {
 			return new ApplicationError(
-				`Substance ${substance.name} does not have ${route} as a route of administration.`
+				`Substance ${substance.name} does not have ${route} as a route of administration.`,
 			);
 		}
 

@@ -7,7 +7,7 @@ const ingestionModule = new App();
 ingestionModule.post(
 	"/ingestion",
 	passport.authenticate("jwt", { session: false }),
-	(req, res) => new IngestSubstanceController().execute(req as any, res)
+	(request, res) => new IngestSubstanceController().execute(request as any, res),
 );
 
 export { ingestionModule };

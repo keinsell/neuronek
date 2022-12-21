@@ -29,7 +29,7 @@ export class RouteOfAdministration
 	};
 	constructor(
 		properties: RouteOfAdministrationProperties,
-		id?: string | number
+		id?: string | number,
 	) {
 		super(id);
 		this.classification = properties.classification;
@@ -58,12 +58,7 @@ export class RouteOfAdministration
 		}
 
 		if (phase === PhaseClassification.aftereffects) {
-			return (
-				duration.onset +
-				duration.comeup +
-				duration.peak +
-				duration.offset
-			);
+			return duration.onset + duration.comeup + duration.peak + duration.offset;
 		}
 
 		throw new Error("Unknown phase");
@@ -75,7 +70,7 @@ export class RouteOfAdministrationWithSubstance extends RouteOfAdministration {
 	constructor(
 		properties: RouteOfAdministrationProperties,
 		substance: Substance,
-		id?: string | number
+		id?: string | number,
 	) {
 		super(properties, id);
 		this.substance = substance;

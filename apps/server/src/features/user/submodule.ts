@@ -6,18 +6,20 @@ import passport from "passport";
 
 const userModule = new App();
 
-userModule.post("/user/register", (req, res) =>
-	new RegisterUserController().execute(req as any, res)
+userModule.post(
+	"/user/register",
+	(request, res) => new RegisterUserController().execute(request as any, res),
 );
 
-userModule.post("/user/login", (req, res) =>
-	new LoginUserController().execute(req as any, res)
+userModule.post(
+	"/user/login",
+	(request, res) => new LoginUserController().execute(request as any, res),
 );
 
 userModule.get(
 	"/user",
 	passport.authenticate("jwt", { session: false }),
-	(req, res) => new GetUserProfileController().execute(req as any, res)
+	(request, res) => new GetUserProfileController().execute(request as any, res),
 );
 
 export { userModule };

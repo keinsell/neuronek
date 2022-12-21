@@ -38,11 +38,11 @@ export class Guard {
 	static lengthIsBetween(
 		value: number | string | unknown[],
 		min: number,
-		max: number
+		max: number,
 	): boolean {
 		if (Guard.isEmpty(value)) {
 			throw new Error(
-				"Cannot check length of a value. Provided value is empty"
+				"Cannot check length of a value. Provided value is empty",
 			);
 		}
 		const valueLength =

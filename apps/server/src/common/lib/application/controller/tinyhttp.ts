@@ -21,7 +21,7 @@ export abstract class TinnyHttpController<T = any> {
 	public static jsonResponse(
 		response: Response,
 		code: number,
-		message: string
+		message: string,
 	) {
 		return response.status(code).json({ message });
 	}
@@ -38,7 +38,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			400,
-			message ?? "Unauthorized"
+			message ?? "Unauthorized",
 		);
 	}
 
@@ -46,7 +46,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			401,
-			message ?? "Unauthorized"
+			message ?? "Unauthorized",
 		);
 	}
 
@@ -54,7 +54,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			402,
-			message ?? "Payment required"
+			message ?? "Payment required",
 		);
 	}
 
@@ -62,7 +62,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			403,
-			message ?? "Forbidden"
+			message ?? "Forbidden",
 		);
 	}
 
@@ -70,7 +70,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			404,
-			message ?? "Not found"
+			message ?? "Not found",
 		);
 	}
 
@@ -78,7 +78,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			409,
-			message ?? "Conflict"
+			message ?? "Conflict",
 		);
 	}
 
@@ -86,7 +86,7 @@ export abstract class TinnyHttpController<T = any> {
 		return TinnyHttpController.jsonResponse(
 			this.res,
 			429,
-			message ?? "Too many requests"
+			message ?? "Too many requests",
 		);
 	}
 

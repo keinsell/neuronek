@@ -7,11 +7,10 @@ import { PsychoactiveClass } from "./entities/psychoactive-class.enum";
 import { TimeRange } from "../../utilities/range.vo";
 
 export class SubstanceMapper
-	implements
-		Mapper<Substance, DatabaseRecords.SubstanceCreateRecord, unknown>
+	implements Mapper<Substance, DatabaseRecords.SubstanceCreateRecord, unknown>
 {
 	constructor(
-		private routeOfAdministrationMapper: RouteOfAdministrationMapper = new RouteOfAdministrationMapper()
+		private routeOfAdministrationMapper: RouteOfAdministrationMapper = new RouteOfAdministrationMapper(),
 	) {}
 
 	toPersistence(entity: Substance): Prisma.SubstanceCreateInput {
@@ -42,29 +41,24 @@ export class SubstanceMapper
 					systematic: record.systematicNomenclature ?? undefined,
 				},
 				chemicalClass: record.chemicalClass,
-				psychoactiveClass:
-					record.psychoactiveClass as PsychoactiveClass,
-				administrationBy: record.routesOfAdministraton.map((r) =>
-					this.routeOfAdministrationMapper.toDomain(r)
+				psychoactiveClass: record.psychoactiveClass as PsychoactiveClass,
+				administrationBy: record.routesOfAdministraton.map(
+					(r) => this.routeOfAdministrationMapper.toDomain(r),
 				),
 				addiction: {
 					tolerance: {
 						toleranceReversal: {
 							reversalToHalf: record.timeToHalfTolerance
-								? TimeRange.fromString(
-										record.timeToHalfTolerance
-								  )
+								? TimeRange.fromString(record.timeToHalfTolerance)
 								: undefined,
 							reversalToBaseline: record.timeToZeroTolerance
-								? TimeRange.fromString(
-										record.timeToZeroTolerance
-								  )
+								? TimeRange.fromString(record.timeToZeroTolerance)
 								: undefined,
 						},
 					},
 				},
 			},
-			record.id
+			record.id,
 		);
 	}
 

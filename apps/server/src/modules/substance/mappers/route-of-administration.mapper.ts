@@ -16,7 +16,7 @@ export class RouteOfAdministrationMapper
 		>
 {
 	toPersistence(
-		entity: RouteOfAdministrationWithSubstance
+		entity: RouteOfAdministrationWithSubstance,
 	): DatabaseRecords.RouteOfAdministrationCreateRecord {
 		return {
 			classification: entity.classification,
@@ -40,7 +40,7 @@ export class RouteOfAdministrationMapper
 	}
 
 	toDomain(
-		record: DatabaseRecords.RouteOfAdministrationRecord
+		record: DatabaseRecords.RouteOfAdministrationRecord,
 	): RouteOfAdministration {
 		return new RouteOfAdministration(
 			{
@@ -63,7 +63,7 @@ export class RouteOfAdministrationMapper
 					aftereffects: ms(record.aftereffects),
 				},
 			},
-			record.id
+			record.id,
 		);
 	}
 

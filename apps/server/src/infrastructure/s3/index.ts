@@ -8,6 +8,6 @@ export const S3Infrastructure = new AWS.S3({
 	useAccelerateEndpoint: false,
 	credentials: new AWS.Credentials(
 		ENVIRONMENT_VARIABLES.S3_ACCESS_KEY,
-		ENVIRONMENT_VARIABLES.S3_SECRET_KEY
+		ENVIRONMENT_VARIABLES.S3_SECRET_KEY,
 	),
 });

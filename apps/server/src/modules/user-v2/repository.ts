@@ -11,7 +11,7 @@ import { UserMapper } from "./mapper";
 export class UserRepository implements Repository<User> {
 	constructor(
 		private database: PrismaClient = PrismaInfrastructre,
-		private userMapper: UserMapper = new UserMapper()
+		private userMapper: UserMapper = new UserMapper(),
 	) {
 		this.database = database;
 		this.userMapper = userMapper;
@@ -78,7 +78,7 @@ export class UserRepository implements Repository<User> {
 		throw new Error("Method not implemented.");
 	}
 	findAllPaginated(
-		parameters: PaginatedQueryParameters
+		parameters: PaginatedQueryParameters,
 	): Promise<Paginated<User>> {
 		throw new Error("Method not implemented.");
 	}

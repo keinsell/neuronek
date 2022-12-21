@@ -56,10 +56,10 @@ export class Substance extends Entity implements SubstanceProperties {
 	}
 
 	public getTotalDurationOfEffectsRelativeToRouteOfAdministration(
-		route: RouteOfAdministrationClassification
+		route: RouteOfAdministrationClassification,
 	): number {
 		const administrationRoute = this.administrationBy.find(
-			(v) => v.classification === route
+			(v) => v.classification === route,
 		);
 
 		if (!administrationRoute) {
@@ -71,8 +71,7 @@ export class Substance extends Entity implements SubstanceProperties {
 		let totalDuration = 0;
 
 		for (const key of keys) {
-			const duration =
-				administrationRoute.duration[key as PhaseClassification];
+			const duration = administrationRoute.duration[key as PhaseClassification];
 
 			if (key === PhaseClassification.aftereffects) {
 				continue;
@@ -86,10 +85,10 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	public getDosageClassification(
 		dosage: number,
-		route: RouteOfAdministrationClassification
+		route: RouteOfAdministrationClassification,
 	): DosageClassification {
 		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route
+			(v) => v.classification === route,
 		);
 
 		if (!routeOfAdministration) {
@@ -98,8 +97,7 @@ export class Substance extends Entity implements SubstanceProperties {
 
 		const { dosage: substanceDosage } = routeOfAdministration;
 
-		let classification: DosageClassification =
-			DosageClassification.moderate;
+		let classification: DosageClassification = DosageClassification.moderate;
 
 		if (dosage < substanceDosage.light) {
 			classification = DosageClassification.thereshold;
@@ -130,10 +128,10 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	public getTimeToPhase(
 		route: RouteOfAdministrationClassification,
-		phase: PhaseClassification
+		phase: PhaseClassification,
 	) {
 		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route
+			(v) => v.classification === route,
 		);
 
 		if (!routeOfAdministration) {

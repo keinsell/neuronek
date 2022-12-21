@@ -21,8 +21,8 @@ export class SubstanceRepository implements Repository<Substance> {
 		private substanceMapper: SubstanceMapper = new SubstanceMapper(),
 		private routeOfAdministrationRepository: RouteOfAdministrationRepository = new RouteOfAdministrationRepository(
 			database,
-			new RouteOfAdministrationMapper()
-		)
+			new RouteOfAdministrationMapper(),
+		),
 	) {}
 
 	async save(entity: Substance): Promise<Substance> {
@@ -77,14 +77,13 @@ export class SubstanceRepository implements Repository<Substance> {
 
 		// Save connected routes of administration and replace ones connected to substance with newly created ones which have proper ids to futher connections.
 
-		const routesOfAdministrationConnectedToSubstance =
-			entity.administrationBy;
+		const routesOfAdministrationConnectedToSubstance = entity.administrationBy;
 
 		const routesOfAdministrationWithSubstanceId =
 			routesOfAdministrationConnectedToSubstance.map((route) => {
 				return new RouteOfAdministrationWithSubstance(
 					route,
-					updatedOrCreatedSubstance
+					updatedOrCreatedSubstance,
 				);
 			});
 
@@ -120,7 +119,7 @@ export class SubstanceRepository implements Repository<Substance> {
 			});
 
 		updatedOrCreatedSubstance = this.substanceMapper.toDomain(
-			substanceWithRoutesOfAdministration
+			substanceWithRoutesOfAdministration,
 		);
 
 		return updatedOrCreatedSubstance;
@@ -133,7 +132,7 @@ export class SubstanceRepository implements Repository<Substance> {
 		throw new Error("Method not implemented.");
 	}
 	findAllPaginated(
-		parameters: PaginatedQueryParameters
+		parameters: PaginatedQueryParameters,
 	): Promise<Paginated<Substance>> {
 		throw new Error("Method not implemented.");
 	}
@@ -145,7 +144,7 @@ export class SubstanceRepository implements Repository<Substance> {
 	}
 
 	async findByNameOrAlias(
-		substanceNameOrAlias: string
+		substanceNameOrAlias: string,
 	): Promise<Substance | undefined> {
 		const substance = await this.database.substance.findFirst({
 			where: {

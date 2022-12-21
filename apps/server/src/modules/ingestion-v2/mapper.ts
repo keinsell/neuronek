@@ -7,12 +7,11 @@ import { UserMapper } from "../user-v2/mapper";
 import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
 
 export class IngestionMapper
-	implements
-		Mapper<Ingestion, DatabaseRecords.IngestionCreateRecord, unknown>
+	implements Mapper<Ingestion, DatabaseRecords.IngestionCreateRecord, unknown>
 {
 	constructor(
 		private substanceMapper: SubstanceMapper = new SubstanceMapper(),
-		private userMapper: UserMapper = new UserMapper()
+		private userMapper: UserMapper = new UserMapper(),
 	) {}
 	toPersistence(entity: Ingestion): Prisma.IngestionCreateInput {
 		return {
@@ -43,7 +42,7 @@ export class IngestionMapper
 				substance: this.substanceMapper.toDomain(record.Substance),
 				user: this.userMapper.toDomain(record.User),
 			},
-			record.id
+			record.id,
 		);
 	}
 

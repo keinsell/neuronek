@@ -53,7 +53,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { administrationRoutes } = substance;
 
 		const administrationRoute = administrationRoutes.find(
-			(v) => v.route === route
+			(v) => v.route === route,
 		);
 
 		if (!administrationRoute?.duration) {
@@ -99,21 +99,13 @@ export class Ingestion extends Entity implements IngestionProperties {
 			isCompleted:
 				this.getTimeSinceIngestion() >
 				onset + comeup + peak + offset + aftereffects,
-			startedAt: new Date(
-				date.getTime() + onset + comeup + peak + offset
-			),
+			startedAt: new Date(date.getTime() + onset + comeup + peak + offset),
 			endedAt: new Date(
-				date.getTime() + onset + comeup + peak + offset + aftereffects
+				date.getTime() + onset + comeup + peak + offset + aftereffects,
 			),
 		};
 
-		return [
-			onsetStage,
-			comeupStage,
-			peakStage,
-			offsetStage,
-			aftereffectsStage,
-		];
+		return [onsetStage, comeupStage, peakStage, offsetStage, aftereffectsStage];
 	}
 
 	getIngestionStage() {
@@ -121,7 +113,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { administrationRoutes } = substance;
 
 		const administrationRoute = administrationRoutes.find(
-			(v) => v.route === route
+			(v) => v.route === route,
 		);
 
 		if (!administrationRoute?.duration) {
@@ -144,7 +136,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { administrationRoutes } = substance;
 
 		const administrationRoute = administrationRoutes.find(
-			(v) => v.route === route
+			(v) => v.route === route,
 		);
 
 		if (!administrationRoute?.duration) {
@@ -191,7 +183,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 
 		const dosageClassification = substance.getDosageClassification(
 			pureDosage,
-			route
+			route,
 		);
 
 		if (!dosageClassification) {
@@ -211,7 +203,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { administrationRoutes } = substance;
 
 		const administrationRoute = administrationRoutes.find(
-			(v) => v.route === route
+			(v) => v.route === route,
 		);
 
 		if (!administrationRoute?.duration) {

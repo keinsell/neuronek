@@ -35,26 +35,22 @@ export class LoginUserController extends Controller {
 	 * Generates a new user that can interact with the system.
 	 */
 	protected async documentation(
-		@Body() _body: LoginUserRequestDTO
+		@Body() _body: LoginUserRequestDTO,
 	): Promise<LoginUserResponseDTO> {
 		throw new Error("Method not implemented.");
 	}
 
 	protected async executeImplementation(): Promise<unknown> {
 		if (!this.req.body) {
-			return this.res
-				.status(400)
-				.json(new ValidationError("Missing body").toJSON());
+			return this.res.status(400).json(
+				new ValidationError("Missing body").toJSON(),
+			);
 		}
 
 		if (!(this.req.body.username && this.req.body.recoveryKey)) {
-			return this.res
-				.status(400)
-				.json(
-					new ValidationError(
-						"Missing username or recoveryKey"
-					).toJSON()
-				);
+			return this.res.status(400).json(
+				new ValidationError("Missing username or recoveryKey").toJSON(),
+			);
 		}
 
 		const command = new LoginUserCommand({

@@ -16,7 +16,7 @@ export class RegisterUserCommandHandler
 		private logger: ILogger = MODULE_CONFIGURATION.logger,
 		private userRepository: UserRepository = new UserRepository(),
 		private hasherService: IHashingService = MODULE_CONFIGURATION.hasher,
-		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService()
+		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService(),
 	) {
 		this.logger = logger;
 		this.userRepository = userRepository;
@@ -24,9 +24,7 @@ export class RegisterUserCommandHandler
 		this.jsonWebTokenService = jsonWebTokenService;
 	}
 
-	async execute(
-		command: RegisterUserCommand
-	): Promise<RegisterUserReponseDTO> {
+	async execute(command: RegisterUserCommand): Promise<RegisterUserReponseDTO> {
 		this.logger.log("RegisterUserCommandHandler.execute", command);
 
 		let user = User.generateUser();
@@ -50,7 +48,7 @@ export class RegisterUserCommandHandler
 		}
 
 		const token = this.jsonWebTokenService.sign(
-			new UserMapper().toJsonWebToken(user)
+			new UserMapper().toJsonWebToken(user),
 		);
 
 		this.logger.log("Token generated", token);

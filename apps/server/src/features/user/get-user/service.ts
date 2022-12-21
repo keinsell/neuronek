@@ -16,7 +16,7 @@ export class GetUserProfileCommandHandler
 		private logger: ILogger = MODULE_CONFIGURATION.logger,
 		private userRepository: UserRepository = new UserRepository(),
 		private ingestionRepository: IngestionRepository = new IngestionRepository(),
-		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService()
+		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService(),
 	) {
 		this.logger = logger;
 		this.userRepository = userRepository;
@@ -25,19 +25,17 @@ export class GetUserProfileCommandHandler
 	}
 
 	async execute(
-		command: GetUserProfileCommand
+		command: GetUserProfileCommand,
 	): Promise<UserProfileResponseDTO | ApplicationError> {
 		this.logger.log("LoginUserCommandHandler.execute", command);
 
 		const user = command.user;
 
 		const ingestions =
-			await this.ingestionRepository.countAllByIngesterUsername(
-				user.username
-			);
+			await this.ingestionRepository.countAllByIngesterUsername(user.username);
 
 		const token = this.jsonWebTokenService.sign(
-			new UserMapper().toJsonWebToken(user)
+			new UserMapper().toJsonWebToken(user),
 		);
 
 		return {

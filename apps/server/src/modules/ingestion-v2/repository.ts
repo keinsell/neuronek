@@ -11,15 +11,14 @@ import { IngestionMapper } from "./mapper";
 export class IngestionRepository implements Repository<Ingestion> {
 	constructor(
 		public database: PrismaClient = PrismaInfrastructre,
-		private ingestionMapper: IngestionMapper = new IngestionMapper()
+		private ingestionMapper: IngestionMapper = new IngestionMapper(),
 	) {}
 	async save(entity: Ingestion): Promise<Ingestion> {
-		const isIngestionWithProvidedId =
-			await this.database.ingestion.findUnique({
-				where: {
-					id: entity.id,
-				},
-			});
+		const isIngestionWithProvidedId = await this.database.ingestion.findUnique({
+			where: {
+				id: entity.id,
+			},
+		});
 
 		let createdOrUpdatedIngestion: Ingestion;
 
@@ -54,8 +53,7 @@ export class IngestionRepository implements Repository<Ingestion> {
 				},
 			});
 
-			createdOrUpdatedIngestion =
-				this.ingestionMapper.toDomain(createdUser);
+			createdOrUpdatedIngestion = this.ingestionMapper.toDomain(createdUser);
 		}
 
 		console.log(createdOrUpdatedIngestion);
@@ -81,7 +79,7 @@ export class IngestionRepository implements Repository<Ingestion> {
 		throw new Error("Method not implemented.");
 	}
 	findAllPaginated(
-		parameters: PaginatedQueryParameters
+		parameters: PaginatedQueryParameters,
 	): Promise<Paginated<Ingestion>> {
 		throw new Error("Method not implemented.");
 	}

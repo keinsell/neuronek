@@ -26,7 +26,7 @@ export class UserMapper
 				height: record.height ?? undefined,
 				birthdate: record.dateOfBirth ?? undefined,
 			},
-			record.id
+			record.id,
 		);
 	}
 

@@ -31,9 +31,7 @@ export interface Repository<T> {
 	save(entity: T): Promise<T>;
 	findById(id: string): Promise<T | null>;
 	findAll(): Promise<T[]>;
-	findAllPaginated(
-		parameters: PaginatedQueryParameters
-	): Promise<Paginated<T>>;
+	findAllPaginated(parameters: PaginatedQueryParameters): Promise<Paginated<T>>;
 	delete(id: string): Promise<void>;
 	transaction<T>(callback: () => Promise<T>): Promise<T>;
 }

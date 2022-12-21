@@ -28,5 +28,5 @@ export const jwtAuthorizationStrategy = new JwtStrategy(
 		}
 
 		return done(null, user);
-	}
+	},
 );

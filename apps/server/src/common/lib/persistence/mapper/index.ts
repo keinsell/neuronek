@@ -10,20 +10,18 @@ import { Entity } from "../../domain/entity/index.js";
 export interface Mapper<
 	DomainEntity extends Entity,
 	DbCreateRecord,
-	ResponseDTO = any
+	ResponseDTO = any,
 > {
 	/**
 	 * Method for converting domain entity to persistence record.
 	 * @param entity Any {@link Entity `Entity`} instance.
 	 */
 	toPersistence(entity: DomainEntity): DbCreateRecord;
-
 	/**
 	 * Method for converting persistence record to domain entity.
 	 * @param record Any record from database.
 	 */
 	toDomain(record: any): DomainEntity;
-
 	/** Utility function which converts provided {@link Entity `Entity`} to provided type which usually should be Data Transfer Object. */
 	toResponse?(entity: DomainEntity): ResponseDTO;
 }
