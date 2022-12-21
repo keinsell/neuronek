@@ -48,7 +48,7 @@ export class IngestSubstanceCommandHandler
 
 		// Parse dosage from string to numbers
 
-		const dosage = MassUnit.fromString(amount).baseScalar * (purity ?? 1);
+		const dosage = MassUnit.fromString(amount).baseScalar;
 
 		let ingestion = new Ingestion({
 			substance,
@@ -63,7 +63,7 @@ export class IngestSubstanceCommandHandler
 
 		return {
 			substance: ingestion.substance.name,
-			dosage: ingestion.amount.toString(),
+			dosage: ingestion.purityAdjustedDosage.toString(),
 			dateOfIngestion: ingestion.date,
 			dosageClassification: ingestion.dosageClassification,
 			routeOfAdministration: ingestion.route,
