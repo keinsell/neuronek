@@ -9,7 +9,7 @@ import {
 	ExtendedSpecConfig,
 } from "tsoa";
 import { userModule } from "../modules/user-v2/submodule";
-import { ApplicationModules } from "../features/modules";
+import { ApplicationModules } from "../modules/modules";
 import { RequestIdInterceptor } from "../common/lib/application/interceptor/request-id";
 import { jwtAuthorizationStrategy } from "../modules/user-v2/authentication-strategy";
 import passport from "passport";
