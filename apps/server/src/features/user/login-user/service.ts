@@ -1,4 +1,5 @@
 import { ICommandHandler } from "../../../common/lib/domain/command";
+import { ApplicationError } from "../../../common/lib/domain/error";
 import { ILogger } from "../../../common/lib/infrastructure/logger";
 import { IHashingService } from "../../../common/services/hashing";
 import { JsonWebTokenService } from "../../../common/services/jsonwebtoken";
@@ -6,11 +7,13 @@ import { MODULE_CONFIGURATION } from "../../../configuration/module-configuratio
 import { User } from "../../../modules/user-v2/entity";
 import { UserMapper } from "../../../modules/user-v2/mapper";
 import { UserRepository } from "../../../modules/user-v2/repository";
-import { RegisterUserCommand } from "./command";
-import { RegisterUserReponseDTO } from "./response";
+import { LoginUserCommand, RegisterUserCommand } from "./command";
+import { UserInvalidRecoveryKeyError } from "./errors/user-invalid-recovery-key";
+import { UserNotFoundError } from "./errors/user-not-found";
+import { LoginUserResponseDTO, RegisterUserReponseDTO } from "./response";
 
-export class RegisterUserCommandHandler
-	implements ICommandHandler<RegisterUserCommand>
+export class LoginUserCommandHandler
+	implements ICommandHandler<LoginUserCommand>
 {
 	constructor(
 		private logger: ILogger = MODULE_CONFIGURATION.logger,
@@ -25,29 +28,29 @@ export class RegisterUserCommandHandler
 	}
 
 	async execute(
-		command: RegisterUserCommand
-	): Promise<RegisterUserReponseDTO> {
-		this.logger.log("RegisterUserCommandHandler.execute", command);
+		command: LoginUserCommand
+	): Promise<LoginUserResponseDTO | ApplicationError> {
+		this.logger.log("LoginUserCommandHandler.execute", command);
 
-		let user = User.generateUser();
+		const isUserWithProvidedUsername =
+			await this.userRepository.findByUsername(command.username);
 
-		this.logger.log("User generated", user);
+		console.log(isUserWithProvidedUsername);
 
-		const unashedRecoveryKey = user.recoveryKey;
-
-		user.recoveryKey = await this.hasherService.hash(user.recoveryKey);
-
-		this.logger.log("Hashed recovery key", {
-			from: unashedRecoveryKey,
-			to: user.recoveryKey,
-		});
-
-		try {
-			user = await this.userRepository.save(user);
-			this.logger.log("User saved", user);
-		} catch (e) {
-			this.logger.error("Error saving user", e);
+		if (!isUserWithProvidedUsername) {
+			return new UserNotFoundError();
 		}
+
+		const isRecoveryKeyValid = await this.hasherService.verify(
+			command.recoveryKey,
+			isUserWithProvidedUsername.recoveryKey
+		);
+
+		if (!isRecoveryKeyValid) {
+			return new UserInvalidRecoveryKeyError();
+		}
+
+		const user = isUserWithProvidedUsername;
 
 		const token = this.jsonWebTokenService.sign(
 			new UserMapper().toJsonWebToken(user)
@@ -58,7 +61,8 @@ export class RegisterUserCommandHandler
 		return {
 			id: user.id,
 			username: user.username,
-			recoveryKey: unashedRecoveryKey,
+			weight: user.weight,
+			height: user.height,
 			token,
 		};
 	}

@@ -46,6 +46,20 @@ export class UserRepository implements Repository<User> {
 		return createdOrUpdatedUser;
 	}
 
+	async findByUsername(username: string) {
+		const user = await this.database.user.findUnique({
+			where: {
+				username: username,
+			},
+		});
+
+		if (!user) {
+			return undefined;
+		}
+
+		return this.userMapper.toDomain(user);
+	}
+
 	findById(id: string): Promise<User | null> {
 		throw new Error("Method not implemented.");
 	}

@@ -1,7 +1,7 @@
 import { App } from "@tinyhttp/app";
-import { urlencoded } from "milliparsec";
 import { lruSend } from "lru-send";
 import cors from "cors";
+import bodyparser from "body-parser";
 import {
 	generateRoutes,
 	generateSpec,
@@ -10,6 +10,9 @@ import {
 } from "tsoa";
 import { userModule } from "../features/user/submodule";
 import { ApplicationModules } from "../features/modules";
+import { RequestIdInterceptor } from "../common/lib/application/interceptor/request-id";
+import { jwtAuthorizationStrategy } from "../modules/user-v2/authentication-strategy";
+import passport from "passport";
 
 export class HttpApplication {
 	private application: App;
@@ -23,9 +26,12 @@ export class HttpApplication {
 	}
 
 	protected applyMiddleware() {
-		this.application.use(urlencoded());
+		this.application.use(bodyparser.json());
+		this.application.use(bodyparser.urlencoded());
 		this.application.use(lruSend());
 		this.application.options("*", cors());
+		passport.use(jwtAuthorizationStrategy);
+		this.application.use(new RequestIdInterceptor().intercept);
 	}
 
 	protected applyDevelopmentMiddleware() {}

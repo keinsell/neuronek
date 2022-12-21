@@ -1650,6 +1650,21 @@
     reflect-metadata "^0.1.13"
     validator "^13.6.0"
 
+"@types/body-parser@*":
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
+  integrity sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==
+  dependencies:
+    "@types/connect" "*"
+    "@types/node" "*"
+
+"@types/connect@*":
+  version "3.4.35"
+  resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
+  integrity sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/consola@2.2.5":
   version "2.2.5"
   resolved "https://registry.npmjs.org/@types/consola/-/consola-2.2.5.tgz"
@@ -1702,6 +1717,25 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-0.0.39.tgz"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
+"@types/express-serve-static-core@^4.17.31":
+  version "4.17.31"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.31.tgz#a1139efeab4e7323834bb0226e62ac019f474b2f"
+  integrity sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==
+  dependencies:
+    "@types/node" "*"
+    "@types/qs" "*"
+    "@types/range-parser" "*"
+
+"@types/express@*":
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.15.tgz#9290e983ec8b054b65a5abccb610411953d417ff"
+  integrity sha512-Yv0k4bXGOH+8a+7bELd2PqHQsuiANB+A8a4gnQrkRWzrkKlb6KHaVvyXhqs04sVW/OWlbPyYxRgYlIXLfrufMQ==
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "^4.17.31"
+    "@types/qs" "*"
+    "@types/serve-static" "*"
+
 "@types/glob@^7.1.1":
   version "7.2.0"
   resolved "https://registry.npmjs.org/@types/glob/-/glob-7.2.0.tgz"
@@ -1732,7 +1766,7 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/jsonwebtoken@8.5.9":
+"@types/jsonwebtoken@*", "@types/jsonwebtoken@8.5.9":
   version "8.5.9"
   resolved "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-8.5.9.tgz"
   integrity sha512-272FMnFGzAVMGtu9tkr29hRL6bZj4Zs1KZNeHLnKqAvp06tAIcarTMwOh8/8bz4FmKRcMxZhZNeUAQsNLoiPhg==
@@ -1745,6 +1779,11 @@
   integrity sha512-556YJ7ejzxIqSSxzyGGpctuZOarNZJt/zlEkhmmDc1f/slOEANHuwu2ZX7YaZ40rMiWoxt8GvAhoDpW1cmSy6A==
   dependencies:
     "@types/node" "*"
+
+"@types/mime@*":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.1.tgz#5f8f2bca0a5863cb69bc0b0acd88c96cb1d4ae10"
+  integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
 
 "@types/minimatch@*":
   version "5.1.2"
@@ -1793,6 +1832,40 @@
   resolved "https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.0.tgz"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/passport-jwt@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/passport-jwt/-/passport-jwt-3.0.8.tgz#c8a95bf7d8f330f2560f1b3d07605e23ac01469a"
+  integrity sha512-VKJZDJUAHFhPHHYvxdqFcc5vlDht8Q2pL1/ePvKAgqRThDaCc84lSYOTQmnx3+JIkDlN+2KfhFhXIzlcVT+Pcw==
+  dependencies:
+    "@types/express" "*"
+    "@types/jsonwebtoken" "*"
+    "@types/passport-strategy" "*"
+
+"@types/passport-strategy@*":
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/@types/passport-strategy/-/passport-strategy-0.2.35.tgz#e52f5212279ea73f02d9b06af67efe9cefce2d0c"
+  integrity sha512-o5D19Jy2XPFoX2rKApykY15et3Apgax00RRLf0RUotPDUsYrQa7x4howLYr9El2mlUApHmCMv5CZ1IXqKFQ2+g==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
+"@types/passport@*", "@types/passport@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.11.tgz#d046b41e28b280f4e7994614fb976e9b449cb7c6"
+  integrity sha512-pz1cx9ptZvozyGKKKIPLcVDVHwae4hrH5d6g5J+DkMRRjR3cVETb4jMabhXAUbg3Ov7T22nFHEgaK2jj+5CBpw==
+  dependencies:
+    "@types/express" "*"
+
+"@types/qs@*":
+  version "6.9.7"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
+  integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
+
+"@types/range-parser@*":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
+  integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
+
 "@types/semver@^6.0.0":
   version "6.2.3"
   resolved "https://registry.npmjs.org/@types/semver/-/semver-6.2.3.tgz"
@@ -1802,6 +1875,14 @@
   version "7.3.13"
   resolved "https://registry.npmjs.org/@types/semver/-/semver-7.3.13.tgz"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
+
+"@types/serve-static@*":
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.15.0.tgz#c7930ff61afb334e121a9da780aac0d9b8f34155"
+  integrity sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg==
+  dependencies:
+    "@types/mime" "*"
+    "@types/node" "*"
 
 "@types/sinon@10.0.13":
   version "10.0.13"
@@ -5387,7 +5468,7 @@ jsonpointer@^5.0.0:
   resolved "https://registry.npmjs.org/jsonpointer/-/jsonpointer-5.0.1.tgz"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
 
-jsonwebtoken@8.5.1:
+jsonwebtoken@8.5.1, jsonwebtoken@^8.2.0:
   version "8.5.1"
   resolved "https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -6547,6 +6628,28 @@ parseurl@^1.3.2, parseurl@~1.3.3:
   resolved "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz"
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
 
+passport-jwt@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/passport-jwt/-/passport-jwt-4.0.0.tgz#7f0be7ba942e28b9f5d22c2ebbb8ce96ef7cf065"
+  integrity sha512-BwC0n2GP/1hMVjR4QpnvqA61TxenUMlmfNjYNgK0ZAs0HK4SOQkHcSv4L328blNTLtHq7DbmvyNJiH+bn6C5Mg==
+  dependencies:
+    jsonwebtoken "^8.2.0"
+    passport-strategy "^1.0.0"
+
+passport-strategy@1.x.x, passport-strategy@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
+  integrity sha512-CB97UUvDKJde2V0KDWWB3lyf6PC3FaZP7YxZ2G8OAtn9p4HI9j9JLP9qjOGZFvyl8uwNT8qM+hGnz/n16NI7oA==
+
+passport@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/passport/-/passport-0.6.0.tgz#e869579fab465b5c0b291e841e6cc95c005fac9d"
+  integrity sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==
+  dependencies:
+    passport-strategy "1.x.x"
+    pause "0.0.1"
+    utils-merge "^1.0.1"
+
 path-exists@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz"
@@ -6598,6 +6701,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+pause@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
+  integrity sha512-KG8UEiEVkR3wGEb4m5yZkVCzigAD+cVEJck2CzYZO37ZGJfctvVptVO192MwrtPhzONn6go8ylnOdMhKqi4nfg==
 
 pegjs@^0.10.0:
   version "0.10.0"
@@ -8362,7 +8470,7 @@ utility-types@^3.10.0:
   resolved "https://registry.npmjs.org/utility-types/-/utility-types-3.10.0.tgz"
   integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
 
-utils-merge@1.0.1:
+utils-merge@1.0.1, utils-merge@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==

@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { Mapper } from "../../common/lib/persistence/mapper";
 import { DatabaseRecords } from "../../common/lib/persistence/mapper/database-records";
 import { User } from "./entity";
+import { JsonWebTokenPayload } from "./authentication-strategy";
 
 export class UserMapper
 	implements Mapper<User, DatabaseRecords.UserCreateRecord, unknown>
@@ -31,5 +32,15 @@ export class UserMapper
 
 	toResponse?(entity: User): unknown {
 		throw new Error("Method not implemented.");
+	}
+
+	toJsonWebToken(user: User): JsonWebTokenPayload {
+		return {
+			id: user.id,
+			username: user.username,
+			weight: user.weight,
+			height: user.height,
+			dateOfBirth: user.birthdate,
+		};
 	}
 }

@@ -12,12 +12,16 @@ export class RegisterUserController extends Controller {
 	@Post("register")
 	@OperationId("register-user")
 	@Response<RegisterUserReponseDTO>(200, "OK", {
-		username: "9m1r1r1r1r1r1r1r",
-		recoveryKey: "9m1r1r1r1r1r1r1r9m1r1r1r1r1r1r1r",
+		username: "T51GPDba7qwEnu73",
+		recoveryKey: "wESm3711FEGAlba74rGOAYzXtCdzSjdx",
+		// trunk-ignore(semgrep/generic.secrets.security.detected-jwt-token.detected-jwt-token)
+		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsYnhhejRuMDAxMDY3Z2Q1ejVjcXhuNjMiLCJ1c2VybmFtZSI6IlQ1MUdQRGJhN3F3RW51NzMiLCJpYXQiOjE2NzE2MDU4NzB9.9MblyhSFdtIlsGvz21OqEQGjx9fA7FC1dwsQL73rGZM",
 	})
 	@Example<RegisterUserReponseDTO>({
-		username: "9m1r1r1r1r1r1r1r",
-		recoveryKey: "9m1r1r1r1r1r1r1r9m1r1r1r1r1r1r1r",
+		username: "T51GPDba7qwEnu73",
+		recoveryKey: "wESm3711FEGAlba74rGOAYzXtCdzSjdx",
+		// trunk-ignore(semgrep/generic.secrets.security.detected-jwt-token.detected-jwt-token)
+		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsYnhhejRuMDAxMDY3Z2Q1ejVjcXhuNjMiLCJ1c2VybmFtZSI6IlQ1MUdQRGJhN3F3RW51NzMiLCJpYXQiOjE2NzE2MDU4NzB9.9MblyhSFdtIlsGvz21OqEQGjx9fA7FC1dwsQL73rGZM",
 	})
 	/**
 	 * Generates a new user that can interact with the system.

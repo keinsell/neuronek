@@ -1,3 +1,5 @@
+import { ApplicationErrorDTO } from "./applicationErrorDTO";
+
 export class ApplicationError {
 	public readonly message: string;
 	public readonly statusCode: number;
@@ -9,7 +11,7 @@ export class ApplicationError {
 		this.name = this.constructor.name;
 	}
 
-	toJSON() {
+	toJSON(): ApplicationErrorDTO {
 		return {
 			name: this.name,
 			message: this.message,
