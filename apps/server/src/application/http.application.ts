@@ -8,10 +8,10 @@ import {
 	ExtendedRoutesConfig,
 	ExtendedSpecConfig,
 } from "tsoa";
-import { userModule } from "../modules/user-v2/submodule";
+import { userModule } from "../modules/user/submodule";
 import { ApplicationModules } from "../modules/modules";
 import { RequestIdInterceptor } from "../common/lib/application/interceptor/request-id";
-import { jwtAuthorizationStrategy } from "../modules/user-v2/authentication-strategy";
+import { jwtAuthorizationStrategy } from "../modules/user/authentication-strategy";
 import passport from "passport";
 
 export class HttpApplication {

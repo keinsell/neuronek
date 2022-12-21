@@ -1,11 +1,11 @@
 import { PrismaInfrastructre } from "./infrastructure/prisma";
 import { SUBSTANCE_SEED } from "./configuration/knowledge_base/substances";
 import { SubstanceRepository } from "./modules/substance/repository";
-import { RegisterUserCommandHandler } from "./modules/user-v2/features/register-user/service";
-import { RegisterUserCommand } from "./modules/user-v2/features/register-user/command";
+import { RegisterUserCommandHandler } from "./modules/user/features/register-user/service";
+import { RegisterUserCommand } from "./modules/user/features/register-user/command";
 import { SAMPLE_INGESTIONS } from "./configuration/sample-ingestions";
-import { IngestSubstanceCommand } from "./modules/ingestion-v2/features/ingest-substance/command";
-import { IngestSubstanceCommandHandler } from "./modules/ingestion-v2/features/ingest-substance/service";
+import { IngestSubstanceCommand } from "./modules/ingestion/features/ingest-substance/command";
+import { IngestSubstanceCommandHandler } from "./modules/ingestion/features/ingest-substance/service";
 
 async function main() {
 	await PrismaInfrastructre.$connect();

@@ -1,4 +1,4 @@
-import { User } from "../../../../modules/user-v2/entity";
+import { User } from "../../../../modules/user/entity";
 
 export type ApplicationRequestContext = {
 	user?: User;

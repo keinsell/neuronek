@@ -1,6 +1,6 @@
-import { ingestionModule } from "./ingestion-v2/submodule";
+import { ingestionModule } from "./ingestion/submodule";
 import { substanceModule } from "./substance/submodule";
-import { userModule } from "./user-v2/submodule";
+import { userModule } from "./user/submodule";
 
 export namespace ApplicationModules {
 	export const User = userModule;

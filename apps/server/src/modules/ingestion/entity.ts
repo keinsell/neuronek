@@ -3,7 +3,7 @@ import { DosageClassification } from "../substance/entities/dosage-classificatio
 import { PhaseClassification } from "../substance/entities/phase-classification.enum";
 import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
 import { Substance } from "../substance/entity";
-import { User } from "../user-v2/entity";
+import { User } from "../user/entity";
 
 export interface IngestionProperties {
 	substance: Substance;
@@ -47,8 +47,8 @@ export class Ingestion extends Entity implements IngestionProperties {
 		return new Date(
 			this.date.getTime() +
 				this.substance.getTotalDurationOfEffectsRelativeToRouteOfAdministration(
-					this.route,
-				),
+					this.route
+				)
 		);
 	}
 
@@ -61,8 +61,8 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const ingestionStartsAt = new Date(
 			this.date.getTime() -
 				this.substance.getTotalDurationOfEffectsRelativeToRouteOfAdministration(
-					this.route,
-				),
+					this.route
+				)
 		);
 
 		const now = new Date();
@@ -102,7 +102,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const { administrationBy } = substance;
 
 		const administrationRoute = administrationBy.find(
-			(route) => route.classification === this.route,
+			(route) => route.classification === this.route
 		);
 
 		if (!administrationRoute) {
@@ -158,9 +158,11 @@ export class Ingestion extends Entity implements IngestionProperties {
 			isCompleted:
 				this.getTimeSinceIngestion() >
 				onset + comeup + peak + offset + aftereffects,
-			startedAt: new Date(date.getTime() + onset + comeup + peak + offset),
+			startedAt: new Date(
+				date.getTime() + onset + comeup + peak + offset
+			),
 			endedAt: new Date(
-				date.getTime() + onset + comeup + peak + offset + aftereffects,
+				date.getTime() + onset + comeup + peak + offset + aftereffects
 			),
 		});
 
@@ -171,7 +173,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 		const phases = this.getIngestionPhases();
 
 		const currentPhase = phases.find(
-			(phase) => phase.endedAt.getTime() > Date.now(),
+			(phase) => phase.endedAt.getTime() > Date.now()
 		);
 
 		if (!currentPhase) {
@@ -190,7 +192,7 @@ export class Ingestion extends Entity implements IngestionProperties {
 	get dosageClassification(): DosageClassification {
 		const classification = this.substance.getDosageClassification(
 			this.purityAdjustedDosage,
-			this.route,
+			this.route
 		);
 
 		return classification;

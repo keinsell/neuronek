@@ -1,5 +1,4 @@
 import ms from "ms";
-import { Entity } from "../../common/entity/entity.common";
 import { NumberRange } from "../../utilities/range.vo";
 import { ChemcialDetails } from "./entities/chemical-details.vo";
 import { ChemcialNomencalture } from "./entities/chemical-nomencalture.vo";
@@ -9,6 +8,7 @@ import { RouteOfAdministrationClassification } from "./entities/route-of-adminis
 import { RouteOfAdministration } from "./entities/route-of-administration.entity";
 import { SubstanceAddiction } from "./entities/substance-addiction.vo";
 import { DosageClassification } from "./entities/dosage-classification.enum";
+import { Entity } from "../../common/lib/domain/entity";
 
 export interface SubstanceProperties {
 	name: string;
@@ -56,10 +56,10 @@ export class Substance extends Entity implements SubstanceProperties {
 	}
 
 	public getTotalDurationOfEffectsRelativeToRouteOfAdministration(
-		route: RouteOfAdministrationClassification,
+		route: RouteOfAdministrationClassification
 	): number {
 		const administrationRoute = this.administrationBy.find(
-			(v) => v.classification === route,
+			(v) => v.classification === route
 		);
 
 		if (!administrationRoute) {
@@ -71,7 +71,8 @@ export class Substance extends Entity implements SubstanceProperties {
 		let totalDuration = 0;
 
 		for (const key of keys) {
-			const duration = administrationRoute.duration[key as PhaseClassification];
+			const duration =
+				administrationRoute.duration[key as PhaseClassification];
 
 			if (key === PhaseClassification.aftereffects) {
 				continue;
@@ -85,10 +86,10 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	public getDosageClassification(
 		dosage: number,
-		route: RouteOfAdministrationClassification,
+		route: RouteOfAdministrationClassification
 	): DosageClassification {
 		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route,
+			(v) => v.classification === route
 		);
 
 		if (!routeOfAdministration) {
@@ -97,7 +98,8 @@ export class Substance extends Entity implements SubstanceProperties {
 
 		const { dosage: substanceDosage } = routeOfAdministration;
 
-		let classification: DosageClassification = DosageClassification.moderate;
+		let classification: DosageClassification =
+			DosageClassification.moderate;
 
 		if (dosage < substanceDosage.light) {
 			classification = DosageClassification.thereshold;
@@ -128,10 +130,10 @@ export class Substance extends Entity implements SubstanceProperties {
 
 	public getTimeToPhase(
 		route: RouteOfAdministrationClassification,
-		phase: PhaseClassification,
+		phase: PhaseClassification
 	) {
 		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route,
+			(v) => v.classification === route
 		);
 
 		if (!routeOfAdministration) {

@@ -3,7 +3,7 @@ import { ApplicationError } from "../../../../common/lib/domain/error";
 import { ILogger } from "../../../../common/lib/infrastructure/logger";
 import { JsonWebTokenService } from "../../../../common/services/jsonwebtoken";
 import { MODULE_CONFIGURATION } from "../../../../configuration/module-configuration";
-import { IngestionRepository } from "../../../ingestion-v2/repository";
+import { IngestionRepository } from "../../../ingestion/repository";
 import { UserMapper } from "../../mapper";
 import { UserRepository } from "../../repository";
 import { GetUserProfileCommand } from "./command";

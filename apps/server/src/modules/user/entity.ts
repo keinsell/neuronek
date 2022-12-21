@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { Entity } from "../../common/lib/domain/entity";
-import { Ingestion } from "../ingestion-v2/entity";
+import { Ingestion } from "../ingestion/entity";
 
 export interface UserProperties {
 	username: string;

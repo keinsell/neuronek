@@ -3,15 +3,16 @@ import { Mapper } from "../../common/lib/persistence/mapper";
 import { DatabaseRecords } from "../../common/lib/persistence/mapper/database-records";
 import { Ingestion } from "./entity";
 import { SubstanceMapper } from "../substance/mapper";
-import { UserMapper } from "../user-v2/mapper";
+import { UserMapper } from "../user/mapper";
 import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
 
 export class IngestionMapper
-	implements Mapper<Ingestion, DatabaseRecords.IngestionCreateRecord, unknown>
+	implements
+		Mapper<Ingestion, DatabaseRecords.IngestionCreateRecord, unknown>
 {
 	constructor(
 		private substanceMapper: SubstanceMapper = new SubstanceMapper(),
-		private userMapper: UserMapper = new UserMapper(),
+		private userMapper: UserMapper = new UserMapper()
 	) {}
 	toPersistence(entity: Ingestion): Prisma.IngestionCreateInput {
 		return {
@@ -42,7 +43,7 @@ export class IngestionMapper
 				substance: this.substanceMapper.toDomain(record.Substance),
 				user: this.userMapper.toDomain(record.User),
 			},
-			record.id,
+			record.id
 		);
 	}
 

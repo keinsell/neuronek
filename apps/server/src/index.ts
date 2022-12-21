@@ -6,15 +6,15 @@ import { RouteOfAdministration } from "./modules/substance/entities/route-of-adm
 import { RouteOfAdministrationClassification } from "./modules/substance/entities/route-of-administration-classification.enum";
 import { SubstanceRepository } from "./modules/substance/repository";
 import { Caffeine } from "./configuration/knowledge_base/substances/stimulants/caffeine.seed";
-import { Ingestion } from "./modules/ingestion-v2/entity";
+import { Ingestion } from "./modules/ingestion/entity";
 import { Chrono } from "chrono-node";
 import ms from "ms";
 import { Amphetamine } from "./configuration/knowledge_base/substances/stimulants/amphetamine.seed";
-import { User } from "./modules/user-v2/entity";
-import { UserRepository } from "./modules/user-v2/repository";
-import { IngestionRepository } from "./modules/ingestion-v2/repository";
-import { RegisterUserCommandHandler } from "./modules/user-v2/features/register-user/service";
-import { RegisterUserCommand } from "./modules/user-v2/features/register-user/command";
+import { User } from "./modules/user/entity";
+import { UserRepository } from "./modules/user/repository";
+import { IngestionRepository } from "./modules/ingestion/repository";
+import { RegisterUserCommandHandler } from "./modules/user/features/register-user/service";
+import { RegisterUserCommand } from "./modules/user/features/register-user/command";
 import { nanoid } from "nanoid";
 logProcessErrors();
 

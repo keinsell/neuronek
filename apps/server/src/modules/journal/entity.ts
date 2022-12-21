@@ -1,7 +1,7 @@
-import { Ingestion } from "../ingestion-v2/entity";
+import { Ingestion } from "../ingestion/entity";
 import { PsychoactiveClass } from "../substance/entities/psychoactive-class.enum";
 import { Substance } from "../substance/entity";
-import { User, UserWithIngestions } from "../user-v2/entity";
+import { User, UserWithIngestions } from "../user/entity";
 
 export class Journal {
 	ownedBy: User;
@@ -10,7 +10,7 @@ export class Journal {
 		this.ownedBy = user;
 	}
 	static buildFromUserWithIngestions(
-		userWithIngestions: UserWithIngestions,
+		userWithIngestions: UserWithIngestions
 	): Journal {
 		return new Journal(userWithIngestions.ingestions, userWithIngestions);
 	}
@@ -25,7 +25,7 @@ export class Journal {
 			}
 			if (filter.psychoactiveClass) {
 				return filter.psychoactiveClass.includes(
-					ingestion.substance.psychoactiveClass,
+					ingestion.substance.psychoactiveClass
 				);
 			}
 			return true;

@@ -1,5 +1,5 @@
 import { Chrono } from "chrono-node";
-import { IngestSubstanceRequestDTO } from "../modules/ingestion-v2/features/ingest-substance/request";
+import { IngestSubstanceRequestDTO } from "../modules/ingestion/features/ingest-substance/request";
 import { RouteOfAdministrationClassification } from "../modules/substance/entities/route-of-administration-classification.enum";
 
 export const SAMPLE_INGESTIONS: IngestSubstanceRequestDTO[] = [
