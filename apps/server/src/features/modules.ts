@@ -1,5 +1,5 @@
 import { ingestionModule } from "../modules/ingestion-v2/submodule";
-import { substanceModule } from "./substance/submodule";
+import { substanceModule } from "../modules/substance/submodule";
 import { userModule } from "./user/submodule";
 
 export namespace ApplicationModules {
