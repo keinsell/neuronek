@@ -1,4 +1,4 @@
-import { Command } from "../../../common/lib/domain/command";
+import { Command } from "../../../../common/lib/domain/command";
 
 export class LoginUserCommand extends Command {
 	public readonly username: string;

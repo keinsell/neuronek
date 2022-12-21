@@ -13,8 +13,8 @@ import { Amphetamine } from "./configuration/knowledge_base/substances/stimulant
 import { User } from "./modules/user-v2/entity";
 import { UserRepository } from "./modules/user-v2/repository";
 import { IngestionRepository } from "./modules/ingestion-v2/repository";
-import { RegisterUserCommandHandler } from "./features/user/register-user/service";
-import { RegisterUserCommand } from "./features/user/register-user/command";
+import { RegisterUserCommandHandler } from "./modules/user-v2/features/register-user/service";
+import { RegisterUserCommand } from "./modules/user-v2/features/register-user/command";
 import { nanoid } from "nanoid";
 logProcessErrors();
 

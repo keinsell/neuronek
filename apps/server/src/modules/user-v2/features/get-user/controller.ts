@@ -2,8 +2,8 @@ import { Get, OperationId, Route, Security, Tags } from "tsoa";
 import { GetUserProfileCommand } from "./command";
 import { UserProfileResponseDTO } from "./response";
 import { GetUserProfileCommandHandler } from "./service";
-import { Controller } from "../../../common/lib/application/controller";
-import { ApplicationError } from "../../../common/lib/domain/error";
+import { Controller } from "../../../../common/lib/application/controller";
+import { ApplicationError } from "../../../../common/lib/domain/error";
 
 @Tags("User")
 @Route("user")

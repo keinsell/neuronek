@@ -1,12 +1,12 @@
-import { ICommandHandler } from "../../../common/lib/domain/command";
-import { ApplicationError } from "../../../common/lib/domain/error";
-import { ILogger } from "../../../common/lib/infrastructure/logger";
-import { IHashingService } from "../../../common/services/hashing";
-import { JsonWebTokenService } from "../../../common/services/jsonwebtoken";
-import { MODULE_CONFIGURATION } from "../../../configuration/module-configuration";
-import { User } from "../../../modules/user-v2/entity";
-import { UserMapper } from "../../../modules/user-v2/mapper";
-import { UserRepository } from "../../../modules/user-v2/repository";
+import { ICommandHandler } from "../../../../common/lib/domain/command";
+import { ApplicationError } from "../../../../common/lib/domain/error";
+import { ILogger } from "../../../../common/lib/infrastructure/logger";
+import { IHashingService } from "../../../../common/services/hashing";
+import { JsonWebTokenService } from "../../../../common/services/jsonwebtoken";
+import { MODULE_CONFIGURATION } from "../../../../configuration/module-configuration";
+import { User } from "../../entity";
+import { UserMapper } from "../../mapper";
+import { UserRepository } from "../../repository";
 import { LoginUserCommand, RegisterUserCommand } from "./command";
 import { UserInvalidRecoveryKeyError } from "./errors/user-invalid-recovery-key";
 import { UserNotFoundError } from "./errors/user-not-found";
@@ -19,7 +19,7 @@ export class LoginUserCommandHandler
 		private logger: ILogger = MODULE_CONFIGURATION.logger,
 		private userRepository: UserRepository = new UserRepository(),
 		private hasherService: IHashingService = MODULE_CONFIGURATION.hasher,
-		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService(),
+		private jsonWebTokenService: JsonWebTokenService = new JsonWebTokenService()
 	) {
 		this.logger = logger;
 		this.userRepository = userRepository;
@@ -28,13 +28,12 @@ export class LoginUserCommandHandler
 	}
 
 	async execute(
-		command: LoginUserCommand,
+		command: LoginUserCommand
 	): Promise<LoginUserResponseDTO | ApplicationError> {
 		this.logger.log("LoginUserCommandHandler.execute", command);
 
-		const isUserWithProvidedUsername = await this.userRepository.findByUsername(
-			command.username,
-		);
+		const isUserWithProvidedUsername =
+			await this.userRepository.findByUsername(command.username);
 
 		console.log(isUserWithProvidedUsername);
 
@@ -44,7 +43,7 @@ export class LoginUserCommandHandler
 
 		const isRecoveryKeyValid = await this.hasherService.verify(
 			command.recoveryKey,
-			isUserWithProvidedUsername.recoveryKey,
+			isUserWithProvidedUsername.recoveryKey
 		);
 
 		if (!isRecoveryKeyValid) {
@@ -54,7 +53,7 @@ export class LoginUserCommandHandler
 		const user = isUserWithProvidedUsername;
 
 		const token = this.jsonWebTokenService.sign(
-			new UserMapper().toJsonWebToken(user),
+			new UserMapper().toJsonWebToken(user)
 		);
 
 		this.logger.log("Token generated", token);

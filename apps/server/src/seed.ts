@@ -1,8 +1,8 @@
 import { PrismaInfrastructre } from "./infrastructure/prisma";
 import { SUBSTANCE_SEED } from "./configuration/knowledge_base/substances";
 import { SubstanceRepository } from "./modules/substance/repository";
-import { RegisterUserCommandHandler } from "./features/user/register-user/service";
-import { RegisterUserCommand } from "./features/user/register-user/command";
+import { RegisterUserCommandHandler } from "./modules/user-v2/features/register-user/service";
+import { RegisterUserCommand } from "./modules/user-v2/features/register-user/command";
 import { SAMPLE_INGESTIONS } from "./configuration/sample-ingestions";
 import { IngestSubstanceCommand } from "./modules/ingestion-v2/features/ingest-substance/command";
 import { IngestSubstanceCommandHandler } from "./modules/ingestion-v2/features/ingest-substance/service";

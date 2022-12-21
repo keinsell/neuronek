@@ -1,4 +1,4 @@
-import { JsonWebTokenPayload } from "../../../modules/user-v2/authentication-strategy";
+import { JsonWebTokenPayload } from "../../authentication-strategy";
 import { UserProfileResponseDTO } from "../get-user/response";
 
 export interface RegisterUserReponseDTO extends JsonWebTokenPayload {

@@ -2,7 +2,7 @@ import { Body, Example, OperationId, Post, Response, Route, Tags } from "tsoa";
 import { RegisterUserCommand } from "./command";
 import { RegisterUserReponseDTO } from "./response";
 import { RegisterUserCommandHandler } from "./service";
-import { Controller } from "../../../common/lib/application/controller";
+import { Controller } from "../../../../common/lib/application/controller";
 
 @Tags("User")
 @Route("user")
