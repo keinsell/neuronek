@@ -3,7 +3,8 @@ import { Substance } from "../../../../modules/substance/entity";
 import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import { RouteOfAdministration } from "../../../../modules/substance/entities/route-of-administration.entity";
 import { RouteOfAdministrationClassification } from "../../../../modules/substance/entities/route-of-administration-classification.enum";
-import { NumberRange, TimeRange } from "../../../../utilities/range.vo";
+import { TimeRange } from "../../../../utilities/range.vo";
+import { MassUnit } from "../../../../utilities/mass.vo";
 
 export const Caffeine: Substance = new Substance({
 	name: "Caffeine",
@@ -21,12 +22,12 @@ export const Caffeine: Substance = new Substance({
 			classification: RouteOfAdministrationClassification.oral,
 			bioavailability: 0.8,
 			dosage: {
-				thereshold: 10000,
-				light: 20000,
-				moderate: 50000,
-				strong: 150000,
-				heavy: 500000,
-				overdose: 1000000,
+				thereshold: MassUnit.fromString("10mg"),
+				light: MassUnit.fromString("20mg"),
+				moderate: MassUnit.fromString("50mg"),
+				strong: MassUnit.fromString("150mg"),
+				heavy: MassUnit.fromString("500mg"),
+				overdose: MassUnit.fromString("1g"),
 			},
 			duration: {
 				onset: ms("10m"),

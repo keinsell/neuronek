@@ -27,7 +27,7 @@ model Ingestion {
     date             DateTime
     ingesterUsername String
     /// Dosage in miligrams
-    dosage           Float
+    dosage           String
     route            String
     /// The route of administration of the substance.
     substanceName    String
@@ -45,11 +45,11 @@ model RouteOfAdministration {
     bioavailability Float?
 
     // Dosages specific for such route of administration
-    theresholdDosage Float
-    lightDosage      Float
-    commonDosage     Float
-    strongDosage     Float
-    heavyDosage      Float
+    theresholdDosage String
+    lightDosage      String
+    commonDosage     String
+    strongDosage     String
+    heavyDosage      String
 
     // Stage Durations
     onset        String

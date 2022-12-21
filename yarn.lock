@@ -8418,9 +8418,9 @@ undefsafe@^2.0.5:
   resolved "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz"
   integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
 
-unitmath@0.8.8:
+unitmath@^0.8.8:
   version "0.8.8"
-  resolved "https://registry.npmjs.org/unitmath/-/unitmath-0.8.8.tgz"
+  resolved "https://registry.yarnpkg.com/unitmath/-/unitmath-0.8.8.tgz#6dd3fd45999abfe8cd574adb18db0a5fe3d6318e"
   integrity sha512-oTgVl2IMY+lac5YXJvM/J48Et2iksGy4k4wt0wWwSTWp9iXQ86L9baNMQ6k+G55lPJB2oQ/YjhDAXYuyXsG9wg==
   dependencies:
     esm "3.2.22"

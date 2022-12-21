@@ -5,6 +5,7 @@ import { Ingestion } from "./entity";
 import { SubstanceMapper } from "../substance/mapper";
 import { UserMapper } from "../user/mapper";
 import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
+import { MassUnit } from "../../utilities/mass.vo";
 
 export class IngestionMapper
 	implements
@@ -17,7 +18,7 @@ export class IngestionMapper
 	toPersistence(entity: Ingestion): Prisma.IngestionCreateInput {
 		return {
 			date: entity.date,
-			dosage: entity.amount,
+			dosage: entity.amount.toString(),
 			route: entity.route,
 			purity: entity.purity,
 			Substance: {
@@ -37,7 +38,7 @@ export class IngestionMapper
 		return new Ingestion(
 			{
 				date: record.date,
-				amount: record.dosage,
+				amount: MassUnit.fromString(record.dosage),
 				route: record.route as RouteOfAdministrationClassification,
 				purity: record.purity ?? undefined,
 				substance: this.substanceMapper.toDomain(record.Substance),

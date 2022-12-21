@@ -4,6 +4,7 @@ import { Substance } from "../../../../modules/substance/entity";
 import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
 import { RouteOfAdministration } from "../../../../modules/substance/entities/route-of-administration.entity";
 import { RouteOfAdministrationClassification } from "../../../../modules/substance/entities/route-of-administration-classification.enum";
+import { MassUnit } from "../../../../utilities/mass.vo";
 
 export const Amphetamine: Substance = new Substance({
 	name: "Amphetamine",
@@ -21,12 +22,12 @@ export const Amphetamine: Substance = new Substance({
 			classification: RouteOfAdministrationClassification.insufflated,
 			bioavailability: 0.8,
 			dosage: {
-				thereshold: 4000,
-				light: 6000,
-				moderate: 15000,
-				strong: 30000,
-				heavy: 50000,
-				overdose: 100000,
+				thereshold: MassUnit.fromString("4mg"),
+				light: MassUnit.fromString("6mg"),
+				moderate: MassUnit.fromString("15mg"),
+				strong: MassUnit.fromString("30mg"),
+				heavy: MassUnit.fromString("50mg"),
+				overdose: MassUnit.fromString("100mg"),
 			},
 			duration: {
 				onset: ms("5m"),
@@ -40,12 +41,12 @@ export const Amphetamine: Substance = new Substance({
 			classification: RouteOfAdministrationClassification.oral,
 			bioavailability: 0.8,
 			dosage: {
-				thereshold: 2500,
-				light: 5000,
-				moderate: 15000,
-				strong: 30000,
-				heavy: 50000,
-				overdose: 100000,
+				thereshold: MassUnit.fromString("2.5mg"),
+				light: MassUnit.fromString("5mg"),
+				moderate: MassUnit.fromString("15mg"),
+				strong: MassUnit.fromString("30mg"),
+				heavy: MassUnit.fromString("50mg"),
+				overdose: MassUnit.fromString("100mg"),
 			},
 			duration: {
 				onset: ms("45m"),

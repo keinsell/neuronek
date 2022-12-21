@@ -6,6 +6,7 @@ import { SubstanceNotFoundError } from "../../../substance/errors/substance-not-
 import { SubstanceRepository } from "../../../substance/repository";
 import { IngestSubstanceCommand } from "./command";
 import { IngestedSubstanceResponseDTO } from "./response";
+import { MassUnit } from "../../../../utilities/mass.vo";
 
 export class IngestSubstanceCommandHandler
 	implements ICommandHandler<IngestSubstanceCommand>
@@ -47,13 +48,14 @@ export class IngestSubstanceCommandHandler
 
 		// Parse dosage from string to numbers
 
-		const dosage = 5;
+		const dosage = MassUnit.fromString(amount).baseScalar * (purity ?? 1);
 
 		let ingestion = new Ingestion({
 			substance,
 			user,
 			route,
-			amount: dosage,
+			amount: MassUnit.fromBase(dosage),
+			purity,
 			date: ingestedAt,
 		});
 
@@ -61,7 +63,7 @@ export class IngestSubstanceCommandHandler
 
 		return {
 			substance: ingestion.substance.name,
-			dosage: String(ingestion.amount),
+			dosage: ingestion.amount.toString(),
 			dateOfIngestion: ingestion.date,
 			dosageClassification: ingestion.dosageClassification,
 			routeOfAdministration: ingestion.route,

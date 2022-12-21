@@ -6,6 +6,7 @@ import {
 	RouteOfAdministration,
 	RouteOfAdministrationWithSubstance,
 } from "../entities/route-of-administration.entity";
+import { MassUnit } from "../../../utilities/mass.vo";
 
 export class RouteOfAdministrationMapper
 	implements
@@ -16,15 +17,15 @@ export class RouteOfAdministrationMapper
 		>
 {
 	toPersistence(
-		entity: RouteOfAdministrationWithSubstance,
+		entity: RouteOfAdministrationWithSubstance
 	): DatabaseRecords.RouteOfAdministrationCreateRecord {
 		return {
 			classification: entity.classification,
-			theresholdDosage: entity.dosage.thereshold,
-			lightDosage: entity.dosage.light,
-			commonDosage: entity.dosage.moderate,
-			strongDosage: entity.dosage.strong,
-			heavyDosage: entity.dosage.heavy,
+			theresholdDosage: entity.dosage.thereshold.toString(),
+			lightDosage: entity.dosage.light.toString(),
+			commonDosage: entity.dosage.moderate.toString(),
+			strongDosage: entity.dosage.strong.toString(),
+			heavyDosage: entity.dosage.heavy.toString(),
 			onset: ms(entity.duration.onset),
 			comeup: ms(entity.duration.comeup),
 			peak: ms(entity.duration.peak),
@@ -40,7 +41,7 @@ export class RouteOfAdministrationMapper
 	}
 
 	toDomain(
-		record: DatabaseRecords.RouteOfAdministrationRecord,
+		record: DatabaseRecords.RouteOfAdministrationRecord
 	): RouteOfAdministration {
 		return new RouteOfAdministration(
 			{
@@ -48,12 +49,14 @@ export class RouteOfAdministrationMapper
 					record.classification as RouteOfAdministrationClassification,
 				bioavailability: record.bioavailability ?? undefined,
 				dosage: {
-					thereshold: record.theresholdDosage,
-					light: record.lightDosage,
-					moderate: record.commonDosage,
-					strong: record.strongDosage,
-					heavy: record.heavyDosage,
-					overdose: record.heavyDosage * 2,
+					thereshold: MassUnit.fromString(record.theresholdDosage),
+					light: MassUnit.fromString(record.lightDosage),
+					moderate: MassUnit.fromString(record.commonDosage),
+					strong: MassUnit.fromString(record.strongDosage),
+					heavy: MassUnit.fromString(record.heavyDosage),
+					overdose: MassUnit.fromBase(
+						MassUnit.fromString(record.heavyDosage).baseScalar * 2
+					),
 				},
 				duration: {
 					onset: ms(record.onset),
@@ -63,7 +66,7 @@ export class RouteOfAdministrationMapper
 					aftereffects: ms(record.aftereffects),
 				},
 			},
-			record.id,
+			record.id
 		);
 	}
 

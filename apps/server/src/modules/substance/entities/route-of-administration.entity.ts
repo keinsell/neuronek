@@ -1,4 +1,5 @@
 import { Entity } from "../../../common/lib/domain/entity";
+import { MassUnit } from "../../../utilities/mass.vo";
 import { Substance } from "../entity";
 import { DosageClassification } from "./dosage-classification.enum";
 import { PhaseClassification } from "./phase-classification.enum";
@@ -8,7 +9,7 @@ export interface RouteOfAdministrationProperties {
 	classification: RouteOfAdministrationClassification;
 	bioavailability?: number;
 	dosage: {
-		[dose in DosageClassification]: number;
+		[dose in DosageClassification]: MassUnit;
 	};
 	duration: {
 		[duration in PhaseClassification]: number;
@@ -22,14 +23,14 @@ export class RouteOfAdministration
 	classification: RouteOfAdministrationClassification;
 	bioavailability?: number;
 	dosage: {
-		[dose in DosageClassification]: number;
+		[dose in DosageClassification]: MassUnit;
 	};
 	duration: {
 		[duration in PhaseClassification]: number;
 	};
 	constructor(
 		properties: RouteOfAdministrationProperties,
-		id?: string | number,
+		id?: string | number
 	) {
 		super(id);
 		this.classification = properties.classification;
@@ -58,7 +59,12 @@ export class RouteOfAdministration
 		}
 
 		if (phase === PhaseClassification.aftereffects) {
-			return duration.onset + duration.comeup + duration.peak + duration.offset;
+			return (
+				duration.onset +
+				duration.comeup +
+				duration.peak +
+				duration.offset
+			);
 		}
 
 		throw new Error("Unknown phase");
@@ -70,7 +76,7 @@ export class RouteOfAdministrationWithSubstance extends RouteOfAdministration {
 	constructor(
 		properties: RouteOfAdministrationProperties,
 		substance: Substance,
-		id?: string | number,
+		id?: string | number
 	) {
 		super(properties, id);
 		this.substance = substance;

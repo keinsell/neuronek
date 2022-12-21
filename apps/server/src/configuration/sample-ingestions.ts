@@ -4,6 +4,12 @@ import { RouteOfAdministrationClassification } from "../modules/substance/entiti
 
 export const SAMPLE_INGESTIONS: IngestSubstanceRequestDTO[] = [
 	{
+		substance: "Caffeine",
+		ingestedAt: new Chrono().parseDate("21 Dec 15:54")!,
+		amount: "50mg",
+		route: RouteOfAdministrationClassification.oral,
+	},
+	{
 		substance: "Amphetamine",
 		ingestedAt: new Chrono().parseDate("21 Dec 13:43")!,
 		amount: "3mg",

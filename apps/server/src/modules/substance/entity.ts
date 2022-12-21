@@ -9,6 +9,7 @@ import { RouteOfAdministration } from "./entities/route-of-administration.entity
 import { SubstanceAddiction } from "./entities/substance-addiction.vo";
 import { DosageClassification } from "./entities/dosage-classification.enum";
 import { Entity } from "../../common/lib/domain/entity";
+import { MassUnit } from "../../utilities/mass.vo";
 
 export interface SubstanceProperties {
 	name: string;
@@ -85,7 +86,7 @@ export class Substance extends Entity implements SubstanceProperties {
 	}
 
 	public getDosageClassification(
-		dosage: number,
+		dosage: MassUnit,
 		route: RouteOfAdministrationClassification
 	): DosageClassification {
 		const routeOfAdministration = this.administrationBy.find(
@@ -101,27 +102,27 @@ export class Substance extends Entity implements SubstanceProperties {
 		let classification: DosageClassification =
 			DosageClassification.moderate;
 
-		if (dosage < substanceDosage.light) {
+		if (dosage.baseScalar < substanceDosage.light.baseScalar) {
 			classification = DosageClassification.thereshold;
 		}
 
-		if (dosage >= substanceDosage.light) {
+		if (dosage.baseScalar >= substanceDosage.light.baseScalar) {
 			classification = DosageClassification.light;
 		}
 
-		if (dosage >= substanceDosage.moderate) {
+		if (dosage.baseScalar >= substanceDosage.moderate.baseScalar) {
 			classification = DosageClassification.moderate;
 		}
 
-		if (dosage >= substanceDosage.strong) {
+		if (dosage.baseScalar >= substanceDosage.strong.baseScalar) {
 			classification = DosageClassification.strong;
 		}
 
-		if (dosage >= substanceDosage.heavy) {
+		if (dosage.baseScalar >= substanceDosage.heavy.baseScalar) {
 			classification = DosageClassification.heavy;
 		}
 
-		if (dosage > substanceDosage.overdose) {
+		if (dosage.baseScalar > substanceDosage.overdose.baseScalar) {
 			classification = DosageClassification.overdose;
 		}
 

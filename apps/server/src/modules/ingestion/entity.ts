@@ -1,4 +1,5 @@
 import { Entity } from "../../common/lib/domain/entity";
+import { MassUnit } from "../../utilities/mass.vo";
 import { DosageClassification } from "../substance/entities/dosage-classification.enum";
 import { PhaseClassification } from "../substance/entities/phase-classification.enum";
 import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
@@ -7,7 +8,7 @@ import { User } from "../user/entity";
 
 export interface IngestionProperties {
 	substance: Substance;
-	amount: number;
+	amount: MassUnit;
 	route: RouteOfAdministrationClassification;
 	purity?: number;
 	date: Date;
@@ -18,7 +19,7 @@ export interface IngestionProperties {
 export class Ingestion extends Entity implements IngestionProperties {
 	substance: Substance;
 	route: RouteOfAdministrationClassification;
-	amount: number;
+	amount: MassUnit;
 	purity?: number;
 	date: Date;
 	user: User;
@@ -183,10 +184,10 @@ export class Ingestion extends Entity implements IngestionProperties {
 		return currentPhase.phase;
 	}
 
-	get purityAdjustedDosage(): number {
+	get purityAdjustedDosage(): MassUnit {
 		const { amount, purity } = this;
-		const dosage = amount * (purity ?? 1);
-		return dosage;
+		const dosage = amount.baseScalar * (purity ?? 1);
+		return MassUnit.fromBase(dosage);
 	}
 
 	get dosageClassification(): DosageClassification {
@@ -194,7 +195,6 @@ export class Ingestion extends Entity implements IngestionProperties {
 			this.purityAdjustedDosage,
 			this.route
 		);
-
 		return classification;
 	}
 }
