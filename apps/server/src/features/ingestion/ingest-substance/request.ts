@@ -33,5 +33,5 @@ export interface IngestSubstanceRequestDTO {
 	 *
 	 * @example true
 	 */
-	isConsumed: boolean;
+	isConsumed?: boolean;
 }

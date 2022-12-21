@@ -143,4 +143,26 @@ export class SubstanceRepository implements Repository<Substance> {
 	transaction<T>(callback: () => Promise<T>): Promise<T> {
 		throw new Error("Method not implemented.");
 	}
+
+	async findByNameOrAlias(
+		substanceNameOrAlias: string
+	): Promise<Substance | undefined> {
+		const substance = await this.database.substance.findFirst({
+			where: {
+				OR: [
+					{ name: substanceNameOrAlias },
+					{ commonNomenclature: { hasSome: substanceNameOrAlias } },
+				],
+			},
+			include: {
+				routesOfAdministraton: true,
+			},
+		});
+
+		if (!substance) {
+			return undefined;
+		}
+
+		return this.substanceMapper.toDomain(substance);
+	}
 }

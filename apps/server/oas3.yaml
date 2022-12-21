@@ -5,6 +5,82 @@ components:
     requestBodies: {}
     responses: {}
     schemas:
+        RouteOfAdministrationClassification:
+            enum:
+                - oral
+                - sublingual
+                - buccal
+                - insufflated
+                - rectal
+                - transdermal
+                - subcutaneous
+                - intramuscular
+                - interavenous
+                - smoked
+            type: string
+        DosageClassification:
+            description: "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n\nEffective doses can be divided into five categories: `threshold`, `light`, `moderate`, `strong`, and `heavy`."
+            enum:
+                - thereshold
+                - light
+                - moderate
+                - strong
+                - heavy
+                - overdose
+            type: string
+        IngestedSubstanceResponseDTO:
+            properties:
+                substance:
+                    type: string
+                routeOfAdministration:
+                    $ref: '#/components/schemas/RouteOfAdministrationClassification'
+                dosageClassification:
+                    $ref: '#/components/schemas/DosageClassification'
+                dosage:
+                    type: string
+                dateOfIngestion:
+                    type: string
+                    format: date-time
+            required:
+                - substance
+                - routeOfAdministration
+                - dosageClassification
+                - dosage
+                - dateOfIngestion
+            type: object
+            additionalProperties: false
+        IngestSubstanceRequestDTO:
+            properties:
+                substance:
+                    type: string
+                    description: "Ingested substance name, this is not id of substance, but name of substance, as user may ingest substance which is not yet in database and we wish to collect information about them or link these request to existing substances to provide better information for users.\n\nEDIT: As actual state of application, server will reject requests with not existing substances, so this is not actual anymore."
+                    example: Amphetamine
+                amount:
+                    type: string
+                    description: "\nDosage of ingested substance, expressed in string which allows to calculate amount of substance ingested, for example \"5mg\" or \"1g\"."
+                    example: 5mg
+                purity:
+                    type: number
+                    format: double
+                    example: 0.9
+                route:
+                    $ref: '#/components/schemas/RouteOfAdministrationClassification'
+                    example: oral
+                ingestedAt:
+                    type: string
+                    format: date-time
+                    example: ""
+                isConsumed:
+                    type: boolean
+                    description: 'Information about state of ingestion, as some ingestions may be planned but not actually consumed - once consumed, ingestion will update ingestion date, if such value will be not provided ingestion will start as it''s created.'
+                    example: true
+            required:
+                - substance
+                - amount
+                - route
+                - ingestedAt
+            type: object
+            additionalProperties: false
         UserProfileResponseDTO:
             properties:
                 id:
@@ -124,6 +200,29 @@ info:
         email: keinsell@protonmail.com
 openapi: 3.0.0
 paths:
+    /ingestion:
+        post:
+            operationId: ingest-substance
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/IngestedSubstanceResponseDTO'
+            tags:
+                - Ingestion
+            security:
+                -
+                    jwt:
+                        - user
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/IngestSubstanceRequestDTO'
     /user:
         get:
             operationId: get-user

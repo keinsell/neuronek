@@ -1,18 +1,9 @@
-import {
-	Body,
-	Example,
-	Get,
-	OperationId,
-	Post,
-	Response,
-	Route,
-	Security,
-	Tags,
-} from "tsoa";
+import { Get, OperationId, Route, Security, Tags } from "tsoa";
 import { GetUserProfileCommand } from "./command";
 import { UserProfileResponseDTO } from "./response";
 import { GetUserProfileCommandHandler } from "./service";
 import { Controller } from "../../../common/lib/application/controller";
+import { ApplicationError } from "../../../common/lib/domain/error";
 
 @Tags("User")
 @Route("user")
@@ -34,6 +25,10 @@ export class GetUserProfileController extends Controller {
 		const command = new GetUserProfileCommand(this.req.user);
 
 		const response = await this.handler.execute(command);
+
+		if (response instanceof ApplicationError) {
+			return this.fail(response.toJSON());
+		}
 
 		return this.res.status(200).json(response);
 	}

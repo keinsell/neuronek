@@ -39,6 +39,7 @@ export class HttpApplication {
 
 	protected attachComponents() {
 		this.application.use(ApplicationModules.User);
+		this.application.use(ApplicationModules.Ingestion);
 	}
 
 	protected async openapi3() {
