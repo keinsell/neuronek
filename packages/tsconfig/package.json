@@ -1,14 +1,14 @@
 {
-  "name": "@neuroneek/tsconfig",
+  "name": "tsconfig",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "core.json",
   "files": [
     "node.json"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "typescript": "4.9.3"
   }

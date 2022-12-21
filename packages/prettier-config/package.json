@@ -1,11 +1,11 @@
 {
-  "name": "@neuroneek/prettier-config",
+  "name": "prettier-config",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "keywords": [],
-  "author": "",
   "license": "ISC",
+  "author": "",
+  "main": "index.js",
   "dependencies": {
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "2.3.0",
