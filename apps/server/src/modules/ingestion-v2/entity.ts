@@ -1,8 +1,8 @@
 import { Entity } from "../../common/lib/domain/entity";
-import { DosageClassification } from "../substance-v2/entities/dosage-classification.enum";
-import { PhaseClassification } from "../substance-v2/entities/phase-classification.enum";
-import { RouteOfAdministrationClassification } from "../substance-v2/entities/route-of-administration-classification.enum";
-import { Substance } from "../substance-v2/entity";
+import { DosageClassification } from "../substance/entities/dosage-classification.enum";
+import { PhaseClassification } from "../substance/entities/phase-classification.enum";
+import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
+import { Substance } from "../substance/entity";
 import { User } from "../user-v2/entity";
 
 export interface IngestionProperties {

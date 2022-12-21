@@ -1,10 +1,10 @@
 import { HttpApplication } from "./application/http.application";
 import logProcessErrors from "log-process-errors";
-import { Substance } from "./modules/substance-v2/entity";
-import { PsychoactiveClass } from "./modules/substance-v2/entities/psychoactive-class.enum";
-import { RouteOfAdministration } from "./modules/substance-v2/entities/route-of-administration.entity";
-import { RouteOfAdministrationClassification } from "./modules/substance-v2/entities/route-of-administration-classification.enum";
-import { SubstanceRepository } from "./modules/substance-v2/repository";
+import { Substance } from "./modules/substance/entity";
+import { PsychoactiveClass } from "./modules/substance/entities/psychoactive-class.enum";
+import { RouteOfAdministration } from "./modules/substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationClassification } from "./modules/substance/entities/route-of-administration-classification.enum";
+import { SubstanceRepository } from "./modules/substance/repository";
 import { Caffeine } from "./configuration/knowledge_base/substances/stimulants/caffeine.seed";
 import { Ingestion } from "./modules/ingestion-v2/entity";
 import { Chrono } from "chrono-node";
@@ -13,6 +13,8 @@ import { Amphetamine } from "./configuration/knowledge_base/substances/stimulant
 import { User } from "./modules/user-v2/entity";
 import { UserRepository } from "./modules/user-v2/repository";
 import { IngestionRepository } from "./modules/ingestion-v2/repository";
+import { RegisterUserCommandHandler } from "./features/user/register-user/service";
+import { RegisterUserCommand } from "./features/user/register-user/command";
 logProcessErrors();
 
 export async function main() {
@@ -22,6 +24,9 @@ export async function main() {
 		console.log(process.env.DATABASE_URI);
 		console.log(process.env.TZ);
 	}
+
+	const command = new RegisterUserCommand({});
+	await new RegisterUserCommandHandler().execute(command);
 
 	const caffeine = Amphetamine;
 	await new SubstanceRepository().save(caffeine);

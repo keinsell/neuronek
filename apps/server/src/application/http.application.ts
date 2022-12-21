@@ -2,13 +2,14 @@ import { App } from "@tinyhttp/app";
 import { urlencoded } from "milliparsec";
 import { lruSend } from "lru-send";
 import cors from "cors";
-import { userRouter } from "../modules/user/routers/user.router";
 import {
 	generateRoutes,
 	generateSpec,
 	ExtendedRoutesConfig,
 	ExtendedSpecConfig,
 } from "tsoa";
+import { userModule } from "../features/user/submodule";
+import { ApplicationModules } from "../features/modules";
 
 export class HttpApplication {
 	private application: App;
@@ -31,19 +32,19 @@ export class HttpApplication {
 	protected applyProductionMiddleware() {}
 
 	protected attachComponents() {
-		this.application.use(userRouter);
+		this.application.use(ApplicationModules.User);
 	}
 
 	protected async openapi3() {
 		const specOptions: ExtendedSpecConfig = {
-			basePath: "/api",
+			basePath: "",
 			entryFile: "./api/server.ts",
 			specVersion: 3,
 			noImplicitAdditionalProperties: "silently-remove-extras",
 			outputDirectory: "./",
-			controllerPathGlobs: ["./**/*.controller.ts"],
-			name: "Neuronek",
-			description: "Early version of Neuronek API.",
+			controllerPathGlobs: ["./**/*.controller.ts", "./**/controller.ts"],
+			name: "neuronek",
+			description: "Documentation of ongoing API of application.",
 			version: "1.0.0",
 			schemes: ["http"],
 			contact: {
@@ -51,7 +52,7 @@ export class HttpApplication {
 				email: "keinsell@protonmail.com",
 			},
 			yaml: true,
-			specFileBaseName: "oa3",
+			specFileBaseName: "oas3",
 			spec: {
 				tags: [
 					{
@@ -67,7 +68,7 @@ export class HttpApplication {
 		};
 
 		const routeOptions: ExtendedRoutesConfig = {
-			basePath: "/api",
+			basePath: "",
 			noImplicitAdditionalProperties: "silently-remove-extras",
 			entryFile: "./src/index.ts",
 			routesDir: "./dist",
@@ -80,8 +81,8 @@ export class HttpApplication {
 	}
 
 	public async bootstrap() {
-		this.application.listen(4000);
+		this.application.listen(1337);
 		await this.openapi3();
-		console.log("🚀 Server ready at: http://localhost:4000");
+		console.log("🚀 Server ready at: http://localhost:1337");
 	}
 }

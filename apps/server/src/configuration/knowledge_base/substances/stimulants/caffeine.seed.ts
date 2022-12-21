@@ -1,8 +1,8 @@
 import ms from "ms";
-import { Substance } from "../../../../modules/substance-v2/entity";
-import { PsychoactiveClass } from "../../../../modules/substance-v2/entities/psychoactive-class.enum";
-import { RouteOfAdministration } from "../../../../modules/substance-v2/entities/route-of-administration.entity";
-import { RouteOfAdministrationClassification } from "../../../../modules/substance-v2/entities/route-of-administration-classification.enum";
+import { Substance } from "../../../../modules/substance/entity";
+import { PsychoactiveClass } from "../../../../modules/substance/entities/psychoactive-class.enum";
+import { RouteOfAdministration } from "../../../../modules/substance/entities/route-of-administration.entity";
+import { RouteOfAdministrationClassification } from "../../../../modules/substance/entities/route-of-administration-classification.enum";
 import { NumberRange, TimeRange } from "../../../../utilities/range.vo";
 
 export const Caffeine: Substance = new Substance({

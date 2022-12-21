@@ -2,9 +2,9 @@ import { Prisma } from "@prisma/client";
 import { Mapper } from "../../common/lib/persistence/mapper";
 import { DatabaseRecords } from "../../common/lib/persistence/mapper/database-records";
 import { Ingestion } from "./entity";
-import { SubstanceMapper } from "../substance-v2/mapper";
+import { SubstanceMapper } from "../substance/mapper";
 import { UserMapper } from "../user-v2/mapper";
-import { RouteOfAdministrationClassification } from "../substance-v2/entities/route-of-administration-classification.enum";
+import { RouteOfAdministrationClassification } from "../substance/entities/route-of-administration-classification.enum";
 
 export class IngestionMapper
 	implements

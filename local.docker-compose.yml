@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+  # trunk-ignore(semgrep/yaml.docker-compose.security.no-new-privileges.no-new-privileges)
   cockroachdb:
     container_name: ${REPOSITORY_NAME}-cockroachdb
     image: cockroachdb/cockroach:latest
@@ -7,24 +8,14 @@ services:
     ports:
       - "${DATABASE_PORT}:26257"
       - "8081:8080"
-    # volumes:
-    #   - "${PWD}/.cache/cockroach:/cockroach/cockroach-data"
+    volumes:
+      - "${PWD}/.cache/cockroach:/cockroach/cockroach-data"
     environment:
       - COCKROACH_USER=${DATABASE_USER}
       - COCKROACH_PASSWORD=${DATABASE_PASSWORD}
       - COCKROACH_DATABASE=${DATABASE_NAME}
-    mem_limit: 1024m
-    mem_reservation: 512M
-    cpus: 0.5
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 1024m
-        reservations:
-          cpus: "0.25"
-          memory: 512M
 
+  # trunk-ignore(semgrep/yaml.docker-compose.security.no-new-privileges.no-new-privileges)
   ipfs:
     container_name: ${REPOSITORY_NAME}-ipfs
     image: ipfs/kubo:latest
@@ -33,23 +24,13 @@ services:
       - "4001:4001"
       - "127.0.0.1:5001:5001"
       - "127.0.0.1:8080:8080"
-    # volumes:
-    #   - "${PWD}/.cache/ipfs:/data/ipfs"
-    #   - "${PWD}/.cache/ipfs-export:/export"
+    volumes:
+      - "${PWD}/.cache/ipfs:/data/ipfs"
+      - "${PWD}/.cache/ipfs-export:/export"
     environment:
       - IPFS_PROFILE=server
-    mem_limit: 1024m
-    mem_reservation: 512M
-    cpus: 0.5
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 1024m
-        reservations:
-          cpus: "0.25"
-          memory: 512M
 
+  # trunk-ignore(semgrep/yaml.docker-compose.security.no-new-privileges.no-new-privileges)
   redis:
     container_name: ${REPOSITORY_NAME}-redis
     image: redis:latest
@@ -60,6 +41,7 @@ services:
     volumes:
       - ${PWD}/.cache/redis:/data
 
+  # trunk-ignore(semgrep/yaml.docker-compose.security.no-new-privileges.no-new-privileges)
   minio:
     container_name: ${REPOSITORY_NAME}-minio
     image: minio/minio
@@ -70,8 +52,8 @@ services:
     expose:
       - "9000"
       - "9001"
-    # volumes:
-    #   - ${PWD}/.cache/minio:/data
+    volumes:
+      - ${PWD}/.cache/minio:/data
     environment:
       MINIO_ACCESS_KEY: ${S3_ACCESS_KEY}
       MINIO_SECRET_KEY: ${S3_SECRET_KEY}

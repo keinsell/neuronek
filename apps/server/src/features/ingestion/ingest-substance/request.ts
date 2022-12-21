@@ -1,4 +1,4 @@
-import { RouteOfAdministrationClassification } from "../../../modules/substance-v2/entities/route-of-administration-classification.enum";
+import { RouteOfAdministrationClassification } from "../../../modules/substance/entities/route-of-administration-classification.enum";
 
 export interface IngestSubstanceRequestDTO {
 	/**

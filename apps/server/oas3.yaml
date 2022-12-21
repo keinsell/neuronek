@@ -1,0 +1,57 @@
+components:
+    examples: {}
+    headers: {}
+    parameters: {}
+    requestBodies: {}
+    responses: {}
+    schemas:
+        RegisterUserReponseDTO:
+            properties:
+                username:
+                    type: string
+                    description: 'Automatically generated username to identify user.'
+                recoveryKey:
+                    type: string
+                    description: 'RecoveryKey is necessary key to interact with user account.'
+            required:
+                - username
+                - recoveryKey
+            type: object
+            additionalProperties: false
+    securitySchemes: {}
+info:
+    title: neuronek
+    version: 1.0.0
+    description: 'Documentation of ongoing API of application.'
+    contact:
+        name: 'Jakub Olan'
+        email: keinsell@protonmail.com
+openapi: 3.0.0
+paths:
+    /user/register:
+        post:
+            operationId: register-user
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegisterUserReponseDTO'
+                            examples:
+                                'Example 1':
+                                    value: {username: 9m1r1r1r1r1r1r1r, recoveryKey: 9m1r1r1r1r1r1r1r9m1r1r1r1r1r1r1r}
+            tags:
+                - User
+            security: []
+            parameters: []
+servers:
+    -
+        url: /
+tags:
+    -
+        name: User
+        description: 'Operations about users'
+        externalDocs:
+            description: 'Find out more about users'
+            url: 'http://swagger.io'

@@ -1,5 +1,5 @@
-import { DosageClassification } from "../../../modules/substance-v2/entities/dosage-classification.enum";
-import { RouteOfAdministrationClassification } from "../../../modules/substance-v2/entities/route-of-administration-classification.enum";
+import { DosageClassification } from "../../../modules/substance/entities/dosage-classification.enum";
+import { RouteOfAdministrationClassification } from "../../../modules/substance/entities/route-of-administration-classification.enum";
 
 export interface IngestedSubstanceResponseDTO {
 	substance: string;

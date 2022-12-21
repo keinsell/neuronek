@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { Entity } from "../../common/lib/domain/entity";
+import { Ingestion } from "../ingestion-v2/entity";
 
 export interface UserProperties {
 	username: string;
@@ -30,5 +31,13 @@ export class User extends Entity implements UserProperties {
 			username: nanoid(16),
 			recoveryKey: nanoid(32),
 		});
+	}
+}
+
+export class UserWithIngestions extends User {
+	ingestions: Ingestion[];
+	constructor(user: User, ingestions: Ingestion[]) {
+		super(user, user.id);
+		this.ingestions = ingestions;
 	}
 }

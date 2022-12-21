@@ -3,7 +3,6 @@ import {
 	User,
 	Substance,
 	RouteOfAdministration,
-	Effect,
 	Ingestion,
 } from "@prisma/client";
 

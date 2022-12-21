@@ -12,7 +12,10 @@ export class UserRepository implements Repository<User> {
 	constructor(
 		private database: PrismaClient = PrismaInfrastructre,
 		private userMapper: UserMapper = new UserMapper()
-	) {}
+	) {
+		this.database = database;
+		this.userMapper = userMapper;
+	}
 
 	async save(entity: User): Promise<User> {
 		const isUserWithUsername = await this.database.user.findUnique({

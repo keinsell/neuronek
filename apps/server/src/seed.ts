@@ -1,6 +1,6 @@
 import { PrismaInfrastructre } from "./infrastructure/prisma";
 import { SUBSTANCE_SEED } from "./configuration/knowledge_base/substances";
-import { SubstanceRepository } from "./modules/substance-v2/repository";
+import { SubstanceRepository } from "./modules/substance/repository";
 
 async function main() {
 	await PrismaInfrastructre.$connect();
