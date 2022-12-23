@@ -88,10 +88,11 @@ export class IngestionAnalitics {
 	private dosage() {
 		// Dosage-related insights
 		// Guard against theresholdDosage
-		if (
+		const isTheresholdDosage =
 			this.ingestion.dosageClassification ===
-			DosageClassification.thereshold
-		) {
+			DosageClassification.thereshold;
+
+		if (isTheresholdDosage) {
 			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a thereshold dosage, which may not produce any subjective effects, yet you may feel something.`;
 
 			this.addInsight(message);
@@ -101,37 +102,42 @@ export class IngestionAnalitics {
 			// TODO: Disadvise MDMA microdosing
 		}
 
-		if (
-			this.ingestion.dosageClassification === DosageClassification.light
-		) {
+		const isLightDosage =
+			this.ingestion.dosageClassification === DosageClassification.light;
+
+		if (isLightDosage) {
 			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a light dosage, which may produce mild subjective effects - you should be able to ignore them after you will focus on something.`;
 
 			this.addInsight(message);
 		}
 
-		if (
+		const isModerateDosage =
 			this.ingestion.dosageClassification ===
-			DosageClassification.moderate
-		) {
+			DosageClassification.moderate;
+
+		if (isModerateDosage) {
 			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a moderate dosage, which may produce moderate subjective effects - you may trouble ignoring them but you should be still able to perform daily tasks.`;
 
 			this.addInsight(message);
 		}
 
+		const isStrongDosage =
+			this.ingestion.dosageClassification === DosageClassification.strong;
+
 		// Guard against stronger dosages
-		if (
-			this.ingestion.dosageClassification === DosageClassification.strong
-		) {
+		if (isStrongDosage) {
 			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a strong dosage, which may produce strong subjective effects - you may have trouble ignoring them and you may not be able to perform daily tasks, also communication with other people may be problematic.`;
 
 			this.addInsight(message);
 		}
 
 		// Guard against very strong dosages
-		if (
-			this.ingestion.dosageClassification === DosageClassification.heavy
-		) {
-			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a heavy dosage, which may produce overwhelming subjective effects at this point effects cannot be ignored, you cannot self-help yourself in case of troubles - you should definitely seek for tripsitter. Communication with other people after such dosages is nearly impossible. These dosages may produce serious (unreversable) health risks and even death.`;
+
+		const isHeavyDosage =
+			this.ingestion.dosageClassification === DosageClassification.heavy;
+
+		if (isHeavyDosage) {
+			const message = `Dosage of ${this.ingestion.purityAdjustedDosage.toString()} is considered to be a heavy dosage, which may produce overwhelming subjective effects at this point effects cannot be ignored, you cannot self-help yourself in case of troubles - you should definitely seek for tripsitter. Communication with other people after such dosages is impossible. These dosages may produce serious (unreversable) health risks and even death. Consumption of anything above heavy dosage is considered to be reckless and irresponsible - this will increase side-effects and diminish positive effects.`;
 
 			this.addInsight(message);
 		}
