@@ -176,18 +176,28 @@ export class IngestionAnalitics {
 		this.routeOfAdministration();
 		this.duration();
 
+		const isStimulant =
+			this.ingestion.substance.psychoactiveClass ===
+			PsychoactiveClass.stimulant;
+
+		const doSubstanceEffectsLastMoreThan6h =
+			this.ingestion.substance.getTotalDurationOfEffectsRelativeToRouteOfAdministration(
+				this.ingestion.route
+			) > ms("6h");
+
+		const isNotDepressant =
+			this.ingestion.substance.psychoactiveClass !==
+			PsychoactiveClass.depressant;
+
 		// Stimulant-oriented insights
 		if (
-			this.ingestion.substance.psychoactiveClass ===
-				PsychoactiveClass.stimulant ||
-			(this.ingestion.substance.getTotalDurationOfEffectsRelativeToRouteOfAdministration(
-				this.ingestion.route
-			) > ms("6h") &&
-				this.ingestion.substance.psychoactiveClass !==
-					PsychoactiveClass.depressant)
+			isStimulant ||
+			(doSubstanceEffectsLastMoreThan6h && isNotDepressant)
 		) {
+			const isCurrentHourAfternoonOrEvening = new Date().getHours() > 14;
+
 			// Avoid distributing sleep pattern
-			if (new Date().getHours() > 14 || new Date().getHours() < 6) {
+			if (isCurrentHourAfternoonOrEvening) {
 				const message = `It's not recommended to ingest stimulants (or other substances that promote wakefullnes effect) afternoon, as they may seriously impact your sleeping pattern. Such ingestion may block your sleep until (or at least) ${new Date(
 					Date.now() + this.ingestionWillPromoteEffectsFor
 				).toLocaleTimeString()}`;
