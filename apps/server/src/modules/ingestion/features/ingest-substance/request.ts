@@ -27,7 +27,7 @@ export interface IngestSubstanceRequestDTO {
 	/**
 	 * @example ""
 	 */
-	ingestedAt: Date;
+	ingestedAt?: Date;
 	/**
 	 * Information about state of ingestion, as some ingestions may be planned but not actually consumed - once consumed, ingestion will update ingestion date, if such value will be not provided ingestion will start as it's created.
 	 *

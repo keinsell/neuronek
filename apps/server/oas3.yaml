@@ -30,6 +30,8 @@ components:
             type: string
         IngestedSubstanceResponseDTO:
             properties:
+                id:
+                    type: string
                 substance:
                     type: string
                 routeOfAdministration:
@@ -41,12 +43,21 @@ components:
                 dateOfIngestion:
                     type: string
                     format: date-time
+                dateOfIngestionEffectEnd:
+                    type: string
+                    format: date-time
+                insights:
+                    items:
+                        type: string
+                    type: array
             required:
+                - id
                 - substance
                 - routeOfAdministration
                 - dosageClassification
                 - dosage
                 - dateOfIngestion
+                - dateOfIngestionEffectEnd
             type: object
             additionalProperties: false
         IngestSubstanceRequestDTO:
@@ -78,7 +89,6 @@ components:
                 - substance
                 - amount
                 - route
-                - ingestedAt
             type: object
             additionalProperties: false
         UserProfileResponseDTO:

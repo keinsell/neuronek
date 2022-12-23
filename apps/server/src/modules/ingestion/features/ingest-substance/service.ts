@@ -7,6 +7,7 @@ import { SubstanceRepository } from "../../../substance/repository";
 import { IngestSubstanceCommand } from "./command";
 import { IngestedSubstanceResponseDTO } from "./response";
 import { MassUnit } from "../../../../utilities/mass.vo";
+import { IngestionAnalitics } from "../../../analitics/entity";
 
 export class IngestSubstanceCommandHandler
 	implements ICommandHandler<IngestSubstanceCommand>
@@ -56,17 +57,20 @@ export class IngestSubstanceCommandHandler
 			route,
 			amount: MassUnit.fromBase(dosage),
 			purity,
-			date: ingestedAt,
+			date: ingestedAt ?? new Date(),
 		});
 
 		ingestion = await this.ingestionRepository.save(ingestion);
 
 		return {
+			id: ingestion.id,
 			substance: ingestion.substance.name,
 			dosage: ingestion.purityAdjustedDosage.toString(),
 			dateOfIngestion: ingestion.date,
 			dosageClassification: ingestion.dosageClassification,
 			routeOfAdministration: ingestion.route,
+			dateOfIngestionEffectEnd: ingestion.ingestionEffectsEndsAt,
+			insights: new IngestionAnalitics(ingestion).insights,
 		};
 	}
 }

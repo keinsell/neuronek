@@ -1,13 +1,7 @@
 import { Body, Get, OperationId, Post, Route, Security, Tags } from "tsoa";
-import { GetUserProfileCommand, IngestSubstanceCommand } from "./command";
-import {
-	IngestedSubstanceResponseDTO,
-	UserProfileResponseDTO,
-} from "./response";
-import {
-	GetUserProfileCommandHandler,
-	IngestSubstanceCommandHandler,
-} from "./service";
+import { IngestSubstanceCommand } from "./command";
+import { IngestedSubstanceResponseDTO } from "./response";
+import { IngestSubstanceCommandHandler } from "./service";
 import { Controller } from "../../../../common/lib/application/controller";
 import { ApplicationError } from "../../../../common/lib/domain/error";
 import { IngestSubstanceRequestDTO } from "./request";
