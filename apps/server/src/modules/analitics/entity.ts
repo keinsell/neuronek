@@ -30,7 +30,7 @@ export class IngestionAnalitics {
 
 		return substanceRouteOfAdministration.getTimeToPhase(
 			PhaseClassification.comeup
-		);
+		).avg;
 	}
 
 	/** Calculate time from ingestion to end of peak */
@@ -38,40 +38,25 @@ export class IngestionAnalitics {
 		const routeOfAdministration = this.ingestion.route;
 		const substance = this.ingestion.substance;
 
-		const substanceRouteOfAdministration = substance.administrationBy.find(
-			(route) => route.classification === routeOfAdministration
-		);
-
-		if (!substanceRouteOfAdministration) {
-			throw new Error(
-				`Substance ${substance.name} has no route of administration ${routeOfAdministration}`
-			);
-		}
+		const substanceRouteOfAdministration =
+			substance.getAdministrationRouteOrThrow(routeOfAdministration);
 
 		return substanceRouteOfAdministration.getTimeToPhase(
 			PhaseClassification.offset
-		);
+		).avg;
 	}
 
 	get ingestionWillPromoteNegativeEffectsFor(): number {
 		const routeOfAdministration = this.ingestion.route;
 		const substance = this.ingestion.substance;
 
-		const substanceRouteOfAdministration = substance.administrationBy.find(
-			(route) => route.classification === routeOfAdministration
+		const substanceRouteOfAdministration =
+			substance.getAdministrationRouteOrThrow(routeOfAdministration);
+
+		return (
+			substanceRouteOfAdministration.duration.offset.avg +
+			substanceRouteOfAdministration.duration.aftereffects.avg
 		);
-
-		if (!substanceRouteOfAdministration) {
-			throw new Error(
-				`Substance ${substance.name} has no route of administration ${routeOfAdministration}`
-			);
-		}
-
-		const aftereffectsDurationWithOffset =
-			substanceRouteOfAdministration.duration.offset +
-			substanceRouteOfAdministration.duration.aftereffects;
-
-		return aftereffectsDurationWithOffset;
 	}
 
 	get ingestionWillPromoteEffectsFor(): number {

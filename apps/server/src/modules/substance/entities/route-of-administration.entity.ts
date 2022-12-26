@@ -1,5 +1,6 @@
 import { Entity } from "../../../common/lib/domain/entity";
 import { MassUnit } from "../../../utilities/mass.vo";
+import { TimeRange } from "../../../utilities/range.vo";
 import { Substance } from "../entity";
 import { DosageClassification } from "./dosage-classification.enum";
 import { PhaseClassification } from "./phase-classification.enum";
@@ -12,7 +13,7 @@ export interface RouteOfAdministrationProperties {
 		[dose in DosageClassification]: MassUnit;
 	};
 	duration: {
-		[duration in PhaseClassification]: number;
+		[duration in PhaseClassification]: TimeRange;
 	};
 }
 
@@ -26,7 +27,7 @@ export class RouteOfAdministration
 		[dose in DosageClassification]: MassUnit;
 	};
 	duration: {
-		[duration in PhaseClassification]: number;
+		[duration in PhaseClassification]: TimeRange;
 	};
 	constructor(
 		properties: RouteOfAdministrationProperties,
@@ -43,7 +44,7 @@ export class RouteOfAdministration
 		const { duration } = this;
 
 		if (phase === PhaseClassification.onset) {
-			return 0;
+			return new TimeRange(0, 0);
 		}
 
 		if (phase === PhaseClassification.comeup) {
@@ -51,23 +52,30 @@ export class RouteOfAdministration
 		}
 
 		if (phase === PhaseClassification.peak) {
-			return duration.onset + duration.comeup;
+			return duration.onset.add(duration.comeup);
 		}
 
 		if (phase === PhaseClassification.offset) {
-			return duration.onset + duration.comeup + duration.peak;
+			return duration.onset.add(duration.comeup).add(duration.peak);
 		}
 
 		if (phase === PhaseClassification.aftereffects) {
-			return (
-				duration.onset +
-				duration.comeup +
-				duration.peak +
-				duration.offset
-			);
+			return duration.onset
+				.add(duration.comeup)
+				.add(duration.peak)
+				.add(duration.offset);
 		}
 
 		throw new Error("Unknown phase");
+	}
+
+	/** Total duration presents time from ingestion to end of noticable substance positive effects (exluding aftereffects). */
+	get totalDuration(): TimeRange {
+		const { duration } = this;
+		return duration.onset
+			.add(duration.comeup)
+			.add(duration.peak)
+			.add(duration.offset);
 	}
 }
 

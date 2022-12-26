@@ -7,6 +7,7 @@ import {
 	RouteOfAdministrationWithSubstance,
 } from "../entities/route-of-administration.entity";
 import { MassUnit } from "../../../utilities/mass.vo";
+import { TimeRange } from "../../../utilities/range.vo";
 
 export class RouteOfAdministrationMapper
 	implements
@@ -26,11 +27,11 @@ export class RouteOfAdministrationMapper
 			commonDosage: entity.dosage.moderate.toString(),
 			strongDosage: entity.dosage.strong.toString(),
 			heavyDosage: entity.dosage.heavy.toString(),
-			onset: ms(entity.duration.onset),
-			comeup: ms(entity.duration.comeup),
-			peak: ms(entity.duration.peak),
-			offset: ms(entity.duration.offset),
-			aftereffects: ms(entity.duration.aftereffects),
+			onset: entity.duration.onset.toString(),
+			comeup: entity.duration.comeup.toString(),
+			peak: entity.duration.peak.toString(),
+			offset: entity.duration.offset.toString(),
+			aftereffects: entity.duration.aftereffects.toString(),
 			bioavailability: entity.bioavailability,
 			Substance: {
 				connect: {
@@ -59,11 +60,11 @@ export class RouteOfAdministrationMapper
 					),
 				},
 				duration: {
-					onset: ms(record.onset),
-					comeup: ms(record.comeup),
-					peak: ms(record.peak),
-					offset: ms(record.offset),
-					aftereffects: ms(record.aftereffects),
+					onset: TimeRange.fromString(record.onset),
+					comeup: TimeRange.fromString(record.comeup),
+					peak: TimeRange.fromString(record.peak),
+					offset: TimeRange.fromString(record.offset),
+					aftereffects: TimeRange.fromString(record.aftereffects),
 				},
 			},
 			record.id

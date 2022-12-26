@@ -14,6 +14,15 @@ export class Phase {
 		return new Phase(ingestion, phase);
 	}
 
-	startsAt(): Date {}
-	endsAt(): Date {}
+	startsAt(): Date {
+		return this.ingestion.date;
+	}
+	endsAt(): Date {
+		return new Date(
+			this.ingestion.date.getTime() +
+				this.ingestion.substance
+					.getAdministrationRouteOrThrow(this.ingestion.route)
+					.getTimeToPhase(this.phase).avg
+		);
+	}
 }

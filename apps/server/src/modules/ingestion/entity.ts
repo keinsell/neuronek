@@ -99,16 +99,10 @@ export class Ingestion extends Entity implements IngestionProperties {
 	}
 
 	getIngestionPhases() {
-		const { date, substance } = this;
-		const { administrationBy } = substance;
+		const { date, substance, route } = this;
 
-		const administrationRoute = administrationBy.find(
-			(route) => route.classification === this.route
-		);
-
-		if (!administrationRoute) {
-			throw new Error("No route of administration found");
-		}
+		const administrationRoute =
+			substance.getAdministrationRouteOrThrow(route);
 
 		const { onset, comeup, peak, offset, aftereffects } =
 			administrationRoute.duration;
@@ -119,27 +113,28 @@ export class Ingestion extends Entity implements IngestionProperties {
 
 		phases.push({
 			phase: PhaseClassification.onset,
-			isCompleted: this.getTimeSinceIngestion() > onset,
+			isCompleted: this.getTimeSinceIngestion() > onset.max,
 			startedAt: date,
-			endedAt: new Date(date.getTime() + onset),
+			endedAt: new Date(date.getTime() + onset.avg),
 		});
 
 		// Comeup
 
 		phases.push({
 			phase: PhaseClassification.comeup,
-			isCompleted: this.getTimeSinceIngestion() > onset + comeup,
-			startedAt: new Date(date.getTime() + onset),
-			endedAt: new Date(date.getTime() + onset + comeup),
+			isCompleted: this.getTimeSinceIngestion() > onset.avg + comeup.avg,
+			startedAt: new Date(date.getTime() + onset.avg),
+			endedAt: new Date(date.getTime() + onset.avg + comeup.avg),
 		});
 
 		// Peak
 
 		phases.push({
 			phase: PhaseClassification.peak,
-			isCompleted: this.getTimeSinceIngestion() > onset + comeup + peak,
-			startedAt: new Date(date.getTime() + onset + comeup),
-			endedAt: new Date(date.getTime() + onset + comeup + peak),
+			isCompleted:
+				this.getTimeSinceIngestion() > onset.add(comeup).add(peak).max,
+			startedAt: new Date(date.getTime() + onset.add(comeup).max),
+			endedAt: new Date(date.getTime() + onset.add(comeup).add(peak).max),
 		});
 
 		// Offset
@@ -147,9 +142,14 @@ export class Ingestion extends Entity implements IngestionProperties {
 		phases.push({
 			phase: PhaseClassification.offset,
 			isCompleted:
-				this.getTimeSinceIngestion() > onset + comeup + peak + offset,
-			startedAt: new Date(date.getTime() + onset + comeup + peak),
-			endedAt: new Date(date.getTime() + onset + comeup + peak + offset),
+				this.getTimeSinceIngestion() >
+				onset.avg + comeup.avg + peak.avg + offset.avg,
+			startedAt: new Date(
+				date.getTime() + onset.avg + comeup.avg + peak.avg
+			),
+			endedAt: new Date(
+				date.getTime() + onset.avg + comeup.avg + peak.avg + offset.avg
+			),
 		});
 
 		// Aftereffects
@@ -158,12 +158,21 @@ export class Ingestion extends Entity implements IngestionProperties {
 			phase: PhaseClassification.aftereffects,
 			isCompleted:
 				this.getTimeSinceIngestion() >
-				onset + comeup + peak + offset + aftereffects,
+				onset.avg +
+					comeup.avg +
+					peak.avg +
+					offset.avg +
+					aftereffects.avg,
 			startedAt: new Date(
-				date.getTime() + onset + comeup + peak + offset
+				date.getTime() + onset.avg + comeup.avg + peak.avg + offset.avg
 			),
 			endedAt: new Date(
-				date.getTime() + onset + comeup + peak + offset + aftereffects
+				date.getTime() +
+					onset.avg +
+					comeup.avg +
+					peak.avg +
+					offset.avg +
+					aftereffects.avg
 			),
 		});
 

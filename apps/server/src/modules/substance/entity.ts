@@ -56,16 +56,24 @@ export class Substance extends Entity implements SubstanceProperties {
 		this.legality = properties.legality;
 	}
 
+	public getAdministrationRouteOrThrow(
+		administrationRoute: RouteOfAdministrationClassification
+	): RouteOfAdministration {
+		const route = this.administrationBy.find(
+			(v) => v.classification === administrationRoute
+		);
+
+		if (!route) {
+			throw new Error("Administration route not found");
+		}
+
+		return route;
+	}
+
 	public getTotalDurationOfEffectsRelativeToRouteOfAdministration(
 		route: RouteOfAdministrationClassification
 	): number {
-		const administrationRoute = this.administrationBy.find(
-			(v) => v.classification === route
-		);
-
-		if (!administrationRoute) {
-			throw new Error("Route of administration not found");
-		}
+		const administrationRoute = this.getAdministrationRouteOrThrow(route);
 
 		const keys = Object.keys(PhaseClassification);
 
@@ -73,7 +81,7 @@ export class Substance extends Entity implements SubstanceProperties {
 
 		for (const key of keys) {
 			const duration =
-				administrationRoute.duration[key as PhaseClassification];
+				administrationRoute.duration[key as PhaseClassification].max;
 
 			if (key === PhaseClassification.aftereffects) {
 				continue;
@@ -89,13 +97,7 @@ export class Substance extends Entity implements SubstanceProperties {
 		dosage: MassUnit,
 		route: RouteOfAdministrationClassification
 	): DosageClassification {
-		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route
-		);
-
-		if (!routeOfAdministration) {
-			throw new Error("Route of administration not found");
-		}
+		const routeOfAdministration = this.getAdministrationRouteOrThrow(route);
 
 		const { dosage: substanceDosage } = routeOfAdministration;
 
@@ -133,13 +135,7 @@ export class Substance extends Entity implements SubstanceProperties {
 		route: RouteOfAdministrationClassification,
 		phase: PhaseClassification
 	) {
-		const routeOfAdministration = this.administrationBy.find(
-			(v) => v.classification === route
-		);
-
-		if (!routeOfAdministration) {
-			throw new Error("afsdfg");
-		}
+		const routeOfAdministration = this.getAdministrationRouteOrThrow(route);
 
 		return routeOfAdministration.getTimeToPhase(phase);
 	}
