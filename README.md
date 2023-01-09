@@ -4,13 +4,14 @@ Neuronek is application dedicated for tracking usage of psychoactive substances 
 
 ## Why Neuronek?
 
-My life was kinda fullfilled with massive amounts of simulants since 2017 (Caffeine and Nicotine) where Caffeine had significant impact on health of my body (doing overnights day by day and making sleep deprivation even more deep), this was caused by two points where first one was lack of information about ingested substance and no essential understanding of substance mechanism of action and second problem was with keeping track of my caffeine intake. I've decided to resolve these problems by building application.
-
-## Features of Neuronek
-
-- Keep your ingestions at glance
-- **Analisis of active substances in body**, everybody would like to know when one will be tired after ingestion of Caffeine and which subjective effects are produced by substance not really mind itself (for example people can take depressive thoughts as their own after MDMA ingestion over 3 days after ingestion which can bring even more side-effects).
+My life was kinda fullfilled with massive amounts of simulants since 2017 (Caffeine and Nicotine) where Caffeine had significant impact on health of my body (doing overnights day by day and making sleep deprivation even more deep), this was caused by two points where first one was lack of information about ingested substance and no essential understanding of substance mechanism of action and second problem was with keeping track of my caffeine intake. I've decided to resolve these problems by building application, this have on mind to keep track of my supplements (planning and intakes) and inform me of everything that's important to me.
 
 ## Documentation
 
 Project documentation is available in [Craft](https://www.craft.do/space-invite/?id=aVL1gPeJLrKLPUDF6qiCxdu) and it holds whole idea for application and it's features.
+
+## Getting Started
+
+## Contributing
+
+## Licence
