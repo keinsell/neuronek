@@ -103,6 +103,15 @@ dist
 # TernJS port file
 .tern-port
 
-.turbo
+#MacOS
 .DS_Store
+
+# Turbo
+.turbo
+
+# Env
 .env
+
+# Devenv
+.devenv*
+devenv.local.nix
