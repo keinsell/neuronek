@@ -23,6 +23,7 @@
 		"test": "c8 ava"
 	},
 	"dependencies": {
+		"@internal/common": "*",
 		"@logtail/node": "0.1.14",
 		"@logtail/winston": "0.1.14",
 		"@prisma/client": "latest",
@@ -60,12 +61,12 @@
 		"type-fest": "3.4.0",
 		"unitmath": "^0.8.8",
 		"winston": "3.8.2",
-		"@internal/common": "*",
 		"zxcvbn": "4.4.2"
 	},
 	"devDependencies": {
 		"@ava/typescript": "3.0.1",
 		"@faker-js/faker": "7.6.0",
+		"@internal/tsconfig": "*",
 		"@stoplight/spectral-cli": "6.6.0",
 		"@swc/cli": "0.1.57",
 		"@swc/core": "1.3.19",
@@ -90,7 +91,6 @@
 		"nodemon": "2.0.20",
 		"pm2": "5.2.2",
 		"sinon": "14.0.2",
-		"@internal/tsconfig": "*",
 		"tsx": "3.12.1",
 		"typescript": "4.9.3"
 	},

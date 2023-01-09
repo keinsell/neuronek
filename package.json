@@ -28,6 +28,7 @@
     "@changesets/cli": "2.25.2",
     "@commitlint/cli": "17.3.0",
     "@commitlint/config-conventional": "17.3.0",
+    "@internal/prettier-config": "*",
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
     "ava": "5.1.0",
@@ -37,7 +38,6 @@
     "is-ci": "3.0.1",
     "jshint": "2.13.6",
     "lint-staged": "13.0.4",
-    "@internal/prettier-config": "*",
     "rome": "next",
     "tsx": "3.12.1",
     "turbo": "latest",
@@ -49,9 +49,5 @@
   "volta": {
     "node": "18.12.1",
     "yarn": "1.19.2"
-  },
-  "prisma": {
-    "schema": "apps/server/prisma/schema.prisma",
-    "seed": "tsx apps/server/src/infrastructure/prisma/seed.ts"
   }
 }

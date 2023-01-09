@@ -1,15 +1,22 @@
 {
-    "name": "@internal/common",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "type": "module",
-    "version": "0.0.0",
-    "scripts": {
-        "build": "tsup-node src/index.ts --format esm,cjs"
-    },
-    "dependencies": {
-        "@internal/tsconfig": "*",
-        "nanoid": "^4.0.0"
-    }
+  "name": "@internal/common",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup-node src/index.ts --format esm,cjs",
+    "test": "ava"
+  },
+  "dependencies": {
+    "@internal/tsconfig": "*",
+    "ms": "^2.1.3",
+    "nanoid": "^4.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.0.0",
+    "typescript": "^4.4.2",
+    "@types/node": "^16.11.6"
+  }
 }
