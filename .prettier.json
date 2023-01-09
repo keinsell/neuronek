@@ -1,4 +1,4 @@
 {
   "$schema": "http://json.schemastore.org/prettierrc",
-  "extends": "prettier-config"
+  "extends": "@internal/prettier-config"
 }

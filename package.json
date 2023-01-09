@@ -37,7 +37,7 @@
     "is-ci": "3.0.1",
     "jshint": "2.13.6",
     "lint-staged": "13.0.4",
-    "prettier-config": "*",
+    "@internal/prettier-config": "*",
     "rome": "next",
     "tsx": "3.12.1",
     "turbo": "latest",
