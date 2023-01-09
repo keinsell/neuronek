@@ -1,0 +1,13 @@
+{
+    "name": "datastore",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "keywords": [],
+    "license": "ISC",
+    "author": "",
+    "dependencies": {
+      "typescript": "4.9.3"
+    }
+  }
+  
