@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-node",
+  "name": "@internal/eslint-config-node",
   "version": "0.0.0",
   "type": "commonjs",
   "main": "index.js",
