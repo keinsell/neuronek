@@ -1,9 +1,0 @@
-# Motivation of Neuroneek
-
-As 21 y.o guy, I've used a bit of drugs in my life, and by this road I've made some mistakes that didn't neccesarry come from lack of knowledge but come from lossing track of dosages which resulted in moderate abuse for some preoid of time, potential bipolar disorder doesn't help in any way - please do not repeat my mistakes. However, I'm not planning to end my relationship in any way, the thing is to keep such relationship in a "good way" instead "bad way". Research about psychoactive substances especially psychedelics and nootropics was big part of my life and still be. Application is about tracking dosages to have minimal analitics about which substances could potentially impact changes in one's mind, additionally I find such application useful to quit addition - as my nicotine addition is so fucking heavy I do not have clue how to start reducing it I've found way to taper my usage (by setting dosage limit no more than average per day for last 7 days, same for caffeine).
-
-What about knowledge base? I was thinking about integrating PsychonautWiki's API, but I've realized that's not what we really want - in this case we'll build own our database basing on PsychonautWiki's data (along with other relatable sources such as Tripsit, Tripsitter maybe). I really want to use application as data collecting solution which could potentially in some weird way have impact on global knowledge about psychoactive substances and human relations with them.
-
-This application should not encourge you to take any of listed substances as they are illegal in most places at earth, as well they can cause serious injures on one's mental health along with psychical harm. However, if you're supposed to please do them with responsibility.
-
-Time will show what will be going in application, for now it's just dosage tracking application.
