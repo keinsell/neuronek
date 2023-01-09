@@ -2,11 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import {
 	Paginated,
 	PaginatedQueryParameters,
-	Repository,
+
 } from "../../common/lib/persistence/repository";
 import { Ingestion } from "./entity";
 import { PrismaInfrastructre } from "../../infrastructure/prisma";
 import { IngestionMapper } from "./mapper";
+import {Repository} from '@internal/common';
 
 export class IngestionRepository implements Repository<Ingestion> {
 	constructor(

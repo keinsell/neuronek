@@ -60,6 +60,7 @@
 		"type-fest": "3.4.0",
 		"unitmath": "^0.8.8",
 		"winston": "3.8.2",
+		"@internal/common": "*",
 		"zxcvbn": "4.4.2"
 	},
 	"devDependencies": {

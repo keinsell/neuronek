@@ -1,0 +1,15 @@
+{
+    "name": "@internal/common",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "version": "0.0.0",
+    "scripts": {
+        "build": "tsup-node src/index.ts --format esm,cjs"
+    },
+    "dependencies": {
+        "@internal/tsconfig": "*",
+        "nanoid": "^4.0.0"
+    }
+}

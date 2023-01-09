@@ -1,9 +1,5 @@
 import { User } from "./entity";
-import {
-	Paginated,
-	PaginatedQueryParameters,
-	Repository,
-} from "../../common/lib/persistence/repository";
+import {Repository} from '@internal/common';
 import { PrismaClient } from "@prisma/client";
 import { PrismaInfrastructre } from "../../infrastructure/prisma";
 import { UserMapper } from "./mapper";
@@ -77,14 +73,11 @@ export class UserRepository implements Repository<User> {
 	findAll(): Promise<User[]> {
 		throw new Error("Method not implemented.");
 	}
-	findAllPaginated(
-		parameters: PaginatedQueryParameters,
-	): Promise<Paginated<User>> {
-		throw new Error("Method not implemented.");
-	}
+
 	delete(id: string): Promise<void> {
 		throw new Error("Method not implemented.");
 	}
+
 	transaction<T>(callback: () => Promise<T>): Promise<T> {
 		throw new Error("Method not implemented.");
 	}
