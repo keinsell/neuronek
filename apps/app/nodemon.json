@@ -1,0 +1,7 @@
+{
+  "quiet": true,
+  "watch": ["src"],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "tsup-node && node ./dist/index.cjs"
+}
