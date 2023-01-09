@@ -1,3 +1,4 @@
+export { RouteOfAdministrationClassification } from "./route-of-administration/classification";
 export { DosageClassification } from "./dosage/classification";
 
 // trunk-ignore(eslint)
