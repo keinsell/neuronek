@@ -1,4 +1,4 @@
-import { Entity } from "../entity";
+import { Entity } from "../../domain/entity";
 
 /**
  * Mapper is a class that is responsible for mapping between domain and persistence layer.
