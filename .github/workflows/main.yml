@@ -11,7 +11,7 @@ on:
       - release/*
 
 jobs:
-  default:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,19 +24,47 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      # TODO: Linting, formatting
-
-      - name: Build
-        run: yarn build
-
-      - name: Test
-        run: yarn test
-
       # - name: SonarCloud
       #   uses: SonarSource/sonarcloud-github-action@master
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Test
+        run: yarn test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+  release:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
 
       - name: Release
         env:
@@ -44,6 +72,7 @@ jobs:
         run: npx semantic-release
 
   docker:
+    # needs: [release]
     # Build docker image and publish it to github container registry
     runs-on: ubuntu-latest
     steps:
