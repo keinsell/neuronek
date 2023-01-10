@@ -1,3 +1,10 @@
+# [1.0.0-rc.2](https://github.com/keinsell/neuronek/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2023-01-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency typescript to v4.9.4 ([#165](https://github.com/keinsell/neuronek/issues/165)) ([66ba652](https://github.com/keinsell/neuronek/commit/66ba65257bb507d0655830424a7233dfec3dc32a))
+
 # 1.0.0-rc.1 (2023-01-10)
 
 
