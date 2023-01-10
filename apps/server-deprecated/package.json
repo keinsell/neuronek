@@ -19,8 +19,7 @@
 		"format": "prisma format",
 		"postinstall": "yarn db:generate",
 		"lint": "spectral lint oa3.yaml && rome format ./src --write && eslint ./src --fix",
-		"start": "node dist/index.js",
-		"test": "c8 ava"
+		"start": "node dist/index.js"
 	},
 	"dependencies": {
 		"@internal/common": "*",

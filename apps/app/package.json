@@ -22,8 +22,7 @@
     "lint:eslint": "eslint . --ext .ts,.tsx",
     "lint:oas3": "spectral lint oas3.yaml",
     "lint:prettier": "prettier --write .",
-    "start": "node dist/index.js",
-    "test": "c8 ava"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@internal/common": "*",
