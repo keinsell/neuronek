@@ -18,7 +18,10 @@
     "dev": "nodemon",
     "format": "prisma format",
     "postinstall": "yarn db:generate",
-    "lint": "spectral lint oa3.yaml && rome format ./src --write && eslint ./src --fix",
+    "lint": "yarn lint:prettier && yarn lint:eslint && yarn lint:oas3",
+    "lint:eslint": "eslint . --ext .ts,.tsx",
+    "lint:oas3": "spectral lint oas3.yaml",
+    "lint:prettier": "prettier --write .",
     "start": "node dist/index.js",
     "test": "c8 ava"
   },

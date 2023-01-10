@@ -1,36 +1,36 @@
-name: Check & deploy API documentation
-on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
-jobs:
-  deploy-doc:
-    if: ${{ github.event_name == 'push' }}
-    name: Deploy API documentation on Bump
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bump-sh/github-action@v1
-        with:
-          doc: neuronek
-          token: ENoPotercqarXvd9ksqgqAusHQmLrLYZ
-          file: apps/server/oas3.yaml
-  api-diff:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Check API diff on Bump
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bump-sh/github-action@v1
-        with:
-          doc: neuronek
-          token: ENoPotercqarXvd9ksqgqAusHQmLrLYZ
-          file: apps/server/oas3.yaml
-          command: diff
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+# name: Check & deploy API documentation
+# on:
+#   push:
+#     branches:
+#       - main
+#       - master
+#   pull_request:
+#     branches:
+#       - main
+#       - master
+# jobs:
+#   deploy-doc:
+#     if: ${{ github.event_name == 'push' }}
+#     name: Deploy API documentation on Bump
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: bump-sh/github-action@v1
+#         with:
+#           doc: neuronek
+#           token: ...
+#           file: apps/server/oas3.yaml
+#   api-diff:
+#     if: ${{ github.event_name == 'pull_request' }}
+#     name: Check API diff on Bump
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: bump-sh/github-action@v1
+#         with:
+#           doc: neuronek
+#           token: ...
+#           file: apps/server/oas3.yaml
+#           command: diff
+#         env:
+#           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

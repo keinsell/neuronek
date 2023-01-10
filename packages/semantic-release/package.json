@@ -1,0 +1,31 @@
+{
+  "name": "semantic-release-config",
+  "version": "0.1.6-alpha.0",
+  "description": "",
+  "homepage": "https://github.com/keinsell/neuronek/packages/semantic-release#readme",
+  "bugs": {
+    "url": "https://github.com/keinsell/neuroneek/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keinsell/neuroneek.git"
+  },
+  "license": "MIT",
+  "author": "Jakub Olan <keinsell@protonmail.com>",
+  "main": "lib/index.json",
+  "files": [
+    "lib/index.json"
+  ],
+  "dependencies": {
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.2",
+    "@semantic-release/npm": "^9.0.0",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "commitizen": "^4.1.2"
+  },
+  "peerDependencies": {
+    "semantic-release": "^17.1.1"
+  }
+}

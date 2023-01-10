@@ -39,6 +39,7 @@
     "jshint": "2.13.6",
     "lint-staged": "13.0.4",
     "rome": "next",
+    "semantic-release-config": "*",
     "tsx": "3.12.1",
     "turbo": "latest",
     "typescript": "4.9.3"
