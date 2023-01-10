@@ -6,6 +6,7 @@
     },
     "test": {
       "inputs": ["src/**/*.test.ts"],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "build": {
