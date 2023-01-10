@@ -1,4 +1,29 @@
 {
-  "extends": "semantic-release-config",
-  "repositoryUrl": "https://github.com/keinsell/neuronek"
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    ["@semantic-release/release-notes-generator"],
+    ["@semantic-release/changelog"],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    "@semantic-release/github",
+    [
+      "@semantic-release/git",
+      {
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
+  ],
+  "branches": [
+    { "name": "release/stable", "prerelease": false },
+    { "name": "main", "prerelease": "rc" }
+  ]
 }
