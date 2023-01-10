@@ -31,9 +31,9 @@ RUN apk update && apk add --update python3 make g++
 WORKDIR /app
 
 # Copy source to build directory
-COPY --from=builder /app/out/json/ .
+# COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
-COPY --from=builder /app/out/full/ .
+# COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
 COPY turbo.json turbo.json
 
