@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npx turbo run build --filter=server"
+  },
+  "deploy": {
+    "startCommand": "npx turbo run start --filter=server",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
