@@ -22,7 +22,8 @@
     "lint:eslint": "eslint . --ext .ts,.tsx",
     "lint:oas3": "spectral lint oas3.yaml",
     "lint:prettier": "prettier --write .",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "ava"
   },
   "dependencies": {
     "@internal/common": "*",
@@ -82,19 +83,21 @@
     "@types/jsonwebtoken": "8.5.9",
     "@types/md5": "2.3.2",
     "@types/ms": "0.7.31",
+    "@types/node": "^18.11.18",
     "@types/nodemon": "1.19.2",
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.8",
     "@types/sinon": "10.0.13",
     "@types/zxcvbn": "4.4.1",
     "@typescript-eslint/parser": "5.48.1",
-    "ava": "5.1.0",
+    "ava": "^5.1.0",
     "c8": "7.12.0",
     "eslint": "8.31.0",
     "execa": "6.1.0",
     "nodemon": "2.0.20",
     "pm2": "5.2.2",
     "sinon": "14.0.2",
+    "ts-node": "^10.9.1",
     "tsx": "3.12.2",
     "typescript": "4.9.4"
   },
