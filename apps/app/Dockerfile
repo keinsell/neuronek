@@ -3,7 +3,7 @@ RUN apk update
 # Set working directory
 WORKDIR /app
 
-RUN yarn global add turbo
+RUN npm i -g turbo
 
 COPY . .
 
