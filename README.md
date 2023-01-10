@@ -8,7 +8,7 @@ My life was kinda fullfilled with massive amounts of simulants since 2017 (Caffe
 
 ## Documentation
 
-Project documentation is available in [Craft](https://www.craft.do/space-invite/?id=aVL1gPeJLrKLPUDF6qiCxdu) and it holds whole idea for application and it's features.
+Project documentation is available in [Notion](https://www.notion.so/neuronek/invite/3893a7eb16843e642e0155a1119216a84b343d3b) and it holds whole idea for application and it's features.
 
 ## Getting Started
 
