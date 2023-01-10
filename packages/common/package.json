@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@internal/tsconfig": "*",
+    "js-quantities": "^1.7.6",
     "ms": "^2.1.3",
-    "nanoid": "^4.0.0"
+    "nanoid": "^4.0.0",
+    "unitmath": "^0.8.8"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
