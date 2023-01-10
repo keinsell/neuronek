@@ -7,7 +7,7 @@ RUN yarn global add turbo
 
 COPY . .
 
-RUN turbo prune --scope=server --docker
+RUN turbo prune --scope=app --docker
 
 #
 #
@@ -26,7 +26,7 @@ COPY .gitignore .gitignore
 COPY turbo.json turbo.json
 
 RUN yarn install
-RUN yarn turbo run build --filter=server...
+RUN yarn turbo run build --filter=app...
 
 #
 #
@@ -43,4 +43,4 @@ RUN adduser --system --uid 1001 runner
 USER runner
 COPY --from=installer /app .
 
-CMD node apps/server/dist/index.js
+CMD node apps/app/dist/index.js
