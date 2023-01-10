@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Prepare source for server
 COPY . .
-RUN npx turbo prune --scope=server --docker
+# RUN npx turbo prune --scope=server --docker
 
 # Use installer image to install packages
 FROM node:alpine AS installer
