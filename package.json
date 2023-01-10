@@ -40,7 +40,7 @@
     "lint-staged": "13.1.0",
     "rome": "next",
     "semantic-release-config": "*",
-    "tsx": "3.12.1",
+    "tsx": "3.12.2",
     "turbo": "latest",
     "typescript": "4.9.4"
   },
