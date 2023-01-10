@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Substance",
+  "definitions": {
+    "Substance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "commonNomenclature": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "substitutiveNomenclature": {
+          "type": "string"
+        },
+        "systematicNomenclature": {
+          "type": "string"
+        },
+        "psychoactiveClass": {
+          "type": "string"
+        },
+        "chemicalClass": {
+          "type": "string"
+        },
+        "routesOfAdministration": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoutesOfAdministration"
+          }
+        }
+      },
+      "required": [
+        "$schema",
+        "chemicalClass",
+        "commonNomenclature",
+        "name",
+        "psychoactiveClass",
+        "routesOfAdministration",
+        "substitutiveNomenclature",
+        "systematicNomenclature"
+      ],
+      "title": "Substance"
+    },
+    "RoutesOfAdministration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "routeClassification": {
+          "type": "string"
+        },
+        "bioavailability": {
+          "type": "number"
+        },
+        "theresholdDosage": {
+          "type": "string"
+        },
+        "lightDosage": {
+          "type": "string"
+        },
+        "commonDosage": {
+          "type": "string"
+        },
+        "strongDosage": {
+          "type": "string"
+        },
+        "heavyDosage": {
+          "type": "string"
+        },
+        "onsetDuration": {
+          "type": "string"
+        },
+        "comeupDuration": {
+          "type": "string"
+        },
+        "peakDuration": {
+          "type": "string"
+        },
+        "offsetDuration": {
+          "type": "string"
+        },
+        "afterEffectsDuration": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "afterEffectsDuration",
+        "bioavailability",
+        "comeupDuration",
+        "commonDosage",
+        "heavyDosage",
+        "lightDosage",
+        "offsetDuration",
+        "onsetDuration",
+        "peakDuration",
+        "routeClassification",
+        "strongDosage",
+        "theresholdDosage"
+      ],
+      "title": "RoutesOfAdministration"
+    }
+  }
+}

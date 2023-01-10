@@ -1,7 +1,7 @@
-export { RouteOfAdministrationClassification } from "./route-of-administration/classification";
-export { DosageClassification } from "./dosage/classification";
+export { RouteOfAdministrationClassification } from "./src/model/route-of-administration/classification";
+export { DosageClassification } from "./src/model/dosage/classification";
 
-import { PhaseClassification } from "./phase/classification.js";
+import { PhaseClassification } from "./src/model/phase/classification.js";
 // trunk-ignore(eslint)
 import { Substance } from "./types";
 

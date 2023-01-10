@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schema/substance.schema.json",
+  "name": "Amphetamine",
+  "commonNomenclature": ["Speed"],
+  "substitutiveNomenclature": "",
+  "systematicNomenclature": "",
+  "psychoactiveClass": "stimulant",
+  "chemicalClass": "",
+  "routesOfAdministration": [
+    {
+      "routeClassification": "oral",
+      "bioavailability": 0.8,
+      "theresholdDosage": "2.5mg",
+      "lightDosage": "5mg",
+      "commonDosage": "10mg",
+      "strongDosage": "20mg",
+      "heavyDosage": "40mg",
+      "onsetDuration": "15-30min",
+      "comeupDuration": "1-2h",
+      "peakDuration": "1-2h",
+      "offsetDuration": "4-6h",
+      "afterEffectsDuration": "4-6h"
+    }
+  ]
+}
