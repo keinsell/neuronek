@@ -49,29 +49,28 @@ jobs:
       - name: Build
         run: yarn build
 
-  release:
-    needs: [test, build]
-    runs-on: ubuntu-latest
-    # If it's on PR skip
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
+  # release:
+  #   needs: [test, build]
+  #   runs-on: ubuntu-latest
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: yarn install
+  #     - name: Setup Node.js environment
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.x
 
-      # - name: Build
-      #   run: yarn build
+  #     - name: Install dependencies
+  #       run: yarn install
 
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+  #     # - name: Build
+  #     #   run: yarn build
+
+  #     - name: Release
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: npx semantic-release
 
   docker:
     # needs: [release]
