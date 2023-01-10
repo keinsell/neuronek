@@ -9,8 +9,14 @@
 # Use installer image to install packages
 FROM node:alpine AS installer
 
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
 # Install build packages for native node modules
-RUN apk update && apk add --update python3 make g++
+RUN apk update && apk add --update \
+  python3 \
+  make \
+  g++
 
 WORKDIR /app
 
