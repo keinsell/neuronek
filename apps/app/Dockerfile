@@ -1,13 +1,12 @@
 FROM node:alpine AS builder
-RUN apk update
-# Set working directory
-WORKDIR /app
 
-RUN npm i -g turbo
+RUN apk update
+
+WORKDIR /app
 
 COPY . .
 
-RUN turbo prune --scope=app --docker
+RUN npx turbo prune --scope=app --docker
 
 #
 #
