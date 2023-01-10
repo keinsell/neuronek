@@ -18,11 +18,11 @@ WORKDIR /app
 COPY package.json package.json
 COPY yarn.lock yarn.lock
 
-# Install necessary packages
-RUN yarn install
-
 # Copy source to build directory
 COPY . .
+
+# Install necessary packages
+RUN yarn install
 
 # Build necessary packages
 RUN yarn turbo run build --filter=server...
