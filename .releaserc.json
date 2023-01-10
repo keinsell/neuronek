@@ -1,3 +1,4 @@
 {
-  "extends": "semantic-release-config"
+  "extends": "semantic-release-config",
+  "repositoryUrl": "https://github.com/keinsell/neuronek"
 }
