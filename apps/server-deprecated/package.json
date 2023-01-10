@@ -7,7 +7,6 @@
 	"author": "",
 	"type": "module",
 	"scripts": {
-		"build": "tsoa spec-and-routes && tsup-node src/index.ts --format esm,cjs",
 		"db:generate": "prisma generate",
 		"db:migrate:deploy": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
@@ -15,7 +14,6 @@
 		"db:push:force": "prisma db push --accept-data-loss",
 		"db:seed": "tsx src/seed.ts",
 		"db:studio": "prisma studio",
-		"dev": "nodemon",
 		"format": "prisma format",
 		"postinstall": "yarn db:generate",
 		"lint": "spectral lint oa3.yaml && rome format ./src --write && eslint ./src --fix",
