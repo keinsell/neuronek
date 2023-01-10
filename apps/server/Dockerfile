@@ -6,39 +6,30 @@
 #     context: .
 #     dockerfile: ./apps/server/Dockerfile
 
-# Use builder image to prepare source from monorepo
-FROM node:alpine AS builder
-
-# Update system packages
-RUN apk update
-
-# Set working directory
-WORKDIR /app
-
-# Install turbo
-RUN npm i -g turbo
-
-# Prepare source for server
-COPY . .
-RUN npx turbo prune --scope=server --docker
-
 # Use installer image to install packages
 FROM node:alpine AS installer
 
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
 # Install build packages for native node modules
-RUN apk update && apk add --update python3 make g++
+RUN apk update && apk add --update \
+  python3 \
+  make \
+  g++
 
 WORKDIR /app
 
 # Copy source to build directory
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
-COPY --from=builder /app/out/full/ .
-COPY .gitignore .gitignore
-COPY turbo.json turbo.json
+COPY package.json package.json
+COPY yarn.lock yarn.lock
+
+# Copy source to build directory
+COPY . .
 
 # Install necessary packages
 RUN yarn install
+
 # Build necessary packages
 RUN yarn turbo run build --filter=server...
 
