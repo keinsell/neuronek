@@ -16,11 +16,11 @@ RUN apk update
 WORKDIR /app
 
 # Install turbo
-RUN yarn global add turbo
+# RUN yarn global add turbo
 
 # Prepare source for server
 COPY . .
-RUN turbo prune --scope=server --docker
+RUN npx turbo prune --scope=server --docker
 
 # Use installer image to install packages
 FROM node:alpine AS installer
@@ -41,7 +41,6 @@ COPY turbo.json turbo.json
 RUN yarn install
 # Build necessary packages
 RUN yarn turbo run build --filter=server...
-
 
 # Use runner image to run app with limited permissions
 FROM node:alpine AS runner
