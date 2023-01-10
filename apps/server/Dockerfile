@@ -6,22 +6,6 @@
 #     context: .
 #     dockerfile: ./apps/server/Dockerfile
 
-# Use builder image to prepare source from monorepo
-FROM node:alpine AS builder
-
-# Update system packages
-RUN apk update
-
-# Set working directory
-WORKDIR /app
-
-# Install turbo
-RUN npm i -g turbo
-
-# Prepare source for server
-COPY . .
-RUN npx turbo prune --scope=server --docker
-
 # Use installer image to install packages
 FROM node:alpine AS installer
 
@@ -31,14 +15,15 @@ RUN apk update && apk add --update python3 make g++
 WORKDIR /app
 
 # Copy source to build directory
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
-COPY --from=builder /app/out/full/ .
-COPY .gitignore .gitignore
-COPY turbo.json turbo.json
+COPY package.json package.json
+COPY yarn.lock yarn.lock
 
 # Install necessary packages
 RUN yarn install
+
+# Copy source to build directory
+COPY . .
+
 # Build necessary packages
 RUN yarn turbo run build --filter=server...
 
