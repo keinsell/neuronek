@@ -19,6 +19,7 @@
     },
     "dev": {
       "cache": false,
+      "dependsOn": ["^build"],
       "inputs": ["src/**/*.ts", "lib/**/*.ts"]
     },
     "db:migrate:deploy": {
