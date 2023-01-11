@@ -29,7 +29,7 @@
     "@internal/common": "*",
     "@internal/datastore": "*",
     "@logtail/node": "0.1.14",
-    "@logtail/winston": "0.1.14",
+    "@logtail/winston": "0.1.15",
     "@prisma/client": "latest",
     "@tinyhttp/app": "2.0.28",
     "argon2": "0.30.2",

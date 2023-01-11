@@ -879,12 +879,19 @@
   dependencies:
     js "^0.1.0"
 
-"@logtail/winston@0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@logtail/winston/-/winston-0.1.14.tgz#96c52a02d9c00bdd54468dd9fe00ba20d060f6fc"
-  integrity sha512-EpDzA7nLPp2vJYkAeOGctocYEZmYIqV+kXs2cIj0fwyhnaoc2+yQLDKxNrMODvcmUS6XvRo7VZPOujHqgQXV1g==
+"@logtail/types@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@logtail/types/-/types-0.1.15.tgz#af7ba20da2c9bf2f9be78ee1b974997dfbbce0b3"
+  integrity sha512-RL12CP1Ilqj3Eo8CdXioHpo/j3UinDPQp+qgOBDX0+er+D6yaR5U2lPlA4LVsivALc/MWEIiGQdPYH1yWD7HPw==
   dependencies:
-    "@logtail/types" "^0.1.12"
+    js "^0.1.0"
+
+"@logtail/winston@0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@logtail/winston/-/winston-0.1.15.tgz#53447865652e3ca7711adc37a00cc1d7dfa9f16a"
+  integrity sha512-/W5kop2hccCWYIabrKHLrF3LvskTrNSn4tzgjBshckIsEPBs3gQC/8wIeB0WaoErE8D16tnb68QoCy7jwfGqSQ==
+  dependencies:
+    "@logtail/types" "^0.1.15"
     winston-transport "^4.3.0"
 
 "@manypkg/find-root@^1.1.0":
@@ -2351,27 +2358,6 @@
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz#4db9bfaf276ef4fdc3608194fab8b8f2fd1c44f9"
   integrity sha512-mM4TkDpA9oixqg1Fv2vVpOFyIVLJjm5x4k0V+K/rEsizfjD7Tk7LKk3GTtbB7KCfP0FEHQtsZqFxYA0+sijNVg==
-  dependencies:
-    "@types/node" "*"
-
-"@types/keyv@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
-  integrity sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
-  dependencies:
-    "@types/node" "*"
-
-"@types/keyv@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
-  integrity sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
-  dependencies:
-    "@types/node" "*"
-
-"@types/keyv@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
-  integrity sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
   dependencies:
     "@types/node" "*"
 
