@@ -1,6 +1,8 @@
 import argon2 from "argon2";
 import { Hasher } from "../index.js";
+import { Service } from "diod";
 
+@Service()
 export class Argon2Hasher implements Hasher {
   private readonly options: argon2.Options;
 

@@ -4566,6 +4566,11 @@ diff@^5.0.0, diff@^5.1.0:
   resolved "https://registry.yarnpkg.com/diff/-/diff-5.1.0.tgz#bc52d298c5ea8df9194800224445ed43ffc87e40"
   integrity sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==
 
+diod@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/diod/-/diod-2.0.0.tgz#11f389ed77be13f027b8ff5fddca351170c01c4f"
+  integrity sha512-xnlnXzLcRG2KmB32wTGz+gsPUuguzaPz9xFuFT9M3iqXBbMk7JkYVeg5/MmbUNyiaWJu8DTn9RPmtAGthLhFgA==
+
 dir-glob@^3.0.0, dir-glob@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/dir-glob/-/dir-glob-3.0.1.tgz#56dbf73d992a4a93ba1584f4534063fd2e41717f"
@@ -10052,7 +10057,7 @@ redis-parser@^3.0.0:
   dependencies:
     redis-errors "^1.0.0"
 
-reflect-metadata@0.1.13, reflect-metadata@^0.1.13, reflect-metadata@^0.1.9:
+reflect-metadata@^0.1.13, reflect-metadata@^0.1.9:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==

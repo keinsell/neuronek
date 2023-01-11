@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Argon2Hasher } from "./security/hasher/argon2/argon2.hasher.js";
 import { Hasher } from "./security/hasher/index.js";
 import { MassRange } from "./utilities/mass-range/mass-range.js";

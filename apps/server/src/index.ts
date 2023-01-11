@@ -1,12 +1,16 @@
+import "reflect-metadata";
+
 import { Password } from "./modules/user/value-objects/password/password.vo.js";
 import { User } from "./modules/user/user.entity.js";
-import { Argon2Hasher } from "@internal/common";
+import { Container } from "./container.js";
+import { Hasher } from "@internal/common";
 
-console.log("Hello World!");
+const user = User.create({
+  username: "test",
+  password: await Password.fromPlain(
+    "asddasasdasddsasad",
+    Container.get(Hasher)
+  ),
+});
 
-console.log(
-  User.create({
-    username: "test",
-    password: await Password.fromPlain("khjkjhgjhkjkhl", new Argon2Hasher()),
-  })
-);
+console.log(user);
