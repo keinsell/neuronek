@@ -1,10 +1,7 @@
 # Neuronek
 
-Neuronek is application dedicated for tracking usage of psychoactive substances in favor of harm-reduction, self-improvement and recreational drug usage.
+Neuronek is journal that aims to help with cyclic usage of nootropic/adaptogenic drugs.
 
-## Why Neuronek?
-
-My life was kinda fullfilled with massive amounts of simulants since 2017 (Caffeine and Nicotine) where Caffeine had significant impact on health of my body (doing overnights day by day and making sleep deprivation even more deep), this was caused by two points where first one was lack of information about ingested substance and no essential understanding of substance mechanism of action and second problem was with keeping track of my caffeine intake. I've decided to resolve these problems by building application, this have on mind to keep track of my supplements (planning and intakes) and inform me of everything that's important to me.
 
 ## Documentation
 
