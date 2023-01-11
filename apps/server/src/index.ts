@@ -1,16 +1,15 @@
 import "reflect-metadata";
 
-import { Password } from "./modules/user/value-objects/password/password.vo.js";
-import { User } from "./modules/user/user.entity.js";
 import { Container } from "./container.js";
-import { Hasher } from "@internal/common";
+import { RegisterUserService } from "./modules/user/commands/register-user/register-user.service.js";
+import { RegisterUserCommand } from "./modules/user/commands/register-user/register-user.command.js";
 
-const user = User.create({
-  username: "test",
-  password: await Password.fromPlain(
-    "asddasasdasddsasad",
-    Container.get(Hasher)
-  ),
-});
+const response = await Container.get(RegisterUserService).execute(
+  new RegisterUserCommand({ username: "adssad", password: "asdasd" })
+);
 
-console.log(user);
+if (response.isOk()) {
+  console.log(response.value);
+} else {
+  console.log(response.error);
+}

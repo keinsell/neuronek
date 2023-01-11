@@ -1,6 +1,8 @@
 import { Repository } from "@internal/common";
 import { User } from "./user.entity.js";
+import { Service } from "diod";
 
+@Service()
 export class UserRepository implements Repository<User> {
   save(entity: User): Promise<User> {
     throw new Error("Method not implemented.");

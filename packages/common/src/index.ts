@@ -1,5 +1,6 @@
 import "reflect-metadata";
 
+export { Exception } from "./domain/exception/index.js";
 export { Argon2Hasher } from "./security/hasher/argon2/argon2.hasher.js";
 export { Hasher } from "./security/hasher/index.js";
 export { MassRange } from "./utilities/mass-range/mass-range.js";
