@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "@internal/tsconfig": "*",
+    "diod": "^2.0.0",
     "js-quantities": "^1.7.6",
     "ms": "^2.1.3",
     "nanoid": "^4.0.0",
-    "unitmath": "^0.8.8",
-      "diod": "^2.0.0"
+    "unitmath": "^0.8.8"
   },
   "devDependencies": {
+    "@swc/helpers": "^0.4.14",
     "@types/node": "^16.11.6",
     "ava": "^5.1.0",
     "ts-node": "^10.0.0",
