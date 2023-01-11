@@ -13,10 +13,10 @@ generator client {
 model User {
   id          String      @id @default(cuid())
   username    String      @unique
+  password    String
   dateOfBirth DateTime?
   weight      Int?
   height      Int?
-  recoveryKey String      @unique
   Ingestion   Ingestion[]
 }
 

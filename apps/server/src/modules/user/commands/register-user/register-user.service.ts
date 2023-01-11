@@ -2,7 +2,7 @@ import { CommandHandler, Hasher } from "@internal/common";
 import { RegisterUserCommand } from "./register-user.command.js";
 import { User } from "../../user.entity.js";
 import { UserRepository } from "../../user.repository.js";
-import { Result, ResultAsync, errAsync, okAsync } from "neverthrow";
+import { Result, errAsync, okAsync } from "neverthrow";
 import { UserProvidedWeakPasswordException } from "../../exceptions/weak-password.exception.js";
 import { Password } from "../../value-objects/password/password.vo.js";
 import { Service } from "diod";
@@ -35,6 +35,10 @@ export class RegisterUserService
       username: command.username,
       password,
     });
+
+    // TODO: Check if user with such username already exists
+    // TODO: Throw exception if user with such username already exists
+    // TODO: Save user in database
 
     okAsync(user);
   }

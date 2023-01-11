@@ -1,9 +1,12 @@
 import { Repository } from "@internal/common";
 import { User } from "./user.entity.js";
 import { Service } from "diod";
+import { UserMapper } from "./user.mapper.js";
 
 @Service()
 export class UserRepository implements Repository<User> {
+  constructor(private readonly userMapper: UserMapper) {}
+
   save(entity: User): Promise<User> {
     throw new Error("Method not implemented.");
   }

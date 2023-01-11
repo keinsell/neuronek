@@ -10,6 +10,10 @@ export class Password extends ValueObject<string> {
     return this.hasher.compare(password, this.hash);
   }
 
+  public toString(): string {
+    return this.hash;
+  }
+
   /**
    * Creates a new password from plain text.
    * @param password The plain text password.
@@ -37,13 +41,7 @@ export class Password extends ValueObject<string> {
    * @returns The password.
    * @throws {Error} If the hash is invalid.
    */
-  public static async fromHash(
-    hash: string,
-    hasher: Hasher
-  ): Promise<Password> {
-    if (!(await hasher.isSupported(hash))) {
-      throw new Error("Hash is not supported");
-    }
+  public static fromHash(hash: string, hasher: Hasher): Password {
     return new Password(hash, hasher);
   }
 }

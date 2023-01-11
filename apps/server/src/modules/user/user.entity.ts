@@ -16,4 +16,12 @@ export class User extends Entity<UserProperties> {
   public static create(properties: UserProperties): User {
     return new User(properties);
   }
+
+  public get username(): string {
+    return this.properties.username;
+  }
+
+  public get password(): Password {
+    return this.properties.password;
+  }
 }
