@@ -31,7 +31,7 @@
     "@logtail/node": "0.1.15",
     "@logtail/winston": "0.1.15",
     "@prisma/client": "latest",
-    "@tinyhttp/app": "2.0.28",
+    "@tinyhttp/app": "2.0.29",
     "argon2": "0.30.3",
     "body-parser": "^1.20.1",
     "chrono-node": "2.5.0",
