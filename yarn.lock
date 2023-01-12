@@ -169,7 +169,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.20.7":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.20.7.tgz#66fe23b3c8569220817d5feb8b9dcdc95bb4f71b"
   integrity sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg==
@@ -230,7 +230,7 @@
     debug "^4.1.0"
     globals "^11.1.0"
 
-"@babel/types@^7.18.6", "@babel/types@^7.19.0", "@babel/types@^7.20.2", "@babel/types@^7.20.7":
+"@babel/types@^7.0.0", "@babel/types@^7.18.6", "@babel/types@^7.19.0", "@babel/types@^7.20.2", "@babel/types@^7.20.7":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.20.7.tgz#54ec75e252318423fc07fb644dc6a58a64c09b7f"
   integrity sha512-69OnhBxSSgK0OzTJai4kyPDiKTIe3j+ctaHdIGVbRahTLAT7L3R9oeXHC2aVSuGYt3cVnoAMDmOCgJ2yaiLMvg==
@@ -832,40 +832,35 @@
     methods "^1.1.2"
     path-to-regexp "^6.2.1"
 
-"@logtail/core@^0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@logtail/core/-/core-0.1.12.tgz#e5b4ffefbcee82b2a3b60623d23399440a68d61d"
-  integrity sha512-h0OPFfgrZ7pUK11wAHYvPmTXtzT8KYFUeQOC7BQX0mIJG8cgWGEHJTLVtdcp+gce0EqO5/61NczLhjx3T4tacA==
+"@logtail/core@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@logtail/core/-/core-0.1.15.tgz#fed2584afca4b16935f85c7ad354e2e7613c36d3"
+  integrity sha512-ORyn4VcbVtCNDIYOLFe8SscCbL1gb69xWyve1A5nn47yS3oOXUWfRrbfbMCZgrqmJqFrw5IQdqIk8rq30jAXdw==
   dependencies:
-    "@logtail/tools" "^0.1.12"
-    "@logtail/types" "^0.1.12"
+    "@logtail/tools" "^0.1.15"
+    "@logtail/types" "^0.1.15"
 
-"@logtail/node@0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@logtail/node/-/node-0.1.14.tgz#5df0130ad7975fa2520ba2b643416982683e49ca"
-  integrity sha512-vbK/LwX0Z9p7iRcbk0nW0mYoxAKp4V+9VSKBB3E77ap+FQgsnCz9fZYihMg/eiThGgHqb7wfGLaKQJ2REiQK7A==
+"@logtail/node@0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@logtail/node/-/node-0.1.15.tgz#3437164d473d9301d0d37379508c495ffbf088c0"
+  integrity sha512-bBFBdZJ0MKzLfbh0JgMMkq6/IRbjVtWNbrklZkek2oarZ+jEgnqylE1Byd0mzde3MmWKIICoF6aVkZUEjvkl3w==
   dependencies:
-    "@logtail/core" "^0.1.12"
-    "@logtail/types" "^0.1.12"
+    "@logtail/core" "^0.1.15"
+    "@logtail/types" "^0.1.15"
     "@msgpack/msgpack" "^2.5.1"
+    "@types/babel__core" "7.0.4"
+    "@types/babel__traverse" "7.0.4"
     "@types/stack-trace" "^0.0.29"
     cross-fetch "^3.0.4"
     minimatch "^3.0.4"
     stack-trace "^0.0.10"
 
-"@logtail/tools@^0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@logtail/tools/-/tools-0.1.12.tgz#5484313ff1d2409dc8afbc9f5a499c510fed6063"
-  integrity sha512-lKXq1gaW63rGsCbSOhLOPeBovvc2RyNaMRHanWJcOC/nTIHj46JNIh+TbINre13PKn473JigZ7yXys35V8K3Vw==
+"@logtail/tools@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@logtail/tools/-/tools-0.1.15.tgz#8476b081fe27264f469007fffc9efadcba3d9c3d"
+  integrity sha512-xg3fibF05Q7fv1KEQ4wIkfq+oLeMWj0Jju4sc/1Cs2/ycMe0vLYONVk3Y7ZZl6CG9qJ5ezGcBE4teWYwJkNmMw==
   dependencies:
-    "@logtail/types" "^0.1.12"
-
-"@logtail/types@^0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@logtail/types/-/types-0.1.12.tgz#af12897c4710ebac76c2e2a5a72af5c6d5d9220b"
-  integrity sha512-PnMweu6oyfBCn3/iLfQBf+tTaOIle4gRUFuRnqze72kR5CKFlBAq3h4Yur3KRiDtYJcT8H+x1kZWZtC/xdAYAg==
-  dependencies:
-    js "^0.1.0"
+    "@logtail/types" "^0.1.15"
 
 "@logtail/types@^0.1.15":
   version "0.1.15"
@@ -2216,6 +2211,21 @@
     promise.any "^2.0.5"
     reflect-metadata "^0.1.13"
     validator "^13.7.0"
+
+"@types/babel__core@7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.0.4.tgz#14b30c11113bad353cabfaea73e327b48edb0f0e"
+  integrity sha512-2Y2RK1BN5BRFfhneGfQA8mmFmTANbzGgS5uQPluoRqGNWb6uAcefqxzNbqgxPpmPkLqKapQfmYcyyl5iAQV+fA==
+  dependencies:
+    "@babel/parser" "^7.1.0"
+    "@babel/types" "^7.0.0"
+
+"@types/babel__traverse@7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.0.4.tgz#de652399bd8493ab712e4d6b68031b7a2f72ad5f"
+  integrity sha512-2vARZYqR4Flf59WtqMfa9GgbOjK04xLZaN9+CMf7Cs+4cAhxZBP3K9LYRzsWxOQe402VvqX9+7DdXxB72ujEOg==
+  dependencies:
+    "@babel/types" "^7.0.0"
 
 "@types/body-parser@*":
   version "1.19.2"

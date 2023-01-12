@@ -28,7 +28,7 @@
   "dependencies": {
     "@internal/common": "*",
     "@internal/datastore": "*",
-    "@logtail/node": "0.1.14",
+    "@logtail/node": "0.1.15",
     "@logtail/winston": "0.1.15",
     "@prisma/client": "latest",
     "@tinyhttp/app": "2.0.28",
