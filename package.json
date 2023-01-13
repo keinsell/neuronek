@@ -12,5 +12,8 @@
   "volta": {
     "node": "19.4.0",
     "yarn": "4.0.0-rc.35"
+  },
+  "devDependencies": {
+    "turbo": "^1.7.0"
   }
 }
