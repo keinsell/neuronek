@@ -1,5 +1,6 @@
-import { createHash } from "../shared.common/hashing/hash.service.js";
-import { User } from "../shared.domain/modules/user/user.entity.js";
+import { prisma } from "../shared.infrastructure/infrastructure.prisma/prisma.infrastructure.js";
+import { createHash } from "./service.create-hash/create-hash.service.js";
+import { User } from "@prisma/client";
 
 interface CreateUserRequest {
   username: string;
@@ -9,8 +10,10 @@ interface CreateUserRequest {
 export async function createUser(payload: CreateUserRequest): Promise<User> {
   const hashedPassword = await createHash(payload.password);
 
-  return {
-    username: payload.username,
-    password: hashedPassword,
-  };
+  return await prisma.user.create({
+    data: {
+      username: payload.username,
+      password: hashedPassword,
+    },
+  });
 }

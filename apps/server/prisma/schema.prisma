@@ -16,7 +16,7 @@ model User {
   dateOfBirth DateTime?
   weight      Int?
   height      Int?
-  recoveryKey String      @unique
+  password    String
   Ingestion   Ingestion[]
 }
 
