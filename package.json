@@ -13,7 +13,11 @@
     "node": "19.4.0",
     "yarn": "4.0.0-rc.35"
   },
+  "scripts": {
+    "prepare": "husky install"
+  },
   "devDependencies": {
+    "husky": "^8.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "2.3.0",
     "prettier-plugin-prisma": "4.8.0",
