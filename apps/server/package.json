@@ -61,7 +61,7 @@
     "react": "^18.2.0",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.11",
-    "routing-controllers": "0.10.0",
+    "routing-controllers": "0.10.1",
     "runtypes": "6.6.0",
     "shallow-equal-object": "1.1.1",
     "superstruct": "1.0.3",
