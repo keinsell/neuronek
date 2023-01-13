@@ -11,6 +11,8 @@ interface LoginUserRequest {
 export async function loginUser(
   payload: LoginUserRequest
 ): Promise<User & { jwt_token: string }> {
+  // TODO(T-31): Add UserRepository
+  // TODO(T-32): Add UserEntity
   const user = await prisma.user.findUnique({
     where: {
       username: payload.username,

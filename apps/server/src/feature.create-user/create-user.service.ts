@@ -23,6 +23,8 @@ export async function createUser(
     throw new Error("Username is already taken");
   }
 
+  // TODO(T-31): Add UserRepository
+  // TODO(T-32): Add UserEntity
   const user = await prisma.user.create({
     data: {
       username: payload.username,
