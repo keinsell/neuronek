@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "apollographql.vscode-apollo",
+    "graphql.vscode-graphql",
+    "stpn.vscode-graphql"
+  ]
+}

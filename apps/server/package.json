@@ -26,6 +26,7 @@
     "test": "ava"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.4",
     "@internal/datastore": "*",
     "@logtail/node": "0.1.15",
     "@logtail/winston": "0.1.15",
@@ -42,6 +43,9 @@
     "cuid": "2.1.8",
     "diod": "^2.0.0",
     "express-decorators": "1.2.1",
+    "graphql": "^16.6.0",
+    "graphql-request": "^5.1.0",
+    "graphql-tag": "^2.12.6",
     "js-quantities": "1.7.6",
     "jsonwebtoken": "9.0.0",
     "log-process-errors": "10.2.0",
@@ -54,6 +58,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "prisma": "latest",
+    "react": "^18.2.0",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.11",
     "routing-controllers": "0.10.0",
