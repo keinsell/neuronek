@@ -26,7 +26,6 @@
     "test": "ava"
   },
   "dependencies": {
-    "@internal/common": "*",
     "@internal/datastore": "*",
     "@logtail/node": "0.1.15",
     "@logtail/winston": "0.1.15",

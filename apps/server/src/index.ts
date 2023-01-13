@@ -1,16 +1,9 @@
 import "reflect-metadata";
+import { createUser } from "./feature.create-user/create-user.service.js";
 
-import { Password } from "./modules/user/value-objects/password/password.vo.js";
-import { User } from "./modules/user/user.entity.js";
-import { Container } from "./container.js";
-import { Hasher } from "@internal/common";
-
-const user = User.create({
+const user = await createUser({
   username: "test",
-  password: await Password.fromPlain(
-    "asddasasdasddsasad",
-    Container.get(Hasher)
-  ),
+  password: "test",
 });
 
 console.log(user);
