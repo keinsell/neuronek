@@ -1,3 +1,5 @@
+> Japierdole... Nie wiem ile razy będę zmieniać specyfikację tej aplikacji żeby potem wyjebać pół kodu. ~@keinsell
+
 # Neuronek
 
 Neuronek is journal that aims to help with cyclic usage of nootropic/adaptogenic drugs.
