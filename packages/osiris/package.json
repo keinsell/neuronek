@@ -1,6 +1,6 @@
 {
 	"name": "osiris",
-	"description": "...",
+	"description": "🧪 Community-based psychoactive substance database with a focus on safety, harm reduction and education. Including well-designed wrapper for easier data manipulation. Note: This project is still in early development and the data might be inaccurate.",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
