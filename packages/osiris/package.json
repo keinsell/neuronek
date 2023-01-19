@@ -1,0 +1,27 @@
+{
+	"name": "osiris",
+	"description": "...",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"author": {
+		"name": "Jakub Olan",
+		"email": "keinsell@protonmail.com",
+		"url": "https://github.com/keinsell"
+	},
+	"packageManager": "yarn@4.0.0-rc.35",
+	"volta": {
+		"node": "19.4.0",
+		"yarn": "4.0.0-rc.35"
+	},
+	"scripts": {
+		"dev": "nodemon"
+	},
+	"devDependencies": {
+		"nodemon": "2.0.20",
+		"ts-node": "^10.9.1",
+		"tsup": "^6.5.0",
+		"tsx": "3.12.2",
+		"typescript": "^4.9.4"
+	}
+}
