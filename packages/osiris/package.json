@@ -15,9 +15,11 @@
 		"yarn": "4.0.0-rc.35"
 	},
 	"scripts": {
-		"dev": "nodemon"
+		"dev": "nodemon",
+		"build": "tsup-node src --format esm,cjs"
 	},
 	"devDependencies": {
+		"@types/node": "^18.11.18",
 		"nodemon": "2.0.20",
 		"ts-node": "^10.9.1",
 		"tsup": "^6.5.0",

@@ -1,27 +1,31 @@
 {
-  "name": "server",
-  "description": "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "author": {
-    "name": "Jakub Olan",
-    "email": "keinsell@protonmail.com",
-    "url": "https://github.com/keinsell"
-  },
-  "packageManager": "yarn@4.0.0-rc.35",
-  "volta": {
-    "node": "19.4.0",
-    "yarn": "4.0.0-rc.35"
-  },
-  "scripts": {
-    "dev": "nodemon"
-  },
-  "devDependencies": {
-    "nodemon": "2.0.20",
-    "ts-node": "^10.9.1",
-    "tsup": "^6.5.0",
-    "tsx": "3.12.2",
-    "typescript": "^4.9.4"
-  }
+	"name": "server",
+	"description": "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"author": {
+		"name": "Jakub Olan",
+		"email": "keinsell@protonmail.com",
+		"url": "https://github.com/keinsell"
+	},
+	"packageManager": "yarn@4.0.0-rc.35",
+	"volta": {
+		"node": "19.4.0",
+		"yarn": "4.0.0-rc.35"
+	},
+	"scripts": {
+		"dev": "nodemon"
+	},
+	"dependencies": {
+		"osiris": "*"
+	},
+	"devDependencies": {
+		"@types/node": "^18.11.18",
+		"nodemon": "2.0.20",
+		"ts-node": "^10.9.1",
+		"tsup": "^6.5.0",
+		"tsx": "3.12.2",
+		"typescript": "^4.9.4"
+	}
 }
