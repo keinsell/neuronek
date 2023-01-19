@@ -1,0 +1,3 @@
+.husky/*
+yarn.lock
+.prettierignore

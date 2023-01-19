@@ -1,44 +1,48 @@
 {
-  "name": "neuronek",
-  "description": "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
-  "private": true,
-  "version": "0.0.0",
-  "author": {
-    "name": "Jakub Olan",
-    "email": "keinsell@protonmail.com",
-    "url": "https://github.com/keinsell"
-  },
-  "packageManager": "yarn@4.0.0-rc.35",
-  "volta": {
-    "node": "19.4.0",
-    "yarn": "4.0.0-rc.35"
-  },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "db:generate": "turbo run db:generate",
-    "db:migrate:deploy": "turbo run db:migrate:deploy",
-    "db:push": "turbo run db:push",
-    "db:seed": "turbo run db:seed",
-    "db:studio": "turbo run db:studio",
-    "dev": "turbo run dev --parallel",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "pre-commit": "lint-staged",
-    "prepare": "husky install",
-    "start": "turbo run start",
-    "test": "turbo run test"
-  },
-  "devDependencies": {
-    "husky": "^8.0.3",
-    "prettier": "^2.7.1",
-    "prettier-plugin-packagejson": "2.3.0",
-    "prettier-plugin-prisma": "4.8.0",
-    "prettier-plugin-properties": "0.2.0",
-    "prettier-plugin-sh": "0.12.8",
-    "turbo": "^1.7.0"
-  }
+	"name": "neuronek",
+	"description": "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
+	"private": true,
+	"version": "0.0.0",
+	"author": {
+		"name": "Jakub Olan",
+		"email": "keinsell@protonmail.com",
+		"url": "https://github.com/keinsell"
+	},
+	"packageManager": "yarn@4.0.0-rc.35",
+	"volta": {
+		"node": "19.4.0",
+		"yarn": "4.0.0-rc.35"
+	},
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"db:generate": "turbo run db:generate",
+		"db:migrate:deploy": "turbo run db:migrate:deploy",
+		"db:push": "turbo run db:push",
+		"db:seed": "turbo run db:seed",
+		"db:studio": "turbo run db:studio",
+		"dev": "turbo run dev --parallel",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"lint": "turbo run lint",
+		"pre-commit": "lint-staged",
+		"prepare": "husky install",
+		"start": "turbo run start",
+		"test": "turbo run test"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "17.4.2",
+		"@commitlint/config-conventional": "17.4.2",
+		"eslint": "^8.32.0",
+		"husky": "^8.0.3",
+		"lint-staged": "13.1.0",
+		"prettier": "^2.7.1",
+		"prettier-plugin-packagejson": "2.3.0",
+		"prettier-plugin-prisma": "4.8.0",
+		"prettier-plugin-properties": "0.2.0",
+		"prettier-plugin-sh": "0.12.8",
+		"turbo": "^1.7.0"
+	}
 }
