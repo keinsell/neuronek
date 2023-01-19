@@ -1,12 +1,12 @@
 export default {
 	entry: ['src/index.ts', 'src/shared/*.ts'],
 	silent: false,
-	splitting: false,
+	splitting: true,
 	target: 'node18',
 	sourcemap: true,
 	dts: true,
-	minify: true,
-	clean: true,
+	minify: false,
+	clean: false,
 	treeshake: true,
 	loader: {
 		'.md': 'text'

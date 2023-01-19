@@ -4,6 +4,9 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"main": "dist/index.js",
+	"module": "dist/index.cjs",
+	"types": "dist/index.d.ts",
 	"author": {
 		"name": "Jakub Olan",
 		"email": "keinsell@protonmail.com",
