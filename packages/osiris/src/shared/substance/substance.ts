@@ -1,3 +1,4 @@
+import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
 import { RouteOfAdministration } from '../route-of-administration/route-of-administration.js'
 
 /**
@@ -26,7 +27,7 @@ export class Substance {
 		/**
 		 * @example "Stimulant"
 		 */
-		psychoactive_class: string
+		psychoactive_class: PsychoactiveClass
 		/**
 		 * @example "Phenethylamine"
 		 */
