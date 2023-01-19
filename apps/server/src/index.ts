@@ -1,1 +1,3 @@
-console.log('server: startup script')
+import { DosageClassification } from 'osiris'
+
+console.log(DosageClassification.light)

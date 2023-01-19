@@ -3,12 +3,12 @@ export default {
 	silent: false,
 	splitting: true,
 	target: 'node18',
-	sourcemap: true,
+	sourcemap: false,
 	dts: true,
 	minify: false,
 	clean: false,
 	treeshake: true,
 	loader: {
-		'.md': 'text'
+		'.md': 'file'
 	}
 }
