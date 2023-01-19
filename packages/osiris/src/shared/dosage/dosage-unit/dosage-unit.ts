@@ -3,7 +3,7 @@ export class DosageUnit {
 	/**
 	 * baseScalar represents highest possible amount of mass (kilograms).
 	 */
-	protected baseScalar: number
+	public baseScalar: number
 
 	constructor(baseScalar: number) {
 		this.baseScalar = baseScalar
