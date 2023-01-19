@@ -13,8 +13,24 @@
     "node": "19.4.0",
     "yarn": "4.0.0-rc.35"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "prepare": "husky install"
+    "build": "turbo run build",
+    "db:generate": "turbo run db:generate",
+    "db:migrate:deploy": "turbo run db:migrate:deploy",
+    "db:push": "turbo run db:push",
+    "db:seed": "turbo run db:seed",
+    "db:studio": "turbo run db:studio",
+    "dev": "turbo run dev --parallel",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "start": "turbo run start",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "husky": "^8.0.3",
