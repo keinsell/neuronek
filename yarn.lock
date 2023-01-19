@@ -482,7 +482,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^18.11.18":
   version: 18.11.18
   resolution: "@types/node@npm:18.11.18"
   checksum: bd39552701928d4a1613bc46adf8b65f8212064c2b5475a67161b6c4cef21ddb0a5c2ba062673213f8f5301ef6e171241a9e274a9b59c9fc1f5e2b69764740eb
@@ -3141,6 +3141,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"osiris@npm:*, osiris@workspace:packages/osiris":
+  version: 0.0.0-use.local
+  resolution: "osiris@workspace:packages/osiris"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    nodemon: "npm:2.0.20"
+    ts-node: "npm:^10.9.1"
+    tsup: "npm:^6.5.0"
+    tsx: "npm:3.12.2"
+    typescript: "npm:^4.9.4"
+  languageName: unknown
+  linkType: soft
+
 "p-limit@npm:^2.2.0":
   version: 2.3.0
   resolution: "p-limit@npm:2.3.0"
@@ -3663,7 +3676,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "server@workspace:apps/server"
   dependencies:
+    "@types/node": "npm:^18.11.18"
     nodemon: "npm:2.0.20"
+    osiris: "npm:*"
     ts-node: "npm:^10.9.1"
     tsup: "npm:^6.5.0"
     tsx: "npm:3.12.2"
