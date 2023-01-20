@@ -16,8 +16,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          yarn-version: 4.x
           cache: yarn
+
+      - uses: volta-cli/action@v3
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --prefer-offline
