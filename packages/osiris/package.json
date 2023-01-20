@@ -15,7 +15,9 @@
 	"scripts": {
 		"build": "tsup-node",
 		"dev": "nodemon",
-		"test": "ava"
+		"test": "yarn test:coverage",
+		"test:coverage": "c8 ava",
+		"test:unit": "ava"
 	},
 	"dependencies": {
 		"js-quantities": "^1.7.6",
@@ -30,6 +32,7 @@
 		"@types/node": "^18.11.18",
 		"@types/nodemon": "1.19.2",
 		"ava": "^5.1.1",
+		"c8": "^7.12.0",
 		"nodemon": "2.0.20",
 		"ts-node": "^10.9.1",
 		"tsup": "^6.5.0",
