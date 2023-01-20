@@ -646,6 +646,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ms@npm:^0.7.31":
+  version: 0.7.31
+  resolution: "@types/ms@npm:0.7.31"
+  checksum: cccb52777bb683c65ac5bab61351cd3910c9ce3512b1d903a591fc9694bb83afad6e48bf0beee5b47b6a8b620a05f5d82f8febfd55de05e7d9eb93586cc196c8
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:^18.11.18":
   version: 18.11.18
   resolution: "@types/node@npm:18.11.18"
@@ -3883,11 +3890,13 @@ __metadata:
     "@swc/core": "npm:^1.3.27"
     "@swc/wasm": "npm:^1.3.27"
     "@types/js-quantities": "npm:^1.6.3"
+    "@types/ms": "npm:^0.7.31"
     "@types/node": "npm:^18.11.18"
     "@types/nodemon": "npm:1.19.2"
     ava: "npm:^5.1.1"
     c8: "npm:^7.12.0"
     js-quantities: "npm:^1.7.6"
+    ms: "npm:^2.1.3"
     nodemon: "npm:2.0.20"
     pqm: "npm:^1.0.0"
     ts-node: "npm:^10.9.1"
