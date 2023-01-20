@@ -1,46 +1,49 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
-  "pipeline": {
-    "lint": {
-      "outputs": []
-    },
-    "test": {
-      "inputs": ["src/**/*.test.ts"],
-      "dependsOn": ["^build"],
-      "cache": false
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "public/dist/**"],
-      "cache": true
-    },
-    "start": {
-      "dependsOn": ["^build"],
-      "cache": false
-    },
-    "dev": {
-      "cache": false,
-      "dependsOn": ["^build"],
-      "inputs": ["src/**/*.ts", "lib/**/*.ts"]
-    },
-    "db:migrate:deploy": {
-      "outputs": [],
-      "cache": false
-    },
-    "db:push": {
-      "outputs": [],
-      "cache": false
-    },
-    "db:seed": {
-      "outputs": [],
-      "cache": false
-    },
-    "db:studio": {
-      "outputs": [],
-      "cache": false
-    },
-    "db:generate": {
-      "dependsOn": ["^db:generate"]
-    }
-  }
+	"$schema": "https://turborepo.org/schema.json",
+	"pipeline": {
+		"lint": {
+			"outputs": []
+		},
+		"test": {
+			"inputs": ["src/**/*.test.ts"],
+			"dependsOn": ["^build"],
+			"cache": false
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**", ".next/**", "public/dist/**"],
+			"cache": true
+		},
+		"start": {
+			"dependsOn": ["^build"],
+			"cache": false
+		},
+		"dev": {
+			"cache": false,
+			"dependsOn": ["^build"],
+			"inputs": ["src/**/*.ts", "lib/**/*.ts"]
+		},
+		"db:migrate:deploy": {
+			"outputs": [],
+			"cache": false
+		},
+		"db:push": {
+			"outputs": [],
+			"cache": false
+		},
+		"db:seed": {
+			"outputs": [],
+			"cache": false
+		},
+		"db:studio": {
+			"outputs": [],
+			"cache": false
+		},
+		"db:generate": {
+			"dependsOn": ["^db:generate"]
+		}
+	},
+	"remoteCache": {
+		"signature": true
+	}
 }
