@@ -16,9 +16,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
+          cache: yarn
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --prefer-offline
 
       - name: Build
         run: yarn build
