@@ -1,48 +1,45 @@
+import Qty from 'js-quantities'
+import pqm from 'pqm'
+import unitmath from 'unitmath'
+
 /** Represents single dosage value, for example `30mg` */
-export class DosageUnit {
+export class DosageUnit extends Qty {
 	/**
 	 * baseScalar represents highest possible amount of mass (kilograms).
 	 */
-	public baseScalar: number
+	// public baseScalar: number
 
-	constructor(baseScalar: number) {
-		this.baseScalar = baseScalar
+	/** Unit of value */
+	// public unit: 'kg' | 'l'
+
+	constructor(amount: number, unit: string) {
+		super(amount, unit)
+		// this.baseScalar = pqm.quantity(amount, unit)
+		// this.unit = unit
 	}
 
-	/** Converts value to string with attention to `baseScalar` - chooses best possible unit. */
+	/** Converts value to string with attention to `baseScalar`, function will find and use lowest possible unit relative to value. */
 	toString(): string {
-		if (this.baseScalar < 0.000001) {
-			return `${this.baseScalar / 0.000001}ug`
+		const qty = `${Qty(this.baseScalar, this.units()).toString()}`
+
+		const simplified = unitmath(qty).simplify().toString()
+		const parsed = Qty(simplified)
+
+		if (parsed.units() === 'ug') {
+			return `${parsed.scalar} μg`
 		}
 
-		if (this.baseScalar < 0.001) {
-			return `${this.baseScalar / 0.001}mg`
+		if (parsed.units() === 'cm3') {
+			return `${parsed.scalar} l`
 		}
 
-		if (this.baseScalar < 1) {
-			return `${this.baseScalar}g`
-		}
-
-		return `${this.baseScalar}kg`
+		return parsed.toString()
 	}
 
-	static fromString(amount: string): DosageUnit {
-		if (amount.endsWith('mg')) {
-			return new DosageUnit(parseFloat(amount) * 0.001)
-		}
-
-		if (amount.endsWith('ug')) {
-			return new DosageUnit(parseFloat(amount) * 0.000001)
-		}
-
-		if (amount.endsWith('g')) {
-			return new DosageUnit(parseFloat(amount))
-		}
-
-		if (amount.endsWith('kg')) {
-			return new DosageUnit(parseFloat(amount) * 1000)
-		}
-
-		throw new Error(`Invalid dosage unit provided: ${amount}`)
+	static fromString(string: string): DosageUnit {
+		const baseScalarOfUnit = new Qty(string).toBase()
+		const unit = baseScalarOfUnit.units()
+		const value = baseScalarOfUnit.scalar
+		return new DosageUnit(value, unit)
 	}
 }
