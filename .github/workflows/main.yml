@@ -47,3 +47,15 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Upload build artifacts (packages/orisis)
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-orisis
+          path: packages/orisis/dist
+
+      - name: Upload build artifacts (apps/server)
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-server
+          path: apps/server/dist
