@@ -17,18 +17,6 @@ import {
 import { RouteOfAdministrationTable } from '../../shared/route-of-administration/route-of-administration-table/route-of-administration-table.js'
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
 
-export function mapGetSubstanceQueryToSubstance(input: GetSubstancesQuery): Substance | undefined {
-	const response = input.substances
-
-	if (!response || response.length === 0) {
-		return undefined
-	}
-
-	const data = response[0]
-
-	console.log(new PsychonautWikiMapper().GetSubstanceQuery__Substance(input))
-}
-
 export class PsychonautWikiMapper {
 	private SubstanceRoaRange_DosageUnit(input: SubstanceRoaRange, unit?: string): DosageUnit | undefined {
 		return input ? new DosageUnit(input.max, unit ?? 'mg') : undefined
