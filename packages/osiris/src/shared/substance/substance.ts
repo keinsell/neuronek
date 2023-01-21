@@ -1,7 +1,7 @@
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
 import {
 	RouteOfAdministrationTable,
-	RouteOfAdministrationTableJSON
+	_RouteOfAdministrationTableJSON
 } from './route-of-administration-table/route-of-administration-table.js'
 
 export type SubstanceJSON = {
@@ -11,7 +11,7 @@ export type SubstanceJSON = {
 	systematic_nomenclature?: string
 	chemical_class?: string
 	psychoactive_class?: PsychoactiveClass
-	routes_of_administration?: RouteOfAdministrationTableJSON
+	routes_of_administration?: _RouteOfAdministrationTableJSON
 }
 
 /**
