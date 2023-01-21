@@ -42,7 +42,7 @@ export class Substance {
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
 	 */
-	class_membership?: {
+	class_membership: {
 		/**
 		 * Psychoactive class refers to the classification of a chemical compound based on its ability to affect the central nervous system and alter brain function, resulting in changes in perception, mood, consciousness, or behavior.
 		 *
@@ -54,7 +54,7 @@ export class Substance {
 		 *
 		 * @example "Phenethylamine"
 		 */
-		chemical_class: string
+		chemical_class?: string
 	}
 	/**
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
