@@ -1,4 +1,4 @@
-import { PhaseClassification } from './phase-classification.js'
+import { PhaseClassification } from '../phase-classification.js'
 import ms from 'ms'
 
 export class Phase {

@@ -1,5 +1,18 @@
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
-import { RouteOfAdministrationTable } from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
+import {
+	RouteOfAdministrationTable,
+	RouteOfAdministrationTableJSON
+} from './route-of-administration-table/route-of-administration-table.js'
+
+export type SubstanceJSON = {
+	name: string
+	common_nomenclature?: string[]
+	substitive_nomenclature?: string
+	systematic_nomenclature?: string
+	chemical_class?: string
+	psychoactive_class?: PsychoactiveClass
+	routes_of_administration?: RouteOfAdministrationTableJSON
+}
 
 /**
  * A psychoactive substance is a chemical substance—other than a nutrient or essential dietary ingredient—that alters brain function to produce temporary changes in sensation, perception, mood, consciousness, cognition, and behavior.
@@ -99,5 +112,15 @@ export class Substance {
 		this.toxicity = substanceInfomration.toxicity
 		this.harm_potential = substanceInfomration.harm_potential
 		this.experiences = substanceInfomration.experiences
+	}
+
+	toJSON(): SubstanceJSON {
+		return {
+			name: this.name,
+			common_nomenclature: this.chemical_nomeclature.common_names,
+			substitive_nomenclature: this.chemical_nomeclature.substitutive_name,
+			systematic_nomenclature: this.chemical_nomeclature.systematic_name,
+			psychoactive_class: this.class_membership.psychoactive_class
+		}
 	}
 }

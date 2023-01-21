@@ -1,5 +1,9 @@
-import { RouteOfAdministrationClassification } from '../route-of-administration-classification.js'
-import { RouteOfAdministration } from '../route-of-administration.js'
+import { RouteOfAdministrationClassification } from './route-of-administration-classification.js'
+import { RouteOfAdministration, RouteOfAdministrationJSON } from './route-of-administration/route-of-administration.js'
+
+export type RouteOfAdministrationTableJSON = {
+	[route in RouteOfAdministrationClassification]?: RouteOfAdministrationJSON
+}
 
 export class RouteOfAdministrationTable {
 	public readonly [RouteOfAdministrationClassification.oral]?: RouteOfAdministration

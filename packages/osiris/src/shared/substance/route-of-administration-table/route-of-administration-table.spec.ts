@@ -1,9 +1,9 @@
 import test from 'ava'
 import { RouteOfAdministrationTable } from './route-of-administration-table.js'
-import { RouteOfAdministration } from '../route-of-administration.js'
-import { RouteOfAdministrationClassification } from '../route-of-administration-classification.js'
-import { DosageTable } from '../../dosage/dosage-table/dosage-table.js'
-import { PhaseTable } from '../../phase/phase-table/phase-table.js'
+import { RouteOfAdministration } from './route-of-administration/route-of-administration.js'
+import { RouteOfAdministrationClassification } from './route-of-administration-classification.js'
+import { DosageTable } from './route-of-administration/dosage-table/dosage-table.js'
+import { PhaseTable } from './route-of-administration/phase-table/phase-table.js'
 
 test('constructor(): should create route of administration table', t => {
 	const table = new RouteOfAdministrationTable({})

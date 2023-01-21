@@ -3,7 +3,7 @@ import { getSubstanceFromPsychonautWiki } from './providers/psychonautwiki/get-s
 
 const osiris = new Osiris()
 
-export { DosageClassification } from './shared/dosage/dosage-classification.js'
-export { RouteOfAdministrationClassification } from './shared/route-of-administration/route-of-administration-classification.js'
+export { DosageClassification } from './shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-classification.js'
+export { RouteOfAdministrationClassification } from './shared/substance/route-of-administration-table/route-of-administration-classification.js'
 
 export default osiris

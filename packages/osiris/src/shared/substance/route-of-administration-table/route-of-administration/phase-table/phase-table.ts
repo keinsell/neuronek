@@ -1,5 +1,9 @@
-import { PhaseClassification } from '../phase-classification.js'
-import { Phase } from '../phase.js'
+import { PhaseClassification } from './phase-classification.js'
+import { Phase } from './phase/phase.js'
+
+export type _PhaseTable = {
+	[key in PhaseClassification]?: string
+}
 
 export class PhaseTable {
 	public readonly [PhaseClassification.onset]?: Phase
@@ -78,5 +82,26 @@ export class PhaseTable {
 		})
 
 		return timeToEndOfPhase
+	}
+
+	toJSON(): _PhaseTable {
+		const json: _PhaseTable = {}
+
+		for (const phase of this.phaseFunnel) {
+			json[phase] = this[phase]?.toString()
+		}
+
+		return json
+	}
+
+	static fromJSON(json: _PhaseTable): PhaseTable {
+		// parse phases
+		const phases = {}
+		for (const phase of Object.keys(json)) {
+			phases[phase] = Phase.fromString(json[phase])
+		}
+
+		// create PhaseTable instance
+		return new PhaseTable(phases)
 	}
 }

@@ -1,10 +1,10 @@
 import ms from 'ms'
-import { DosageTable } from '../../shared/dosage/dosage-table/dosage-table.js'
-import { DosageUnit } from '../../shared/dosage/dosage-unit/dosage-unit.js'
-import { PhaseTable } from '../../shared/phase/phase-table/phase-table.js'
-import { Phase } from '../../shared/phase/phase.js'
-import { RouteOfAdministrationClassification } from '../../shared/route-of-administration/route-of-administration-classification.js'
-import { RouteOfAdministration } from '../../shared/route-of-administration/route-of-administration.js'
+import { DosageTable } from '../../shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-table.js'
+import { DosageUnit } from '../../shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-unit/dosage-unit.js'
+import { PhaseTable } from '../../shared/substance/route-of-administration-table/route-of-administration/phase-table/phase-table.js'
+import { Phase } from '../../shared/substance/route-of-administration-table/route-of-administration/phase-table/phase/phase.js'
+import { RouteOfAdministrationClassification } from '../../shared/substance/route-of-administration-table/route-of-administration-classification.js'
+import { RouteOfAdministration } from '../../shared/substance/route-of-administration-table/route-of-administration/route-of-administration.js'
 import { Substance } from '../../shared/substance/substance.js'
 import {
 	GetSubstancesQuery,
@@ -14,7 +14,7 @@ import {
 	SubstanceRoaDurationRange,
 	SubstanceRoaRange
 } from './gql/sdk/graphql.js'
-import { RouteOfAdministrationTable } from '../../shared/route-of-administration/route-of-administration-table/route-of-administration-table.js'
+import { RouteOfAdministrationTable } from '../../shared/substance/route-of-administration-table/route-of-administration-table.js'
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
 
 export class PsychonautWikiMapper {
