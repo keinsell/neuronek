@@ -1,7 +1,7 @@
 import { RouteOfAdministrationClassification } from './route-of-administration-classification.js'
 import { RouteOfAdministration, _RouteOfAdministrationJSON } from './route-of-administration/route-of-administration.js'
 
-export type RouteOfAdministrationTableJSON = {
+export type _RouteOfAdministrationTableJSON = {
 	[route in RouteOfAdministrationClassification]?: _RouteOfAdministrationJSON
 }
 
