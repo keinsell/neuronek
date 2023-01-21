@@ -1,4 +1,5 @@
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
+import { RouteOfAdministrationTable } from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
 import { RouteOfAdministration } from '../route-of-administration/route-of-administration.js'
 
 /**
@@ -33,7 +34,7 @@ export class Substance {
 		 */
 		chemical_class: string
 	}
-	routes_of_administration: RouteOfAdministration[]
+	routes_of_administration: RouteOfAdministrationTable
 	interactions?: {}
 	pharmacology?: {}
 	subjective_effects?: {}
