@@ -29,4 +29,24 @@ export class RouteOfAdministrationTable {
 	getDocumentedRoutesOfAdministration(): RouteOfAdministration[] {
 		return Object.values(this).filter((route: RouteOfAdministration) => !!route)
 	}
+
+	toJSON(): _RouteOfAdministrationTableJSON {
+		const json: _RouteOfAdministrationTableJSON = {}
+
+		for (const route in this as any) {
+			json[route] = json[route] ? this[route].toJSON() : undefined
+		}
+
+		return json
+	}
+
+	static fromJSON(json: _RouteOfAdministrationTableJSON): RouteOfAdministrationTable {
+		const routesOfAdministration: { [route in RouteOfAdministrationClassification]?: RouteOfAdministration } = {}
+
+		for (const route in json) {
+			routesOfAdministration[route] = json[route] ? RouteOfAdministration.fromJSON(json[route]) : undefined
+		}
+
+		return new RouteOfAdministrationTable(routesOfAdministration)
+	}
 }

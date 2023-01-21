@@ -20,3 +20,36 @@ test('getDocumentedRoutesOfAdministration(): should return only available routes
 
 	t.is(table.getDocumentedRoutesOfAdministration().length, 1)
 })
+
+test('toJSON(): should return json', t => {
+	const table = new RouteOfAdministrationTable({
+		oral: new RouteOfAdministration({
+			dosage: new DosageTable({}),
+			phase: new PhaseTable({})
+		}),
+		insufflated: new RouteOfAdministration({
+			dosage: new DosageTable({}),
+			phase: new PhaseTable({})
+		})
+	})
+
+	t.deepEqual(table.toJSON(), {
+		oral: undefined,
+		insufflated: undefined
+	})
+})
+
+test('fromJSON(): should create route of administration table', t => {
+	const table = RouteOfAdministrationTable.fromJSON({
+		oral: undefined,
+		insufflated: undefined
+	})
+
+	t.deepEqual(
+		table,
+		new RouteOfAdministrationTable({
+			insufflated: undefined,
+			oral: undefined
+		})
+	)
+})
