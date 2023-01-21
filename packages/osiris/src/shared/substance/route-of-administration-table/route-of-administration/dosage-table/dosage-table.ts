@@ -1,7 +1,7 @@
 import { DosageClassification } from './dosage-classification.js'
 import { DosageUnit } from './dosage-unit/dosage-unit.js'
 
-export type _DosageTable = {
+export type _DosageTableJSON = {
 	[key in DosageClassification]?: string
 }
 
@@ -57,7 +57,7 @@ export class DosageTable {
 			return DosageClassification.thereshold
 	}
 
-	toJSON(): _DosageTable {
+	toJSON(): _DosageTableJSON {
 		return {
 			thereshold: this.thereshold?.toString(),
 			light: this.light?.toString(),
@@ -67,7 +67,7 @@ export class DosageTable {
 		}
 	}
 
-	static fromJSON(json: _DosageTable): DosageTable {
+	static fromJSON(json: _DosageTableJSON): DosageTable {
 		return new DosageTable({
 			thereshold: json.thereshold ? DosageUnit.fromString(json.thereshold) : undefined,
 			light: json.light ? DosageUnit.fromString(json.light) : undefined,

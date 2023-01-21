@@ -1,7 +1,7 @@
 import { PhaseClassification } from './phase-classification.js'
 import { Phase } from './phase/phase.js'
 
-export type _PhaseTable = {
+export type _PhaseTableJSON = {
 	[key in PhaseClassification]?: string
 }
 
@@ -84,8 +84,8 @@ export class PhaseTable {
 		return timeToEndOfPhase
 	}
 
-	toJSON(): _PhaseTable {
-		const json: _PhaseTable = {}
+	toJSON(): _PhaseTableJSON {
+		const json: _PhaseTableJSON = {}
 
 		for (const phase of this.phaseFunnel) {
 			json[phase] = this[phase]?.toString()
@@ -94,9 +94,10 @@ export class PhaseTable {
 		return json
 	}
 
-	static fromJSON(json: _PhaseTable): PhaseTable {
+	static fromJSON(json: _PhaseTableJSON): PhaseTable {
 		// parse phases
 		const phases = {}
+
 		for (const phase of Object.keys(json)) {
 			phases[phase] = Phase.fromString(json[phase])
 		}
