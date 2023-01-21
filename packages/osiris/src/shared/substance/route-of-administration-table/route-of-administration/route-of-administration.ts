@@ -1,9 +1,9 @@
-import { DosageTable, _DosageTable } from './dosage-table/dosage-table.js'
+import { DosageTable, _DosageTableJSON } from './dosage-table/dosage-table.js'
 import { PhaseTable, _PhaseTableJSON } from './phase-table/phase-table.js'
 
-export type RouteOfAdministrationJSON = {
+export type _RouteOfAdministrationJSON = {
 	bioavailability?: number
-	dosage: _DosageTable
+	dosage: _DosageTableJSON
 	phase: _PhaseTableJSON
 }
 
@@ -16,5 +16,21 @@ export class RouteOfAdministration {
 		this.bioavailability = administrationRoute.bioavailability
 		this.dosage = administrationRoute.dosage
 		this.phase = administrationRoute.phase
+	}
+
+	toJSON(): _RouteOfAdministrationJSON {
+		return {
+			bioavailability: this.bioavailability,
+			dosage: this.dosage.toJSON(),
+			phase: this.phase.toJSON()
+		}
+	}
+
+	static fromJSON(json: _RouteOfAdministrationJSON): RouteOfAdministration {
+		return new RouteOfAdministration({
+			bioavailability: json.bioavailability,
+			dosage: DosageTable.fromJSON(json.dosage),
+			phase: PhaseTable.fromJSON(json.phase)
+		})
 	}
 }

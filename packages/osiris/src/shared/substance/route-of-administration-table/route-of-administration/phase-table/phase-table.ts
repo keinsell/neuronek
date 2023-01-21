@@ -97,6 +97,7 @@ export class PhaseTable {
 	static fromJSON(json: _PhaseTableJSON): PhaseTable {
 		// parse phases
 		const phases = {}
+
 		for (const phase of Object.keys(json)) {
 			phases[phase] = Phase.fromString(json[phase])
 		}
