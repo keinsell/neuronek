@@ -124,4 +124,15 @@ export class Substance {
 			routes_of_administration: this.routes_of_administration.toJSON()
 		}
 	}
+
+	static fromJSON(json: _SubstanceJSON): Substance {
+		return new Substance({
+			name: json.name,
+			common_names: json.common_nomenclature,
+			substitutive_name: json.substitive_nomenclature,
+			systematic_name: json.systematic_nomenclature,
+			psychoactive_class: json.psychoactive_class,
+			routes_of_administration: RouteOfAdministrationTable.fromJSON(json.routes_of_administration)
+		})
+	}
 }
