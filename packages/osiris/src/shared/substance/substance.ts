@@ -21,7 +21,7 @@ export class Substance {
 		 *
 		 * @example ["Amphetamine", "Speed", "Adderall", "Pep"]
 		 */
-		common_names: string[]
+		common_names?: string[]
 		/**
 		 * Substitutive name is a type of chemical nomenclature used for organic compounds. In this system, the substitutive name of a compound is based on the name of the parent hydrocarbon, with the functional group (such as an alcohol or a carboxylic acid) indicated by a prefix or suffix.
 		 *
@@ -37,7 +37,7 @@ export class Substance {
 		 *
 		 * @example "(RS)-1-Phenylpropan-2-amine"
 		 */
-		systematic_name: string
+		systematic_name?: string
 	}
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
@@ -48,7 +48,7 @@ export class Substance {
 		 *
 		 * @example "Stimulant"
 		 */
-		psychoactive_class: PsychoactiveClass
+		psychoactive_class?: PsychoactiveClass
 		/**
 		 * Chemical class refers to the grouping of chemical compounds that have similar structural or functional characteristics. In chemistry, compounds are often classified based on their chemical makeup, such as their chemical formula, functional groups, or reactivity.
 		 *
@@ -66,4 +66,38 @@ export class Substance {
 	toxicity?: {}
 	harm_potential?: {}
 	experiences?: {}
+
+	constructor(substanceInfomration: {
+		name: string
+		common_names?: string[]
+		substitutive_name?: string
+		systematic_name?: string
+		psychoactive_class?: PsychoactiveClass
+		chemical_class?: string
+		routes_of_administration: RouteOfAdministrationTable
+		interactions?: {}
+		pharmacology?: {}
+		subjective_effects?: {}
+		toxicity?: {}
+		harm_potential?: {}
+		experiences?: {}
+	}) {
+		this.name = substanceInfomration.name
+		this.chemical_nomeclature = {
+			common_names: substanceInfomration.common_names,
+			substitutive_name: substanceInfomration.substitutive_name,
+			systematic_name: substanceInfomration.systematic_name
+		}
+		this.class_membership = {
+			psychoactive_class: substanceInfomration.psychoactive_class,
+			chemical_class: substanceInfomration.chemical_class
+		}
+		this.routes_of_administration = substanceInfomration.routes_of_administration
+		this.interactions = substanceInfomration.interactions
+		this.pharmacology = substanceInfomration.pharmacology
+		this.subjective_effects = substanceInfomration.subjective_effects
+		this.toxicity = substanceInfomration.toxicity
+		this.harm_potential = substanceInfomration.harm_potential
+		this.experiences = substanceInfomration.experiences
+	}
 }

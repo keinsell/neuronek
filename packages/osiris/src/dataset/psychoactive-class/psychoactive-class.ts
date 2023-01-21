@@ -18,8 +18,3 @@ export enum PsychoactiveClass {
 	/** Entheogens (from the Ancient Greek ἔνθεος entheos ["god", "divine"] and γενέσθαι genesthai ["generate" - "generating the divine within"]) are a family of psychoactive substances, typically of plant origin, that are used in religious, ritual, or spiritual contexts. Jonathan Ott is credited with coining the term in 1979. */
 	entheogen = 'entheogen'
 }
-
-// This idea for storing datasets is experimental.
-export const dataset_psychoactive_class: { classification: PsychoactiveClass; description: string }[] = (await import(
-	'./psychoactive-class.dataset.json'
-)) as unknown as { classification: PsychoactiveClass; description: string }[]

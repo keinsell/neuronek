@@ -1,0 +1,13 @@
+overwrite: true
+schema: 'https://api.psychonautwiki.org'
+documents: ['./src/providers/psychonautwiki/gql/**/*.graphql']
+emitLegacyCommonJSImports: false
+generates:
+  'src/providers/psychonautwiki/gql/sdk/':
+    preset: 'client'
+    plugins: []
+    schema: 'https://api.psychonautwiki.org'
+    documents: ['./src/providers/psychonautwiki/gql/**/*.graphql']
+  'src/providers/psychonautwiki/gql/graphql.schema.json':
+    plugins:
+      - 'introspection'
