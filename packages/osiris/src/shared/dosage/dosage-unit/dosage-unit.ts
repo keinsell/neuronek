@@ -26,11 +26,6 @@ export class DosageUnit extends Qty {
 			return `${parsed.scalar} μg`
 		}
 
-		// If the units are cubic centimeters, return the unit as l
-		if (parsed.units() === 'cm3') {
-			return `${parsed.scalar} l`
-		}
-
 		// Otherwise return the string representation of the parsed quantity
 		return parsed.toString()
 	}
