@@ -4,7 +4,7 @@
   <b>Build journal of your neurochemisty</b>
   <br><br>
   <a href="https://codecov.io/gh/keinsell/neuronek" > 
-  <img src="https://codecov.io/gh/keinsell/neuronek/branch/main/graph/badge.svg?token=1WFSNWGWSR"/> 
+  <img src="https://codecov.io/gh/keinsell/neuronek/branch/main/graph/badge.svg?token=RCgwN04Ije"/> 
   </a>
     <a href="https://wakatime.com/badge/user/13a02f4d-34c9-45f7-95ee-bf9d66b139fb/project/69d00351-b8a4-4431-a21e-798846120e57"><img src="https://wakatime.com/badge/user/13a02f4d-34c9-45f7-95ee-bf9d66b139fb/project/69d00351-b8a4-4431-a21e-798846120e57.svg" alt="wakatime"></a>
 </p>
