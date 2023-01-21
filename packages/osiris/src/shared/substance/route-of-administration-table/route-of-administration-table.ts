@@ -33,8 +33,11 @@ export class RouteOfAdministrationTable {
 	toJSON(): _RouteOfAdministrationTableJSON {
 		const json: _RouteOfAdministrationTableJSON = {}
 
-		for (const route in this as any) {
-			json[route] = json[route] ? this[route].toJSON() : undefined
+		for (const route in this) {
+			const routeOfAdministration = this[route as RouteOfAdministrationClassification]
+			if (routeOfAdministration) {
+				json[route as RouteOfAdministrationClassification] = routeOfAdministration.toJSON()
+			}
 		}
 
 		return json
