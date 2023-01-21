@@ -13,7 +13,7 @@ export class DosageUnit extends Qty {
 	/** Converts value to string with attention to `baseScalar`, function will find and use lowest possible unit relative to value. */
 	toString(): string {
 		// Convert the base scalar to the units of this quantity
-		const qty = `${Qty(this.baseScalar, this.units()).toString()}`
+		const qty = `${Qty(this.scalar, this.units()).toString()}`
 
 		// Simplify the quantity and get the string representation
 		const simplified = unitmath(qty).simplify().toString()
