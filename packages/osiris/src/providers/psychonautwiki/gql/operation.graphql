@@ -1,11 +1,20 @@
 query getSubstances($name: String) {
 	substances(query: $name) {
 		name
-		addictionPotential
+		summary
+		url
+		featured
+
+		effects {
+			name
+			url
+		}
+
 		class {
 			chemical
 			psychoactive
 		}
+
 		tolerance {
 			full
 			half
@@ -71,6 +80,32 @@ query getSubstances($name: String) {
 			bioavailability {
 				min
 				max
+			}
+		}
+
+		images {
+			thumb
+			image
+		}
+
+		addictionPotential
+		toxicity
+		crossTolerances
+		commonNames
+		uncertainInteractions {
+			class {
+				psychoactive
+			}
+		}
+		unsafeInteractions {
+			class {
+				psychoactive
+			}
+		}
+
+		dangerousInteractions {
+			class {
+				psychoactive
 			}
 		}
 	}

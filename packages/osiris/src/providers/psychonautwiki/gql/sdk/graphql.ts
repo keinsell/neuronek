@@ -174,7 +174,14 @@ export type GetSubstancesQuery = {
 	substances?: Array<{
 		__typename?: 'Substance'
 		name?: string | null
+		summary?: string | null
+		url?: string | null
+		featured?: boolean | null
 		addictionPotential?: string | null
+		toxicity?: Array<string | null> | null
+		crossTolerances?: Array<string | null> | null
+		commonNames?: Array<string | null> | null
+		effects?: Array<{ __typename?: 'Effect'; name?: string | null; url?: string | null } | null> | null
 		class?: {
 			__typename?: 'SubstanceClass'
 			chemical?: Array<string | null> | null
@@ -245,6 +252,19 @@ export type GetSubstancesQuery = {
 			} | null
 			bioavailability?: { __typename?: 'SubstanceRoaRange'; min?: number | null; max?: number | null } | null
 		} | null> | null
+		images?: Array<{ __typename?: 'SubstanceImage'; thumb?: string | null; image?: string | null } | null> | null
+		uncertainInteractions?: Array<{
+			__typename?: 'Substance'
+			class?: { __typename?: 'SubstanceClass'; psychoactive?: Array<string | null> | null } | null
+		} | null> | null
+		unsafeInteractions?: Array<{
+			__typename?: 'Substance'
+			class?: { __typename?: 'SubstanceClass'; psychoactive?: Array<string | null> | null } | null
+		} | null> | null
+		dangerousInteractions?: Array<{
+			__typename?: 'Substance'
+			class?: { __typename?: 'SubstanceClass'; psychoactive?: Array<string | null> | null } | null
+		} | null> | null
 	} | null> | null
 }
 
@@ -279,7 +299,20 @@ export const GetSubstancesDocument = {
 							kind: 'SelectionSet',
 							selections: [
 								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'addictionPotential' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'summary' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'url' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'featured' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'effects' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'url' } }
+										]
+									}
+								},
 								{
 									kind: 'Field',
 									name: { kind: 'Name', value: 'class' },
@@ -457,6 +490,72 @@ export const GetSubstancesDocument = {
 														{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
 														{ kind: 'Field', name: { kind: 'Name', value: 'max' } }
 													]
+												}
+											}
+										]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'images' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'thumb' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'image' } }
+										]
+									}
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'addictionPotential' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'toxicity' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'crossTolerances' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'commonNames' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'uncertainInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'class' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [{ kind: 'Field', name: { kind: 'Name', value: 'psychoactive' } }]
+												}
+											}
+										]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'unsafeInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'class' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [{ kind: 'Field', name: { kind: 'Name', value: 'psychoactive' } }]
+												}
+											}
+										]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'dangerousInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'class' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [{ kind: 'Field', name: { kind: 'Name', value: 'psychoactive' } }]
 												}
 											}
 										]

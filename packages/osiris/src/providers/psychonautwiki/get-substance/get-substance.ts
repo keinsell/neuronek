@@ -1,8 +1,14 @@
 import { request } from 'graphql-request'
-import { GetSubstancesDocument } from '../gql/sdk/graphql.js'
+import { GetSubstancesDocument, GetSubstancesQuery } from '../gql/sdk/graphql.js'
 
 export async function getSubstanceFromPsychonautWiki(substanceName: string) {
-	const response = await request('https://api.psychonautwiki.org', GetSubstancesDocument, { name: substanceName })
+	const response = await request<GetSubstancesQuery>('https://api.psychonautwiki.org', GetSubstancesDocument, {
+		name: substanceName
+	})
 
-	return response
+	if (response.substances.length === 0) {
+		return undefined
+	}
+
+	return response[0]
 }
