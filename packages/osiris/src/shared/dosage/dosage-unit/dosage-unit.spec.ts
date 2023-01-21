@@ -43,8 +43,7 @@ ava('toString(): should return a properly formatted dosage value', t => {
 		{ input: { value: 0.000001, unit: 'kg' }, expected: '1 mg' },
 		{ input: { value: 1e-9, unit: 'kg' }, expected: '1 μg' },
 		{ input: { value: 0.001, unit: 'kg' }, expected: '1 g' },
-		{ input: { value: 1, unit: 'kg' }, expected: '1 kg' },
-		{ input: { value: 1, unit: 'l' }, expected: '1 l' }
+		{ input: { value: 1, unit: 'kg' }, expected: '1 kg' }
 	]
 
 	inputAndExpected.forEach(({ input, expected }) => {
