@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"graphql": "^16.6.0",
+		"graphql-request": "^5.1.0",
 		"js-quantities": "^1.7.6",
 		"ms": "^2.1.3",
 		"pqm": "^1.0.0",
