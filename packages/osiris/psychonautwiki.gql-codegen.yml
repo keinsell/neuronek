@@ -3,7 +3,7 @@ schema: 'https://api.psychonautwiki.org'
 documents: ['./src/providers/psychonautwiki/gql/**/*.graphql']
 emitLegacyCommonJSImports: false
 generates:
-  'src/providers/psychonautwiki/sdk/':
+  'src/providers/psychonautwiki/gql/sdk/':
     preset: 'client'
     plugins: []
     schema: 'https://api.psychonautwiki.org'
