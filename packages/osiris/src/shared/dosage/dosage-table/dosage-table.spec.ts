@@ -30,3 +30,38 @@ test('getClassificationOfDosage(): should return dosage classification', t => {
 		)
 	}
 })
+
+test('toJSON(): should return JSONed data', t => {
+	const dosageTable = new DosageTable({
+		thereshold: new DosageUnit(0.5, 'mg'),
+		light: new DosageUnit(0.75, 'mg'),
+		moderate: new DosageUnit(1, 'mg'),
+		strong: new DosageUnit(1.5, 'mg'),
+		heavy: new DosageUnit(2, 'mg')
+	})
+
+	t.deepEqual(dosageTable.toJSON(), {
+		thereshold: '0.5 mg',
+		light: '0.75 mg',
+		moderate: '1 mg',
+		strong: '1.5 mg',
+		heavy: '2 mg'
+	})
+})
+
+test('fromJSON(): should return dosage table from JSON', t => {
+	const dosageTable = DosageTable.fromJSON({
+		thereshold: '0.5 mg',
+		light: '0.75 mg',
+		moderate: '1 mg',
+		strong: '1.5 mg'
+	})
+
+	t.deepEqual(dosageTable.toJSON(), {
+		thereshold: '0.5 mg',
+		light: '0.75 mg',
+		moderate: '1 mg',
+		strong: '1.5 mg',
+		heavy: undefined
+	})
+})
