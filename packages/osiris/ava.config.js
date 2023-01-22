@@ -1,6 +1,6 @@
 export default {
 	concurrency: 5,
-	failFast: true,
+	failFast: false,
 	failWithoutAssertions: false,
 	environmentVariables: {
 		NODE_ENV: 'testing'
