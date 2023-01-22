@@ -1,0 +1,13 @@
+{
+	"python.terminal.activateEnvironment": false,
+	"eslint.validate": ["javascript"],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"editor.rulers": [120],
+	"search.exclude": {
+		"*.json": true,
+		"node_modules": true,
+		"env": true
+	}
+}

@@ -1,3 +1,8 @@
-import { DosageClassification } from 'osiris'
+import osiris, { _SubstanceJSON } from 'osiris'
 
-console.log(DosageClassification.light)
+export interface SubstanceResponse extends _SubstanceJSON {}
+
+const amphetamine = await osiris.findSubstanceByName('Amphetamine')
+
+console.log(amphetamine)
+console.log(amphetamine.routes_of_administration.getDocumentedRoutesOfAdministration())

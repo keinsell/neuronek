@@ -1,3 +1,5 @@
 .husky/*
 yarn.lock
 .prettierignore
+*.txt
+*.py
