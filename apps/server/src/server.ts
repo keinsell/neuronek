@@ -17,3 +17,5 @@ app.use('/docs', swaggerUI.serve, (_req: Request, res: Response) => {
 })
 
 RegisterRoutes(app)
+
+export { app as HttpApplication }
