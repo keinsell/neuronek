@@ -18,7 +18,7 @@ RUN yarn global add turbo
 COPY . .
 
 # Install dependencies for application and purne unused dependencies
-RUN turbo prune --scope=$TURBO_TARGET_PACKAGE --docker
+RUN turbo prune --scope=server --docker
 
 # Install dependencies for application
 FROM node:alpine AS installer
@@ -42,7 +42,7 @@ COPY turbo.json turbo.json
 # Install dependencies for application
 RUN yarn install
 # Build application
-RUN yarn turbo run build --filter=$TURBO_TARGET_PACKAGE...
+RUN yarn turbo run build --filter=server...
 
 # Prepare runner of application
 FROM node:alpine AS runner
@@ -68,4 +68,4 @@ USER runner
 COPY --from=installer /app .
 
 # Start application
-CMD node apps/$TURBO_TARGET_PACKAGE/dist/index.js
+CMD node apps/server/bin/server.js
