@@ -144,7 +144,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          dockerfile: ./apps/server/Dockerfile
+          file: ./apps/server/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
 
