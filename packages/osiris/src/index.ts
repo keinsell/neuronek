@@ -1,5 +1,5 @@
 import { Osiris } from './osiris.js'
-import { getSubstanceFromPsychonautWiki } from './providers/psychonautwiki/get-substance/get-substance.js'
+import data from 'psyxts-dataset'
 
 const osiris = new Osiris()
 

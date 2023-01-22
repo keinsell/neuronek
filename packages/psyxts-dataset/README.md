@@ -1,4 +1,6 @@
-# merge-psychonautwiki-tripsit-data
+# PsychonautWiki x Tripsit Dataset (`psyxts`)
+
+> This package was based on previous repository at https://github.com/TripSit/merge-psychonautwiki-tripsit-data initally made by https://github.com/NoahSaso/merge-psychonautwiki-tripsit-data. In Neuronek we decided to give it a try and merge these data in our format (if this will have any sense). Package was edited to be able used by `npm` as typed dataset. This repository seems to be abandoned, so I have no willing to contribute to it as same this is intended to be done with `osiris` but with more detailed data model.
 
 Script to merge data from PsychonautWiki API + pages and TripSit factsheets into one standardized format
 

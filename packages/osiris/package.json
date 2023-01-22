@@ -29,6 +29,7 @@
 		"js-quantities": "^1.7.6",
 		"ms": "^2.1.3",
 		"pqm": "^1.0.0",
+		"psyxts-dataset": "*",
 		"unitmath": "^0.8.8"
 	},
 	"devDependencies": {
