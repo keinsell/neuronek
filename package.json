@@ -40,9 +40,9 @@
 		"prettier-plugin-sh": "0.12.8",
 		"turbo": "^1.7.0"
 	},
-	"packageManager": "yarn@1.19.2",
+	"packageManager": "yarn@3.3.1",
 	"volta": {
 		"node": "19.4.0",
-		"yarn": "1.19.2"
+		"yarn": "3.3.1"
 	}
 }
