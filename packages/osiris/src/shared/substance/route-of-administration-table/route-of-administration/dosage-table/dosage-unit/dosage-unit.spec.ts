@@ -1,54 +1,37 @@
-import ava from 'ava'
+import ava, { TestFn } from 'ava'
 import { DosageUnit } from './dosage-unit.js'
 
-ava('fromString(): should create a dosage unit with baseScalar', t => {
-	const inputAndExpected: {
-		input: string
-		expected: {
-			baseScalar: number
-			unit: string
-		}
-	}[] = [
-		{ input: '1ug', expected: { baseScalar: 1e-9, unit: 'kg' } },
-		{ input: '1mg', expected: { baseScalar: 0.000001, unit: 'kg' } },
-		{ input: '1g', expected: { baseScalar: 0.001, unit: 'kg' } },
-		{ input: '1kg', expected: { baseScalar: 1, unit: 'kg' } },
-		{ input: '1ml', expected: { baseScalar: 0.000001, unit: 'm3' } },
-		{ input: '1l', expected: { baseScalar: 0.001, unit: 'm3' } }
-	]
+const test = ava as TestFn<{
+	baseScalarAndString: {
+		baseScalar: number
+		unit: string
+		string: string
+	}[]
+}>
 
-	inputAndExpected.forEach(iteration => {
-		const result = DosageUnit.fromString(iteration.input)
-		t.is(
-			result.baseScalar,
-			iteration.expected.baseScalar,
-			`baseScalar of ${iteration.input} should be ${iteration.expected.baseScalar}`
-		)
-		t.is(
-			result.units(),
-			iteration.expected.unit,
-			`baseScalar unit of ${iteration.input} should be ${iteration.expected.unit}`
-		)
+test.beforeEach(t => {
+	t.context.baseScalarAndString = [
+		{ baseScalar: 1e-9, unit: 'kg', string: '1 μg' },
+		{ baseScalar: 0.000001, unit: 'kg', string: '1 mg' },
+		{ baseScalar: 0.001, unit: 'kg', string: '1 g' },
+		{ baseScalar: 1, unit: 'kg', string: '1 kg' },
+		{ baseScalar: 0.000001, unit: 'm3', string: '1 cm3' },
+		{ baseScalar: 0.001, unit: 'm3', string: '1000 cm3' }
+	]
+})
+
+test('fromString(): should create a dosage unit with baseScalar', t => {
+	t.context.baseScalarAndString.forEach(iteration => {
+		const result = DosageUnit.fromString(iteration.string)
+		t.is(result.baseScalar, iteration.baseScalar, `baseScalar of ${iteration.string} should be ${iteration.baseScalar}`)
+		t.is(result.units(), iteration.unit, `baseScalar unit of ${iteration.string} should be ${iteration.unit}`)
 	})
 })
 
-ava('toString(): should return a properly formatted dosage value', t => {
-	const inputAndExpected: {
-		input: {
-			value: number
-			unit: string
-		}
-		expected: string
-	}[] = [
-		{ input: { value: 0.000001, unit: 'kg' }, expected: '1 mg' },
-		{ input: { value: 1e-9, unit: 'kg' }, expected: '1 μg' },
-		{ input: { value: 0.001, unit: 'kg' }, expected: '1 g' },
-		{ input: { value: 1, unit: 'kg' }, expected: '1 kg' }
-	]
-
-	inputAndExpected.forEach(({ input, expected }) => {
-		const dosageUnit = new DosageUnit(input.value, input.unit)
+test('toString(): should return a properly formatted dosage value', t => {
+	t.context.baseScalarAndString.forEach(({ string, unit, baseScalar }) => {
+		const dosageUnit = new DosageUnit(baseScalar, unit)
 		const result = dosageUnit.toString()
-		t.is(result, expected, `should return ${expected} from provided baseScalar of ${input}`)
+		t.is(result, string, `should return ${string} from provided baseScalar of ${baseScalar}`)
 	})
 })
