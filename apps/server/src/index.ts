@@ -1,8 +1,11 @@
-import osiris, { _SubstanceJSON } from 'osiris'
+import 'reflect-metadata'
+import { createExpressServer, useContainer } from 'routing-controllers'
+import { HelloWorldController } from './hello-routing/hello-world.controller.js'
+import { container } from './infrastructure/ioc/container.js'
+import { DiodAdapter } from './infrastructure/ioc/routing-controllers.js'
 
-export interface SubstanceResponse extends _SubstanceJSON {}
+useContainer(new DiodAdapter(container))
 
-const amphetamine = await osiris.findSubstanceByName('Amphetamine')
-
-console.log(amphetamine)
-console.log(amphetamine.routes_of_administration.getDocumentedRoutesOfAdministration())
+createExpressServer({
+	controllers: [HelloWorldController]
+}).listen(3000)
