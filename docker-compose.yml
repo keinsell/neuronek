@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  server:
+    container_name: ${REPOSITORY_NAME}-server
+    image: ${REPOSITORY_NAME}:latest
+    build:
+      dockerfile: apps/server/Dockerfile
+      context: .
+    ports:
+      - '${PORT}:3000'
+    environment:
+      - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_NAME}
