@@ -4,6 +4,11 @@ import {
 	_RouteOfAdministrationTableJSON
 } from './route-of-administration-table/route-of-administration-table.js'
 
+/**
+ * A psychoactive substance is a chemical substance—other than a nutrient or essential dietary ingredient—that alters brain function to produce temporary changes in sensation, perception, mood, consciousness, cognition, and behavior.
+ *
+ * Psychoactive substances have been used by humans for a variety of purposes since recorded history. For example, they may be used as medicine, as recreational substances for their euphoric effects and novelty value, as entheogens for ritual or spiritual purposes, or as scientific research probes for studying the brain and mind. The latter two have particular relevance for practitioners of psychonautics.
+ */
 export type _SubstanceJSON = {
 	name: string
 	common_nomenclature?: string[]

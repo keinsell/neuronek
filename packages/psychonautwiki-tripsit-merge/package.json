@@ -1,0 +1,46 @@
+{
+	"name": "tripsit-psychonautwiki-dataset",
+	"version": "1.0.3",
+	"description": "Combine psychonautwiki & tripsit.me to get a single dataset for use in the tripsit.me app",
+	"homepage": "https://github.com/TripSit/TODO#readme",
+	"bugs": {
+		"url": "https://github.com/TripSit/TODO/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TripSit/TODO.git"
+	},
+	"license": "MIT",
+	"author": "Eric / Moonbear / Teknos <eric@tripsit.me>",
+	"contributors": [],
+	"main": "cache/combinedDb.json",
+	"typings": "src/@types/combined.d.ts",
+	"scripts": {
+		"dev": "npm run lint && npm run patch && npm run nodemon",
+		"lint": "eslint --ext ts .",
+		"nodemon": "nodemon --config ./nodemon.json",
+		"patch": "npm version patch -git-tag-version false"
+	},
+	"dependencies": {
+		"axios": "^0.27.2",
+		"graphql-request": "^5.0.0",
+		"jssoup": "^0.0.15",
+		"ts-node": "^10.8.2"
+	},
+	"devDependencies": {
+		"@types/node": "^18.0.3",
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
+		"@typescript-eslint/parser": "^5.30.6",
+		"eslint": "^8.20.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-google": "^0.14.0",
+		"eslint-import-resolver-typescript": "^3.2.6",
+		"eslint-plugin-import": "^2.26.0",
+		"nodemon": "^2.0.19",
+		"typescript": "^4.7.4"
+	},
+	"engines": {
+		"node": "16.17.0",
+		"npm": "^8.19.2"
+	}
+}
