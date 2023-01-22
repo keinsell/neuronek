@@ -147,6 +147,8 @@ jobs:
           file: ./apps/server/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+          build-args: |
+            TURBO_TARGET_PACKAGE=server
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
