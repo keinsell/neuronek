@@ -10,7 +10,7 @@
 			"cache": false
 		},
 		"build": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["^build", "^db:generate"],
 			"outputs": ["dist/**", ".next/**", "public/dist/**"],
 			"cache": true
 		},
@@ -20,7 +20,7 @@
 		},
 		"dev": {
 			"cache": false,
-			"dependsOn": ["^build"],
+			"dependsOn": ["^build", "^db:generate", "^dev"],
 			"inputs": ["src/**/*.ts", "lib/**/*.ts"]
 		},
 		"db:migrate:deploy": {
@@ -40,7 +40,8 @@
 			"cache": false
 		},
 		"db:generate": {
-			"dependsOn": ["^db:generate"]
+			"dependsOn": ["^db:generate"],
+			"cache": false
 		}
 	},
 	"remoteCache": {
