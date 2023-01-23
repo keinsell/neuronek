@@ -12,10 +12,13 @@ import {
 	SubstanceRoaDose,
 	SubstanceRoaDuration,
 	SubstanceRoaDurationRange,
+	SubstanceTolerance,
 	SubstanceRoaRange
 } from './gql/sdk/graphql.js'
 import { RouteOfAdministrationTable } from '../../shared/substance/route-of-administration-table/route-of-administration-table.js'
 import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
+import { ToxicityTable } from '../../shared/substance/toxicity-table/toxicity-table.js'
+import { Tolerance } from '../../shared/substance/tolerance/tolerance.js'
 
 export class PsychonautWikiMapper {
 	private SubstanceRoaRange_DosageUnit(input: SubstanceRoaRange, unit?: string): DosageUnit | undefined {
@@ -30,6 +33,41 @@ export class PsychonautWikiMapper {
 			moderate: this.SubstanceRoaRange_DosageUnit(input.common, unit),
 			strong: this.SubstanceRoaRange_DosageUnit(input.strong, unit),
 			heavy: input.heavy ? new DosageUnit(input.heavy, unit) : undefined
+		})
+	}
+
+	private SubstanceTolerance__Tolerance(input: SubstanceTolerance): Tolerance {
+		let averagedTimeForToleranceToHalf: number | undefined
+		let averagedTimeForToleranceToBaseline: number | undefined
+
+		if (input.half) {
+			// Find "-" in string and split
+			const half = input.half.split('-')
+			let average = 0
+			for (const time of half) {
+				average += ms(time)
+			}
+			averagedTimeForToleranceToHalf = average / half.length
+		}
+
+		if (input.zero) {
+			// Find "-" in string and split
+			const baseline = input.zero.split('-')
+			let average = 0
+			for (const time of baseline) {
+				average += ms(time)
+			}
+			averagedTimeForToleranceToBaseline = average / baseline.length
+		}
+
+		return new Tolerance({
+			development: {
+				description: input.full
+			},
+			reduction: {
+				toleranceBaselineTime: averagedTimeForToleranceToBaseline,
+				toleranceHalfingTime: averagedTimeForToleranceToHalf
+			}
 		})
 	}
 
@@ -114,13 +152,20 @@ export class PsychonautWikiMapper {
 			return undefined
 		}
 
-		console.log(data)
-
 		const substance = new Substance({
 			name: data.name,
-			psychoactive_class: this.PsychoactiveClass__PsychoactiveClass(data.class.psychoactive),
-			chemical_class: data.class.chemical.toString(),
-			routes_of_administration: this.SubstanceRoaArray__RouteOfAdministrationTable(data.roas)
+			class_membership: {
+				psychoactive_class: this.PsychoactiveClass__PsychoactiveClass(data.class.psychoactive),
+				chemical_class: data.class.chemical.toString()
+			},
+			chemical_nomeclature: {
+				common_names: data.commonNames
+			},
+			routes_of_administration: this.SubstanceRoaArray__RouteOfAdministrationTable(data.roas),
+			toxicity: new ToxicityTable({
+				description: data.toxicity.toString()
+			}),
+			tolerance: this.SubstanceTolerance__Tolerance(data.tolerance)
 		})
 
 		return substance
