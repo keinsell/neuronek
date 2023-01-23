@@ -7368,6 +7368,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"neverthrow@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "neverthrow@npm:6.0.0"
+  checksum: 2110457892947b0d5b1f019198fef335cfb42db98b83b3cd9ebcdf0405cf81f2cfc2fef51199daa86d4bb6269dee0ac1d328f3de5dfd6eeca23105a565f78d27
+  languageName: node
+  linkType: hard
+
 "no-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "no-case@npm:3.0.4"
@@ -8759,6 +8766,7 @@ __metadata:
     diod: ^2.0.0
     express: ^4.18.2
     nanoid: ^4.0.0
+    neverthrow: ^6.0.0
     nodemon: 2.0.20
     osiris: "*"
     reflect-metadata: ^0.1.13

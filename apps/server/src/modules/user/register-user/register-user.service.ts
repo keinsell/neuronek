@@ -3,25 +3,28 @@ import { Password } from '../password/password.vo.js'
 import { User } from '../user.entity.js'
 import { UserRepository } from '../user.repository.js'
 import { RegisterUserRequest } from './register-user.request.js'
+import { Usecase } from '../../../shared/common/domain/usecase.js'
+import { UsernameTakenError } from '../errors/username-taken.error.js'
+import { Result, err, ok } from 'neverthrow'
 
 @Service()
-export class RegisterUserService {
+export class RegisterUserService implements Usecase<RegisterUserRequest, User, UsernameTakenError> {
 	constructor(private userRepository: UserRepository) {}
 
-	async execute(data: RegisterUserRequest): Promise<User> {
-		const user = new User({
-			username: data.username,
-			password: new Password(data.password)
-		})
-
-		const alreadyExists = await this.userRepository.findByUsername(user.username)
+	async execute(request: RegisterUserRequest): Promise<Result<User, UsernameTakenError>> {
+		const alreadyExists = await this.userRepository.findByUsername(request.username)
 
 		if (alreadyExists) {
-			throw new Error('User already registered')
+			return err(new UsernameTakenError())
 		}
 
-		const saved = await this.userRepository.save(user)
+		let user = new User({
+			username: request.username,
+			password: new Password(request.password)
+		})
 
-		return saved
+		user = await this.userRepository.save(user)
+
+		return ok(user)
 	}
 }
