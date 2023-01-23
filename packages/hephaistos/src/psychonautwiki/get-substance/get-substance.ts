@@ -1,7 +1,7 @@
 import { request } from 'graphql-request'
 import { GetSubstancesDocument, GetSubstancesQuery } from '../gql/sdk/graphql.js'
 import { PsychonautWikiMapper } from '../psychonautwiki.mapper.js'
-import { Substance } from '../../../shared/substance/substance.js'
+import { Substance } from 'osiris'
 
 export async function getSubstanceFromPsychonautWiki(substanceName: string): Promise<Substance | undefined> {
 	const response = await request<GetSubstancesQuery>('https://api.psychonautwiki.org', GetSubstancesDocument, {
