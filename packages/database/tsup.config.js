@@ -1,12 +1,17 @@
-import { defineConfig } from 'tsup'
-
-const isProduction = process.env['NODE_ENV'] === 'production'
-
-export default defineConfig({
-	clean: true,
-	dts: true,
+export default {
 	entry: ['src/index.ts'],
+	silent: false,
+	splitting: true,
+	target: 'node18',
+	sourcemap: true,
+	dts: true,
+	minify: true,
 	format: ['esm'],
-	minify: isProduction,
-	sourcemap: true
-})
+	clean: true,
+	treeshake: true,
+	metafile: true,
+	shims: true,
+	loader: {
+		'.md': 'file'
+	}
+}
