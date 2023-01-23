@@ -1,11 +1,10 @@
-import { Body, Controller, Example, OperationId, Post, Route, Tags } from 'tsoa'
-import { User } from '../user.entity.js'
+import { Body, Controller, Example, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
 import { UserResponse } from '../user.response.js'
 import type { RegisterUserRequest } from './register-user.request.js'
-import { Password } from '../password/password.vo.js'
 import { Service } from 'diod'
 import { RegisterUserService } from './register-user.service.js'
 import { nanoid } from 'nanoid'
+import { UsernameTakenError } from '../errors/username-taken.error.js'
 
 @Service()
 @Route('user')
@@ -21,15 +20,31 @@ export class RegisterUserController extends Controller {
 	 */
 	@Post()
 	@OperationId('register-user')
+	@SuccessResponse('201', 'User registered')
+	@Example<UserResponse>({
+		id: 'abc123',
+		username: 'user1',
+		jwt_token: 'ad'
+	})
+	@Response<UsernameTakenError>('400', 'Username already taken', {
+		message: 'This username is already taken.',
+		statusCode: 400
+	})
 	async registerUser(@Body() body: RegisterUserRequest): Promise<UserResponse> {
-		// TODO: Validate Body
-
 		const response = await this.registerUserService.execute(body)
 
+		// Handle Error
+		if (response.isErr()) {
+			this.setStatus(response.error.statusCode || 400)
+			return response.error as any
+		}
+
+		// Response
+		this.setStatus(201)
 		return {
-			id: response.id,
-			username: response.username,
-			jwt_token: 'ads'
+			id: response.value.id,
+			username: response.value.username,
+			jwt_token: nanoid()
 		}
 	}
 }
