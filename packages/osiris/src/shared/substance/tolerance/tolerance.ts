@@ -1,4 +1,4 @@
-import { PsychoactiveClass } from '../../../dataset/psychoactive-class/psychoactive-class'
+import { PsychoactiveClassification } from '../../../dataset/psychoactive-class/psychoactive-class'
 
 export interface ToleranceProperties {
 	development?: {
@@ -20,7 +20,7 @@ export interface ToleranceProperties {
 
 	/** Most of substances are sharing tolerance each other due to similar mechanisms of actions. For now we shgould only take attention to psychoactive groups which may share tolerance. */
 	crossTolerance?: {
-		byPsychoactiveGroup?: PsychoactiveClass
+		byPsychoactiveGroup?: PsychoactiveClassification
 	}
 }
 
@@ -45,7 +45,7 @@ export class Tolerance implements ToleranceProperties {
 
 	/** Most of substances are sharing tolerance each other due to similar mechanisms of actions. For now we shgould only take attention to psychoactive groups which may share tolerance. */
 	crossTolerance?: {
-		byPsychoactiveGroup?: PsychoactiveClass
+		byPsychoactiveGroup?: PsychoactiveClassification
 	}
 
 	constructor(payload: ToleranceProperties = {}) {

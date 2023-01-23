@@ -16,7 +16,7 @@ import {
 	SubstanceRoaRange
 } from './gql/sdk/graphql.js'
 import { RouteOfAdministrationTable } from '../../shared/substance/route-of-administration-table/route-of-administration-table.js'
-import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
+import { PsychoactiveClassification } from '../../dataset/psychoactive-class/psychoactive-class.js'
 import { ToxicityTable } from '../../shared/substance/toxicity-table/toxicity-table.js'
 import { Tolerance } from '../../shared/substance/tolerance/tolerance.js'
 
@@ -124,7 +124,9 @@ export class PsychonautWikiMapper {
 		return this.RouteOfAdministrationWithClassification__RouteOfAdministrationTable(array as any)
 	}
 
-	private PsychoactiveClass__PsychoactiveClass(input: string | string[]): PsychoactiveClass | undefined {
+	private PsychoactiveClassification__PsychoactiveClassification(
+		input: string | string[]
+	): PsychoactiveClassification | undefined {
 		const mainClassification: string = input instanceof Array ? input[0] : input
 
 		if (mainClassification === '') {
@@ -133,9 +135,9 @@ export class PsychonautWikiMapper {
 
 		switch (mainClassification) {
 			case 'Psychedelics':
-				return PsychoactiveClass.psychedelic
+				return PsychoactiveClassification.psychedelic
 			case 'Stimulants':
-				return PsychoactiveClass.stimulant
+				return PsychoactiveClassification.stimulant
 		}
 	}
 
@@ -155,7 +157,7 @@ export class PsychonautWikiMapper {
 		const substance = new Substance({
 			name: data.name,
 			class_membership: {
-				psychoactive_class: this.PsychoactiveClass__PsychoactiveClass(data.class.psychoactive),
+				psychoactive_class: this.PsychoactiveClassification__PsychoactiveClassification(data.class.psychoactive),
 				chemical_class: data.class.chemical.toString()
 			},
 			chemical_nomeclature: {
