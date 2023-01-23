@@ -32,11 +32,15 @@ export interface PsychoactiveClassProperties {
 	 * @example 'Psychedelics (also known as serotonergic hallucinogens) are a class of psychoactive substances that produce an altered state of consciousness marked by unusual changes in perception, mood, and cognitive processes.'
 	 */
 	description?: string
+	wikipedia?: string
+	psychonautwiki?: string
 }
 
 export class PsychoactiveClass implements PsychoactiveClassProperties {
 	name: PsychoactiveClassification
 	description?: string
+	wikipedia?: string
+	psychonautwiki?: string
 
 	constructor(properties: PsychoactiveClassProperties) {
 		Object.assign(this, properties)
