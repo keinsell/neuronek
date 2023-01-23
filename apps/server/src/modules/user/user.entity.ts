@@ -10,8 +10,8 @@ export class User extends Entity implements UserProperties {
 	public readonly username: string
 	public readonly password: Password
 
-	constructor(properties: UserProperties) {
-		super()
+	constructor(properties: UserProperties, id?: string | number) {
+		super(id)
 		Object.assign(this, properties)
 	}
 }
