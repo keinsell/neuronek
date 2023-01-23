@@ -152,17 +152,7 @@ export class Substance implements SubstanceProperites {
 	experiences?: {}
 
 	constructor(substanceInfomration: SubstanceProperites) {
-		this.name = substanceInfomration.name
-		this.chemical_nomeclature = substanceInfomration.chemical_nomeclature
-		this.class_membership = substanceInfomration.class_membership
-		this.routes_of_administration = substanceInfomration.routes_of_administration
-		this.interactions = substanceInfomration.interactions
-		this.pharmacology = substanceInfomration.pharmacology
-		this.subjective_effects = substanceInfomration.subjective_effects
-		this.toxicity = substanceInfomration.toxicity
-		this.harm_potential = substanceInfomration.harm_potential
-		this.experiences = substanceInfomration.experiences
-		this.tolerance = substanceInfomration.tolerance
+		Object.assign(this, substanceInfomration)
 	}
 
 	toJSON(): _SubstanceJSON {
