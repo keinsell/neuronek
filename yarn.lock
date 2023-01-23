@@ -2998,7 +2998,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bundle-require@npm:^3.1.2":
+"bundle-require@npm:^3.0.2, bundle-require@npm:^3.1.2":
   version: 3.1.2
   resolution: "bundle-require@npm:3.1.2"
   dependencies:
@@ -3698,12 +3698,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"database@npm:*":
+  version: 0.0.2
+  resolution: "database@npm:0.0.2"
+  checksum: 1dc5c9616bcb6ef0a390ce7b3ab7c25afe9a50dfa442e2fea474378f7be14f03461bc51034f24efa74ed165d9a8ea8fd00533816576c8beca28c898130c9faac
+  languageName: node
+  linkType: hard
+
 "database@workspace:packages/database":
   version: 0.0.0-use.local
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": latest
     prisma: latest
+    tsup: 6.2.2
+    typescript: 4.7.4
   languageName: unknown
   linkType: soft
 
@@ -5113,7 +5122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@npm%3A~2.3.2#~builtin<compat/fsevents>":
+"fsevents@patch:fsevents@npm%3A~2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
@@ -8459,6 +8468,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rollup@npm:^2.74.1":
+  version: 2.79.1
+  resolution: "rollup@npm:2.79.1"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: 6a2bf167b3587d4df709b37d149ad0300692cc5deb510f89ac7bdc77c8738c9546ae3de9322b0968e1ed2b0e984571f5f55aae28fa7de4cfcb1bc5402a4e2be6
+  languageName: node
+  linkType: hard
+
 "rollup@npm:^3.2.5":
   version: 3.10.1
   resolution: "rollup@npm:3.10.1"
@@ -8626,6 +8649,7 @@ __metadata:
   resolution: "server@workspace:apps/server"
   dependencies:
     "@types/node": ^18.11.18
+    database: "*"
     diod: ^2.0.0
     express: ^4.18.2
     nodemon: 2.0.20
@@ -9451,6 +9475,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsup@npm:6.2.2":
+  version: 6.2.2
+  resolution: "tsup@npm:6.2.2"
+  dependencies:
+    bundle-require: ^3.0.2
+    cac: ^6.7.12
+    chokidar: ^3.5.1
+    debug: ^4.3.1
+    esbuild: ^0.15.1
+    execa: ^5.0.0
+    globby: ^11.0.3
+    joycon: ^3.0.1
+    postcss-load-config: ^3.0.1
+    resolve-from: ^5.0.0
+    rollup: ^2.74.1
+    source-map: 0.8.0-beta.0
+    sucrase: ^3.20.3
+    tree-kill: ^1.2.2
+  peerDependencies:
+    "@swc/core": ^1
+    postcss: ^8.4.12
+    typescript: ^4.1.0
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    postcss:
+      optional: true
+    typescript:
+      optional: true
+  bin:
+    tsup: dist/cli-default.js
+    tsup-node: dist/cli-node.js
+  checksum: fdcad3f097d439bd94a60233af3284e471679642d16da4dba9fffa4e1ec7fe0cd3c21cc8e548dbfe55f6acdca76d2bcd27e91765f9386a9533ed4b7a25b34c56
+  languageName: node
+  linkType: hard
+
 "tsup@npm:^6.5.0":
   version: 6.5.0
   resolution: "tsup@npm:6.5.0"
@@ -9658,6 +9718,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:4.7.4":
+  version: 4.7.4
+  resolution: "typescript@npm:4.7.4"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 5750181b1cd7e6482c4195825547e70f944114fb47e58e4aa7553e62f11b3f3173766aef9c281783edfd881f7b8299cf35e3ca8caebe73d8464528c907a164df
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^4.6.4, typescript@npm:^4.7.4, typescript@npm:^4.9.3, typescript@npm:^4.9.4":
   version: 4.9.4
   resolution: "typescript@npm:4.9.4"
@@ -9665,6 +9735,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: e782fb9e0031cb258a80000f6c13530288c6d63f1177ed43f770533fdc15740d271554cdae86701c1dd2c83b082cea808b07e97fd68b38a172a83dbf9e0d0ef9
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.7.4#~builtin<compat/typescript>":
+  version: 4.7.4
+  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 9096d8f6c16cb80ef3bf96fcbbd055bf1c4a43bd14f3b7be45a9fbe7ada46ec977f604d5feed3263b4f2aa7d4c7477ce5f9cd87de0d6feedec69a983f3a4f93e
   languageName: node
   linkType: hard
 

@@ -1,0 +1,35 @@
+{
+	"compilerOptions": {
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"exactOptionalPropertyTypes": false,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"forceConsistentCasingInFileNames": true,
+		"inlineSources": false,
+		"isolatedModules": true,
+		"strictNullChecks": true,
+		"noUnusedParameters": true,
+		"preserveWatchOutput": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"lib": ["ESNext", "ScriptHost", "DOM"],
+		"module": "NodeNext",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"target": "ESNext"
+	},
+	"ts-node": {
+		"swc": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
+}
