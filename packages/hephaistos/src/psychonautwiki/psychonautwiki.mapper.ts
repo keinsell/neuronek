@@ -1,11 +1,17 @@
 import ms from 'ms'
-import { DosageTable } from '../../shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-table.js'
-import { DosageUnit } from '../../shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-unit/dosage-unit.js'
-import { PhaseTable } from '../../shared/substance/route-of-administration-table/route-of-administration/phase-table/phase-table.js'
-import { Phase } from '../../shared/substance/route-of-administration-table/route-of-administration/phase-table/phase/phase.js'
-import { RouteOfAdministrationClassification } from '../../shared/substance/route-of-administration-table/route-of-administration-classification.js'
-import { RouteOfAdministration } from '../../shared/substance/route-of-administration-table/route-of-administration/route-of-administration.js'
-import { Substance } from '../../shared/substance/substance.js'
+import {
+	Substance,
+	RouteOfAdministrationClassification,
+	Phase,
+	DosageUnit,
+	DosageTable,
+	Tolerance,
+	PhaseTable,
+	RouteOfAdministration,
+	PsychoactiveClassification,
+	RouteOfAdministrationTable,
+	ToxicityTable
+} from 'osiris'
 import {
 	GetSubstancesQuery,
 	SubstanceRoa,
@@ -15,10 +21,6 @@ import {
 	SubstanceTolerance,
 	SubstanceRoaRange
 } from './gql/sdk/graphql.js'
-import { RouteOfAdministrationTable } from '../../shared/substance/route-of-administration-table/route-of-administration-table.js'
-import { PsychoactiveClassification } from '../../dataset/psychoactive-class/psychoactive-class.js'
-import { ToxicityTable } from '../../shared/substance/toxicity-table/toxicity-table.js'
-import { Tolerance } from '../../shared/substance/tolerance/tolerance.js'
 
 export class PsychonautWikiMapper {
 	private SubstanceRoaRange_DosageUnit(input: SubstanceRoaRange, unit?: string): DosageUnit | undefined {
