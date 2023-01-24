@@ -1,0 +1,31 @@
+{
+	"name": "erowid-dataset",
+	"version": "0.0.0",
+	"description": "A research project analyzing the experiences available from Erowid in the interest of harm reduction.",
+	"keywords": [
+		"erowid",
+		"experience",
+		"substance",
+		"drug"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/christianbundy/erowid-research-project.git"
+	},
+	"author": "Christian Bundy <me@christianbundy.com>",
+	"contributors": [
+		{
+			"name": "Christian Bundy",
+			"email": "me@christianbundy.com"
+		},
+		{
+			"name": "Jakub Olan",
+			"email": "keinsell@protonmail.com"
+		}
+	],
+	"main": "dataset/index.json",
+	"types": "@types/erowid.d.ts",
+	"engines": {
+		"node": ">=0.10"
+	}
+}

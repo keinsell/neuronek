@@ -4056,6 +4056,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"erowid-dataset@*, erowid-dataset@workspace:packages/dataset-erowid":
+  version: 0.0.0-use.local
+  resolution: "erowid-dataset@workspace:packages/dataset-erowid"
+  languageName: unknown
+  linkType: soft
+
 "err-code@npm:^2.0.2":
   version: 2.0.3
   resolution: "err-code@npm:2.0.3"
@@ -5593,6 +5599,7 @@ __metadata:
     "@types/nodemon": 1.19.2
     ava: ^5.1.1
     c8: ^7.12.0
+    erowid-dataset: "*"
     graphql: ^16.6.0
     graphql-request: ^5.1.0
     js-quantities: ^1.7.6
@@ -8161,9 +8168,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"psyxts-dataset@*, psyxts-dataset@workspace:packages/psyxts-dataset":
+"psyxts-dataset@*, psyxts-dataset@workspace:packages/dataset-psyxts":
   version: 0.0.0-use.local
-  resolution: "psyxts-dataset@workspace:packages/psyxts-dataset"
+  resolution: "psyxts-dataset@workspace:packages/dataset-psyxts"
   dependencies:
     "@types/node": ^18.0.3
     "@typescript-eslint/eslint-plugin": ^5.30.6

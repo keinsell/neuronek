@@ -24,6 +24,7 @@
 		"test:unit": "ava"
 	},
 	"dependencies": {
+		"erowid-dataset": "*",
 		"graphql": "^16.6.0",
 		"graphql-request": "^5.1.0",
 		"js-quantities": "^1.7.6",
