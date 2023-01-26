@@ -3,7 +3,6 @@ import { UserResponse } from '../user.response.js'
 import type { RegisterUserRequest } from './register-user.request.js'
 import { Service } from 'diod'
 import { RegisterUserService } from './register-user.service.js'
-import { nanoid } from 'nanoid'
 import { UsernameTakenError } from '../errors/username-taken.error.js'
 
 @Service()
@@ -22,9 +21,12 @@ export class RegisterUserController extends Controller {
 	@OperationId('register-user')
 	@SuccessResponse('201', 'User registered')
 	@Example<UserResponse>({
-		id: 'abc123',
-		username: 'user1',
-		jwt_token: 'ad'
+		id: 'cldctwu260000pm4a9b83zgvs',
+		username: 'keinsell',
+		jwt_token:
+			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3MjE0NTEsImV4cCI6MTY3NDcyODY1MSwiYXVkIjoiYWNjb3VudC5uZXVyb25lay54eXoiLCJpc3MiOiJuZXVyb25lay54eXoiLCJzdWIiOiJjbGRjdHd1MjYwMDAwcG00YTliODN6Z3ZzIiwianRpIjoiMzE2OCJ9.R3wF4_lUIOYFB9uVz5CQ36sZeIESJfEjQuBDQ7To8sI',
+		refresh_token:
+			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzQ3MjE0NTEsImV4cCI6MTY3NTkzMTA1MSwiYXVkIjoiYWNjb3VudC5uZXVyb25lay54eXoiLCJpc3MiOiJuZXVyb25lay54eXoiLCJzdWIiOiJjbGRjdHd1MjYwMDAwcG00YTliODN6Z3ZzIiwianRpIjoiMzE2OCJ9.p_g0drCiRBl9ADAidVZ7vnq2Gv21MjVaqo-k0u3ldfE'
 	})
 	@Response<UsernameTakenError>('400', 'Username already taken', {
 		message: 'This username is already taken.',

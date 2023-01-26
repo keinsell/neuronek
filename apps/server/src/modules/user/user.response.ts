@@ -18,14 +18,7 @@ eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
 SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
 	 * @pattern 'Bearer'
 	 */
-	jwt_token?: string
-	/**
-	 * A unix timestamp indicating when the JWT expires.
-	 * @example 1601501319
-	 * @minimum 0
-	 * @type integer
-	 */
-	expires_in?: number
+	jwt_token: string
 	/**
 	 * A refresh token that can be sent to the /user/refresh endpoint to get a new JWT.'
 	 * @pattern 'Bearer'
@@ -33,5 +26,5 @@ SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
 eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
 SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
 	 */
-	refresh_token?: string
+	refresh_token: string
 }
