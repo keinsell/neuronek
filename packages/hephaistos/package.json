@@ -1,8 +1,8 @@
 {
-	"name": "osiris",
+	"name": "hephaistos",
 	"version": "0.0.0",
 	"private": true,
-	"description": "🧪 Community-based psychoactive substance database with a focus on safety, harm reduction and education. Including well-designed wrapper for easier data manipulation. Note: This project is still in early development and the data might be inaccurate.",
+	"description": "",
 	"author": {
 		"name": "Jakub Olan",
 		"email": "keinsell@protonmail.com",
@@ -24,11 +24,14 @@
 		"test:unit": "ava"
 	},
 	"dependencies": {
+		"erowid-dataset": "*",
 		"graphql": "^16.6.0",
 		"graphql-request": "^5.1.0",
 		"js-quantities": "^1.7.6",
 		"ms": "^2.1.3",
+		"osiris": "*",
 		"pqm": "^1.0.0",
+		"psyxts-dataset": "*",
 		"unitmath": "^0.8.8"
 	},
 	"devDependencies": {

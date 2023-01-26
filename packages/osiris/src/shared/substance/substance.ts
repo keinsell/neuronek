@@ -1,4 +1,4 @@
-import { PsychoactiveClass } from '../../dataset/psychoactive-class/psychoactive-class.js'
+import { PsychoactiveClassification } from '../../dataset/psychoactive-class/psychoactive-class.js'
 import {
 	RouteOfAdministrationTable,
 	_RouteOfAdministrationTableJSON
@@ -17,7 +17,7 @@ export type _SubstanceJSON = {
 	substitive_nomenclature?: string
 	systematic_nomenclature?: string
 	chemical_class?: string
-	psychoactive_class?: PsychoactiveClass
+	psychoactive_class?: PsychoactiveClassification
 	routes_of_administration?: _RouteOfAdministrationTableJSON
 }
 
@@ -63,7 +63,7 @@ interface SubstanceProperites {
 		 *
 		 * @example "Stimulant"
 		 */
-		psychoactive_class?: PsychoactiveClass
+		psychoactive_class?: PsychoactiveClassification
 		/**
 		 * Chemical class refers to the grouping of chemical compounds that have similar structural or functional characteristics. In chemistry, compounds are often classified based on their chemical makeup, such as their chemical formula, functional groups, or reactivity.
 		 *
@@ -131,7 +131,7 @@ export class Substance implements SubstanceProperites {
 		 *
 		 * @example "Stimulant"
 		 */
-		psychoactive_class?: PsychoactiveClass
+		psychoactive_class?: PsychoactiveClassification
 		/**
 		 * Chemical class refers to the grouping of chemical compounds that have similar structural or functional characteristics. In chemistry, compounds are often classified based on their chemical makeup, such as their chemical formula, functional groups, or reactivity.
 		 *
