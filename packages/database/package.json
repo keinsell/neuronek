@@ -13,9 +13,7 @@
 		"prebuild": "yarn db:generate",
 		"build": "tsup-node",
 		"db:generate": "prisma generate",
-		"db:push": "prisma db push --skip-generate",
-		"predev": "npm run generate",
-		"dev": "tsup-node --watch"
+		"db:push": "prisma db push --skip-generate"
 	},
 	"dependencies": {
 		"@prisma/client": "latest"
