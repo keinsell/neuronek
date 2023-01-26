@@ -1,4 +1,4 @@
-import { Body, Controller, Example, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
+import { Body, Controller, Example, Middlewares, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
 import { UserResponse } from '../user.response.js'
 import type { RegisterUserRequest } from './register-user.request.js'
 import { Service } from 'diod'
