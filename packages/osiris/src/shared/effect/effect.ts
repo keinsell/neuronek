@@ -1,3 +1,10 @@
+export enum EffectTag {
+	cognitive = 'cognitive',
+	psychological_stage = 'psychological_stage',
+	novelty = 'novel',
+	psychedelic = 'psychedelic'
+}
+
 /** @see https://effectindex.com/categories/ */
 export enum EffectCategory {
 	/** Visual effects are defined as any subjective effect that directly alters a person's sense of sight. */
@@ -51,7 +58,36 @@ export enum EffectCategory {
 	/** Uncomfortable bodily effects are defined as any uncomfortable physical effect that relates to the overall body and cannot be categorized as cardiovascular or cerebrovascular. */
 	uncomfortable_bodily_effects = 'Uncomfortable Bodily Effects'
 }
+
+// https://effectindex.com/effects/
 export class Effect {
+	/**
+	 * @example "Jamais vu"
+	 */
 	name: string
-	description: string
+	/**
+	 * @example "jamais-vu"
+	 */
+	slug: string
+	/**
+	 * @example 'Psychological States'
+	 */
+	category: EffectCategory
+	/**
+	 * @example ["cognitive", "psychological_stage"]
+	 */
+	tags: EffectTag[]
+	/**
+	 * @example "Jamais vu can be described as the sudden sensation that a previously known concept or currently-occurring situation is unfamiliar and being experienced for the very first time. This is often triggered despite the fact that during the experience of it, the person is rationally aware that the circumstances of the previous experience have definitely occurred."
+	 */
+	summary: string
+	/**
+	 * Markdown-formatted text.
+	 * @example ["# Jamais vu", "**Jamais vu** can be described as the sudden sensation that a previously known concept or currently-occurring situation is unfamiliar and being experienced for the very first time. This is often triggered despite the fact that during the experience of it, the person is rationally aware that the circumstances of the previous experience have definitely occurred.", ...]
+	 */
+	description: string[]
+	/**
+	 * @example "https://effectindex.com/effects/jamais-vu"
+	 */
+	see_also?: Effect[]
 }
