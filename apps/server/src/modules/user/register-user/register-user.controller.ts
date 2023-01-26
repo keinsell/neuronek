@@ -39,12 +39,15 @@ export class RegisterUserController extends Controller {
 			return response.error as any
 		}
 
+		const { access_token, refresh_token } = response.value.token.toJwtTokenAndRefreshToken()
+
 		// Response
 		this.setStatus(201)
 		return {
 			id: response.value.id,
 			username: response.value.username,
-			jwt_token: nanoid()
+			jwt_token: access_token,
+			refresh_token: refresh_token
 		}
 	}
 }

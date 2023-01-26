@@ -6,12 +6,15 @@ import { RegisterUserRequest } from './register-user.request.js'
 import { Usecase } from '../../../shared/common/domain/usecase.js'
 import { UsernameTakenError } from '../errors/username-taken.error.js'
 import { Result, err, ok } from 'neverthrow'
+import { JwtToken } from '../authorization/jwt-token.js'
 
 @Service()
-export class RegisterUserService implements Usecase<RegisterUserRequest, User, UsernameTakenError> {
+export class RegisterUserService
+	implements Usecase<RegisterUserRequest, User & { token: JwtToken }, UsernameTakenError>
+{
 	constructor(private userRepository: UserRepository) {}
 
-	async execute(request: RegisterUserRequest): Promise<Result<User, UsernameTakenError>> {
+	async execute(request: RegisterUserRequest): Promise<Result<User & { token: JwtToken }, UsernameTakenError>> {
 		const alreadyExists = await this.userRepository.findByUsername(request.username)
 
 		if (alreadyExists) {
@@ -25,6 +28,6 @@ export class RegisterUserService implements Usecase<RegisterUserRequest, User, U
 
 		user = await this.userRepository.save(user)
 
-		return ok(user)
+		return ok({ ...user, token: JwtToken.fromUser(user) })
 	}
 }
