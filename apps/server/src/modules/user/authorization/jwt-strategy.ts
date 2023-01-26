@@ -1,10 +1,11 @@
 import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt'
 import { UserRepository } from '../user.repository.js'
 import { Service } from 'diod'
+import { JWT_SECRET } from '../../../shared/configuration/environment-variables.js'
 
 const options: StrategyOptions = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-	secretOrKey: 'adsads',
+	secretOrKey: JWT_SECRET,
 	issuer: 'account.neuronek.xyz',
 	audience: 'neuronek.xyz'
 }

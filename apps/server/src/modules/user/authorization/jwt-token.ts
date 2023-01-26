@@ -1,8 +1,7 @@
 import { User } from '../user.entity.js'
 import jsonwebtoken from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
-
-export const JWT_SECRET = 'asdsasadasdasdasd'
+import { JWT_SECRET } from '../../../shared/configuration/environment-variables.js'
 
 export class JwtToken {
 	/**
