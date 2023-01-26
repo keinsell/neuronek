@@ -4162,6 +4162,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"envalid@npm:^7.3.1":
+  version: 7.3.1
+  resolution: "envalid@npm:7.3.1"
+  dependencies:
+    tslib: 2.3.1
+  checksum: dea10ada13e007f684318474a7dd1b528bbe4ed8ca702918e276d26505bd3807f1e93c4045b7acadd1a4639f207ae4c5375ca0afdff973efab9ea7ead655240f
+  languageName: node
+  linkType: hard
+
 "erowid-dataset@*, erowid-dataset@workspace:packages/dataset-erowid":
   version: 0.0.0-use.local
   resolution: "erowid-dataset@workspace:packages/dataset-erowid"
@@ -8895,6 +8904,7 @@ __metadata:
     argon2: ^0.30.3
     database: "*"
     diod: ^2.0.0
+    envalid: ^7.3.1
     express: ^4.18.2
     jsonwebtoken: ^9.0.0
     nanoid: ^4.0.0
@@ -9695,6 +9705,13 @@ __metadata:
     minimist: "npm:^1.2.6"
     strip-bom: "npm:^3.0.0"
   checksum: 8afa01c673ebb4782ba53d3a12df97fa837ce524f8ad38ee4e2b2fd57f5ac79abc21c574e9e9eb014d93efe7fe8214001b96233b5c6ea75bd1ea82afe17a4c6d
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.3.1":
+  version: 2.3.1
+  resolution: "tslib@npm:2.3.1"
+  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
   languageName: node
   linkType: hard
 
