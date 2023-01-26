@@ -27,7 +27,7 @@ export class RouteOfAdministrationTable {
 
 	/** Filters table of routes of administration and returns only documented routes. */
 	getDocumentedRoutesOfAdministration(): RouteOfAdministration[] {
-		return Object.values(this).filter((route: RouteOfAdministration) => !!route)
+		return Object.values(this).filter((route: RouteOfAdministration) => Boolean(route))
 	}
 
 	toJSON(): _RouteOfAdministrationTableJSON {
