@@ -110,3 +110,88 @@ query getSubstances($name: String) {
 		}
 	}
 }
+
+query AllSubstances {
+	substances(limit: 9999) {
+		name
+		commonNames
+		url
+		class {
+			chemical
+			psychoactive
+		}
+		tolerance {
+			full
+			half
+			zero
+		}
+		roas {
+			name
+			dose {
+				units
+				threshold
+				light {
+					min
+					max
+				}
+				common {
+					min
+					max
+				}
+				strong {
+					min
+					max
+				}
+				heavy
+			}
+			duration {
+				onset {
+					min
+					max
+					units
+				}
+				comeup {
+					min
+					max
+					units
+				}
+				peak {
+					min
+					max
+					units
+				}
+				offset {
+					min
+					max
+					units
+				}
+				total {
+					min
+					max
+					units
+				}
+				afterglow {
+					min
+					max
+					units
+				}
+			}
+			bioavailability {
+				min
+				max
+			}
+		}
+		addictionPotential
+		toxicity
+		crossTolerances
+		uncertainInteractions {
+			name
+		}
+		unsafeInteractions {
+			name
+		}
+		dangerousInteractions {
+			name
+		}
+	}
+}
