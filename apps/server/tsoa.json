@@ -4,12 +4,22 @@
 	"controllerPathGlobs": ["**/*.controller.ts", "*/**/*.controller.ts"],
 	"spec": {
 		"outputDirectory": "dist",
-		"specVersion": 3
+		"specVersion": 3,
+		"securityDefinitions": {
+			"Bearer": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		},
+		"security": [{ "Bearer": [] }]
 	},
 	"routes": {
 		"basePath": "/",
 		"entryFile": "src/index.ts",
 		"routesDir": "dist",
-		"iocModule": "src/shared/infrastructure/ioc/container.ts"
+		"authenticationModule": "src/shared/infrastructure/authorization/auth.ts",
+		"iocModule": "src/shared/infrastructure/ioc/container.ts",
+		"esm": true
 	}
 }

@@ -268,6 +268,88 @@ export type GetSubstancesQuery = {
 	} | null> | null
 }
 
+export type AllSubstancesQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllSubstancesQuery = {
+	__typename?: 'Query'
+	substances?: Array<{
+		__typename?: 'Substance'
+		name?: string | null
+		commonNames?: Array<string | null> | null
+		url?: string | null
+		addictionPotential?: string | null
+		toxicity?: Array<string | null> | null
+		crossTolerances?: Array<string | null> | null
+		class?: {
+			__typename?: 'SubstanceClass'
+			chemical?: Array<string | null> | null
+			psychoactive?: Array<string | null> | null
+		} | null
+		tolerance?: {
+			__typename?: 'SubstanceTolerance'
+			full?: string | null
+			half?: string | null
+			zero?: string | null
+		} | null
+		roas?: Array<{
+			__typename?: 'SubstanceRoa'
+			name?: string | null
+			dose?: {
+				__typename?: 'SubstanceRoaDose'
+				units?: string | null
+				threshold?: number | null
+				heavy?: number | null
+				light?: { __typename?: 'SubstanceRoaRange'; min?: number | null; max?: number | null } | null
+				common?: { __typename?: 'SubstanceRoaRange'; min?: number | null; max?: number | null } | null
+				strong?: { __typename?: 'SubstanceRoaRange'; min?: number | null; max?: number | null } | null
+			} | null
+			duration?: {
+				__typename?: 'SubstanceRoaDuration'
+				onset?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+				comeup?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+				peak?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+				offset?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+				total?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+				afterglow?: {
+					__typename?: 'SubstanceRoaDurationRange'
+					min?: number | null
+					max?: number | null
+					units?: string | null
+				} | null
+			} | null
+			bioavailability?: { __typename?: 'SubstanceRoaRange'; min?: number | null; max?: number | null } | null
+		} | null> | null
+		uncertainInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
+		unsafeInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
+		dangerousInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
+	} | null> | null
+}
+
 export const GetSubstancesDocument = {
 	kind: 'Document',
 	definitions: [
@@ -569,3 +651,230 @@ export const GetSubstancesDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetSubstancesQuery, GetSubstancesQueryVariables>
+export const AllSubstancesDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'AllSubstances' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'substances' },
+						arguments: [
+							{ kind: 'Argument', name: { kind: 'Name', value: 'limit' }, value: { kind: 'IntValue', value: '9999' } }
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'commonNames' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'url' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'class' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'chemical' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'psychoactive' } }
+										]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'tolerance' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'full' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'half' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'zero' } }
+										]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'roas' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'dose' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'units' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'threshold' } },
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'light' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'common' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'strong' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } }
+																]
+															}
+														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'heavy' } }
+													]
+												}
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'duration' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'onset' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'comeup' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'peak' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'offset' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'total' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'afterglow' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'max' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'units' } }
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'bioavailability' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'min' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'max' } }
+													]
+												}
+											}
+										]
+									}
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'addictionPotential' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'toxicity' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'crossTolerances' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'uncertainInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'name' } }]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'unsafeInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'name' } }]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'dangerousInteractions' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'name' } }]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AllSubstancesQuery, AllSubstancesQueryVariables>
