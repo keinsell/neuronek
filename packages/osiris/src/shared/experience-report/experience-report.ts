@@ -25,3 +25,16 @@ export interface PhaseParaphraphTableProperites {
 	/** Ending of experience which would include offset and aftereffects. */
 	offset?: PhaseParagraphProperties
 }
+
+export interface ExperienceReportProperties {
+	title?: string
+	subject?: SubjectProperties
+	ingestions?: IngestionProperties[]
+	experienceDate?: Date
+	submissionDate?: Date
+	phases?: PhaseParaphraphTableProperites
+	raw_content?: string[]
+	conclusion?: string
+	effects?: Effect[]
+	location?: string
+}
