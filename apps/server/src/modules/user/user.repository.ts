@@ -6,6 +6,7 @@ import { Password } from './password/password.vo.js'
 export abstract class UserRepository {
 	abstract save(user: User): Promise<User>
 	abstract findByUsername(username: string): Promise<User | undefined>
+	abstract findByUserId(userId: string): Promise<User | undefined>
 }
 
 @Service()
@@ -18,6 +19,10 @@ export class InMemoryUserRepository implements UserRepository {
 	}
 
 	async findByUsername(username: string): Promise<User> {
+		throw new Error('Method not implemented.')
+	}
+
+	async findByUserId(userId: string): Promise<User> {
 		throw new Error('Method not implemented.')
 	}
 }
@@ -51,6 +56,15 @@ export class PrismaUserRepository implements UserRepository {
 
 	async findByUsername(username: string): Promise<User> {
 		const result = await this.prisma.user.findUnique({ where: { username } })
+
+		if (!result) {
+			return undefined
+		}
+		return this.PrismaUserRecord__User(result)
+	}
+
+	async findByUserId(userId: string): Promise<User> {
+		const result = await this.prisma.user.findUnique({ where: { id: userId } })
 
 		if (!result) {
 			return undefined
