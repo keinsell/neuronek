@@ -1,20 +1,20 @@
-import { User } from '../user.entity.js'
+import { User } from '../user/user.entity.js'
 import jsonwebtoken from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
-import { JWT_SECRET } from '../../../shared/configuration/environment-variables.js'
+import { JWT_SECRET } from '../../shared/configuration/environment-variables.js'
 
 export class JwtToken {
 	/**
 	 * Stands for "subject" and it's a string that typically contains the user's unique identifier.
 	 */
-	protected readonly subject: string
+	public readonly subject: string
 	/**
 	 * Stands for "JWT ID" and it's a string that contains a unique ID to identify the JWT.
 	 */
-	protected readonly jti: string = nanoid(128)
+	public readonly jti: string = nanoid(128)
 
-	protected readonly issuer: string = 'neuronek.xyz'
-	protected readonly audience: string = 'account.neuronek.xyz'
+	public readonly issuer: string = 'neuronek.xyz'
+	public readonly audience: string = 'account.neuronek.xyz'
 
 	protected readonly access_token: jsonwebtoken.SignOptions
 	protected readonly refresh_token: jsonwebtoken.SignOptions
@@ -63,24 +63,14 @@ export class JwtToken {
 		}
 	}
 
-	static fromJsonWebToken(token: string): JwtToken {
-		// Decode JWT token
-		const decoded = jsonwebtoken.decode(token, { json: true }) as {
-			iss?: string
-			aud: string
-			jti: string
-			sub: string
-			iat: number
-			exp: number
+	static fromAuthHeader(token: string): JwtToken | undefined {
+		try {
+			const { sub } = jsonwebtoken.verify(token, JWT_SECRET) as { sub: string }
+			return new JwtToken({
+				userId: sub
+			})
+		} catch (error) {
+			return undefined
 		}
-
-		// Verify token
-		const verify = jsonwebtoken.verify(token, JWT_SECRET)
-
-		const token_class = new JwtToken({
-			userId: decoded.sub
-		})
-
-		return token_class
 	}
 }
