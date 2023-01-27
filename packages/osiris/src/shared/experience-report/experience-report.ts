@@ -17,3 +17,11 @@ export interface PhaseParagraphProperties {
 	content: string[]
 	effects?: Effect[]
 }
+export interface PhaseParaphraphTableProperites {
+	/** Start of experience which would include onset and comeup. */
+	onset?: PhaseParagraphProperties
+	/** Middle of experience which would include plateau and peak. */
+	peak?: PhaseParagraphProperties
+	/** Ending of experience which would include offset and aftereffects. */
+	offset?: PhaseParagraphProperties
+}
