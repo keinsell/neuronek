@@ -1,3 +1,4 @@
+import { IngestionProperties } from '../ingestion/ingestion.js'
 export interface SubjectProperties {
 	name?: string
 	gender?: string
