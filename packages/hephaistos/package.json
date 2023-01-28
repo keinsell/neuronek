@@ -13,7 +13,8 @@
 	"module": "dist/index.cjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsx ./src/index.ts",
+		"build": "tsup-node",
+		"compile": "tsx ./src/index.ts",
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
 		"predev": "yarn generate",
@@ -31,6 +32,7 @@
 		"osiris": "*",
 		"pqm": "^1.0.0",
 		"psyxts-dataset": "*",
+		"type-fest": "^3.5.3",
 		"unitmath": "^0.8.8"
 	},
 	"devDependencies": {

@@ -1,11 +1,10 @@
 import { ExperienceReport, Substance } from 'osiris'
-import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class HephaistosDataset {
-	private readonly substance_store: Substance[] = []
-	private readonly experience_store: ExperienceReport[] = []
-	private readonly effect_store: string[] = []
+	public readonly substance_store: Substance[] = []
+	public readonly experience_store: ExperienceReport[] = []
+	public readonly effect_store: string[] = []
 
 	constructor({ substances, experiences, effects }) {
 		this.substance_store = substances
@@ -14,12 +13,15 @@ export class HephaistosDataset {
 	}
 
 	findSubstanceByName(substanceName: string): Substance {
+		console.log('Looking for substance ', substanceName)
+		console.log(this.substance_store.map(substance => substance.name))
+
 		return this.substance_store.find(
 			substance =>
-				substance.name === substanceName ||
-				substance.chemical_nomeclature.common_names.includes(substanceName) ||
-				substance.chemical_nomeclature.substitutive_name === substanceName ||
-				substance.chemical_nomeclature.systematic_name === substanceName
+				(substance.name && substance.name === substanceName) ||
+				substance.chemical_nomeclature?.common_names?.includes(substanceName) ||
+				substance.chemical_nomeclature?.substitutive_name === substanceName ||
+				substance.chemical_nomeclature?.systematic_name === substanceName
 		)
 	}
 }
@@ -48,7 +50,8 @@ export class Hephaistos {
 	}
 
 	private async buildSubstanceStore() {
-		this.substance_store.push(await new PsychonautWikiSubstanceProvider().all())
+		const psychonautwiki = await new PsychonautWikiSubstanceProvider().all()
+		this.substance_store.push(...psychonautwiki)
 	}
 
 	private async buildExperienceStore() {
