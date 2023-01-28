@@ -1,22 +1,11 @@
 import { Effect } from '../effect/effect.js'
 import { IngestionProperties } from '../ingestion/ingestion.js'
-import { ExperienceStage } from './ExperienceStage.js'
 import { ExperienceStageTable } from './ExperienceStageTable.js'
-
-export interface SubjectProperties {
-	name?: string
-	gender?: string
-	age?: number
-	birthdate?: Date
-	weight?: number
-	height?: number
-	medications?: string[]
-	mental_illness?: string[]
-}
+import { Subject } from './ExperienceSubject.js'
 
 interface ExperienceReportProperties {
 	title?: string
-	subject?: SubjectProperties
+	subject?: Subject
 	ingestions?: IngestionProperties[]
 	experienceDate?: Date
 	submissionDate?: Date
@@ -29,7 +18,7 @@ interface ExperienceReportProperties {
 
 export class ExperienceReport implements ExperienceReportProperties {
 	title?: string
-	subject?: SubjectProperties
+	subject?: Subject
 	ingestions?: IngestionProperties[]
 	experienceDate?: Date
 	submissionDate?: Date
