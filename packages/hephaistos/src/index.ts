@@ -1,15 +1,17 @@
 import { Substance } from 'osiris'
-import { findErowidExpericesWithOneOfCommonNamesMentioned } from './erowid/index.js'
+import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { getSubstanceFromPsychonautWiki } from './psychonautwiki/get-substance/get-substance.js'
+import { ExperienceReport } from 'osiris'
+import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class HephaistosDataset {
 	private readonly substance_store: Substance[] = []
-	private readonly experiience_store: any[] = []
+	private readonly experience_store: ExperienceReport[] = []
 	private readonly effect_store: string[] = []
 
 	constructor({ substances, experiences, effects }) {
 		this.substance_store = substances
-		this.experiience_store = experiences
+		this.experience_store = experiences
 		this.effect_store = effects
 	}
 
@@ -26,7 +28,7 @@ export class HephaistosDataset {
 
 export class Hephaistos {
 	private readonly substance_store: Substance[] = []
-	private readonly experiience_store: any[] = []
+	private readonly experience_store: any[] = []
 	private readonly effect_store: string[] = []
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
@@ -37,18 +39,24 @@ export class Hephaistos {
 
 		return new HephaistosDataset({
 			substances: this.substance_store,
-			experiences: this.experiience_store,
+			experiences: this.experience_store,
 			effects: this.effect_store
 		})
 	}
 
 	private async buildSubstanceStore() {
-		this.substance_store.push(await getSubstanceFromPsychonautWiki('LSD'))
+		this.substance_store.push(await new PsychonautWikiSubstanceProvider().findSubstanceByName('LSD'))
 	}
 
-	private async buildExperienceStore() {}
+	private async buildExperienceStore() {
+		const erowidExperiences = await new ErowidExperienceProvider().all()
+
+		this.experience_store.push(...erowidExperiences)
+	}
+
 	private async buildEffectStore() {}
 }
 
 const dataset = await new Hephaistos().build()
-console.log(dataset.findSubstanceByName('LSD'))
+
+console.log(dataset)

@@ -19,7 +19,8 @@ import {
 	SubstanceRoaDuration,
 	SubstanceRoaDurationRange,
 	SubstanceTolerance,
-	SubstanceRoaRange
+	SubstanceRoaRange,
+	AllSubstancesQuery
 } from './gql/sdk/graphql.js'
 
 export class PsychonautWikiMapper {
@@ -34,7 +35,7 @@ export class PsychonautWikiMapper {
 			light: this.SubstanceRoaRange_DosageUnit(input.light, unit),
 			moderate: this.SubstanceRoaRange_DosageUnit(input.common, unit),
 			strong: this.SubstanceRoaRange_DosageUnit(input.strong, unit),
-			heavy: input.heavy ? new DosageUnit(input.heavy, unit) : undefined
+			heavy: input?.heavy !== undefined || input?.heavy !== null ? new DosageUnit(input.heavy, unit) : undefined
 		})
 	}
 
@@ -42,7 +43,7 @@ export class PsychonautWikiMapper {
 		let averagedTimeForToleranceToHalf: number | undefined
 		let averagedTimeForToleranceToBaseline: number | undefined
 
-		if (input.half) {
+		if (input?.half) {
 			// Find "-" in string and split
 			const half = input.half.split('-')
 			let average = 0
@@ -52,7 +53,7 @@ export class PsychonautWikiMapper {
 			averagedTimeForToleranceToHalf = average / half.length
 		}
 
-		if (input.zero) {
+		if (input?.zero) {
 			// Find "-" in string and split
 			const baseline = input.zero.split('-')
 			let average = 0
@@ -64,11 +65,11 @@ export class PsychonautWikiMapper {
 
 		return new Tolerance({
 			development: {
-				description: input.full
+				description: input?.full
 			},
 			reduction: {
-				toleranceBaselineTime: averagedTimeForToleranceToBaseline,
-				toleranceHalfingTime: averagedTimeForToleranceToHalf
+				toleranceBaselineTime: averagedTimeForToleranceToBaseline || undefined,
+				toleranceHalfingTime: averagedTimeForToleranceToHalf || undefined
 			}
 		})
 	}
@@ -85,11 +86,11 @@ export class PsychonautWikiMapper {
 
 	private SubstanceRoaDuration__PhaseTable(input: SubstanceRoaDuration): PhaseTable {
 		return new PhaseTable({
-			onset: input.onset ? this.SubstanceRoaDurationRange__Phase(input.onset) : undefined,
-			comeup: input.comeup ? this.SubstanceRoaDurationRange__Phase(input.comeup) : undefined,
-			peak: input.peak ? this.SubstanceRoaDurationRange__Phase(input.peak) : undefined,
-			offset: input.offset ? this.SubstanceRoaDurationRange__Phase(input.offset) : undefined,
-			aftereffects: input.afterglow ? this.SubstanceRoaDurationRange__Phase(input.afterglow) : undefined
+			onset: input?.onset ? this.SubstanceRoaDurationRange__Phase(input.onset) : undefined,
+			comeup: input?.comeup ? this.SubstanceRoaDurationRange__Phase(input.comeup) : undefined,
+			peak: input?.peak ? this.SubstanceRoaDurationRange__Phase(input.peak) : undefined,
+			offset: input?.offset ? this.SubstanceRoaDurationRange__Phase(input.offset) : undefined,
+			aftereffects: input?.afterglow ? this.SubstanceRoaDurationRange__Phase(input.afterglow) : undefined
 		})
 	}
 
@@ -167,11 +168,17 @@ export class PsychonautWikiMapper {
 			},
 			routes_of_administration: this.SubstanceRoaArray__RouteOfAdministrationTable(data.roas),
 			toxicity: new ToxicityTable({
-				description: data.toxicity.toString()
+				description: data.toxicity?.toString()
 			}),
 			tolerance: this.SubstanceTolerance__Tolerance(data.tolerance)
 		})
 
 		return substance
+	}
+
+	public AllSubstancesQuery__Substances(input: AllSubstancesQuery): Substance[] {
+		return input.substances
+			.filter(item => item !== null)
+			.map(item => this.GetSubstanceQuery__Substance({ substances: [item] }) as Substance)
 	}
 }
