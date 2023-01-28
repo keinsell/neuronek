@@ -1,4 +1,5 @@
 import { PsychoactiveClassification } from './dataset/psychoactive-class/psychoactive-class.js'
+import { ExperienceReport } from './shared/experience-report/experience-report.js'
 import { RouteOfAdministrationClassification } from './shared/substance/route-of-administration-table/route-of-administration-classification.js'
 import { RouteOfAdministrationTable } from './shared/substance/route-of-administration-table/route-of-administration-table.js'
 import { DosageTable } from './shared/substance/route-of-administration-table/route-of-administration/dosage-table/dosage-table.js'
@@ -11,6 +12,7 @@ import { Tolerance } from './shared/substance/tolerance/tolerance.js'
 import { ToxicityTable } from './shared/substance/toxicity-table/toxicity-table.js'
 
 export {
+	ExperienceReport,
 	Substance,
 	RouteOfAdministrationClassification,
 	Phase,

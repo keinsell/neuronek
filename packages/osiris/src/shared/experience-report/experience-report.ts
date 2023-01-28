@@ -38,3 +38,20 @@ export interface ExperienceReportProperties {
 	effects?: Effect[]
 	location?: string
 }
+
+export class ExperienceReport implements ExperienceReportProperties {
+	title?: string
+	subject?: SubjectProperties
+	ingestions?: IngestionProperties[]
+	experienceDate?: Date
+	submissionDate?: Date
+	phases?: PhaseParaphraphTableProperites
+	raw_content?: string[]
+	conclusion?: string
+	effects?: Effect[]
+	location?: string
+
+	constructor(properties: ExperienceReportProperties) {
+		Object.assign(this, properties)
+	}
+}
