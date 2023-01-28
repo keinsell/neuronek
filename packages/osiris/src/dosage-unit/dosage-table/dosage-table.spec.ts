@@ -1,6 +1,6 @@
 import ava, { TestFn } from 'ava'
-import { DosageClassification } from './dosage-classification.js'
-import { DosageUnit } from './dosage-unit/dosage-unit.js'
+import { DosageClassification } from '../dosage-classification.js'
+import { DosageUnit } from '../dosage-unit.js'
 import { DosageTable } from './dosage-table.js'
 
 const test = ava as TestFn<{

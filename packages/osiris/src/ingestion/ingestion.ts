@@ -1,5 +1,5 @@
-import { RouteOfAdministrationClassification } from '../substance/route-of-administration-table/route-of-administration-classification.js'
-import { DosageUnit } from '../substance/route-of-administration-table/route-of-administration/dosage-table/dosage-unit/dosage-unit.js'
+import { RouteOfAdministrationClassification } from '../route-of-administration/route-of-administration-table/route-of-administration-classification.js'
+import { DosageUnit } from '../dosage-unit/dosage-unit.js'
 import { Substance } from '../substance/substance.js'
 
 export interface IngestionProperties {

@@ -1,10 +1,10 @@
-import { PsychoactiveClassification } from '../../dataset/psychoactive-class/psychoactive-class.js'
+import { PsychoactiveClassification } from '../psychoactive-class/psychoactive-class.js'
 import {
 	RouteOfAdministrationTable,
 	_RouteOfAdministrationTableJSON
-} from './route-of-administration-table/route-of-administration-table.js'
-import { Tolerance } from './tolerance/tolerance.js'
-import { ToxicityTable } from './toxicity-table/toxicity-table.js'
+} from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
+import { Tolerance } from '../tolerance/tolerance.js'
+import { ToxicityTable } from '../toxicity-table/toxicity-table.js'
 
 /**
  * A psychoactive substance is a chemical substance—other than a nutrient or essential dietary ingredient—that alters brain function to produce temporary changes in sensation, perception, mood, consciousness, cognition, and behavior.

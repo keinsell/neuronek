@@ -1,5 +1,5 @@
-import { DosageClassification } from './dosage-classification.js'
-import { DosageUnit } from './dosage-unit/dosage-unit.js'
+import { DosageClassification } from '../dosage-classification.js'
+import { DosageUnit } from '../dosage-unit.js'
 
 export type _DosageTableJSON = {
 	[key in DosageClassification]?: string

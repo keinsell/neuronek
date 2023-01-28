@@ -1,5 +1,5 @@
-import { DosageTable, _DosageTableJSON } from './dosage-table/dosage-table.js'
-import { PhaseTable, _PhaseTableJSON } from './phase-table/phase-table.js'
+import { DosageTable, _DosageTableJSON } from '../dosage-unit/dosage-table/dosage-table.js'
+import { PhaseTable, _PhaseTableJSON } from '../phase/phase-table/phase-table.js'
 
 export type _RouteOfAdministrationJSON = {
 	bioavailability?: number

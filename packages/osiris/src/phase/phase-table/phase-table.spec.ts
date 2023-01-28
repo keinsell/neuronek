@@ -1,7 +1,7 @@
 import test from 'ava'
 import { PhaseTable } from './phase-table.js'
 import { PhaseClassification } from './phase-classification.js'
-import { Phase } from './phase/phase.js'
+import { Phase } from '../phase.js'
 
 test('constructor(): should create phase table', t => {
 	const phaseTable = new PhaseTable({

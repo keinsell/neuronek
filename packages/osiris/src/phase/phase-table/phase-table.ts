@@ -1,5 +1,5 @@
 import { PhaseClassification } from './phase-classification.js'
-import { Phase } from './phase/phase.js'
+import { Phase } from '../phase.js'
 
 export type _PhaseTableJSON = {
 	[key in PhaseClassification]?: string

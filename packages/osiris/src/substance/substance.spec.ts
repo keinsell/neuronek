@@ -1,6 +1,6 @@
 import ava, { TestFn } from 'ava'
 import { Substance, _SubstanceJSON } from './substance.js'
-import { RouteOfAdministrationTable } from './route-of-administration-table/route-of-administration-table.js'
+import { RouteOfAdministrationTable } from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
 
 const test = ava as unknown as TestFn<{ substance: Substance; json: _SubstanceJSON }>
 
