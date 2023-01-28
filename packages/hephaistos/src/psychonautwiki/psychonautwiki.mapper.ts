@@ -141,6 +141,10 @@ export class PsychonautWikiMapper {
 				return PsychoactiveClassification.psychedelic
 			case 'Stimulants':
 				return PsychoactiveClassification.stimulant
+			case 'Depressants':
+				return PsychoactiveClassification.depressant
+			default:
+				return PsychoactiveClassification.psychedelic
 		}
 	}
 

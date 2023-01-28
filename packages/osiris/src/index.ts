@@ -10,8 +10,10 @@ import { RouteOfAdministration } from './route-of-administration/route-of-admini
 import { Substance } from './substance/substance.js'
 import { Tolerance } from './tolerance/tolerance.js'
 import { ToxicityTable } from './toxicity-table/toxicity-table.js'
+import { Ingestion } from './ingestion/ingestion.js'
 
 export {
+	Ingestion,
 	ExperienceReport,
 	Substance,
 	RouteOfAdministrationClassification,

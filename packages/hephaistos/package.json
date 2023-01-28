@@ -13,11 +13,10 @@
 	"module": "dist/index.cjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsup-node",
-		"predev": "yarn generate",
-		"dev": "tsx src/index.ts --watch --no-clear",
+		"build": "tsx ./src/index.ts",
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
+		"predev": "yarn generate",
 		"prestart": "yarn generate",
 		"test": "yarn test:coverage",
 		"test:coverage": "c8 ava",
