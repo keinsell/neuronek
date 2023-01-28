@@ -1,6 +1,5 @@
 import { Substance } from 'osiris'
 import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
-import { getSubstanceFromPsychonautWiki } from './psychonautwiki/get-substance/get-substance.js'
 import { ExperienceReport } from 'osiris'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
@@ -33,9 +32,14 @@ export class Hephaistos {
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
+		// TODO: Find cached information from repository
+
+		// TODO: If cache was not found fetch new dataset using all providers
 		await this.buildSubstanceStore()
 		await this.buildExperienceStore()
 		await this.buildEffectStore()
+
+		// TODO: Save scrapped information in repository
 
 		return new HephaistosDataset({
 			substances: this.substance_store,
