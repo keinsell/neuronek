@@ -47,7 +47,7 @@ export class PsychoactiveClass implements PsychoactiveClassProperties {
 	}
 }
 
-export const psychoactiveClasses: { [key in PsychoactiveClassification]: PsychoactiveClass } = {
+export const _PsychoactiveClassificationData: { [key in PsychoactiveClassification]: PsychoactiveClass } = {
 	[PsychoactiveClassification.psychedelic]: new PsychoactiveClass({
 		name: PsychoactiveClassification.psychedelic,
 		description: `Psychedelics (also known as serotonergic hallucinogens) are a class of psychoactive substances that produce an altered state of consciousness marked by unusual changes in perception, mood, and cognitive processes.`
