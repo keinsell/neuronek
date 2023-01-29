@@ -1,27 +1,9 @@
 import { Effect } from '../effect/effect.js'
 import { PsychoactiveClassification } from '../psychoactive-class/psychoactive-class.js'
-import {
-	RouteOfAdministrationTable,
-	_RouteOfAdministrationTableJSON
-} from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
+import { RouteOfAdministrationTable } from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
 import { Tolerance } from '../tolerance/tolerance.js'
 import { ToxicityTable } from '../toxicity-table/toxicity-table.js'
 import { EffectPromotedBySubstance } from './effect-promoted-by-substance.js'
-
-/**
- * A psychoactive substance is a chemical substance—other than a nutrient or essential dietary ingredient—that alters brain function to produce temporary changes in sensation, perception, mood, consciousness, cognition, and behavior.
- *
- * Psychoactive substances have been used by humans for a variety of purposes since recorded history. For example, they may be used as medicine, as recreational substances for their euphoric effects and novelty value, as entheogens for ritual or spiritual purposes, or as scientific research probes for studying the brain and mind. The latter two have particular relevance for practitioners of psychonautics.
- */
-export type _SubstanceJSON = {
-	name: string
-	common_nomenclature?: string[]
-	substitive_nomenclature?: string
-	systematic_nomenclature?: string
-	chemical_class?: string
-	psychoactive_class?: PsychoactiveClassification[]
-	routes_of_administration?: _RouteOfAdministrationTableJSON
-}
 
 interface SubstanceProperites {
 	/**
@@ -205,31 +187,5 @@ export class Substance implements SubstanceProperites {
 
 	constructor(substanceInfomration: SubstanceProperites) {
 		Object.assign(this, substanceInfomration)
-	}
-
-	toJSON(): _SubstanceJSON {
-		return {
-			name: this.name,
-			common_nomenclature: this.chemical_nomeclature.common_names,
-			substitive_nomenclature: this.chemical_nomeclature.substitutive_name,
-			systematic_nomenclature: this.chemical_nomeclature.systematic_name,
-			psychoactive_class: this.class_membership.psychoactive_class,
-			routes_of_administration: this.routes_of_administration.toJSON()
-		}
-	}
-
-	static fromJSON(json: _SubstanceJSON): Substance {
-		return new Substance({
-			name: json.name,
-			chemical_nomeclature: {
-				common_names: json.common_nomenclature,
-				substitutive_name: json.substitive_nomenclature,
-				systematic_name: json.systematic_nomenclature
-			},
-			class_membership: {
-				psychoactive_class: json.psychoactive_class
-			},
-			routes_of_administration: RouteOfAdministrationTable.fromJSON(json.routes_of_administration)
-		})
 	}
 }

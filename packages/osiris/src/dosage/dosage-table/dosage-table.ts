@@ -2,10 +2,6 @@ import { DosageClassification } from '../dosage-classification.js'
 import { DosageRange } from '../dosage-range/dosage-range.js'
 import { Dosage } from '../dosage.js'
 
-export type _DosageTableJSON = {
-	[key in DosageClassification]?: string
-}
-
 /**
  * DosageTable is a class that holds infomration about dosage classification for specific substance or route of administration.
  */
@@ -46,25 +42,5 @@ export class DosageTable {
 			return DosageClassification.thereshold
 
 		return DosageClassification.heavy
-	}
-
-	toJSON(): _DosageTableJSON {
-		return {
-			thereshold: this.thereshold?.toString(),
-			light: this.light?.toString(),
-			moderate: this.moderate?.toString(),
-			strong: this.strong?.toString(),
-			heavy: this.heavy?.toString()
-		}
-	}
-
-	static fromJSON(json: _DosageTableJSON): DosageTable {
-		return new DosageTable({
-			thereshold: json.thereshold ? DosageRange.fromString(json.thereshold) : undefined,
-			light: json.light ? DosageRange.fromString(json.light) : undefined,
-			moderate: json.moderate ? DosageRange.fromString(json.moderate) : undefined,
-			strong: json.strong ? DosageRange.fromString(json.strong) : undefined,
-			heavy: json.heavy ? DosageRange.fromString(json.heavy) : undefined
-		})
 	}
 }

@@ -1,9 +1,5 @@
 import { RouteOfAdministrationClassification } from './route-of-administration-classification.js'
-import { RouteOfAdministration, _RouteOfAdministrationJSON } from '../route-of-administration.js'
-
-export type _RouteOfAdministrationTableJSON = {
-	[route in RouteOfAdministrationClassification]?: _RouteOfAdministrationJSON
-}
+import { RouteOfAdministration } from '../route-of-administration.js'
 
 export class RouteOfAdministrationTable {
 	public readonly [RouteOfAdministrationClassification.oral]?: RouteOfAdministration
@@ -26,30 +22,7 @@ export class RouteOfAdministrationTable {
 	}
 
 	/** Filters table of routes of administration and returns only documented routes. */
-	getDocumentedRoutesOfAdministration(): RouteOfAdministration[] {
+	get all(): RouteOfAdministration[] {
 		return Object.values(this).filter((route: RouteOfAdministration) => Boolean(route))
-	}
-
-	toJSON(): _RouteOfAdministrationTableJSON {
-		const json: _RouteOfAdministrationTableJSON = {}
-
-		for (const route in this) {
-			const routeOfAdministration = this[route as RouteOfAdministrationClassification]
-			if (routeOfAdministration) {
-				json[route as RouteOfAdministrationClassification] = routeOfAdministration.toJSON()
-			}
-		}
-
-		return json
-	}
-
-	static fromJSON(json: _RouteOfAdministrationTableJSON): RouteOfAdministrationTable {
-		const routesOfAdministration: { [route in RouteOfAdministrationClassification]?: RouteOfAdministration } = {}
-
-		for (const route in json) {
-			routesOfAdministration[route] = json[route] ? RouteOfAdministration.fromJSON(json[route]) : undefined
-		}
-
-		return new RouteOfAdministrationTable(routesOfAdministration)
 	}
 }
