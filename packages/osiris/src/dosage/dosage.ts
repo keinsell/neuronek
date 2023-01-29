@@ -75,21 +75,7 @@ export class Dosage extends Qty {
 
 	/** This function converts a string to a Dosage by converting the string to a base scalar and unitand then returning a new Dosage with the scalar and unit as the value and unit respectively. */
 	static fromString(string: string): Dosage {
-		// Convert the string to a base scalar and unit
-		const baseScalarOfUnit = Dosage.parse(string)
-
-		// If we got null we need to assign custom unit
-		if (baseScalarOfUnit === null) {
-			// Check if the string contains a unit, if it does we can find the scalar and assign the unsupported unit
-			const hasUnit = /(\D)+/g.test(string)
-			// If we have a unit we can assign it as a custom unit
-			if (hasUnit) {
-				const unit = string.match(/(\D)+/g)[0]
-				const value = parseInt(string.replace(/(\D)+/g, ''))
-				return new Dosage(value, unit)
-			}
-		}
-
+		const baseScalarOfUnit = new Qty(string).toBase()
 		const unit = baseScalarOfUnit.units()
 		const value = baseScalarOfUnit.scalar
 		// Return the dosage unit

@@ -3,6 +3,7 @@ import { RouteOfAdministration, _RouteOfAdministrationJSON } from './route-of-ad
 import { DosageTable } from '../dosage/dosage-table/dosage-table.js'
 import { PhaseTable } from '../phase/phase-table/phase-table.js'
 import { Dosage } from '../dosage/dosage.js'
+import { DosageRange } from '../dosage/dosage-range/dosage-range.js'
 
 test('constructor(): should create route of administration', t => {
 	const routeOfAdministration = new RouteOfAdministration({
@@ -35,7 +36,7 @@ test('toJSON(): should return json', t => {
 test('fromJSON(): should return route of administration', t => {
 	const routeOfAdministration = new RouteOfAdministration({
 		dosage: new DosageTable({
-			moderate: Dosage.fromString('10mg')
+			moderate: DosageRange.fromString('10mg')
 		}),
 		phase: new PhaseTable({})
 	})

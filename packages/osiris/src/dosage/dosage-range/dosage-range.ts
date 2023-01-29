@@ -9,11 +9,25 @@ export class DosageRange {
 	}
 
 	toString(): string {
+		if (this.minimum && !this.maximum) {
+			return this.minimum.toString()
+		}
+
+		if (this.maximum && !this.minimum) {
+			return this.maximum.toString()
+		}
+
 		return `${this.minimum.toString()} - ${this.maximum.toString()}`
 	}
 
 	static fromString(dosageString: string): DosageRange {
 		const [minimumString, maximumString] = dosageString.split(' - ')
+
+		if (minimumString && !maximumString) {
+			const dosage = Dosage.fromString(minimumString)
+			return new DosageRange(dosage, undefined)
+		}
+
 		const minimum = Dosage.fromString(minimumString)
 		const maximum = Dosage.fromString(maximumString)
 		const dosageRange = new DosageRange(minimum, maximum)
