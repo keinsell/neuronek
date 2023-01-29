@@ -29,11 +29,18 @@ export class CacheManager {
 		}
 
 		this.db.data.substances = []
+		this.db.data.experiences = []
 
 		for (const substance of dataset.substance_store) {
 			console.log(`Cache: ${substance.name}`)
 			const serializedSubstance = substance.toJSON()
 			this.db.data.substances.push(serializedSubstance)
+		}
+
+		for (const experience of dataset.experience_store) {
+			console.log(`Cache: ${experience.title}`)
+			const serializedExperience = experience.toJSON()
+			this.db.data.experiences.push(serializedExperience)
 		}
 
 		console.log(`DB: ${this.db.data.substances.length} substances`)
@@ -59,7 +66,7 @@ export class CacheManager {
 		return {
 			substances: this.db.data.substances.map(substance => Substance.fromJSON(substance)),
 			effects: this.db.data.effects,
-			experiences: this.db.data.experiences
+			experiences: this.db.data.experiences.map(experience => ExperienceReport.fromJSON(experience))
 		}
 	}
 }

@@ -1,7 +1,7 @@
 import { Effect } from '../effect/effect.js'
 import { Ingestion, IngestionProperties } from '../ingestion/ingestion.js'
 import { ExperienceStageTable } from './ExperienceStageTable.js'
-import { Subject } from './ExperienceSubject.js'
+import { Subject, SubjectJSON } from './ExperienceSubject.js'
 
 interface ExperienceReportProperties {
 	title?: string
@@ -14,6 +14,14 @@ interface ExperienceReportProperties {
 	conclusion?: string
 	effects?: Effect[]
 	location?: string
+}
+
+interface ExperienceReportJSON {
+	title?: string
+	subject?: SubjectJSON
+	experienceDate?: Date
+	submissionDate?: Date
+	raw_content?: string[]
 }
 
 export class ExperienceReport implements ExperienceReportProperties {
@@ -30,5 +38,13 @@ export class ExperienceReport implements ExperienceReportProperties {
 
 	constructor(properties: ExperienceReportProperties) {
 		Object.assign(this, properties)
+	}
+
+	static fromJSON(object: ExperienceReportJSON): ExperienceReport {
+		return new ExperienceReport({ ...object, subject: object.subject ? Subject.fromObject(object.subject) : undefined })
+	}
+
+	toJSON(): ExperienceReportJSON {
+		return { ...this }
 	}
 }

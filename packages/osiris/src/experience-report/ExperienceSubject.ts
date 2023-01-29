@@ -9,6 +9,8 @@ interface SubjectProperties {
 	mental_illness?: string[]
 }
 
+export interface SubjectJSON extends SubjectProperties {}
+
 export class Subject implements SubjectProperties {
 	name?: string
 	gender?: string
@@ -21,5 +23,13 @@ export class Subject implements SubjectProperties {
 
 	constructor(properties: SubjectProperties) {
 		Object.assign(this, properties)
+	}
+
+	static fromObject(object: SubjectJSON): Subject {
+		return new Subject(object)
+	}
+
+	toObject(): SubjectJSON {
+		return { ...this }
 	}
 }

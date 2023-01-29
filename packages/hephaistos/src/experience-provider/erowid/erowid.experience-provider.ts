@@ -13,21 +13,21 @@ export class ErowidExperienceProvider implements ErowidExperienceProvider {
 
 		const ingestions: Ingestion[] = []
 
-		for await (const dosage of dosages) {
-			let substance: Substance | undefined
+		// for await (const dosage of dosages) {
+		// 	let substance: Substance | undefined
 
-			try {
-				// substance = await this.substanceProvider.findSubstanceByName(dosage.substance)
-			} catch (error) {
-				console.log(error)
-			}
+		// 	try {
+		// 		// substance = await this.substanceProvider.findSubstanceByName(dosage.substance)
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
 
-			ingestions.push(
-				new Ingestion({
-					substance: substance
-				})
-			)
-		}
+		// 	ingestions.push(
+		// 		new Ingestion({
+		// 			substance: substance
+		// 		})
+		// 	)
+		// }
 
 		return new ExperienceReport({
 			title: input.title,

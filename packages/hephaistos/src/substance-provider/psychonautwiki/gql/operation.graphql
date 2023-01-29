@@ -193,5 +193,10 @@ query AllSubstances {
 		dangerousInteractions {
 			name
 		}
+
+		effects {
+			name
+			url
+		}
 	}
 }
