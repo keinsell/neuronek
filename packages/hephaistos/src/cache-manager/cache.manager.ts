@@ -1,5 +1,5 @@
 import { LowSync } from 'lowdb'
-import { JSONFileSync } from 'lowdb/lib/node.js'
+import { JSONFileSync } from 'lowdb/node'
 import { HephaistosDataset } from '../main.js'
 import { ExperienceReport, Substance } from 'osiris'
 import { Effect } from '../substance-provider/psychonautwiki/gql/sdk/graphql.js'
