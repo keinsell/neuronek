@@ -15,6 +15,11 @@ jobs:
       TURBO_REMOTE_ONLY: true
     steps:
       - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -62,6 +67,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          lfs: true
+
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -120,6 +129,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2

@@ -1,6 +1,6 @@
 import {
 	DosageTable,
-	DosageUnit,
+	Dosage,
 	Phase,
 	PhaseTable,
 	PsychoactiveClassification,
@@ -8,7 +8,8 @@ import {
 	RouteOfAdministrationClassification,
 	RouteOfAdministrationTable,
 	Substance,
-	Tolerance
+	Tolerance,
+	DosageRange
 } from 'osiris'
 import { GetSubstancesQuery, SubstanceRoa } from './gql/sdk/graphql.js'
 import ms from 'ms'
@@ -55,6 +56,11 @@ export namespace PsychonautwikiMapper {
 		const minimal_bioavailability = input.bioavailability?.min ?? undefined
 		const maximal_bioavailability = input.bioavailability?.max ?? undefined
 		let units = input.dose?.units ?? undefined
+		let additionalProperties: {
+			isPerKilogramOfBodyWeight?: boolean
+		} = {}
+
+		console.log(input)
 
 		// TODO: Find a way to inform users that it's about pure substance itself not method of administration (ex. cigarette, beer or raw plant)
 		if (units === 'mg (THC)') {
@@ -68,18 +74,25 @@ export namespace PsychonautwikiMapper {
 		// TODO: Need to be handled in other way as it's important information
 		if (units === 'mg/kg of body weight') {
 			units = 'mg'
+			additionalProperties.isPerKilogramOfBodyWeight = true
 		}
 
-		// TODO: What the fuck does it mean?
-		if (units === 'seeds') {
-			units = undefined
-		}
+		const thereshold = dosageRange(undefined, dosage(input.dose?.threshold, units, additionalProperties))
+		const light = dosageRange(
+			dosage(input.dose?.light?.min, units, additionalProperties),
+			dosage(input.dose?.light?.max, units, additionalProperties)
+		)
+		const common = dosageRange(
+			dosage(input.dose?.common?.min, units, additionalProperties),
+			dosage(input.dose?.common?.max, units, additionalProperties)
+		)
 
-		const thereshold = dosage(input.dose?.threshold, units)
-		const light = dosage(input.dose?.light?.max, units)
-		const common = dosage(input.dose?.common?.min, units)
-		const strong = dosage(input.dose?.strong?.min, units)
-		const heavy = dosage(input.dose?.heavy, units)
+		const strong = dosageRange(
+			dosage(input.dose?.strong?.min, units, additionalProperties),
+			dosage(input.dose?.strong?.max, units, additionalProperties)
+		)
+
+		const heavy = dosageRange(dosage(input.dose?.heavy, units, additionalProperties))
 
 		const dosage_table = new DosageTable({ thereshold, light, moderate: common, strong, heavy })
 
@@ -117,7 +130,7 @@ export namespace PsychonautwikiMapper {
 		}
 	}
 
-	function dosage(input?: number, unit?: string): DosageUnit | undefined {
+	function dosage(input?: number, unit?: string, adds?: any): Dosage | undefined {
 		if (!input) {
 			return undefined
 		}
@@ -126,7 +139,11 @@ export namespace PsychonautwikiMapper {
 			return undefined
 		}
 
-		return new DosageUnit(input, unit)
+		return new Dosage(input, unit, adds)
+	}
+
+	function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
+		return new DosageRange(min, max)
 	}
 
 	function phase(input?: number, unit?: string): Phase {
