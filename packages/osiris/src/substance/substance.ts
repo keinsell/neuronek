@@ -37,6 +37,7 @@ interface SubstanceProperites {
 		 * @example ["Amphetamine", "Speed", "Adderall", "Pep"]
 		 */
 		common_names?: string[]
+		brand_names?: string[]
 		/**
 		 * Substitutive name is a type of chemical nomenclature used for organic compounds. In this system, the substitutive name of a compound is based on the name of the parent hydrocarbon, with the functional group (such as an alcohol or a carboxylic acid) indicated by a prefix or suffix.
 		 *
@@ -53,6 +54,30 @@ interface SubstanceProperites {
 		 * @example "(RS)-1-Phenylpropan-2-amine"
 		 */
 		systematic_name?: string
+		/**
+		 * UNIIs are generated based on scientific identity characteristics using ISO 11238 data elements. UNII availability does not imply any regulatory review or approval. Synonyms and mappings are based on the best public information available at the time of publication. Please report any problems/errors associated with this data to FDA-SRS@fda.hhs.gov.
+		 *
+		 * @example "CK833KGX7E"
+		 */
+		unii?: string
+		/**	CAS number is a unique numerical identifier assigned to pure substances and mixtures by the Chemical Abstracts Service registry, a division of the American Chemical Society (ACS). The CAS registry number is the de facto standard for the identification of chemical substances in scientific literature.
+		 * @example "300-62-9"
+		 */
+		cas_number?: string
+		/** InChI Key is ...
+		 * @example "KWTSXDURSIMDCE-UHFFFAOYSA-N"
+		 */
+		inchi_key?: string
+		/**
+		 * IUPAC name is a common short-hand name for organic compounds. This name is used as a unique identifier in the Chemical Abstracts Service database, and is often used in lieu of a systematic name as a convenient shorthand for the compound.
+		 * @example "1-phenylpropan-2-amine"
+		 */
+		iupac?: string
+		/**
+		 * SMILES is a chemical notation for describing the structure of chemical compounds using ASCII characters.
+		 * @example "CC(N)CC1=CC=CC=C1"
+		 */
+		smiles?: string
 	}
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
