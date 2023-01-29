@@ -1,13 +1,22 @@
 import { PhaseClassification } from './phase-table/phase-classification.js'
 import ms from 'ms'
 
-export class Phase {
+export interface PhaseProperties {
+	minimalDuration?: number
+	maximalDuration?: number
+}
+
+export interface PhaseJSON {
+	minimalDuration?: number
+	maximalDuration?: number
+}
+
+export class Phase implements PhaseProperties {
 	public readonly minimalDuration?: number
 	public readonly maximalDuration?: number
 
-	constructor(duration: { minimalDuration?: number; maximalDuration?: number }) {
-		this.minimalDuration = duration.minimalDuration
-		this.maximalDuration = duration.maximalDuration
+	constructor(properties: PhaseProperties) {
+		Object.assign(this, properties)
 	}
 
 	toString() {
@@ -51,6 +60,18 @@ export class Phase {
 			return new Phase({ minimalDuration: parts[0], maximalDuration: parts[1] })
 		} else {
 			return new Phase({ minimalDuration: parts[1], maximalDuration: parts[0] })
+		}
+	}
+
+	/** Build a phase from JSON structure. */
+	static fromJSON(json: PhaseJSON) {
+		return new Phase(json)
+	}
+
+	toJSON(): PhaseJSON {
+		return {
+			minimalDuration: this.minimalDuration,
+			maximalDuration: this.maximalDuration
 		}
 	}
 }

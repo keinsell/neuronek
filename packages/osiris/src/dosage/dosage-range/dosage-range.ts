@@ -1,6 +1,16 @@
-import { Dosage } from '../dosage.js'
+import { Dosage, DosageJSON } from '../dosage.js'
 
-export class DosageRange {
+export interface DosageRangeProperties {
+	minimum?: Dosage
+	maximum?: Dosage
+}
+
+export interface DosageRangeJSON {
+	minimum?: DosageJSON
+	maximum?: DosageJSON
+}
+
+export class DosageRange implements DosageRangeProperties {
 	minimum?: Dosage
 	maximum?: Dosage
 
@@ -43,5 +53,19 @@ export class DosageRange {
 		} else {
 			return dosage.baseScalar >= this.minimum.baseScalar && dosage.baseScalar <= this.maximum.baseScalar
 		}
+	}
+
+	toJSON(): DosageRangeJSON {
+		return {
+			minimum: this.minimum?.toJSON(),
+			maximum: this.maximum?.toJSON()
+		}
+	}
+
+	static fromJSON(dosageRangeJSON: DosageRangeJSON): DosageRange {
+		return new DosageRange(
+			dosageRangeJSON.minimum && Dosage.fromJSON(dosageRangeJSON.minimum),
+			dosageRangeJSON.maximum && Dosage.fromJSON(dosageRangeJSON.maximum)
+		)
 	}
 }

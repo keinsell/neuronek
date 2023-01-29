@@ -5723,6 +5723,7 @@ __metadata:
     graphql: ^16.6.0
     graphql-request: ^5.1.0
     js-quantities: ^1.7.6
+    lowdb: ^5.0.5
     ms: ^2.1.3
     nodemon: 2.0.20
     osiris: "*"
@@ -6950,6 +6951,15 @@ __metadata:
   bin:
     loose-envify: cli.js
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
+  languageName: node
+  linkType: hard
+
+"lowdb@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "lowdb@npm:5.0.5"
+  dependencies:
+    steno: ^3.0.0
+  checksum: c9c3b8f4da14a1aeae85c96b2c04f6459bac95ecea63ab3444dfdb1ced257fc78609a6fb7b156e36958987ed77a5fc5415116a4122777c2dd5f1ede4bf9691ff
   languageName: node
   linkType: hard
 
@@ -9213,6 +9223,13 @@ __metadata:
   version: 2.0.1
   resolution: "statuses@npm:2.0.1"
   checksum: 18c7623fdb8f646fb213ca4051be4df7efb3484d4ab662937ca6fbef7ced9b9e12842709872eb3020cc3504b93bde88935c9f6417489627a7786f24f8031cbcb
+  languageName: node
+  linkType: hard
+
+"steno@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "steno@npm:3.0.0"
+  checksum: fb928451a4f96342b496b71147fbca0a20a5daf7bfd23a4a1cec8640d3c6c67176809169e9a5801ea44490d448b5b7ecb151b9fba434872c2d65549847f39460
   languageName: node
   linkType: hard
 

@@ -1,11 +1,12 @@
 import { PhaseClassification } from './phase-classification.js'
-import { Phase } from '../phase.js'
+import { Phase, PhaseJSON } from '../phase.js'
 
-export type _PhaseTableJSON = {
-	[key in PhaseClassification]?: string
+export type PhaseTableProperties = {
+	[key in PhaseClassification]?: Phase
 }
 
-export class PhaseTable {
+export type PhaseTableJSON = PhaseJSON & { classification: PhaseClassification }[]
+export class PhaseTable implements PhaseTableProperties {
 	public readonly [PhaseClassification.onset]?: Phase
 	public readonly [PhaseClassification.comeup]?: Phase
 	public readonly [PhaseClassification.peak]?: Phase
@@ -21,16 +22,8 @@ export class PhaseTable {
 		PhaseClassification.aftereffects
 	]
 
-	constructor(
-		phaseTable: Partial<{
-			[key in PhaseClassification]: Phase
-		}>
-	) {
-		this[PhaseClassification.onset] = phaseTable.onset
-		this[PhaseClassification.comeup] = phaseTable.comeup
-		this[PhaseClassification.peak] = phaseTable.peak
-		this[PhaseClassification.offset] = phaseTable.offset
-		this[PhaseClassification.aftereffects] = phaseTable.aftereffects
+	constructor(properties: PhaseTableProperties) {
+		Object.assign(this, properties)
 	}
 
 	/** Get total duration of effects, this excludes aftereffects. */
@@ -84,22 +77,34 @@ export class PhaseTable {
 		return timeToEndOfPhase
 	}
 
-	toJSON(): _PhaseTableJSON {
-		const json: _PhaseTableJSON = {}
+	get all(): { phase?: Phase; classification: PhaseClassification }[] {
+		const phases = [
+			{ phase: this.onset, classification: PhaseClassification.onset },
+			{ phase: this.comeup, classification: PhaseClassification.comeup },
+			{ phase: this.peak, classification: PhaseClassification.peak },
+			{ phase: this.offset, classification: PhaseClassification.offset },
+			{ phase: this.aftereffects, classification: PhaseClassification.aftereffects }
+		]
 
-		for (const phase of this.phaseFunnel) {
-			json[phase] = this[phase]?.toString()
+		return phases
+	}
+
+	toJSON(): PhaseTableJSON {
+		const json: PhaseTableJSON = []
+
+		for (const phase of this.all) {
+			json[phase.classification] = phase.phase?.toJSON ?? null
 		}
 
 		return json
 	}
 
-	static fromJSON(json: _PhaseTableJSON): PhaseTable {
+	static fromJSON(json: PhaseTableJSON): PhaseTable {
 		// parse phases
 		const phases = {}
 
 		for (const phase of Object.keys(json)) {
-			phases[phase] = Phase.fromString(json[phase])
+			phases[phase] = Phase.fromJSON(json[phase])
 		}
 
 		// create PhaseTable instance

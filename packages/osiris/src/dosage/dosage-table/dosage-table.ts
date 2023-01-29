@@ -1,27 +1,27 @@
 import { DosageClassification } from '../dosage-classification.js'
-import { DosageRange } from '../dosage-range/dosage-range.js'
+import { DosageRange, DosageRangeJSON } from '../dosage-range/dosage-range.js'
 import { Dosage } from '../dosage.js'
+
+export type DosageTableProperties = {
+	[key in DosageClassification]?: DosageRange
+}
+
+export type DosageTableJSON = {
+	[key in DosageClassification]?: DosageRangeJSON
+}
 
 /**
  * DosageTable is a class that holds infomration about dosage classification for specific substance or route of administration.
  */
-export class DosageTable {
+export class DosageTable implements DosageTableProperties {
 	public readonly [DosageClassification.thereshold]?: DosageRange
 	public readonly [DosageClassification.light]?: DosageRange
 	public readonly [DosageClassification.moderate]?: DosageRange
 	public readonly [DosageClassification.strong]?: DosageRange
 	public readonly [DosageClassification.heavy]?: DosageRange
 
-	constructor(
-		dosageTable: Partial<{
-			[key in DosageClassification]: DosageRange
-		}>
-	) {
-		this[DosageClassification.thereshold] = dosageTable.thereshold
-		this[DosageClassification.light] = dosageTable.light
-		this[DosageClassification.moderate] = dosageTable.moderate
-		this[DosageClassification.strong] = dosageTable.strong
-		this[DosageClassification.heavy] = dosageTable.heavy
+	constructor(properties: DosageTableProperties) {
+		Object.assign(this, properties)
 	}
 
 	/** Method will compare provided dosage unit with available dosage table to find classification of provided dosage. */
@@ -42,5 +42,41 @@ export class DosageTable {
 			return DosageClassification.thereshold
 
 		return DosageClassification.heavy
+	}
+
+	get all(): { dosage: DosageRange; classification: DosageClassification }[] {
+		const all: { dosage: DosageRange; classification: DosageClassification }[] = []
+
+		for (const key of Object.keys(this)) {
+			const classification = key as DosageClassification
+			const dosageRange = this[classification]
+
+			if (dosageRange !== undefined) {
+				all.push({ dosage: dosageRange, classification })
+				all.push({ dosage: dosageRange, classification })
+			}
+		}
+
+		return all
+	}
+
+	public toJSON(): DosageTableJSON {
+		const json: DosageTableJSON = {}
+
+		for (const key of this.all) {
+			json[key.classification] = key.dosage?.toJSON()
+		}
+
+		return json
+	}
+
+	public static fromJSON(json: DosageTableJSON): DosageTable {
+		const dosageTable = {}
+
+		for (const key of Object.keys(json)) {
+			dosageTable[key] = DosageRange.fromJSON(json[key])
+		}
+
+		return new DosageTable(dosageTable)
 	}
 }

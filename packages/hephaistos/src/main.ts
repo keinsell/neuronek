@@ -1,5 +1,6 @@
 import { ExperienceReport, Substance } from 'osiris'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
+import { CacheManager } from './cache-manager/cache.manager.js'
 
 export class HephaistosDataset {
 	public readonly substance_store: Substance[] = []
@@ -30,10 +31,26 @@ export class Hephaistos {
 	private readonly substance_store: Substance[] = []
 	private readonly experience_store: any[] = []
 	private readonly effect_store: string[] = []
+	private cacheManager: CacheManager = new CacheManager()
+	private shouldUseCache: boolean = true
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
 		// TODO: Find cached information from repository
+
+		if (this.shouldUseCache) {
+			const cache = this.cacheManager.load()
+
+			if (cache) {
+				this.substance_store.push(...cache.substances)
+				console.log(`Loaded ${this.substance_store.length} substances from cache.`)
+				return new HephaistosDataset({
+					substances: this.substance_store,
+					experiences: this.experience_store,
+					effects: this.effect_store
+				})
+			}
+		}
 
 		// TODO: If cache was not found fetch new dataset using all providers
 		await this.buildSubstanceStore()
@@ -42,11 +59,17 @@ export class Hephaistos {
 
 		// TODO: Save scrapped information in repository
 
-		return new HephaistosDataset({
+		const dataset = new HephaistosDataset({
 			substances: this.substance_store,
 			experiences: this.experience_store,
 			effects: this.effect_store
 		})
+
+		if (this.shouldUseCache) {
+			this.cacheManager.cache(dataset)
+		}
+
+		return dataset
 	}
 
 	private async buildSubstanceStore() {

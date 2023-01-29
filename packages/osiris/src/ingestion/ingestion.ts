@@ -34,11 +34,6 @@ export class Ingestion implements IngestionProperties {
 	notes?: string
 
 	constructor(payload: IngestionProperties) {
-		Object.keys(payload).forEach(key => {
-			if (!payload.hasOwnProperty(key) || typeof payload[key] === 'undefined') {
-				return
-			}
-			this[key] = payload[key]
-		})
+		Object.assign(this, payload)
 	}
 }
