@@ -14,11 +14,12 @@
 /apps/server/src/shared/infrastructure/prisma/prisma.ts @keinsell
 /packages/database/prisma/schema.prisma @keinsell
 /packages/database/src/index.ts @keinsell
-/packages/hephaistos/src/index.ts @keinsell
 /packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.mapper.ts @keinsell
+/packages/osiris/src/bioavailability/bioavailability.ts @keinsell
 /packages/osiris/src/dosage/dosage-range/dosage-range.ts @keinsell
 /packages/osiris/src/dosage/dosage-table/dosage-table.ts @keinsell
 /packages/osiris/src/ingestion/ingestion.ts @keinsell
-/packages/osiris/src/route-of-administration/route-of-administration-table/route-of-administration-table.spec.ts @keinsell
+/packages/osiris/src/phase/phase-table/phase-table.spec.ts @keinsell
+/packages/osiris/src/research-paper/research-paper.ts @keinsell
 /packages/osiris/src/rules/where-when-rule.ts @keinsell
 /packages/osiris/src/toxicity-table/toxicity-table.ts @keinsell
