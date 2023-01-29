@@ -1,4 +1,4 @@
-import { DosageClassification } from '../dosage-unit/dosage-classification.js'
+import { DosageClassification } from '../dosage/dosage-classification.js'
 import { RouteOfAdministrationClassification } from '../route-of-administration/route-of-administration-table/route-of-administration-classification.js'
 
 /**

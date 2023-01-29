@@ -1,21 +1,21 @@
 import ava, { TestFn } from 'ava'
 import { DosageClassification } from '../dosage-classification.js'
-import { DosageUnit } from '../dosage-unit.js'
+import { Dosage } from '../dosage.js'
 import { DosageTable } from './dosage-table.js'
 
 const test = ava as TestFn<{
 	dosageTable: {
-		[dosage in DosageClassification]: DosageUnit
+		[dosage in DosageClassification]: Dosage
 	}
 }>
 
 test.beforeEach(t => {
 	t.context.dosageTable = {
-		thereshold: new DosageUnit(0.5, 'mg'),
-		light: new DosageUnit(0.75, 'mg'),
-		moderate: new DosageUnit(1, 'mg'),
-		strong: new DosageUnit(1.5, 'mg'),
-		heavy: new DosageUnit(2, 'mg')
+		thereshold: new Dosage(0.5, 'mg'),
+		light: new Dosage(0.75, 'mg'),
+		moderate: new Dosage(1, 'mg'),
+		strong: new Dosage(1.5, 'mg'),
+		heavy: new Dosage(2, 'mg')
 	}
 })
 

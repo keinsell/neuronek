@@ -1,5 +1,5 @@
 import { DosageClassification } from '../dosage-classification.js'
-import { DosageUnit } from '../dosage-unit.js'
+import { Dosage } from '../dosage.js'
 
 export type _DosageTableJSON = {
 	[key in DosageClassification]?: string
@@ -9,15 +9,15 @@ export type _DosageTableJSON = {
  * DosageTable is a class that holds infomration about dosage classification for specific substance or route of administration.
  */
 export class DosageTable {
-	public readonly [DosageClassification.thereshold]?: DosageUnit
-	public readonly [DosageClassification.light]?: DosageUnit
-	public readonly [DosageClassification.moderate]?: DosageUnit
-	public readonly [DosageClassification.strong]?: DosageUnit
-	public readonly [DosageClassification.heavy]?: DosageUnit
+	public readonly [DosageClassification.thereshold]?: Dosage
+	public readonly [DosageClassification.light]?: Dosage
+	public readonly [DosageClassification.moderate]?: Dosage
+	public readonly [DosageClassification.strong]?: Dosage
+	public readonly [DosageClassification.heavy]?: Dosage
 
 	constructor(
 		dosageTable: Partial<{
-			[key in DosageClassification]: DosageUnit
+			[key in DosageClassification]: Dosage
 		}>
 	) {
 		this[DosageClassification.thereshold] = dosageTable.thereshold
@@ -28,7 +28,7 @@ export class DosageTable {
 	}
 
 	/** Method will compare provided dosage unit with available dosage table to find classification of provided dosage. */
-	public getClassificationOfDosage(dosage: DosageUnit): DosageClassification {
+	public getClassificationOfDosage(dosage: Dosage): DosageClassification {
 		if (this[DosageClassification.heavy] && dosage.gte(this[DosageClassification.heavy]))
 			return DosageClassification.heavy
 
@@ -69,11 +69,11 @@ export class DosageTable {
 
 	static fromJSON(json: _DosageTableJSON): DosageTable {
 		return new DosageTable({
-			thereshold: json.thereshold ? DosageUnit.fromString(json.thereshold) : undefined,
-			light: json.light ? DosageUnit.fromString(json.light) : undefined,
-			moderate: json.moderate ? DosageUnit.fromString(json.moderate) : undefined,
-			strong: json.strong ? DosageUnit.fromString(json.strong) : undefined,
-			heavy: json.heavy ? DosageUnit.fromString(json.heavy) : undefined
+			thereshold: json.thereshold ? Dosage.fromString(json.thereshold) : undefined,
+			light: json.light ? Dosage.fromString(json.light) : undefined,
+			moderate: json.moderate ? Dosage.fromString(json.moderate) : undefined,
+			strong: json.strong ? Dosage.fromString(json.strong) : undefined,
+			heavy: json.heavy ? Dosage.fromString(json.heavy) : undefined
 		})
 	}
 }

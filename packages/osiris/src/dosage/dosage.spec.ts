@@ -1,5 +1,5 @@
 import ava, { TestFn } from 'ava'
-import { DosageUnit } from './dosage-unit.js'
+import { Dosage } from './dosage.js'
 
 const test = ava as TestFn<{
 	baseScalarAndString: {
@@ -22,7 +22,7 @@ test.beforeEach(t => {
 
 test('fromString(): should create a dosage unit with baseScalar', t => {
 	t.context.baseScalarAndString.forEach(iteration => {
-		const result = DosageUnit.fromString(iteration.string)
+		const result = Dosage.fromString(iteration.string)
 		t.is(result.baseScalar, iteration.baseScalar, `baseScalar of ${iteration.string} should be ${iteration.baseScalar}`)
 		t.is(result.units(), iteration.unit, `baseScalar unit of ${iteration.string} should be ${iteration.unit}`)
 	})
@@ -30,8 +30,8 @@ test('fromString(): should create a dosage unit with baseScalar', t => {
 
 test('toString(): should return a properly formatted dosage value', t => {
 	t.context.baseScalarAndString.forEach(({ string, unit, baseScalar }) => {
-		const dosageUnit = new DosageUnit(baseScalar, unit)
-		const result = dosageUnit.toString()
+		const dosage = new Dosage(baseScalar, unit)
+		const result = dosage.toString()
 		t.is(result, string, `should return ${string} from provided baseScalar of ${baseScalar}`)
 	})
 })

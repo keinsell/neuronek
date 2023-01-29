@@ -1,10 +1,10 @@
-import { DosageUnit } from '../dosage-unit.js'
+import { Dosage } from '../dosage.js'
 
 export class DosageRange {
-	minimum: DosageUnit
-	maximum: DosageUnit
+	minimum: Dosage
+	maximum: Dosage
 
-	constructor(minimum: DosageUnit, maximum: DosageUnit) {
+	constructor(minimum: Dosage, maximum: Dosage) {
 		Object.assign(this, { minimum, maximum })
 	}
 

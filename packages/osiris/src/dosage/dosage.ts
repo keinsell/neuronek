@@ -5,7 +5,7 @@ import unitmath from 'unitmath'
 // If the unit is ug then the value will be converted to μg
 // If the unit is cm3 then the value will be converted to l
 // This function will also find the lowest possible unit relative to the value
-export class DosageUnit extends Qty {
+export class Dosage extends Qty {
 	constructor(amount: number, unit: string) {
 		super(amount, unit)
 	}
@@ -30,14 +30,14 @@ export class DosageUnit extends Qty {
 		return parsed.toString()
 	}
 
-	/** This function converts a string to a DosageUnit by converting the string to a base scalar and unitand then returning a new DosageUnit with the scalar and unit as the value and unit respectively. */
-	static fromString(string: string): DosageUnit {
+	/** This function converts a string to a Dosage by converting the string to a base scalar and unitand then returning a new Dosage with the scalar and unit as the value and unit respectively. */
+	static fromString(string: string): Dosage {
 		// Convert the string to a base scalar and unit
 		const baseScalarOfUnit = new Qty(string).toBase()
 		const unit = baseScalarOfUnit.units()
 		const value = baseScalarOfUnit.scalar
 
 		// Return the dosage unit
-		return new DosageUnit(value, unit)
+		return new Dosage(value, unit)
 	}
 }

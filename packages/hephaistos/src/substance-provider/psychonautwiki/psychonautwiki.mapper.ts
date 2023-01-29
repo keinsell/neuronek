@@ -1,6 +1,6 @@
 import {
 	DosageTable,
-	DosageUnit,
+	Dosage,
 	Phase,
 	PhaseTable,
 	PsychoactiveClassification,
@@ -117,7 +117,7 @@ export namespace PsychonautwikiMapper {
 		}
 	}
 
-	function dosage(input?: number, unit?: string): DosageUnit | undefined {
+	function dosage(input?: number, unit?: string): Dosage | undefined {
 		if (!input) {
 			return undefined
 		}
@@ -126,7 +126,7 @@ export namespace PsychonautwikiMapper {
 			return undefined
 		}
 
-		return new DosageUnit(input, unit)
+		return new Dosage(input, unit)
 	}
 
 	function phase(input?: number, unit?: string): Phase {
