@@ -18,10 +18,7 @@
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
 		"predev": "yarn generate",
-		"prestart": "yarn generate",
-		"test": "yarn test:coverage",
-		"test:coverage": "c8 ava",
-		"test:unit": "ava"
+		"prestart": "yarn generate"
 	},
 	"dependencies": {
 		"erowid-dataset": "*",
