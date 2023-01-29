@@ -36,8 +36,6 @@ export class Hephaistos {
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
-		// TODO: Find cached information from repository
-
 		if (this.shouldUseCache) {
 			const cache = this.cacheManager.load()
 
@@ -52,12 +50,9 @@ export class Hephaistos {
 			}
 		}
 
-		// TODO: If cache was not found fetch new dataset using all providers
 		await this.buildSubstanceStore()
 		await this.buildExperienceStore()
 		await this.buildEffectStore()
-
-		// TODO: Save scrapped information in repository
 
 		const dataset = new HephaistosDataset({
 			substances: this.substance_store,
