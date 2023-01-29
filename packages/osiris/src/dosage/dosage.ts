@@ -6,12 +6,55 @@ import unitmath from 'unitmath'
 // If the unit is cm3 then the value will be converted to l
 // This function will also find the lowest possible unit relative to the value
 export class Dosage extends Qty {
-	constructor(amount: number, unit: string) {
-		super(amount, unit)
+	warnings: string[] = []
+	isDosagePerKilogramOfBodyWeight?: boolean = false
+	form?: 'crystal' | 'powder'
+	purity?: number
+	unsupportedUnit?: string
+
+	constructor(
+		amount: number,
+		unit: string,
+		additionalProperties?: {
+			isPerKilogramOfBodyWeight?: boolean
+			unsupportedUnit?: string
+		}
+	) {
+		const isProvidedUnitAvailable = Qty.getUnits().find(unit => unit === unit)
+		let supportedUnit = isProvidedUnitAvailable ? unit : undefined
+		let unsupportedUnit: string | undefined
+
+		if (supportedUnit === 'seeds') {
+			supportedUnit = undefined
+			unsupportedUnit = 'seeds'
+		}
+
+		super(amount, supportedUnit)
+
+		// Set a custom unit if provided unit is not a known unit
+		this.unsupportedUnit = unsupportedUnit
+		this.getAnalisis()
+
+		// Set additional properties
+		this.isDosagePerKilogramOfBodyWeight = additionalProperties?.isPerKilogramOfBodyWeight || false
+	}
+
+	getAnalisis() {
+		if (!this.form) {
+			this.warnings.push('Dosage is missing form information.')
+		}
+
+		if (!this.purity) {
+			this.warnings.push('Dosage is missing purity.')
+		}
 	}
 
 	/** Converts value to string with attention to `baseScalar`, function will find and use lowest possible unit relative to value. */
 	toString(): string {
+		if (this.isUnitless()) {
+			return `${this.scalar} ${this.unsupportedUnit}`
+		}
+
 		// Convert the base scalar to the units of this quantity
 		const qty = `${Qty(this.scalar, this.units()).toString()}`
 
@@ -33,10 +76,22 @@ export class Dosage extends Qty {
 	/** This function converts a string to a Dosage by converting the string to a base scalar and unitand then returning a new Dosage with the scalar and unit as the value and unit respectively. */
 	static fromString(string: string): Dosage {
 		// Convert the string to a base scalar and unit
-		const baseScalarOfUnit = new Qty(string).toBase()
+		const baseScalarOfUnit = Dosage.parse(string)
+
+		// If we got null we need to assign custom unit
+		if (baseScalarOfUnit === null) {
+			// Check if the string contains a unit, if it does we can find the scalar and assign the unsupported unit
+			const hasUnit = /(\D)+/g.test(string)
+			// If we have a unit we can assign it as a custom unit
+			if (hasUnit) {
+				const unit = string.match(/(\D)+/g)[0]
+				const value = parseInt(string.replace(/(\D)+/g, ''))
+				return new Dosage(value, unit)
+			}
+		}
+
 		const unit = baseScalarOfUnit.units()
 		const value = baseScalarOfUnit.scalar
-
 		// Return the dosage unit
 		return new Dosage(value, unit)
 	}
