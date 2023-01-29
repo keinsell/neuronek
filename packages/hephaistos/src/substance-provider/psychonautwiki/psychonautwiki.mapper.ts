@@ -8,7 +8,8 @@ import {
 	RouteOfAdministrationClassification,
 	RouteOfAdministrationTable,
 	Substance,
-	Tolerance
+	Tolerance,
+	DosageRange
 } from 'osiris'
 import { GetSubstancesQuery, SubstanceRoa } from './gql/sdk/graphql.js'
 import ms from 'ms'
@@ -76,16 +77,21 @@ export namespace PsychonautwikiMapper {
 			additionalProperties.isPerKilogramOfBodyWeight = true
 		}
 
-		// TODO: What the fuck does it mean?
-		// if (units === 'seeds') {
-		// 	units = undefined
-		// }
+		const thereshold = dosageRange(undefined, dosage(input.dose?.threshold, units, additionalProperties))
+		const light = dosageRange(
+			dosage(input.dose?.light?.min, units, additionalProperties),
+			dosage(input.dose?.light?.max, units, additionalProperties)
+		)
+		const common = dosageRange(
+			dosage(input.dose?.common?.min, units, additionalProperties),
+			dosage(input.dose?.common?.max, units, additionalProperties)
+		)
+		const strong = dosageRange(
+			dosage(input.dose?.strong?.min, units, additionalProperties),
+			dosage(input.dose?.strong?.max, units, additionalProperties)
+		)
 
-		const thereshold = dosage(input.dose?.threshold, units, additionalProperties)
-		const light = dosage(input.dose?.light?.max, units, additionalProperties)
-		const common = dosage(input.dose?.common?.min, units, additionalProperties)
-		const strong = dosage(input.dose?.strong?.min, units, additionalProperties)
-		const heavy = dosage(input.dose?.heavy, units, additionalProperties)
+		const heavy = dosageRange(dosage(input.dose?.heavy, units, additionalProperties))
 
 		const dosage_table = new DosageTable({ thereshold, light, moderate: common, strong, heavy })
 
@@ -138,6 +144,9 @@ export namespace PsychonautwikiMapper {
 	function phase(input?: number, unit?: string): Phase {
 		if (!input) {
 			return undefined
+		}
+		function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
+			return new DosageRange(min, max)
 		}
 
 		if (!unit) {
