@@ -3,5 +3,4 @@ import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonaut
 
 const dataset = await new Hephaistos().build()
 
-console.log(dataset)
-console.log(dataset.findSubstanceByName('Speed').toJSON())
+console.log(JSON.stringify(dataset.findSubstanceByName('Speed').toJSON()))

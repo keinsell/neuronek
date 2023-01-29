@@ -32,11 +32,12 @@ export class Hephaistos {
 	private readonly experience_store: any[] = []
 	private readonly effect_store: string[] = []
 	private cacheManager: CacheManager = new CacheManager()
-	private shouldUseCache: boolean = true
+	private restoreCache: boolean = false
+	private saveCache: boolean = true
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
-		if (this.shouldUseCache) {
+		if (this.restoreCache) {
 			const cache = this.cacheManager.load()
 
 			if (cache) {
@@ -60,7 +61,7 @@ export class Hephaistos {
 			effects: this.effect_store
 		})
 
-		if (this.shouldUseCache) {
+		if (this.saveCache) {
 			this.cacheManager.cache(dataset)
 		}
 

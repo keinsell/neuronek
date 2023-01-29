@@ -28,16 +28,15 @@ export class CacheManager {
 			}
 		}
 
+		this.db.data.substances = []
+
 		for (const substance of dataset.substance_store) {
 			console.log(`Cache: ${substance.name}`)
-			console.log(substance)
 			const serializedSubstance = substance.toJSON()
-			console.log(serializedSubstance)
 			this.db.data.substances.push(serializedSubstance)
 		}
 
 		console.log(`DB: ${this.db.data.substances.length} substances`)
-		console.log(this.db)
 
 		this.db.write()
 	}

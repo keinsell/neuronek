@@ -20,6 +20,20 @@ export namespace PsychonautwikiMapper {
 		switch (input) {
 			case 'Psychedelics':
 				return PsychoactiveClassification.psychedelic
+			case 'Dissociatives':
+				return PsychoactiveClassification.dissociative
+			case 'Stimulants':
+				return PsychoactiveClassification.stimulant
+			case 'Depressants':
+				return PsychoactiveClassification.depressant
+			case 'Deliriant':
+				return PsychoactiveClassification.deliriant
+			case 'Entheogens':
+				return PsychoactiveClassification.entheogen
+			case 'Entactogens':
+				return PsychoactiveClassification.empathogen
+			case 'Nootropic':
+				return PsychoactiveClassification.nootropic
 			default:
 				return undefined
 		}
@@ -67,8 +81,6 @@ export namespace PsychonautwikiMapper {
 			isPerKilogramOfBodyWeight?: boolean
 		} = {}
 
-		console.log(input)
-
 		// TODO: Find a way to inform users that it's about pure substance itself not method of administration (ex. cigarette, beer or raw plant)
 		if (units === 'mg (THC)') {
 			units = 'mg'
@@ -103,23 +115,50 @@ export namespace PsychonautwikiMapper {
 
 		const dosage_table = new DosageTable({ thereshold, light, moderate: common, strong, heavy })
 
-		const onset = input.duration?.onset?.min
-			? ms(input.duration.onset?.min + ' ' + input.duration.onset?.units)
-			: undefined
+		const onset = new Phase({
+			minimalDuration: input.duration?.onset?.min
+				? ms(input.duration.onset?.min + ' ' + input.duration.onset?.units)
+				: undefined,
+			maximalDuration: input.duration?.onset?.max
+				? ms(input.duration.onset.max + ' ' + input.duration.onset.units)
+				: undefined
+		})
 
-		const comeup = input.duration?.comeup?.min
-			? ms(input.duration.comeup?.min + ' ' + input.duration.comeup?.units)
-			: undefined
+		const comeup = new Phase({
+			minimalDuration: input.duration?.comeup?.min
+				? ms(input.duration.comeup?.min + ' ' + input.duration.comeup?.units)
+				: undefined,
+			maximalDuration: input.duration?.comeup?.max
+				? ms(input.duration.comeup?.max + ' ' + input.duration.comeup?.units)
+				: undefined
+		})
 
-		const peak = input.duration?.peak?.min ? ms(input.duration.peak?.min + ' ' + input.duration.peak?.units) : undefined
+		const peak = new Phase({
+			minimalDuration: input.duration?.peak?.min
+				? ms(input.duration.peak?.min + ' ' + input.duration.peak?.units)
+				: undefined,
+			maximalDuration: input.duration?.comeup?.max
+				? ms(input.duration.peak?.max + ' ' + input.duration.peak?.units)
+				: undefined
+		})
 
-		const offset = input.duration?.offset?.min
-			? ms(input.duration.offset?.min + ' ' + input.duration.offset?.units)
-			: undefined
+		const offset = new Phase({
+			minimalDuration: input.duration?.offset?.min
+				? ms(input.duration.offset?.min + ' ' + input.duration.offset?.units)
+				: undefined,
+			maximalDuration: input.duration?.comeup?.max
+				? ms(input.duration.offset?.max + ' ' + input.duration.offset?.units)
+				: undefined
+		})
 
-		const aftereffects = input.duration?.afterglow?.min
-			? ms(input.duration.afterglow?.min + ' ' + input.duration.afterglow?.units)
-			: undefined
+		const aftereffects = new Phase({
+			minimalDuration: input.duration?.afterglow?.min
+				? ms(input.duration.afterglow?.min + ' ' + input.duration.afterglow?.units)
+				: undefined,
+			maximalDuration: input.duration?.afterglow?.max
+				? ms(input.duration.afterglow?.max + ' ' + input.duration.afterglow?.units)
+				: undefined
+		})
 
 		const phase_table = new PhaseTable({ onset, comeup, peak, offset, aftereffects })
 
@@ -151,18 +190,6 @@ export namespace PsychonautwikiMapper {
 
 	function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
 		return new DosageRange(min, max)
-	}
-
-	function phase(input?: number, unit?: string): Phase {
-		if (!input) {
-			return undefined
-		}
-
-		if (!unit) {
-			return undefined
-		}
-
-		return ms(`${input}${unit}`)
 	}
 
 	export function useGetSubstancesQuery(request: GetSubstancesQuery): Substance | undefined {
@@ -230,13 +257,6 @@ export namespace PsychonautwikiMapper {
 					average?: number | undefined
 				}
 			} = {}
-
-			// result.tolerance
-			// 			{
-			//   full: 'rapidly develops with prolonged and repeated use',
-			//   half: '3 - 7 days',
-			//   zero: '1 - 2 weeks'
-			// }
 
 			if (result.tolerance.half) {
 				// Check if provided value is a range

@@ -5,7 +5,7 @@ export type PhaseTableProperties = {
 	[key in PhaseClassification]?: Phase
 }
 
-export type PhaseTableJSON = PhaseJSON & { classification: PhaseClassification }[]
+export type PhaseTableJSON = { [key in PhaseClassification]?: PhaseJSON }
 export class PhaseTable implements PhaseTableProperties {
 	public readonly [PhaseClassification.onset]?: Phase
 	public readonly [PhaseClassification.comeup]?: Phase
@@ -90,13 +90,13 @@ export class PhaseTable implements PhaseTableProperties {
 	}
 
 	toJSON(): PhaseTableJSON {
-		const json: PhaseTableJSON = []
+		const json: Partial<PhaseTableJSON> = {}
 
 		for (const phase of this.all) {
-			json[phase.classification] = phase.phase?.toJSON ?? null
+			json[phase.classification] = phase.phase?.toJSON() ?? null
 		}
 
-		return json
+		return json as PhaseTableJSON
 	}
 
 	static fromJSON(json: PhaseTableJSON): PhaseTable {
