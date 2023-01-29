@@ -9,6 +9,7 @@ import {
 	RouteOfAdministrationTable,
 	Substance,
 	Tolerance,
+	Bioavailability,
 	DosageRange
 } from 'osiris'
 import { GetSubstancesQuery, SubstanceRoa } from './gql/sdk/graphql.js'
@@ -55,6 +56,12 @@ export namespace PsychonautwikiMapper {
 		| undefined {
 		const minimal_bioavailability = input.bioavailability?.min ?? undefined
 		const maximal_bioavailability = input.bioavailability?.max ?? undefined
+
+		const bioavailability = new Bioavailability({
+			minimal: minimal_bioavailability,
+			maximal: maximal_bioavailability
+		})
+
 		let units = input.dose?.units ?? undefined
 		let additionalProperties: {
 			isPerKilogramOfBodyWeight?: boolean
@@ -117,7 +124,7 @@ export namespace PsychonautwikiMapper {
 		const phase_table = new PhaseTable({ onset, comeup, peak, offset, aftereffects })
 
 		const roa = new RouteOfAdministration({
-			bioavailability: minimal_bioavailability,
+			bioavailability: bioavailability,
 			dosage: dosage_table,
 			phase: phase_table
 		})

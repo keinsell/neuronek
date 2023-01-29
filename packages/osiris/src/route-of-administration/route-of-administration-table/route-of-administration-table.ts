@@ -1,6 +1,5 @@
 import { RouteOfAdministrationClassification } from './route-of-administration-classification.js'
 import { RouteOfAdministration, RouteOfAdministrationJSON } from '../route-of-administration.js'
-import { type } from 'os'
 
 export type RouteOfAdministrationTableProperties = {
 	[classification in RouteOfAdministrationClassification]?: RouteOfAdministration
@@ -38,8 +37,8 @@ export class RouteOfAdministrationTable implements RouteOfAdministrationTablePro
 			const classification: RouteOfAdministrationClassification =
 				RouteOfAdministrationClassification[key as RouteOfAdministrationClassification]
 
-			if (this[classification]) {
-				json[classification] = this[classification].toJSON()
+			if (this[classification] !== undefined) {
+				json[classification] = this[classification]?.toJSON()
 			}
 		}
 
@@ -47,10 +46,12 @@ export class RouteOfAdministrationTable implements RouteOfAdministrationTablePro
 	}
 
 	static fromJSON(json: RouteOfAdministrationTableJSON): RouteOfAdministrationTable {
-		const table = {}
+		const table: Partial<RouteOfAdministrationTableProperties> = {}
 
 		for (const key of Object.keys(json)) {
-			table[key as RouteOfAdministrationClassification] = RouteOfAdministration?.fromJSON(json[key])
+			const classification = RouteOfAdministrationClassification[key as RouteOfAdministrationClassification]
+			table[key as RouteOfAdministrationClassification] =
+				json[classification] !== undefined ? RouteOfAdministration?.fromJSON(json[classification]) : undefined
 		}
 
 		return new RouteOfAdministrationTable(table)

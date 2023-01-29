@@ -1,30 +1,33 @@
+import { Bioavailability, BioavailabilityJSON } from '../bioavailability/bioavailability.js'
 import { DosageTable, DosageTableJSON } from '../dosage/dosage-table/dosage-table.js'
 import { PhaseTable, PhaseTableJSON } from '../phase/phase-table/phase-table.js'
 
 export interface RouteOfAdministrationProperties {
-	readonly bioavailability?: number
+	readonly bioavailability?: Bioavailability | undefined
 	readonly dosage: DosageTable
 	readonly phase: PhaseTable
 }
 
 export interface RouteOfAdministrationJSON {
-	readonly bioavailability?: number
+	readonly bioavailability?: BioavailabilityJSON | undefined
 	readonly dosage: DosageTableJSON
 	readonly phase: PhaseTableJSON
 }
 
 export class RouteOfAdministration implements RouteOfAdministrationProperties {
-	public readonly bioavailability?: number
+	public readonly bioavailability?: Bioavailability | undefined
 	public readonly dosage: DosageTable
 	public readonly phase: PhaseTable
 
 	constructor(properties: RouteOfAdministrationProperties) {
-		Object.assign(this, properties)
+		this.bioavailability = properties.bioavailability
+		this.dosage = properties.dosage
+		this.phase = properties.phase
 	}
 
 	public toJSON(): RouteOfAdministrationJSON {
 		return {
-			bioavailability: this.bioavailability,
+			bioavailability: this.bioavailability ? this.bioavailability.toJSON() : undefined,
 			dosage: this.dosage.toJSON(),
 			phase: this.phase.toJSON()
 		}
@@ -32,7 +35,7 @@ export class RouteOfAdministration implements RouteOfAdministrationProperties {
 
 	public static fromJSON(json: RouteOfAdministrationJSON): RouteOfAdministration {
 		return new RouteOfAdministration({
-			...json,
+			bioavailability: json.bioavailability ? Bioavailability.fromJSON(json.bioavailability) : undefined,
 			dosage: DosageTable.fromJSON(json.dosage),
 			phase: PhaseTable.fromJSON(json.phase)
 		})

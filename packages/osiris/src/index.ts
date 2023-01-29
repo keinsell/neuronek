@@ -13,8 +13,10 @@ import { Tolerance } from './tolerance/tolerance.js'
 import { ToxicityTable } from './toxicity-table/toxicity-table.js'
 import { Ingestion } from './ingestion/ingestion.js'
 import { DosageRange } from './dosage/dosage-range/dosage-range.js'
+import { Bioavailability } from './bioavailability/bioavailability.js'
 
 export {
+	Bioavailability,
 	SubstanceJSON,
 	Ingestion,
 	DosageRange,
