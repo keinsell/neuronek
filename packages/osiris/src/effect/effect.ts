@@ -59,8 +59,7 @@ export enum EffectCategory {
 	uncomfortable_bodily_effects = 'Uncomfortable Bodily Effects'
 }
 
-// https://effectindex.com/effects/
-export class Effect {
+export interface EffectProperties {
 	/**
 	 * @example "Jamais vu"
 	 */
@@ -90,4 +89,41 @@ export class Effect {
 	 * @example "https://effectindex.com/effects/jamais-vu"
 	 */
 	see_also?: Effect[]
+}
+
+// https://effectindex.com/effects/
+export class Effect implements EffectProperties {
+	/**
+	 * @example "Jamais vu"
+	 */
+	name: string
+	/**
+	 * @example "jamais-vu"
+	 */
+	slug: string
+	/**
+	 * @example 'Psychological States'
+	 */
+	category: EffectCategory
+	/**
+	 * @example ["cognitive", "psychological_stage"]
+	 */
+	tags: EffectTag[]
+	/**
+	 * @example "Jamais vu can be described as the sudden sensation that a previously known concept or currently-occurring situation is unfamiliar and being experienced for the very first time. This is often triggered despite the fact that during the experience of it, the person is rationally aware that the circumstances of the previous experience have definitely occurred."
+	 */
+	summary: string
+	/**
+	 * Markdown-formatted text.
+	 * @example ["# Jamais vu", "**Jamais vu** can be described as the sudden sensation that a previously known concept or currently-occurring situation is unfamiliar and being experienced for the very first time. This is often triggered despite the fact that during the experience of it, the person is rationally aware that the circumstances of the previous experience have definitely occurred.", ...]
+	 */
+	description: string[]
+	/**
+	 * @example "https://effectindex.com/effects/jamais-vu"
+	 */
+	see_also?: Effect[]
+
+	constructor(properties: EffectProperties) {
+		Object.assign(this, properties)
+	}
 }
