@@ -3,5 +3,7 @@
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
-	"editor.formatOnPaste": true
+	"editor.formatOnPaste": false,
+	"editor.formatOnSaveMode": "modificationsIfAvailable",
+	"files.autoSave": "onWindowChange"
 }
