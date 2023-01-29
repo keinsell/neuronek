@@ -60,11 +60,11 @@ export class DosageTable {
 
 	static fromJSON(json: _DosageTableJSON): DosageTable {
 		return new DosageTable({
-			thereshold: json.thereshold ? Dosage.fromString(json.thereshold) : undefined,
-			light: json.light ? Dosage.fromString(json.light) : undefined,
-			moderate: json.moderate ? Dosage.fromString(json.moderate) : undefined,
-			strong: json.strong ? Dosage.fromString(json.strong) : undefined,
-			heavy: json.heavy ? Dosage.fromString(json.heavy) : undefined
+			thereshold: json.thereshold ? DosageRange.fromString(json.thereshold) : undefined,
+			light: json.light ? DosageRange.fromString(json.light) : undefined,
+			moderate: json.moderate ? DosageRange.fromString(json.moderate) : undefined,
+			strong: json.strong ? DosageRange.fromString(json.strong) : undefined,
+			heavy: json.heavy ? DosageRange.fromString(json.heavy) : undefined
 		})
 	}
 }

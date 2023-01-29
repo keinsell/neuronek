@@ -4,4 +4,4 @@ import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonaut
 const dataset = await new Hephaistos().build()
 
 console.log(dataset)
-console.log(dataset.findSubstanceByName('LSA').routes_of_administration.oral)
+console.log(dataset.findSubstanceByName('Speed').routes_of_administration.oral)

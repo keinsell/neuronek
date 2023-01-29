@@ -86,6 +86,7 @@ export namespace PsychonautwikiMapper {
 			dosage(input.dose?.common?.min, units, additionalProperties),
 			dosage(input.dose?.common?.max, units, additionalProperties)
 		)
+
 		const strong = dosageRange(
 			dosage(input.dose?.strong?.min, units, additionalProperties),
 			dosage(input.dose?.strong?.max, units, additionalProperties)
@@ -141,12 +142,13 @@ export namespace PsychonautwikiMapper {
 		return new Dosage(input, unit, adds)
 	}
 
+	function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
+		return new DosageRange(min, max)
+	}
+
 	function phase(input?: number, unit?: string): Phase {
 		if (!input) {
 			return undefined
-		}
-		function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
-			return new DosageRange(min, max)
 		}
 
 		if (!unit) {
