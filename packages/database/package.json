@@ -16,7 +16,8 @@
 		"db:push": "prisma db push --skip-generate"
 	},
 	"dependencies": {
-		"@prisma/client": "latest"
+		"@prisma/client": "latest",
+		"osiris": "*"
 	},
 	"devDependencies": {
 		"prisma": "latest",
