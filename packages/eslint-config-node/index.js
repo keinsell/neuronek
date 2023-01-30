@@ -3,13 +3,12 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:unicorn/recommended',
 		'plugin:node/recommended',
-		'plugin:neverthrow/recommended',
 		'plugin:sonarjs/recommended',
 		'plugin:diff/diff',
 		'plugin:jsdoc/recommended',
 		'plugin:@typescript-eslint/recommended'
 	],
-	plugins: ['json-format', 'neverthrow', 'sonarjs', 'jsdoc', '@typescript-eslint'],
+	plugins: ['json-format', 'sonarjs', 'jsdoc', '@typescript-eslint'],
 	parser: '@typescript-eslint/parser',
 	settings: {
 		'json/sort-package-json': 'standard',

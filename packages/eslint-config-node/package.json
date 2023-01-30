@@ -9,7 +9,6 @@
 		"eslint-plugin-diff": "^2.0.0",
 		"eslint-plugin-jsdoc": "^39.3.2",
 		"eslint-plugin-json-format": "^2.0.1",
-		"eslint-plugin-neverthrow": "^1.1.4",
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-sonarjs": "^0.16.0",
 		"eslint-plugin-unicorn": "^45.0.0",
