@@ -24,4 +24,5 @@
 /packages/osiris/src/route-of-administration/route-of-administration-table/route-of-administration-table.ts @keinsell
 /packages/osiris/src/route-of-administration/route-of-administration.ts @keinsell
 /packages/osiris/src/rules/where-when-rule.ts @keinsell
+/packages/osiris/src/substance/substance.ts @keinsell
 /packages/osiris/src/toxicity-table/toxicity-table.ts @keinsell
