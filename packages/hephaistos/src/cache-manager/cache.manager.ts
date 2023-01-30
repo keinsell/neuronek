@@ -1,9 +1,9 @@
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
+import { ExperienceReport, Substance, SubstanceJSON } from 'osiris'
+
 import { HephaistosDataset } from '../main.js'
-import { ExperienceReport, Substance } from 'osiris'
 import { Effect } from '../substance-provider/psychonautwiki/gql/sdk/graphql.js'
-import { SubstanceJSON } from 'osiris'
 
 type CacheFileStructure = {
 	substances: SubstanceJSON[]
@@ -32,18 +32,16 @@ export class CacheManager {
 		this.db.data.experiences = []
 
 		for (const substance of dataset.substance_store) {
-			console.log(`Cache: ${substance.name}`)
+			console.log(`Cache:Substance: "${substance.name}"`)
 			const serializedSubstance = substance.toJSON()
 			this.db.data.substances.push(serializedSubstance)
 		}
 
 		for (const experience of dataset.experience_store) {
-			console.log(`Cache: ${experience.title}`)
+			console.log(`Cache:Experience: "${experience.title}"`)
 			const serializedExperience = experience.toJSON()
 			this.db.data.experiences.push(serializedExperience)
 		}
-
-		console.log(`DB: ${this.db.data.substances.length} substances`)
 
 		this.db.write()
 	}
@@ -62,6 +60,9 @@ export class CacheManager {
 		if (this.db.data.substances && this.db.data.substances.length < 5) {
 			return undefined
 		}
+
+		console.log(`Cache:Substances: ${this.db.data.substances.length}`)
+		console.log(`Cache:Experiences: ${this.db.data.experiences.length}`)
 
 		return {
 			substances: this.db.data.substances.map(substance => Substance.fromJSON(substance)),

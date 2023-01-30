@@ -1,6 +1,8 @@
+import ms from 'ms'
 import {
-	DosageTable,
+	Bioavailability,
 	Dosage,
+	DosageTable,
 	Phase,
 	PhaseTable,
 	PsychoactiveClassification,
@@ -8,12 +10,11 @@ import {
 	RouteOfAdministrationClassification,
 	RouteOfAdministrationTable,
 	Substance,
-	Tolerance,
-	Bioavailability,
-	DosageRange
+	Tolerance
 } from 'osiris'
-import { GetSubstancesQuery, SubstanceRoa } from './gql/sdk/graphql.js'
-import ms from 'ms'
+import { Writable } from 'type-fest'
+
+import { GetSubstancesQuery, SubstanceRoa, SubstanceRoaDose } from './gql/sdk/graphql.js'
 
 export namespace PsychonautwikiMapper {
 	function psychoactiveClassification(input: string): PsychoactiveClassification {
@@ -62,6 +63,87 @@ export namespace PsychonautwikiMapper {
 		return result
 	}
 
+	function parseDosage(input: SubstanceRoaDose): DosageTable | undefined {
+		let responseUnits = input.units
+
+		const dosageTableConstructor: Partial<Writable<DosageTable>> = {}
+
+		if (!input.units) {
+			return undefined
+		}
+
+		// Custom fix fo body weight
+		if (responseUnits === 'mg/kg of body weight') {
+			responseUnits = 'mg'
+			dosageTableConstructor.isWeightBased = true
+		}
+
+		// Custom fix for weed (THC)
+		if (responseUnits === 'mg (THC)') {
+			responseUnits = 'mg'
+		}
+
+		// Custom fix for alcohol
+		if (responseUnits === 'mL EtOH') {
+			responseUnits = 'ml'
+		}
+
+		// TODO: Custom fix for LSA
+		if (responseUnits === 'seeds') {
+			responseUnits = 'seeds'
+		}
+
+		// Find baseScalar unit from given units
+		const baseScalarUnits = Dosage.fromString(`1 ${input.units}`).toBase().units()
+		const kindOfUnit = Dosage.fromString(`1 ${input.units}`).toBase().kind()
+
+		// Add units
+		dosageTableConstructor.unit = baseScalarUnits
+		dosageTableConstructor.kind = kindOfUnit as 'mass' | 'volume' | 'custom'
+
+		// Parse thereshold dosage
+		if (input.threshold) {
+			dosageTableConstructor.thereshold = new Dosage(input.threshold, responseUnits).baseScalar
+		}
+
+		// Parse light dosage
+		if (input.light) {
+			const min = new Dosage(input.light.min, responseUnits).baseScalar
+			const max = new Dosage(input.light.max, responseUnits).baseScalar
+
+			dosageTableConstructor.light = [min, max]
+		}
+
+		// Parse standard dosage
+		if (input.common) {
+			const min = new Dosage(input.common.min, responseUnits).baseScalar
+			const max = new Dosage(input.common.max, responseUnits).baseScalar
+
+			dosageTableConstructor.moderate = [min, max]
+		}
+
+		// Parse strong dosage
+		if (input.strong) {
+			const min = new Dosage(input.strong.min, responseUnits).baseScalar
+			const max = new Dosage(input.strong.max, responseUnits).baseScalar
+
+			dosageTableConstructor.strong = [min, max]
+		}
+
+		// Parse heavy dosage
+		if (input.heavy) {
+			dosageTableConstructor.heavy = new Dosage(input.heavy, responseUnits).baseScalar
+		}
+
+		if (!dosageTableConstructor.light || !dosageTableConstructor.moderate || !dosageTableConstructor.strong) {
+			return undefined
+		}
+
+		const dosageTable = new DosageTable(dosageTableConstructor as any)
+
+		return dosageTable
+	}
+
 	function routeOfAdministration(input: SubstanceRoa):
 		| {
 				classification: RouteOfAdministrationClassification
@@ -76,44 +158,24 @@ export namespace PsychonautwikiMapper {
 			maximal: maximal_bioavailability
 		})
 
-		let units = input.dose?.units ?? undefined
-		let additionalProperties: {
-			isPerKilogramOfBodyWeight?: boolean
-		} = {}
-
-		// TODO: Find a way to inform users that it's about pure substance itself not method of administration (ex. cigarette, beer or raw plant)
-		if (units === 'mg (THC)') {
-			units = 'mg'
+		if (!input.dose) {
+			return undefined
 		}
 
-		if (units === 'mL EtOH') {
-			units = 'ml'
+		let dosage_table: DosageTable | undefined
+
+		try {
+			dosage_table = parseDosage(input.dose)
+		} catch (error) {
+			console.log(input.dose)
+			console.log(error)
+			return undefined
 		}
 
-		// TODO: Need to be handled in other way as it's important information
-		if (units === 'mg/kg of body weight') {
-			units = 'mg'
-			additionalProperties.isPerKilogramOfBodyWeight = true
+		// We should deny creation of substances without dosages.
+		if (!dosage_table) {
+			return undefined
 		}
-
-		const thereshold = dosageRange(undefined, dosage(input.dose?.threshold, units, additionalProperties))
-		const light = dosageRange(
-			dosage(input.dose?.light?.min, units, additionalProperties),
-			dosage(input.dose?.light?.max, units, additionalProperties)
-		)
-		const common = dosageRange(
-			dosage(input.dose?.common?.min, units, additionalProperties),
-			dosage(input.dose?.common?.max, units, additionalProperties)
-		)
-
-		const strong = dosageRange(
-			dosage(input.dose?.strong?.min, units, additionalProperties),
-			dosage(input.dose?.strong?.max, units, additionalProperties)
-		)
-
-		const heavy = dosageRange(dosage(input.dose?.heavy, units, additionalProperties))
-
-		const dosage_table = new DosageTable({ thereshold, light, moderate: common, strong, heavy })
 
 		const onset = new Phase({
 			minimalDuration: input.duration?.onset?.min
@@ -176,22 +238,6 @@ export namespace PsychonautwikiMapper {
 		}
 	}
 
-	function dosage(input?: number, unit?: string, adds?: any): Dosage | undefined {
-		if (!input) {
-			return undefined
-		}
-
-		if (!unit) {
-			return undefined
-		}
-
-		return new Dosage(input, unit, adds)
-	}
-
-	function dosageRange(min?: Dosage, max?: Dosage): DosageRange {
-		return new DosageRange(min, max)
-	}
-
 	export function useGetSubstancesQuery(request: GetSubstancesQuery): Substance | undefined {
 		const substanceDraft: Partial<Substance> = {}
 
@@ -234,7 +280,9 @@ export namespace PsychonautwikiMapper {
 
 			result.roas.forEach((roa: any) => {
 				const route = routeOfAdministration(roa)
-				route_table[route.classification] = route.route
+				if (route && route.route && route.classification) {
+					route_table[route.classification] = route.route
+				}
 			})
 
 			substanceDraft.routes_of_administration = new RouteOfAdministrationTable(route_table)
