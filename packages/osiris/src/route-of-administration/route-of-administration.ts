@@ -1,8 +1,10 @@
 import { Bioavailability, BioavailabilityJSON } from '../bioavailability/bioavailability.js'
 import { DosageTable, DosageTableJSON } from '../dosage/dosage-table/dosage-table.js'
 import { PhaseTable, PhaseTableJSON } from '../phase/phase-table/phase-table.js'
+import { RouteOfAdministrationClassification } from './route-of-administration-table/route-of-administration-classification.js'
 
 export interface RouteOfAdministrationProperties {
+	readonly classification?: RouteOfAdministrationClassification | undefined
 	readonly bioavailability?: Bioavailability | undefined
 	readonly dosage: DosageTable
 	readonly phase: PhaseTable
@@ -15,6 +17,7 @@ export interface RouteOfAdministrationJSON {
 }
 
 export class RouteOfAdministration implements RouteOfAdministrationProperties {
+	classification?: RouteOfAdministrationClassification | undefined
 	public readonly bioavailability?: Bioavailability | undefined
 	public readonly dosage: DosageTable
 	public readonly phase: PhaseTable
