@@ -1,4 +1,3 @@
-import { Effect } from '../effect/effect.js'
 import { PsychoactiveClassification } from '../psychoactive-class/psychoactive-class.js'
 import {
 	RouteOfAdministrationTable,
@@ -94,6 +93,12 @@ export interface SubstanceProperites {
 	toxicity?: ToxicityTable
 	harm_potential?: {}
 	experiences?: {}
+
+	externals?: {
+		psychonautwiki?: string
+		tripsit?: string
+		isomerdesign?: string
+	}
 }
 
 export interface SubstanceJSON {
@@ -175,6 +180,12 @@ export interface SubstanceJSON {
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
 	routes_of_administration: RouteOfAdministrationTableJSON
+
+	externals?: {
+		psychonautwiki?: string
+		tripsit?: string
+		isomerdesign?: string
+	}
 }
 
 /**
@@ -268,6 +279,11 @@ export class Substance implements SubstanceProperites {
 	toxicity?: ToxicityTable
 	harm_potential?: {}
 	experiences?: {}
+	externals?: {
+		psychonautwiki?: string
+		tripsit?: string
+		isomerdesign?: string
+	}
 
 	constructor(substanceInfomration: SubstanceProperites) {
 		Object.assign(this, substanceInfomration)
