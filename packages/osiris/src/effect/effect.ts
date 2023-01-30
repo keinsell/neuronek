@@ -3,6 +3,7 @@ import slugify from 'slugify'
 import { EffectCategory } from './effect-category.js'
 import { EffectParameter } from './effect-parameter.js'
 import { EffectTag } from './effect-tag.js'
+import { EffectType } from './effect-type.js'
 
 export interface EffectProperties {
 	/**
@@ -13,10 +14,11 @@ export interface EffectProperties {
 	 * @example "jamais-vu"
 	 */
 	slug?: string
+	type?: EffectType
 	/**
 	 * @example 'Psychological States'
 	 */
-	category: EffectCategory
+	category?: EffectCategory
 	/**
 	 * @example ["cognitive", "psychological_stage"]
 	 */
@@ -43,7 +45,8 @@ export interface EffectProperties {
 export interface EffectJSON {
 	name: string
 	slug: string
-	category: EffectCategory
+	type?: EffectType
+	category?: EffectCategory
 	tags?: EffectTag[]
 	parameters?: EffectParameter[]
 	summary?: string
@@ -63,10 +66,11 @@ export class Effect implements EffectProperties {
 	 * @example "jamais-vu"
 	 */
 	slug: string
+	type?: EffectType
 	/**
 	 * @example 'Psychological States'
 	 */
-	category: EffectCategory
+	category?: EffectCategory
 	/**
 	 * @example ["cognitive", "psychological_stage"]
 	 */
@@ -85,6 +89,7 @@ export class Effect implements EffectProperties {
 	 * @example "https://effectindex.com/effects/jamais-vu"
 	 */
 	see_also?: Effect[]
+	conditioningEffects?: Effect[]
 
 	/**  @example "https://effectindex.com/effects/jamais-vu" */
 	effectindex?: string

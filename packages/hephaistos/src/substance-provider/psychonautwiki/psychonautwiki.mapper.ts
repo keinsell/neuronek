@@ -4,6 +4,7 @@ import {
 	ChemicalNomenclature,
 	Dosage,
 	DosageTable,
+	Effect,
 	Phase,
 	PhaseTable,
 	PsychoactiveClassification,
@@ -244,7 +245,7 @@ export namespace PsychonautwikiMapper {
 	 */
 	export function useGetSubstancesQuery(
 		request: GetSubstancesQuery
-	): { substance: Substance; effects: { name: string; psychonautwiki: string }[] } | undefined {
+	): { substance: Substance; effects: Effect[] } | undefined {
 		const substanceDraft: PartialDeep<Substance> = {}
 
 		if (request.substances.length === 0) {
@@ -411,15 +412,17 @@ export namespace PsychonautwikiMapper {
 			psychonautwiki: result.url
 		}
 
-		const effects: { name: string; psychonautwiki: string }[] = []
+		const effects: Effect[] = []
 
 		if (result.effects && result.effects.length > 0) {
 			for (const effect of result.effects) {
 				if (effect.name && effect.url) {
-					effects.push({
-						name: effect.name,
-						psychonautwiki: effect.url
-					})
+					effects.push(
+						new Effect({
+							name: effect.name,
+							psychonautwiki: effect.url
+						})
+					)
 				}
 			}
 		}

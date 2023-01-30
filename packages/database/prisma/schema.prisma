@@ -67,7 +67,8 @@ model Effect {
   name String @unique
   slug String @unique
 
-  category String
+  category String?
+  type     String?
   tags     String[]
 
   summary     String?
