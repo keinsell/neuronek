@@ -256,10 +256,10 @@ export namespace PsychonautwikiMapper {
 
 		// Handle common names
 		if (result.commonNames) {
-			substanceDraft.chemical_nomeclature = { common_names: [] }
+			substanceDraft.nomenclature = { common_names: [] }
 
 			result.commonNames.forEach((element: any) => {
-				substanceDraft.chemical_nomeclature.common_names.push(element)
+				substanceDraft.nomenclature.common_names.push(element)
 			})
 		}
 

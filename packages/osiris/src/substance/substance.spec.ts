@@ -7,7 +7,7 @@ const test = ava as unknown as TestFn<{ substance: Substance }>
 test.beforeEach(t => {
 	t.context.substance = new Substance({
 		name: 'LSD',
-		chemical_nomeclature: {},
+		nomenclature: {},
 		class_membership: {},
 		routes_of_administration: new RouteOfAdministrationTable({})
 	})
@@ -18,7 +18,7 @@ test('constructor(): should create substance', t => {
 		t.context.substance,
 		new Substance({
 			name: 'LSD',
-			chemical_nomeclature: {},
+			nomenclature: {},
 			class_membership: {},
 			routes_of_administration: new RouteOfAdministrationTable({})
 		})

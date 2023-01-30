@@ -18,9 +18,9 @@ export class HephaistosDataset {
 		return this.substance_store.find(
 			substance =>
 				(substance.name && substance.name === substanceName) ||
-				substance.chemical_nomeclature?.common_names?.includes(substanceName) ||
-				substance.chemical_nomeclature?.substitutive_name === substanceName ||
-				substance.chemical_nomeclature?.systematic_name === substanceName
+				substance.nomenclature?.common_names?.includes(substanceName) ||
+				substance.nomenclature?.substitutive_name === substanceName ||
+				substance.nomenclature?.systematic_name === substanceName
 		)
 	}
 }
