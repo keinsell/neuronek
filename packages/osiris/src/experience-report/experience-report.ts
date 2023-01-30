@@ -1,5 +1,5 @@
 import { Effect } from '../effect/effect.js'
-import { Ingestion, IngestionProperties } from '../ingestion/ingestion.js'
+import { Ingestion } from '../ingestion/ingestion.js'
 import { ExperienceStageTable } from './ExperienceStageTable.js'
 import { Subject, SubjectJSON } from './ExperienceSubject.js'
 

@@ -1,6 +1,5 @@
 import { Bioavailability } from './bioavailability/bioavailability.js'
 import { DosageTable } from './dosage/dosage-table/dosage-table.js'
-import { Dosage } from './dosage/dosage.js'
 import { ExperienceReport } from './experience-report/experience-report.js'
 import { Ingestion } from './ingestion/ingestion.js'
 import { PhaseTable } from './phase/phase-table/phase-table.js'
@@ -14,6 +13,7 @@ import { Tolerance } from './tolerance/tolerance.js'
 import { ToxicityTable } from './toxicity-table/toxicity-table.js'
 
 import type { SubstanceJSON } from './substance/substance.js'
+
 export {
 	Bioavailability,
 	SubstanceJSON,
@@ -22,7 +22,6 @@ export {
 	Substance,
 	RouteOfAdministrationClassification,
 	Phase,
-	Dosage,
 	DosageTable,
 	Tolerance,
 	PhaseTable,
@@ -31,3 +30,11 @@ export {
 	RouteOfAdministrationTable,
 	ToxicityTable
 }
+
+export { ChemicalNomenclature } from './substance/chemical-nomenclature/chemical-nomenclature.js'
+
+export { Dosage } from './dosage/dosage.js'
+export { EffectCategory } from './effect/effect-category.js'
+export { EffectParameterOption } from './effect/effect-parameter-option.js'
+export { EffectParameter } from './effect/effect-parameter.js'
+export { EffectTag } from './effect/effect-tag.js'

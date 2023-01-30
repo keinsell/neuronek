@@ -1,6 +1,7 @@
 import ms from 'ms'
 import {
 	Bioavailability,
+	ChemicalNomenclature,
 	Dosage,
 	DosageTable,
 	Phase,
@@ -12,7 +13,7 @@ import {
 	Substance,
 	Tolerance
 } from 'osiris'
-import { Writable } from 'type-fest'
+import { PartialDeep, Writable } from 'type-fest'
 
 import { GetSubstancesQuery, SubstanceRoa, SubstanceRoaDose } from './gql/sdk/graphql.js'
 
@@ -239,7 +240,7 @@ export namespace PsychonautwikiMapper {
 	}
 
 	export function useGetSubstancesQuery(request: GetSubstancesQuery): Substance | undefined {
-		const substanceDraft: Partial<Substance> = {}
+		const substanceDraft: PartialDeep<Substance> = {}
 
 		if (request.substances.length === 0) {
 			return undefined
@@ -252,15 +253,22 @@ export namespace PsychonautwikiMapper {
 			return undefined
 		}
 
+		// Handle substance's name
 		substanceDraft.name = result.name
 
 		// Handle common names
 		if (result.commonNames) {
-			substanceDraft.nomenclature = { common_names: [] }
+			const common_names = []
 
 			result.commonNames.forEach((element: any) => {
-				substanceDraft.nomenclature.common_names.push(element)
+				common_names.push(element)
 			})
+
+			const nomenclature = new ChemicalNomenclature({
+				common_names: common_names
+			})
+
+			substanceDraft.nomenclature = nomenclature
 		}
 
 		if (result.class) {
@@ -391,6 +399,11 @@ export namespace PsychonautwikiMapper {
 					toleranceBaselineTime: semi_tolerance_table?.zero?.average
 				}
 			})
+		}
+
+		// Asigin external url
+		substanceDraft.externals = {
+			psychonautwiki: result.url
 		}
 
 		return new Substance({
