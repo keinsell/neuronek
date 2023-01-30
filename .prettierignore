@@ -4,3 +4,4 @@ yarn.lock
 *.txt
 *.py
 *.zip
+*.xml
