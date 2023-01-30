@@ -21,3 +21,41 @@ model User {
   height      Int?
   password    String
 }
+
+model Substance {
+  id                       String                  @id @default(cuid())
+  name                     String                  @unique
+  common_names             String[]
+  brand_names              String[]
+  substitutive_name        String?
+  systematic_name          String?
+  unii                     String?
+  cas_number               String?
+  inchi_key                String?
+  iupac                    String?
+  smiles                   String?
+  psychoactive_class       String[]
+  chemical_class           String?
+  routes_of_administration RouteOfAdministration[]
+}
+
+model RouteOfAdministration {
+  id                  String     @id @default(cuid())
+  substanceName       String?
+  name                String
+  min_bioavailability Int
+  max_bioavailability Int
+  dosage_kind         String?
+  dosage_unit         String?
+  thereshold_dosage   Int?
+  light_dosage        Int[]
+  common_dosage       Int[]
+  strong_dosage       Int[]
+  heavy_dosage        Int?
+  onset_phase         Int[]
+  comeup_phase        Int[]
+  peak_phase          Int[]
+  offset_phase        Int[]
+  afterglow_phase     Int[]
+  Substance           Substance? @relation(fields: [substanceName], references: [name])
+}

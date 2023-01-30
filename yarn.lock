@@ -3790,6 +3790,7 @@ __metadata:
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": latest
+    osiris: "*"
     prisma: latest
     tsup: 6.2.2
     typescript: 4.7.4
