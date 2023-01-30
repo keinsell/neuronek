@@ -1,6 +1,7 @@
-import { RouteOfAdministrationTable, Substance, PsychoactiveClassification } from 'osiris'
-import { SubstanceProviderAdapter } from '../substance-provider.adapter.js'
 import { request } from 'graphql-request'
+import { Substance } from 'osiris'
+
+import { SubstanceProviderAdapter } from '../substance-provider.adapter.js'
 import {
 	AllSubstancesDocument,
 	AllSubstancesQuery,
@@ -19,7 +20,9 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 			return undefined
 		}
 
-		return PsychonautwikiMapper.useGetSubstancesQuery(response)
+		// TODO: Find effects from database and connect them.
+
+		return PsychonautwikiMapper.useGetSubstancesQuery(response).substance
 	}
 
 	async all(): Promise<Substance[]> {
@@ -27,7 +30,8 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 		const substances: Substance[] = []
 
 		for (const s of response.substances) {
-			substances.push(PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }))
+			// TODO: Find effects from database and connect them.
+			substances.push(PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).substance)
 		}
 
 		return substances

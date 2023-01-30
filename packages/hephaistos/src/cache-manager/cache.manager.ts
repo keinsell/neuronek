@@ -2,7 +2,6 @@ import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
 import { ExperienceReport, Substance, SubstanceJSON } from 'osiris'
 
-import { HephaistosDataset } from '../main.js'
 import { Effect } from '../substance-provider/psychonautwiki/gql/sdk/graphql.js'
 
 type CacheFileStructure = {
@@ -11,13 +10,43 @@ type CacheFileStructure = {
 	experiences: any[]
 }
 
-const adapter = new JSONFileSync<CacheFileStructure>('./cache.db.json')
-const cacheManager = new LowSync<CacheFileStructure>(adapter)
+export interface CacheIO {
+	substance_store: Substance[]
+	effect_store: Effect[]
+	experience_store: ExperienceReport[]
+}
 
-export class CacheManager {
-	protected db: LowSync<CacheFileStructure> = cacheManager
+export abstract class CacheDriver {
+	abstract load(): Promise<CacheIO>
+	abstract overwrite(data: CacheIO): Promise<void>
+}
 
-	cache(dataset: HephaistosDataset): void {
+export class FileCacheDriver implements CacheDriver {
+	private adapter = new JSONFileSync<CacheFileStructure>('./cache.db.json')
+	private db = new LowSync<CacheFileStructure>(this.adapter)
+
+	async load(): Promise<CacheIO> {
+		this.db.read()
+
+		if (!this.db.data) {
+			return undefined
+		}
+
+		if (this.db.data.substances && this.db.data.substances.length < 5) {
+			return undefined
+		}
+
+		console.log(`Cache:Substances: ${this.db.data.substances.length}`)
+		console.log(`Cache:Experiences: ${this.db.data.experiences.length}`)
+
+		return {
+			substance_store: this.db.data.substances.map(substance => Substance.fromJSON(substance)),
+			effect_store: this.db.data.effects,
+			experience_store: this.db.data.experiences.map(experience => ExperienceReport.fromJSON(experience))
+		}
+	}
+
+	async overwrite(dataset: CacheIO): Promise<void> {
 		this.db.read()
 
 		if (!this.db.data) {
@@ -45,29 +74,13 @@ export class CacheManager {
 
 		this.db.write()
 	}
+}
 
-	load(): {
-		substances: Substance[]
-		effects: Effect[]
-		experiences: ExperienceReport[]
-	} {
-		this.db.read()
-
-		if (!this.db.data) {
-			return undefined
-		}
-
-		if (this.db.data.substances && this.db.data.substances.length < 5) {
-			return undefined
-		}
-
-		console.log(`Cache:Substances: ${this.db.data.substances.length}`)
-		console.log(`Cache:Experiences: ${this.db.data.experiences.length}`)
-
-		return {
-			substances: this.db.data.substances.map(substance => Substance.fromJSON(substance)),
-			effects: this.db.data.effects,
-			experiences: this.db.data.experiences.map(experience => ExperienceReport.fromJSON(experience))
-		}
+export class PrismaCacheDriver implements CacheDriver {
+	load(): Promise<CacheIO> {
+		throw new Error('Method not implemented.')
+	}
+	overwrite(data: CacheIO): Promise<void> {
+		throw new Error('Method not implemented.')
 	}
 }

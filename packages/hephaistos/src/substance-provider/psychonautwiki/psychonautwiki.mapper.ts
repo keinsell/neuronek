@@ -239,7 +239,12 @@ export namespace PsychonautwikiMapper {
 		}
 	}
 
-	export function useGetSubstancesQuery(request: GetSubstancesQuery): Substance | undefined {
+	/**
+	 *
+	 */
+	export function useGetSubstancesQuery(
+		request: GetSubstancesQuery
+	): { substance: Substance; effects: { name: string; psychonautwiki: string }[] } | undefined {
 		const substanceDraft: PartialDeep<Substance> = {}
 
 		if (request.substances.length === 0) {
@@ -406,8 +411,24 @@ export namespace PsychonautwikiMapper {
 			psychonautwiki: result.url
 		}
 
-		return new Substance({
-			...(substanceDraft as Substance)
-		})
+		const effects: { name: string; psychonautwiki: string }[] = []
+
+		if (result.effects && result.effects.length > 0) {
+			for (const effect of result.effects) {
+				if (effect.name && effect.url) {
+					effects.push({
+						name: effect.name,
+						psychonautwiki: effect.url
+					})
+				}
+			}
+		}
+
+		return {
+			substance: new Substance({
+				...(substanceDraft as Substance)
+			}),
+			effects
+		}
 	}
 }

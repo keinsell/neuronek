@@ -347,6 +347,7 @@ export type AllSubstancesQuery = {
 		uncertainInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
 		unsafeInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
 		dangerousInteractions?: Array<{ __typename?: 'Substance'; name?: string | null } | null> | null
+		effects?: Array<{ __typename?: 'Effect'; name?: string | null; url?: string | null } | null> | null
 	} | null> | null
 }
 
@@ -868,6 +869,17 @@ export const AllSubstancesDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'name' } }]
+									}
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'effects' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'url' } }
+										]
 									}
 								}
 							]

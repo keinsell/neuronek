@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
+import { EffectRepository } from './repositories/effect.repository.js'
+
 // declare global {
 // 	var prisma: PrismaClient | undefined
 // }
@@ -8,4 +10,4 @@ import { PrismaClient } from '@prisma/client'
 
 // if (process.env.NODE_ENV !== 'production') global.prisma = prisma
 
-export { PrismaClient }
+export { PrismaClient, EffectRepository }

@@ -7,7 +7,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex", "metrics", "tracing", "filteredRelationCount", "fieldReference", "multiSchema", "extendedWhereUnique", "views", "clientExtensions"]
 }
 
 model User {
@@ -45,17 +46,36 @@ model RouteOfAdministration {
   name                String
   min_bioavailability Int
   max_bioavailability Int
-  dosage_kind         String?
-  dosage_unit         String?
-  thereshold_dosage   Int?
+  dosage_kind         String
+  dosage_unit         String
+  dosage_per_kilogram Boolean    @default(false)
+  thereshold_dosage   Int
   light_dosage        Int[]
   common_dosage       Int[]
   strong_dosage       Int[]
-  heavy_dosage        Int?
+  heavy_dosage        Int
   onset_phase         Int[]
   comeup_phase        Int[]
   peak_phase          Int[]
   offset_phase        Int[]
   afterglow_phase     Int[]
   Substance           Substance? @relation(fields: [substanceName], references: [name])
+}
+
+model Effect {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  category String
+  tags     String[]
+
+  summary     String?
+  description String[]
+
+  parameters String[]
+  see_also   String[]
+
+  effectindex    String?
+  psychonautwiki String?
 }

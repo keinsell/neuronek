@@ -1,12 +1,13 @@
-import { ExperienceReport, Substance } from 'osiris'
+import { Effect, ExperienceReport, Substance } from 'osiris'
 
-import { CacheManager } from './cache-manager/cache.manager.js'
+import { CacheDriver, FileCacheDriver } from './cache-manager/cache.manager.js'
+import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class HephaistosDataset {
 	public readonly substance_store: Substance[] = []
 	public readonly experience_store: ExperienceReport[] = []
-	public readonly effect_store: string[] = []
+	public readonly effect_store: Effect[] = []
 
 	constructor({ substances, experiences, effects }) {
 		this.substance_store = substances
@@ -27,19 +28,19 @@ export class HephaistosDataset {
 
 export class Hephaistos {
 	private readonly substance_store: Substance[] = []
-	private readonly experience_store: any[] = []
-	private readonly effect_store: string[] = []
-	private cacheManager: CacheManager = new CacheManager()
+	private readonly experience_store: ExperienceReport[] = []
+	private readonly effect_store: Effect[] = []
+	private cacheManager: CacheDriver = new FileCacheDriver()
 	private restoreCache: boolean = false
 	private saveCache: boolean = true
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
 		if (this.restoreCache) {
-			const cache = this.cacheManager.load()
+			const cache = await this.cacheManager.load()
 
 			if (cache) {
-				this.substance_store.push(...cache.substances)
+				this.substance_store.push(...cache.substance_store)
 				console.log(`Loaded ${this.substance_store.length} substances from cache.`)
 				console.log(`Loaded ${this.experience_store.length} experiences from cache.`)
 				return new HephaistosDataset({
@@ -50,9 +51,9 @@ export class Hephaistos {
 			}
 		}
 
+		await this.buildEffectStore()
 		await this.buildSubstanceStore()
 		await this.buildExperienceStore()
-		await this.buildEffectStore()
 
 		const dataset = new HephaistosDataset({
 			substances: this.substance_store,
@@ -61,11 +62,13 @@ export class Hephaistos {
 		})
 
 		if (this.saveCache) {
-			this.cacheManager.cache(dataset)
+			await this.cacheManager.overwrite(dataset)
 		}
 
 		return dataset
 	}
+
+	private async buildEffectStore() {}
 
 	private async buildSubstanceStore() {
 		const psychonautwiki = await new PsychonautWikiSubstanceProvider().all()
@@ -73,9 +76,7 @@ export class Hephaistos {
 	}
 
 	private async buildExperienceStore() {
-		// const erowidExperiences = await new ErowidExperienceProvider().all()
-		// this.experience_store.push(...erowidExperiences)
+		const erowidExperiences = await new ErowidExperienceProvider().all()
+		this.experience_store.push(...erowidExperiences)
 	}
-
-	private async buildEffectStore() {}
 }
