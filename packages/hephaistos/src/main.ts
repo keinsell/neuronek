@@ -1,6 +1,7 @@
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
 import { CacheDriver, FileCacheDriver } from './cache-manager/cache.manager.js'
+import { PrismaDatabaseSync } from './database-sync/database-sync.adapter.js'
 import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
 import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
@@ -9,6 +10,7 @@ export class HephaistosDataset {
 	public readonly substance_store: Substance[] = []
 	public readonly experience_store: ExperienceReport[] = []
 	public readonly effect_store: Effect[] = []
+	private databaseSync = new PrismaDatabaseSync()
 
 	constructor({ substances, experiences, effects }) {
 		this.substance_store = substances
@@ -16,14 +18,8 @@ export class HephaistosDataset {
 		this.effect_store = effects
 	}
 
-	findSubstanceByName(substanceName: string): Substance {
-		return this.substance_store.find(
-			substance =>
-				(substance.name && substance.name === substanceName) ||
-				substance.nomenclature?.common_names?.includes(substanceName) ||
-				substance.nomenclature?.substitutive_name === substanceName ||
-				substance.nomenclature?.systematic_name === substanceName
-		)
+	public async sync() {
+		await this.databaseSync.sync(this)
 	}
 }
 
@@ -42,9 +38,8 @@ export class Hephaistos {
 
 			if (cache) {
 				this.substance_store.push(...cache.substance_store)
-				console.log(`Loaded ${this.substance_store.length} substances from cache.`)
-				console.log(`Loaded ${this.experience_store.length} experiences from cache.`)
-				console.log(`Loaded ${this.effect_store.length} effects from cache.`)
+				this.effect_store.push(...cache.effect_store)
+				this.experience_store.push(...cache.experience_store)
 				return new HephaistosDataset({
 					substances: this.substance_store,
 					experiences: this.experience_store,

@@ -6682,25 +6682,31 @@ __metadata:
     "@graphql-codegen/introspection": 2.2.3
     "@swc/core": ^1.3.27
     "@swc/wasm": ^1.3.27
+    "@types/figlet": ^1.5.5
     "@types/js-quantities": ^1.6.3
     "@types/ms": ^0.7.31
     "@types/node": ^18.11.18
     "@types/nodemon": 1.19.2
+    "@types/signale": ^1.4.4
     ava: ^5.1.1
     c8: ^7.12.0
+    chalk: ^5.2.0
     database: "*"
     effectindex-dataset: "*"
     erowid-dataset: "*"
     eslint-config-node: "*"
+    figlet: ^1.5.2
     graphql: ^16.6.0
     graphql-request: ^5.1.0
     js-quantities: ^1.7.6
     lowdb: ^5.0.5
     ms: ^2.1.3
     nodemon: 2.0.20
+    ora: ^6.1.2
     osiris: "*"
     pqm: ^1.0.0
     psyxts-dataset: "*"
+    signale: ^1.4.0
     ts-node: ^10.9.1
     tsup: ^6.5.0
     tsx: 3.12.2
