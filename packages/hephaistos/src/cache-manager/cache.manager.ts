@@ -38,10 +38,36 @@ export class FileCacheDriver implements CacheDriver {
 		console.log(`Cache:Experiences: ${this.db.data.experiences.length}`)
 		console.log(`Cache:Effects: ${this.db.data.effects.length}`)
 
+		const substances: Substance[] = []
+		const effects: Effect[] = []
+		const experiences: ExperienceReport[] = []
+
+		for (const substance of this.db.data.substances) {
+			const deserialize = Substance.fromJSON(substance)
+			console.log(`Cache:Substance:Restore: ${deserialize.name}`)
+			substances.push(Substance.fromJSON(substance))
+		}
+
+		for (const effect of this.db.data.effects) {
+			const deserialize = Effect.fromJSON(effect)
+			console.log(`Cache:Effect:Restore: ${deserialize.name}`)
+			effects.push(Effect.fromJSON(effect))
+		}
+
+		for (const experience of this.db.data.experiences) {
+			const deserialize = ExperienceReport.fromJSON(experience)
+			console.log(`Cache:Experience:Restore: ${deserialize.title}`)
+			experiences.push(ExperienceReport.fromJSON(experience))
+		}
+
+		console.log(`Cache:Substances:Restored: ${substances.length}`)
+		console.log(`Cache:Experiences:Restored: ${experiences.length}`)
+		console.log(`Cache:Effects:Restored: ${effects.length}`)
+
 		return {
-			substance_store: this.db.data.substances.map(substance => Substance.fromJSON(substance)),
-			effect_store: this.db.data.effects.map(effect => Effect.fromJSON(effect)),
-			experience_store: this.db.data.experiences.map(experience => ExperienceReport.fromJSON(experience))
+			substance_store: substances,
+			effect_store: effects,
+			experience_store: experiences
 		}
 	}
 
