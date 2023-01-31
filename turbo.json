@@ -6,7 +6,7 @@
 		},
 		"test": {
 			"inputs": ["src/**/*.test.ts"],
-			"dependsOn": ["^build"],
+			"dependsOn": ["^build", "^db:generate"],
 			"cache": false
 		},
 		"build": {
@@ -20,7 +20,7 @@
 		},
 		"dev": {
 			"cache": false,
-			"dependsOn": ["^build"]
+			"dependsOn": ["^build", "^db:generate", "^db:push"]
 		},
 		"db:migrate:deploy": {
 			"outputs": [],
