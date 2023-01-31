@@ -10,7 +10,7 @@
 	},
 	"type": "commonjs",
 	"main": "effectindex.json",
-	"types": "src/types.d.ts",
+	"types": "@types/effectindex.d.ts",
 	"scripts": {
 		"build": "tsx ./src/index.ts",
 		"dev": "tsx --watch ./src/index.ts"

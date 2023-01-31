@@ -4,9 +4,7 @@ import { Effect } from 'osiris'
 import { EffectProviderAdapter } from '../effect-provider.adapter.js'
 
 export class EffectIndexEffectProvider extends EffectProviderAdapter {
-	findByName(name: string): Promise<Effect> {
-		throw new Error('Method not implemented.')
-	}
+	findByName(name: string): Promise<Effect> {}
 	all(): Promise<Effect[]> {
 		const effects: Effect[] = []
 

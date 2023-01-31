@@ -22,4 +22,6 @@ type ParsedPage = {
 	text: string
 }
 
-declare const dataset: ParsedPage[] = []
+declare const dataset: ParsedPage[]
+
+export default dataset
