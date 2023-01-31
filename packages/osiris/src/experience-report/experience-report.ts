@@ -1,7 +1,7 @@
 import { Effect } from '../effect/effect.js'
 import { Ingestion } from '../ingestion/ingestion.js'
 import { ExperienceStageTable } from './experience-stage-table.js'
-import { ExperienceSubject, SubjectJSON } from './experience-subject.js'
+import { ExperienceSubject, ExperienceSubjectProperties } from './experience-subject.js'
 
 interface ExperienceReportProperties {
 	title?: string
@@ -18,7 +18,7 @@ interface ExperienceReportProperties {
 
 interface ExperienceReportJSON {
 	title?: string
-	subject?: SubjectJSON
+	subject?: ExperienceSubjectProperties
 	experienceDate?: Date
 	submissionDate?: Date
 	raw_content?: string[]

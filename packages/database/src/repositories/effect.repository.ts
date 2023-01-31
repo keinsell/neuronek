@@ -1,11 +1,12 @@
 import { Effect as PrismaEffect, Prisma, PrismaClient } from '@prisma/client'
-import { Effect, EffectCategory, EffectTag } from 'osiris'
+import { Effect, EffectCategory, EffectTag, EffectType } from 'osiris'
 
 export class EffectMapper {
 	toDomain(effect: PrismaEffect, effects?: Effect[]): Effect {
 		return new Effect({
 			...effect,
 			category: effect.category as EffectCategory,
+			type: effect.type as EffectType,
 			tags: effect.tags as EffectTag[],
 			parameters: undefined,
 			see_also: effects
@@ -15,6 +16,7 @@ export class EffectMapper {
 	toDatabase(effect: Effect): Prisma.EffectCreateInput {
 		return {
 			...effect,
+			type: effect.type as unknown as string,
 			category: effect.category as unknown as string,
 			tags: effect.tags as unknown as string[],
 			see_also: effect.see_also?.map(effect => effect.slug) ?? [],
