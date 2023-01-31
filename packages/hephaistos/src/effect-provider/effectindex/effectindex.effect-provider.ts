@@ -4,14 +4,18 @@ import { Effect } from 'osiris'
 import { EffectProviderAdapter } from '../effect-provider.adapter.js'
 
 export class EffectIndexEffectProvider extends EffectProviderAdapter {
-	findByName(name: string): Promise<Effect> {}
-	all(): Promise<Effect[]> {
+	async findByName(name: string): Promise<Effect> {
+		const effect = await effecs.find((effect: { title: string }): boolean => effect.title === name)
+		return new Effect({ name: effect.title })
+	}
+
+	async all(): Promise<Effect[]> {
 		const effects: Effect[] = []
 
-		for (const effect in effecs) {
-			effects.push(new Effect({ name: effect }))
+		for (const effect of effecs) {
+			effects.push(new Effect({ name: effect.title }))
 		}
 
-		return Promise.resolve(effects)
+		return effects
 	}
 }

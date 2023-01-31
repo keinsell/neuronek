@@ -1,8 +1,6 @@
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
-import { ExperienceReport, Substance, SubstanceJSON } from 'osiris'
-
-import { Effect } from '../substance-provider/psychonautwiki/gql/sdk/graphql.js'
+import { Effect, ExperienceReport, Substance, SubstanceJSON } from 'osiris'
 
 type CacheFileStructure = {
 	substances: SubstanceJSON[]
@@ -38,10 +36,11 @@ export class FileCacheDriver implements CacheDriver {
 
 		console.log(`Cache:Substances: ${this.db.data.substances.length}`)
 		console.log(`Cache:Experiences: ${this.db.data.experiences.length}`)
+		console.log(`Cache:Effects: ${this.db.data.effects.length}`)
 
 		return {
 			substance_store: this.db.data.substances.map(substance => Substance.fromJSON(substance)),
-			effect_store: this.db.data.effects,
+			effect_store: this.db.data.effects.map(effect => Effect.fromJSON(effect)),
 			experience_store: this.db.data.experiences.map(experience => ExperienceReport.fromJSON(experience))
 		}
 	}
@@ -59,6 +58,7 @@ export class FileCacheDriver implements CacheDriver {
 
 		this.db.data.substances = []
 		this.db.data.experiences = []
+		this.db.data.effects = []
 
 		for (const substance of dataset.substance_store) {
 			console.log(`Cache:Substance: "${substance.name}"`)
@@ -70,6 +70,12 @@ export class FileCacheDriver implements CacheDriver {
 			console.log(`Cache:Experience: "${experience.title}"`)
 			const serializedExperience = experience.toJSON()
 			this.db.data.experiences.push(serializedExperience)
+		}
+
+		for (const effect of dataset.effect_store) {
+			console.log(`Cache:Effect: "${effect.name}"`)
+			const serializedEffect = effect.toJSON()
+			this.db.data.effects.push(serializedEffect)
 		}
 
 		this.db.write()

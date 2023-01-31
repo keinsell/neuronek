@@ -12,7 +12,6 @@
 	"main": "effectindex.json",
 	"types": "@types/effectindex.d.ts",
 	"scripts": {
-		"build": "tsx ./src/index.ts",
 		"dev": "tsx --watch ./src/index.ts"
 	},
 	"dependencies": {

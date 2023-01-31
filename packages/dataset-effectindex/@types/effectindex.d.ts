@@ -1,4 +1,4 @@
-type ParsedPage = {
+export type ParsedPage = {
 	title: string
 	softTitle: string
 	date: null

@@ -14,10 +14,10 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"build": "tsup-node",
-		"compile": "tsx ./src/index.ts",
+		"predev": "yarn generate",
+		"dev": "tsx --watch ./src/index.ts",
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
-		"predev": "yarn generate",
 		"prestart": "yarn generate"
 	},
 	"dependencies": {
