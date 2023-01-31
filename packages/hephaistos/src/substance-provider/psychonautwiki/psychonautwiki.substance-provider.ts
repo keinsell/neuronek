@@ -38,20 +38,16 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 	async all(): Promise<Substance[]> {
 		const response = await request<AllSubstancesQuery>('https://api.psychonautwiki.org', AllSubstancesDocument, {})
 		const substances: Substance[] = []
-		const connection = new PrismaClient()
-		await connection.$connect()
 
 		for (const s of response.substances) {
 			console.log(`Processing ${s.name} from PsychonautWiki`)
 			for (const effect of PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).effects) {
-				await new EffectRepository(connection).save(effect)
 			}
 
 			// TODO: Find effects from database and connect them.
 			substances.push(PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).substance)
 		}
 
-		await connection.$disconnect()
 		return substances
 	}
 }

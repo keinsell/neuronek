@@ -6,6 +6,8 @@
 // 3.3 Extract content from document, transform it to Markdown and save into JSON
 import chalk from 'chalk'
 import figlet from 'figlet'
+import { LowSync } from 'lowdb'
+import { JSONFileSync } from 'lowdb/node'
 import puppeteer from 'puppeteer'
 import signale from 'signale'
 import unfluff from 'unfluff'
@@ -157,11 +159,26 @@ async function main() {
 
 	signale.success(`Extracted ${chalk.yellow(effectPostsUrls.length - 1)} urls.`)
 
+	// Prepare LowDB
+
+	const low = new LowSync<ParsedPage[]>(new JSONFileSync('effectindex.json'))
+
+	// Validate if cache exists
+	low.read()
+
+	if (low.data && low.data.length > 40) {
+		signale.success(`Found ${chalk.yellow(low.data.length)} in cache.`)
+		return low.data
+	}
+
+	low.data = []
+	low.write()
+
+	let i = 0
+
 	// 3. Crawl each url that contains a post
 
 	const browser = await puppeteer.launch()
-
-	const pages: ParsedPage[] = []
 
 	for await (const url of effectPostsUrls) {
 		// 3.1 Get Page HTML
@@ -171,19 +188,31 @@ async function main() {
 
 		// 3.2 Make HTML Readable
 		const data = unfluff(html) as ParsedPage
-		pages.push(data)
 
-		signale.success(`Parsed "${chalk.grey(data.title)}" page`)
+		// If title is "Effect Index", then take a first world in description as title
+		if (data.title === 'Effect Index') {
+			const description = data.description.split(' ')
+			data.title = description[0]
+			signale.info(`"Effect Index" found. Replaced to ${chalk.yellow(data.title)}`)
+		}
+
+		low.data.push(data)
+
+		signale.success(
+			`Parsed "${chalk.grey(data.title)}" page ${chalk.yellow(i++)} of ${effectPostsUrls.length - 1} (${(
+				(i / (effectPostsUrls.length - 1)) *
+				100
+			).toFixed(1)}%)`
+		)
 
 		// 3.3 Close Puppeteer Page
-		page.close()
+		await page.close()
+		low.write()
 	}
 
 	browser.close()
 
-	console.log(pages)
-
-	return pages
+	return low.data
 }
 
 main()

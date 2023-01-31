@@ -1,6 +1,7 @@
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
 import { CacheDriver, FileCacheDriver } from './cache-manager/cache.manager.js'
+import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
 import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
@@ -68,7 +69,11 @@ export class Hephaistos {
 		return dataset
 	}
 
-	private async buildEffectStore() {}
+	private async buildEffectStore() {
+		const effectindex = await new EffectIndexEffectProvider().all()
+		this.effect_store.push(...effectindex)
+		console.log(this.effect_store.length)
+	}
 
 	private async buildSubstanceStore() {
 		const psychonautwiki = await new PsychonautWikiSubstanceProvider().all()
