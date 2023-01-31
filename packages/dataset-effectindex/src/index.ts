@@ -106,6 +106,7 @@ type Sitemap = {
 }
 
 type ParsedPage = {
+	url?: string
 	title: string
 	softTitle: string
 	date: null
@@ -195,6 +196,8 @@ async function main() {
 			data.title = description[0]
 			signale.info(`"Effect Index" found. Replaced to ${chalk.yellow(data.title)}`)
 		}
+
+		data.url = url
 
 		low.data.push(data)
 
