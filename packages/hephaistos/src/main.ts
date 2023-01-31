@@ -32,7 +32,7 @@ export class Hephaistos {
 	private readonly experience_store: ExperienceReport[] = []
 	private readonly effect_store: Effect[] = []
 	private cacheManager: CacheDriver = new FileCacheDriver()
-	private restoreCache: boolean = false
+	private restoreCache = true
 	private saveCache: boolean = true
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
@@ -44,6 +44,7 @@ export class Hephaistos {
 				this.substance_store.push(...cache.substance_store)
 				console.log(`Loaded ${this.substance_store.length} substances from cache.`)
 				console.log(`Loaded ${this.experience_store.length} experiences from cache.`)
+				console.log(`Loaded ${this.effect_store.length} effects from cache.`)
 				return new HephaistosDataset({
 					substances: this.substance_store,
 					experiences: this.experience_store,
@@ -72,7 +73,6 @@ export class Hephaistos {
 	private async buildEffectStore() {
 		const effectindex = await new EffectIndexEffectProvider().all()
 		this.effect_store.push(...effectindex)
-		console.log(this.effect_store.length)
 	}
 
 	private async buildSubstanceStore() {
