@@ -10,6 +10,7 @@ import { Substance } from './substance/substance.js'
 import { Tolerance } from './tolerance/tolerance.js'
 
 import type { SubstanceJSON } from './substance/substance.js'
+export { EffectType } from './effect/effect-type.js'
 export {
 	Bioavailability,
 	SubstanceJSON,

@@ -1,4 +1,4 @@
-interface ExperienceSubjectProperties {
+export interface ExperienceSubjectProperties {
 	name?: string
 	gender?: string
 	age?: number
