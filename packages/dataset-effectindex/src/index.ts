@@ -4,8 +4,16 @@
 // 3.1 Make readable version of page with https://github.com/mozilla/readability
 // 3.2 Extract title from document
 // 3.3 Extract content from document, transform it to Markdown and save into JSON
+import chalk from 'chalk'
+import figlet from 'figlet'
 import puppeteer from 'puppeteer'
+import signale from 'signale'
 import unfluff from 'unfluff'
+
+figlet('Effectindex', function (err, data) {
+	if (err) return console.log(err)
+	console.log(data)
+})
 
 // https://effectindex.com
 
@@ -123,8 +131,6 @@ async function main() {
 	// 1. Get sitemap and covert it to JSON
 	const sitemapXml = await fetch('https://effectindex.com/sitemap.xml').then(r => r.text())
 
-	console.log(sitemapXml)
-
 	let sitemap: Sitemap | undefined
 
 	// 1.1 Convert XML to JSON
@@ -136,7 +142,7 @@ async function main() {
 
 	if (!sitemap) return
 
-	console.log(sitemap)
+	signale.success(`Downloaded ${chalk.grey('sitemap.xml')}`)
 
 	// 2. Filter urls to only ones that are responsible for effect posts
 	const sitemapUrls = sitemap?.urlset.url
@@ -149,7 +155,7 @@ async function main() {
 		}
 	}
 
-	console.log(effectPostsUrls)
+	signale.success(`Extracted ${chalk.yellow(effectPostsUrls.length - 1)} urls.`)
 
 	// 3. Crawl each url that contains a post
 
@@ -167,7 +173,7 @@ async function main() {
 		const data = unfluff(html) as ParsedPage
 		pages.push(data)
 
-		console.log(data)
+		signale.success(`Parsed "${chalk.grey(data.title)}" page`)
 
 		// 3.3 Close Puppeteer Page
 		page.close()
