@@ -1,18 +1,18 @@
-import effecs from 'effectindex-dataset'
+import effectindex from 'effectindex-dataset'
 import { Effect } from 'osiris'
 
 import { EffectProviderAdapter } from '../effect-provider.adapter.js'
 
 export class EffectIndexEffectProvider extends EffectProviderAdapter {
 	async findByName(name: string): Promise<Effect> {
-		const effect = effecs.find((effect: { title: string }): boolean => effect.title === name)
+		const effect = effectindex.find((effect: { title: string }): boolean => effect.title === name)
 		return new Effect({ name: effect.title })
 	}
 
 	async all(): Promise<Effect[]> {
 		const effects: Effect[] = []
 
-		for (const effect of effecs) {
+		for (const effect of effectindex) {
 			const title = effect.title
 			const summary = effect.description
 			const raw_description = effect.text.split('\n')

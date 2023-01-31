@@ -1,4 +1,4 @@
-interface SubjectProperties {
+interface ExperienceSubjectProperties {
 	name?: string
 	gender?: string
 	age?: number
@@ -9,9 +9,7 @@ interface SubjectProperties {
 	mental_illness?: string[]
 }
 
-export interface SubjectJSON extends SubjectProperties {}
-
-export class Subject implements SubjectProperties {
+export class ExperienceSubject implements ExperienceSubjectProperties {
 	name?: string
 	gender?: string
 	age?: number
@@ -21,15 +19,15 @@ export class Subject implements SubjectProperties {
 	medications?: string[]
 	mental_illness?: string[]
 
-	constructor(properties: SubjectProperties) {
+	constructor(properties: ExperienceSubjectProperties) {
 		Object.assign(this, properties)
 	}
 
-	static fromObject(object: SubjectJSON): Subject {
-		return new Subject(object)
+	static fromObject(object: ExperienceSubjectProperties): ExperienceSubject {
+		return new ExperienceSubject(object)
 	}
 
-	toObject(): SubjectJSON {
+	toObject(): ExperienceSubjectProperties {
 		return { ...this }
 	}
 }

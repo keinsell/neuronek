@@ -1,4 +1,4 @@
-import { ExperienceStage } from './ExperienceStage.js'
+import { ExperienceStage } from './experience-stage.js'
 
 export interface ExperienceStageTableProperties {
 	/** Start of experience which would include onset and comeup. */
