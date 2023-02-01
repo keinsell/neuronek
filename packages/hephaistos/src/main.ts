@@ -1,6 +1,5 @@
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
-import { CacheDriver, FileCacheDriver } from './cache-manager/cache.manager.js'
 import { PrismaDatabaseSync } from './database-sync/database-sync.adapter.js'
 import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
 import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
@@ -27,27 +26,9 @@ export class Hephaistos {
 	private readonly substance_store: Substance[] = []
 	private readonly experience_store: ExperienceReport[] = []
 	private readonly effect_store: Effect[] = []
-	private cacheManager: CacheDriver = new FileCacheDriver()
-	private restoreCache = true
-	private saveCache: boolean = true
 
 	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
 	public async build(): Promise<HephaistosDataset> {
-		if (this.restoreCache) {
-			const cache = await this.cacheManager.load()
-
-			if (cache) {
-				this.substance_store.push(...cache.substance_store)
-				this.effect_store.push(...cache.effect_store)
-				this.experience_store.push(...cache.experience_store)
-				return new HephaistosDataset({
-					substances: this.substance_store,
-					experiences: this.experience_store,
-					effects: this.effect_store
-				})
-			}
-		}
-
 		await this.buildEffectStore()
 		await this.buildSubstanceStore()
 		await this.buildExperienceStore()
@@ -58,20 +39,16 @@ export class Hephaistos {
 			effects: this.effect_store
 		})
 
-		if (this.saveCache) {
-			await this.cacheManager.overwrite(dataset)
-		}
-
 		return dataset
 	}
 
 	private async buildEffectStore() {
-		const effectindex = await new EffectIndexEffectProvider().all()
+		const effectindex = await new EffectIndexEffectProvider().load()
 		this.effect_store.push(...effectindex)
 	}
 
 	private async buildSubstanceStore() {
-		const psychonautwiki = await new PsychonautWikiSubstanceProvider().all()
+		const psychonautwiki = await new PsychonautWikiSubstanceProvider().load()
 		this.substance_store.push(...psychonautwiki)
 	}
 

@@ -1,51 +1,46 @@
-import { EffectRepository, PrismaClient } from 'database'
 import { request } from 'graphql-request'
-import { Substance } from 'osiris'
+import { Effect, Substance } from 'osiris'
+import { EffectCacheManager } from 'src/effect-provider/effect.cache-manager.js'
 
 import { SubstanceProviderAdapter } from '../substance-provider.adapter.js'
-import {
-	AllSubstancesDocument,
-	AllSubstancesQuery,
-	GetSubstancesDocument,
-	GetSubstancesQuery
-} from './gql/sdk/graphql.js'
+import { SubstanceCacheManager } from '../substance.cache-manager.js'
+import { AllSubstancesDocument, AllSubstancesQuery } from './gql/sdk/graphql.js'
 import { PsychonautwikiMapper } from './psychonautwiki.mapper.js'
 
 export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter {
-	async findSubstanceByName(name: string): Promise<Substance> {
-		const response = await request<GetSubstancesQuery>('https://api.psychonautwiki.org', GetSubstancesDocument, {
-			name: name
-		})
+	private substanceRepository = new SubstanceCacheManager()
+	private effectRepository = new EffectCacheManager()
 
-		if (response.substances.length === 0) {
-			return undefined
-		}
-
-		// TODO: Find effects from database and connect them.
-
-		const connection = new PrismaClient()
-		await connection.$connect()
-
-		for (const effect of PsychonautwikiMapper.useGetSubstancesQuery(response).effects) {
-			await new EffectRepository(connection).save(effect)
-		}
-
-		await connection.$disconnect()
-
-		return PsychonautwikiMapper.useGetSubstancesQuery(response).substance
-	}
-
-	async all(): Promise<Substance[]> {
+	async load(): Promise<Substance[]> {
 		const response = await request<AllSubstancesQuery>('https://api.psychonautwiki.org', AllSubstancesDocument, {})
 		const substances: Substance[] = []
+		const allSubstance = await this.substanceRepository.all()
+
+		if (allSubstance.length > 200) {
+			return allSubstance
+		}
 
 		for (const s of response.substances) {
 			console.log(`Processing ${s.name} from PsychonautWiki`)
+
+			const effects: Effect[] = []
+
 			for (const effect of PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).effects) {
+				const exists = await this.effectRepository.findByName(effect.name)
+				if (exists) {
+					effects.push(exists)
+				}
 			}
 
-			// TODO: Find effects from database and connect them.
-			substances.push(PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).substance)
+			const substance = PsychonautwikiMapper.useGetSubstancesQuery({ substances: [s] }).substance
+
+			substance.subjective_effects = effects
+
+			substances.push(substance)
+		}
+
+		for (const substance of substances) {
+			await this.substanceRepository.save(substance)
 		}
 
 		return substances

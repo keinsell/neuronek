@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="282bbea3-c56c-48d8-8835-c484edeec3dc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/cache-manager/cache.manager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/effect-provider/effect-provider.adapter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/effect-provider/effect-provider.adapter.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/effect-provider/effectindex/effectindex.effect-provider.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/effect-provider/effectindex/effectindex.effect-provider.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/osiris/src/experience-report/ExperienceSubject.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/osiris/src/experience-report/experience-report.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/osiris/src/experience-report/experience-report.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/experience-provider/erowid/erowid.experience-provider.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/experience-provider/erowid/erowid.experience-provider.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/experience-provider/experience-provider.adapter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/experience-provider/experience-provider.adapter.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.mapper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.mapper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.substance-provider.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.substance-provider.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/substance-provider.adapter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/hephaistos/src/substance-provider/substance-provider.adapter.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +69,7 @@
       <workItem from="1675101709088" duration="598000" />
       <workItem from="1675104817124" duration="408000" />
       <workItem from="1675107432328" duration="1920000" />
-      <workItem from="1675171254589" duration="113000" />
+      <workItem from="1675171254589" duration="332000" />
     </task>
     <servers />
   </component>

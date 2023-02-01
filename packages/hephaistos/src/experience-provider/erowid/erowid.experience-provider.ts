@@ -1,33 +1,53 @@
 import dataset from 'erowid-dataset'
-import type { Report } from 'erowid-dataset'
-import { ExperienceReport } from 'osiris'
-import { PsychonautWikiSubstanceProvider } from '../../substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
-import { SubstanceProviderAdapter } from '../../substance-provider/substance-provider.adapter.js'
-import { Ingestion, Substance } from 'osiris'
+import { Dosage, ExperienceReport, Ingestion } from 'osiris'
+import { SubstanceCacheManager } from 'src/substance-provider/substance.cache-manager.js'
 
+import { ExperienceCacheManager } from '../experience.cache-manager.js'
+
+import type { Report } from 'erowid-dataset'
 export class ErowidExperienceProvider implements ErowidExperienceProvider {
-	constructor(protected substanceProvider: SubstanceProviderAdapter = new PsychonautWikiSubstanceProvider()) {}
+	constructor(
+		protected substanceCacheManager: SubstanceCacheManager = new SubstanceCacheManager(),
+		protected experienceCacheManager: ExperienceCacheManager = new ExperienceCacheManager()
+	) {}
 
 	private async ErowirdReport__ExperienceReport(input: Report): Promise<ExperienceReport> {
-		const dosages = input.dose
+		const dosages = input.dose as any
 
 		const ingestions: Ingestion[] = []
 
-		// for await (const dosage of dosages) {
-		// 	let substance: Substance | undefined
+		// Extract ingestions from Erowid dataset.
+		for (const dose of dosages) {
+			const substance = await this.substanceCacheManager.findByName(dose.substance)
 
-		// 	try {
-		// 		// substance = await this.substanceProvider.findSubstanceByName(dosage.substance)
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
+			if (!substance) {
+				continue
+			}
 
-		// 	ingestions.push(
-		// 		new Ingestion({
-		// 			substance: substance
-		// 		})
-		// 	)
-		// }
+			let dosage: Dosage | null
+
+			if (dose.amount) {
+				if (dose.amount.unit && dose.amount.quantity) {
+					try {
+						dosage = new Dosage(dose.amount.quantity, dose.amount.unit)
+					} catch (error) {
+						console.warn(`Error while creating ingestion for ${input.title}.`)
+					}
+				}
+			}
+
+			if (!dosage) {
+				dosage = null
+				continue
+			}
+
+			const ingestion = new Ingestion({
+				substance: substance,
+				dosage: dosage
+			})
+
+			ingestions.push(ingestion)
+		}
 
 		return new ExperienceReport({
 			title: input.title,
@@ -38,7 +58,7 @@ export class ErowidExperienceProvider implements ErowidExperienceProvider {
 		})
 	}
 
-	async all(): Promise<ExperienceReport[]> {
+	async load(): Promise<ExperienceReport[]> {
 		const experiences = []
 
 		console.log(`Importing ${dataset.length} Erowid reports...`)
@@ -50,6 +70,10 @@ export class ErowidExperienceProvider implements ErowidExperienceProvider {
 			const mappedExperience = await this.ErowirdReport__ExperienceReport(experience)
 			experiences.push(mappedExperience)
 			index++
+		}
+
+		for (const experience of experiences) {
+			await this.experienceCacheManager.save(experience)
 		}
 
 		return experiences

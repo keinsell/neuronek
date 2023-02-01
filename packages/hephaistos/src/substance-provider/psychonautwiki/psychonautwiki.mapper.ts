@@ -96,8 +96,8 @@ export namespace PsychonautwikiMapper {
 		}
 
 		// Find baseScalar unit from given units
-		const baseScalarUnits = Dosage.fromString(`1 ${input.units}`).toBase().units()
-		const kindOfUnit = Dosage.fromString(`1 ${input.units}`).toBase().kind()
+		const baseScalarUnits = Dosage.fromString(`1 ${responseUnits}`).toBase().units()
+		const kindOfUnit = Dosage.fromString(`1 ${responseUnits}`).toBase().kind()
 
 		// Add units
 		dosageTableConstructor.unit = baseScalarUnits
