@@ -51,6 +51,12 @@ export interface SubstanceProperites {
 		psychonautwiki?: string
 		tripsit?: string
 		isomerdesign?: string
+		bluelight?: string
+		hyperreal?: string
+		reddit?: string
+		drugbank?: string
+		wikipedia?: string
+		erowid?: string
 	}
 }
 
@@ -91,6 +97,12 @@ export interface SubstanceJSON {
 		psychonautwiki?: string
 		tripsit?: string
 		isomerdesign?: string
+		bluelight?: string
+		hyperreal?: string
+		reddit?: string
+		drugbank?: string
+		wikipedia?: string
+		erowid?: string
 	}
 }
 
@@ -141,6 +153,12 @@ export class Substance implements SubstanceProperites {
 		psychonautwiki?: string
 		tripsit?: string
 		isomerdesign?: string
+		bluelight?: string
+		hyperreal?: string
+		reddit?: string
+		drugbank?: string
+		wikipedia?: string
+		erowid?: string
 	}
 
 	constructor(substanceInfomration: SubstanceProperites) {
