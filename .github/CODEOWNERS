@@ -17,7 +17,6 @@
 /packages/database/src/repositories/effect.repository.ts @keinsell
 /packages/dataset-effectindex/effectindex.json @keinsell
 /packages/dataset-effectindex/src/index.ts @keinsell
-/packages/hephaistos/src/cache-manager/cache.manager.ts @keinsell
 /packages/hephaistos/src/database-sync/database-sync.adapter.ts @keinsell
 /packages/hephaistos/src/effect-provider/effectindex/effectindex.effect-provider.ts @keinsell
 /packages/hephaistos/src/substance-provider/psychonautwiki/psychonautwiki.mapper.ts @keinsell
