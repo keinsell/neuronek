@@ -53,7 +53,7 @@ export class Hephaistos {
 	}
 
 	private async buildExperienceStore() {
-		const erowidExperiences = await new ErowidExperienceProvider().all()
+		const erowidExperiences = await new ErowidExperienceProvider().load()
 		this.experience_store.push(...erowidExperiences)
 	}
 }
