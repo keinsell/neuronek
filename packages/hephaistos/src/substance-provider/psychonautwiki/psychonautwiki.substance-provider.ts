@@ -40,6 +40,7 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 		}
 
 		for (const substance of substances) {
+			console.log(substance)
 			await this.substanceRepository.save(substance)
 		}
 

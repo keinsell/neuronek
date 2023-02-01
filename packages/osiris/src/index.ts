@@ -10,6 +10,7 @@ import { Substance } from './substance/substance.js'
 import { Tolerance } from './tolerance/tolerance.js'
 
 import type { SubstanceJSON } from './substance/substance.js'
+export { EffectPromotedBySubstance } from './substance/effect-promoted-by-substance.js'
 export { EffectType } from './effect/effect-type.js'
 export {
 	Bioavailability,
@@ -26,7 +27,6 @@ export {
 }
 
 export { ChemicalNomenclature } from './substance/chemical-nomenclature/chemical-nomenclature.js'
-
 export { Dosage } from './dosage/dosage.js'
 export { EffectCategory } from './effect/effect-category.js'
 export { EffectParameterOption } from './effect/effect-parameter-option.js'

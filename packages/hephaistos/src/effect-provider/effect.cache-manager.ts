@@ -48,6 +48,12 @@ export class EffectCacheManager {
 			return undefined
 		}
 
-		return this.db.data.find(effect => effect.name === name)
+		const result = this.db.data.find(effect => effect.name === name)
+
+		if (!result) {
+			return undefined
+		}
+
+		return Effect.fromJSON(result)
 	}
 }

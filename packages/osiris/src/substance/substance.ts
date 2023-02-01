@@ -5,8 +5,8 @@ import {
 } from '../route-of-administration/route-of-administration-table/route-of-administration-table.js'
 import { Tolerance } from '../tolerance/tolerance.js'
 import { ToxicityTable } from '../toxicity-table/toxicity-table.js'
-import { EffectPromotedBySubstance } from './effect-promoted-by-substance.js'
 import { ChemicalNomenclature, ChemicalNomenclatureProperties } from './chemical-nomenclature/chemical-nomenclature'
+import { EffectPromotedBySubstance, EffectPromotedBySubstanceJSON } from './effect-promoted-by-substance.js'
 
 export interface SubstanceProperites {
 	/**
@@ -85,6 +85,7 @@ export interface SubstanceJSON {
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
 	routes_of_administration: RouteOfAdministrationTableJSON
+	subjective_effects: EffectPromotedBySubstanceJSON[]
 
 	externals?: {
 		psychonautwiki?: string
@@ -147,14 +148,19 @@ export class Substance implements SubstanceProperites {
 	}
 
 	toJSON(): SubstanceJSON {
-		return { ...this, routes_of_administration: this.routes_of_administration.toJSON() }
+		return {
+			...this,
+			routes_of_administration: this.routes_of_administration.toJSON(),
+			subjective_effects: this.subjective_effects?.map(effect => effect.toJSON())
+		}
 	}
 
 	static fromJSON(json: SubstanceJSON): Substance {
 		return new Substance({
 			...json,
 			nomenclature: new ChemicalNomenclature(json.chemical_nomeclature),
-			routes_of_administration: RouteOfAdministrationTable.fromJSON(json.routes_of_administration)
+			routes_of_administration: RouteOfAdministrationTable.fromJSON(json.routes_of_administration),
+			subjective_effects: json.subjective_effects?.map(effect => EffectPromotedBySubstance.fromJSON(effect))
 		})
 	}
 }
