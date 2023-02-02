@@ -1,5 +1,5 @@
-import { DosageClassification } from '../dosage/dosage-classification.js'
-import { RouteOfAdministrationClassification } from '../route-of-administration/route-of-administration-table/route-of-administration-classification.js'
+import { DosageClassification } from '../ingestion-context/dosage/dosage-classification.js'
+import { RouteOfAdministrationClassification } from '../substance-context/substance/route-of-administration/route-of-administration-classification.js'
 
 /**
  * WhenWhereRule is a class that represents a very basic rule than can be applied to substances for algorithmic resolving connected effects, harm-reduction or other algorithmic purposes.
