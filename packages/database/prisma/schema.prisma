@@ -12,15 +12,16 @@ generator client {
 }
 
 model User {
-  id          String    @id @default(cuid())
+  id          String      @id @default(cuid())
   firstName   String?
   lastName    String?
-  username    String?   @unique
-  email       String?   @unique
+  username    String?     @unique
+  email       String?     @unique
   dateOfBirth DateTime?
   weight      Int?
   height      Int?
   password    String
+  Ingestion   Ingestion[]
 }
 
 model Substance {
@@ -38,6 +39,7 @@ model Substance {
   psychoactive_class       String[]
   chemical_class           String?
   routes_of_administration RouteOfAdministration[]
+  Ingestion                Ingestion[]
 }
 
 model RouteOfAdministration {
@@ -78,4 +80,17 @@ model Effect {
 
   effectindex    String?
   psychonautwiki String?
+}
+
+model Ingestion {
+  id                    String     @id @default(cuid())
+  substanceName         String?
+  routeOfAdministration String?
+  dosage_unit           String?
+  dosage_amount         Int?
+  isEstimatedDosage     Boolean?   @default(false)
+  date                  DateTime?
+  userId                String?
+  User                  User?      @relation(fields: [userId], references: [id])
+  Substance             Substance? @relation(fields: [substanceName], references: [name])
 }
