@@ -20,7 +20,7 @@ export abstract class LocalStorageRepository<DOMAIN_MODEL, STORAGE_MODEL> {
 	abstract getIndex(model: DOMAIN_MODEL): Promise<number | undefined>
 
 	/** The "save" method is used to save an instance of the domain model to the local storage. The method first reads the existing data, creates an empty array if there is no data, checks if the model already exists in the storage, removes the existing instance of the model if it does, and then pushes the fromDomainModel(model) to the lowdb data array. The method writes the data to the storage file using low.write(). */
-	async save(model: DOMAIN_MODEL) {
+	public async save(model: DOMAIN_MODEL) {
 		await this.low.read()
 		// console.log(`LocalStorageRepository.save()`, model)
 
@@ -51,12 +51,33 @@ export abstract class LocalStorageRepository<DOMAIN_MODEL, STORAGE_MODEL> {
 	}
 
 	/** The "all" method is used to retrieve all instances of the domain model from the storage. The method reads the data from the storage file and maps the storage model to the domain model using the toDomainModel method. */
-	async all() {
+	public async all() {
 		await this.low.read()
-		return this.low.data.map(this.toDomain)
+
+		const storageModels = this.low.data || []
+		const domainModels: DOMAIN_MODEL[] = []
+
+		for (const model of storageModels) {
+			const domainModel = this.toDomain(model)
+			domainModels.push(domainModel)
+		}
+
+		return domainModels
 	}
 
-	async forceWriteAll(models: DOMAIN_MODEL[]) {
+	public async count(): Promise<number> {
+		await this.low.read()
+
+		// Create an empty array if the storage file is empty.
+		if (!this.low.data) {
+			this.low.data = []
+			await this.low.write()
+		}
+
+		return this.low.data.length
+	}
+
+	public async forceWriteAll(models: DOMAIN_MODEL[]) {
 		await this.low.read()
 		const storageModels: STORAGE_MODEL[] = models.map(this.toStorage)
 

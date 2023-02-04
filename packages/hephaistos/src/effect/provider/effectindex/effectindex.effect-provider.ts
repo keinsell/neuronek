@@ -41,6 +41,10 @@ export class EffectIndexEffectProvider extends EffectProviderAdapter {
 	async load(): Promise<Effect[]> {
 		const effects: Effect[] = []
 
+		if ((await this.localstorage.count()) !== 0) {
+			return await this.localstorage.all()
+		}
+
 		for await (const effect of effectindex) {
 			effects.push(EffectIndexMapper.toDomain(effect))
 		}
