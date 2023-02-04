@@ -9,3 +9,5 @@ const hephaistos = await Hephaistos.build()
 
 console.log('Hephaistos is booting...')
 console.log(hephaistos)
+
+await hephaistos.sync()

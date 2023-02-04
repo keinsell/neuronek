@@ -1,3 +1,4 @@
+import { EffectRepository, PrismaClient, SubstanceRepository } from 'database'
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
 import { EffectIndexEffectProvider } from './effect/provider/effectindex/effectindex.effect-provider.js'
@@ -31,5 +32,24 @@ export class Hephaistos {
 			effect_storage: effects,
 			experience_storage: []
 		})
+	}
+
+	/** Synchronize available information with database. */
+	public async sync() {
+		const prisma = new PrismaClient()
+		await prisma.$connect()
+
+		const substanceRepository = new SubstanceRepository(prisma)
+		const effectRepository = new EffectRepository(prisma)
+
+		for (const effect of this.effect_storage) {
+			await effectRepository.save(effect)
+		}
+
+		for (const substance of this.substance_storage) {
+			await substanceRepository.save(substance)
+		}
+
+		await prisma.$disconnect()
 	}
 }

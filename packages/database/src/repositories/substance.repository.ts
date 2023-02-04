@@ -34,7 +34,7 @@ export class SubstanceRepository {
 	async findByName(name: string) {
 		const substance = await this.connector.substance.findFirst({
 			where: {
-				name: name.toLowerCase()
+				name: name
 			}
 		})
 
