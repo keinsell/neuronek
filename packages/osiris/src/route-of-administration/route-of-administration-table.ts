@@ -1,30 +1,33 @@
-import { ValueObject } from '../__core/valueobject.js'
 import { RouteOfAdministration } from './route-of-administration.js'
 import { RouteOfAdministrationClassification } from './RouteOfAdministrationClassification.js'
 
-export type RouteOfAdministrationTableProperties = {
-	[classification in RouteOfAdministrationClassification]?: RouteOfAdministration
-}
+import type { Writable } from 'type-fest'
 
-export class RouteOfAdministrationTable extends ValueObject<RouteOfAdministrationTableProperties> {
-	public [RouteOfAdministrationClassification.oral]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.sublingual]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.buccal]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.insufflated]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.rectal]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.transdermal]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.subcutaneous]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.intramuscular]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.interavenous]?: RouteOfAdministration
-	public [RouteOfAdministrationClassification.smoked]?: RouteOfAdministration
+export class RouteOfAdministrationTable {
+	public readonly [RouteOfAdministrationClassification.oral]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.sublingual]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.buccal]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.insufflated]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.rectal]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.transdermal]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.subcutaneous]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.intramuscular]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.interavenous]?: RouteOfAdministration
+	public readonly [RouteOfAdministrationClassification.smoked]?: RouteOfAdministration
+
+	private constructor(properties: {
+		[classification in RouteOfAdministrationClassification]?: RouteOfAdministration
+	}) {
+		Object.assign(this, properties)
+	}
 
 	static fromMultipleRoutesOfAdministration(...items: RouteOfAdministration[]): RouteOfAdministrationTable {
-		const properties: Partial<RouteOfAdministrationTableProperties> = {}
+		const properties: Writable<Partial<RouteOfAdministrationTable>> = {}
 
 		for (const route of items) {
 			properties[route._v.classification] = route
 		}
 
-		return new RouteOfAdministrationTable(properties as RouteOfAdministrationTableProperties)
+		return new RouteOfAdministrationTable(properties)
 	}
 }
