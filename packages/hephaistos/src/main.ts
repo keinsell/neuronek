@@ -2,7 +2,6 @@ import { Effect, ExperienceReport, Substance } from 'osiris'
 
 import { PrismaDatabaseSync } from './database-sync/database-sync.adapter.js'
 import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
-import { ErowidExperienceProvider } from './experience-provider/erowid/erowid.experience-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class HephaistosDataset {
@@ -53,7 +52,7 @@ export class Hephaistos {
 	}
 
 	private async buildExperienceStore() {
-		const erowidExperiences = await new ErowidExperienceProvider().load()
-		this.experience_store.push(...erowidExperiences)
+		// const erowidExperiences = await new ErowidExperienceProvider().load()
+		// this.experience_store.push(...erowidExperiences)
 	}
 }

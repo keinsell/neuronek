@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client'
 
 import { EffectRepository } from './repositories/effect.repository.js'
 
+export { SubstanceRepository } from './repositories/substance.repository.js'
+
 // declare global {
 // 	var prisma: PrismaClient | undefined
 // }

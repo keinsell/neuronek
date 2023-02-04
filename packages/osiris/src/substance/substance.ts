@@ -21,7 +21,7 @@ export interface SubstanceProperites {
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
 	 */
-	class_membership: {
+	class_membership?: {
 		/**
 		 * Psychoactive class refers to the classification of a chemical compound based on its ability to affect the central nervous system and alter brain function, resulting in changes in perception, mood, consciousness, or behavior.
 		 *
@@ -38,7 +38,7 @@ export interface SubstanceProperites {
 	/**
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
-	routes_of_administration: RouteOfAdministrationTable
+	routes_of_administration?: RouteOfAdministrationTable
 	interactions?: {}
 	pharmacology?: {}
 	subjective_effects?: EffectPromotedBySubstance[]
@@ -73,7 +73,7 @@ export interface SubstanceJSON {
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
 	 */
-	class_membership: {
+	class_membership?: {
 		/**
 		 * Psychoactive class refers to the classification of a chemical compound based on its ability to affect the central nervous system and alter brain function, resulting in changes in perception, mood, consciousness, or behavior.
 		 *
@@ -90,8 +90,8 @@ export interface SubstanceJSON {
 	/**
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
-	routes_of_administration: RouteOfAdministrationTableJSON
-	subjective_effects: EffectPromotedBySubstanceJSON[]
+	routes_of_administration?: RouteOfAdministrationTableJSON
+	subjective_effects?: EffectPromotedBySubstanceJSON[]
 
 	externals?: {
 		psychonautwiki?: string
@@ -124,7 +124,7 @@ export class Substance implements SubstanceProperites {
 	/**
 	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
 	 */
-	class_membership: {
+	class_membership?: {
 		/**
 		 * Psychoactive class refers to the classification of a chemical compound based on its ability to affect the central nervous system and alter brain function, resulting in changes in perception, mood, consciousness, or behavior.
 		 *
@@ -141,7 +141,7 @@ export class Substance implements SubstanceProperites {
 	/**
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
-	routes_of_administration: RouteOfAdministrationTable
+	routes_of_administration?: RouteOfAdministrationTable
 	interactions?: {}
 	pharmacology?: {}
 	subjective_effects?: EffectPromotedBySubstance[]
@@ -168,7 +168,7 @@ export class Substance implements SubstanceProperites {
 	toJSON(): SubstanceJSON {
 		return {
 			...this,
-			routes_of_administration: this.routes_of_administration.toJSON(),
+			routes_of_administration: this.routes_of_administration?.toJSON(),
 			subjective_effects: this.subjective_effects?.map(effect => effect.toJSON())
 		}
 	}
@@ -176,7 +176,7 @@ export class Substance implements SubstanceProperites {
 	static fromJSON(json: SubstanceJSON): Substance {
 		return new Substance({
 			...json,
-			nomenclature: new ChemicalNomenclature(json.chemical_nomeclature),
+			nomenclature: json.chemical_nomeclature ? new ChemicalNomenclature(json.chemical_nomeclature) : undefined,
 			routes_of_administration: RouteOfAdministrationTable.fromJSON(json.routes_of_administration),
 			subjective_effects: json.subjective_effects?.map(effect => EffectPromotedBySubstance.fromJSON(effect))
 		})

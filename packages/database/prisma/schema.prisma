@@ -44,8 +44,7 @@ model RouteOfAdministration {
   id                  String     @id @default(cuid())
   substanceName       String?
   name                String
-  min_bioavailability Int
-  max_bioavailability Int
+  bioavailability     Int[]
   dosage_kind         String
   dosage_unit         String
   dosage_per_kilogram Boolean    @default(false)

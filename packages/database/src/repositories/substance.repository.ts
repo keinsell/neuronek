@@ -1,5 +1,11 @@
-import { Prisma } from '@prisma/client'
-import { DosageClassification, PhaseClassification, RouteOfAdministration, Substance } from 'osiris'
+import { Prisma, PrismaClient, Substance as _Substance } from '@prisma/client'
+import {
+	ChemicalNomenclature,
+	DosageClassification,
+	PhaseClassification,
+	RouteOfAdministration,
+	Substance
+} from 'osiris'
 
 export namespace SubstanceMapper {
 	export type CreateSubstanceRecord = Prisma.SubstanceCreateInput
@@ -21,8 +27,7 @@ export namespace SubstanceMapper {
 			dosage_unit: route.dosage.unit,
 			heavy_dosage: route.dosage[DosageClassification.heavy],
 			light_dosage: route.dosage[DosageClassification.light],
-			max_bioavailability: route.bioavailability.maximal,
-			min_bioavailability: route.bioavailability.minimal,
+			bioavailability: [route.bioavailability.minimal, route.bioavailability.maximal],
 			offset_phase: [
 				route.phase[PhaseClassification.offset].minimalDuration,
 				route.phase[PhaseClassification.offset].maximalDuration
@@ -43,18 +48,63 @@ export namespace SubstanceMapper {
 	export function fromSubstance(substance: Substance): CreateSubstanceRecord {
 		return {
 			name: substance.name,
-			common_names: substance.nomenclature.common_names,
-			substitutive_name: substance.nomenclature.substitutive_name
+			common_names: substance?.nomenclature?.common_names,
+			substitutive_name: substance?.nomenclature?.substitutive_name
 		}
+	}
+
+	export function toSubstance(substance: _Substance) {
+		return new Substance({
+			name: substance.name,
+			nomenclature: new ChemicalNomenclature({
+				common_names: substance.common_names || [],
+				substitutive_name: substance.substitutive_name
+			})
+		})
 	}
 }
 
 export class RouteOfAdministrationRepository {
 	constructor(connector: any) {}
-
-	async
 }
 
 export class SubstanceRepository {
-	constructor(connector: any) {}
+	constructor(private connector: PrismaClient) {}
+
+	async findByName(name: string) {
+		const substance = await this.connector.substance.findFirst({
+			where: {
+				name: name.toLowerCase()
+			}
+		})
+
+		if (!substance) {
+			return null
+		}
+
+		return SubstanceMapper.toSubstance(substance)
+	}
+
+	async save(substance: Substance) {
+		const isSubstance = await this.findByName(substance.name)
+
+		if (isSubstance) {
+			// Update substance
+
+			const updatedSubstance = await this.connector.substance.update({
+				where: {
+					name: substance.name
+				},
+				data: SubstanceMapper.fromSubstance(substance)
+			})
+
+			return SubstanceMapper.toSubstance(updatedSubstance)
+		}
+
+		const createdSubstance = await this.connector.substance.create({
+			data: SubstanceMapper.fromSubstance(substance)
+		})
+
+		return SubstanceMapper.toSubstance(createdSubstance)
+	}
 }
