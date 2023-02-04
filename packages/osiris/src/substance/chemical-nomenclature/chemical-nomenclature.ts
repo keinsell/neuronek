@@ -1,6 +1,7 @@
-import { ValueObject } from '../../__core/valueobject.js'
-
-export interface ChemicalNomenclatureProperties {
+/**
+ * Chemical nomenclature is the system of naming chemical compounds. The rules for naming compounds vary depending on the type of compound, but in general, they are based on the type and number of atoms present in the compound, as well as the chemical bonds between them. The most common system of chemical nomenclature is the International Union of Pure and Applied Chemistry (IUPAC) system, which is widely used in scientific literature and in industry.
+ */
+export class ChemicalNomenclature {
 	/**
 	 * Common names are informal names for chemical compounds that are widely used in everyday language, but not necessarily scientifically accurate or consistent. They often reflect the historical or common usage of a compound, rather than its chemical structure or composition.
 	 *
@@ -45,9 +46,42 @@ export interface ChemicalNomenclatureProperties {
 	/** SMILES is a chemical notation for describing the structure of chemical compounds using ASCII characters.
 	 * @example "CC(N)CC1=CC=CC=C1" */
 	smiles?: string
-}
 
-/**
- * Chemical nomenclature is the system of naming chemical compounds. The rules for naming compounds vary depending on the type of compound, but in general, they are based on the type and number of atoms present in the compound, as well as the chemical bonds between them. The most common system of chemical nomenclature is the International Union of Pure and Applied Chemistry (IUPAC) system, which is widely used in scientific literature and in industry.
- */
-export class ChemicalNomenclature extends ValueObject<ChemicalNomenclatureProperties> {}
+	private constructor(properties: {
+		common_names?: string[]
+		substitutive_name?: string
+		systematic_name?: string
+		unii?: string
+		cas_number?: string
+		inchi_key?: string
+		iupac?: string
+		smiles?: string
+	}) {
+		this.common_names = properties.common_names
+		this.substitutive_name = properties.substitutive_name
+		this.systematic_name = properties.systematic_name
+		this.unii = properties.unii
+		this.cas_number = properties.cas_number
+		this.inchi_key = properties.inchi_key
+		this.iupac = properties.iupac
+		this.smiles = properties.smiles
+	}
+
+	static create(properties: {
+		common_names?: string[]
+		substitutive_name?: string
+		systematic_name?: string
+		unii?: string
+		cas_number?: string
+		inchi_key?: string
+		iupac?: string
+		smiles?: string
+	}): ChemicalNomenclature {
+		return new ChemicalNomenclature(properties)
+	}
+
+	/** Returns all possible names for selected compound. */
+	get all() {
+		return [...this.common_names, this.substitutive_name, this.systematic_name, this.iupac, this.smiles].filter(Boolean)
+	}
+}
