@@ -1,4 +1,4 @@
-import { PsychoactiveClassification } from './PsychoactiveClassification'
+import { PsychoactiveClassification } from './psychoactive-classification.js'
 
 export const _psychoactive_class_description: { [key in PsychoactiveClassification]: string } = {
 	[PsychoactiveClassification.psychedelic]: `Psychedelics (also known as serotonergic hallucinogens) are a class of psychoactive substances that produce an altered state of consciousness marked by unusual changes in perception, mood, and cognitive processes.`,

@@ -9,7 +9,7 @@ import { RouteOfAdministrationClassification } from './route-of-administration/R
 import { Substance } from './substance/substance.js'
 import { Tolerance } from './tolerance/tolerance.js'
 
-export { PsychoactiveClassification } from './psychoactive-class/PsychoactiveClassification.js'
+export { PsychoactiveClassification } from './substance/class-membership/psychoactive-class/psychoactive-classification.js'
 export { EffectPromotedBySubstance } from './substance/effect-promoted-by-substance.js'
 export { EffectType } from './effect/effect-type.js'
 export {
