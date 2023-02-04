@@ -1,7 +1,7 @@
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
-import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
-import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
+import { EffectIndexEffectProvider } from './effect/provider/effectindex/effectindex.effect-provider.js'
+import { PsychonautWikiSubstanceProvider } from './substance/provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class Hephaistos {
 	substance_storage: Substance[]
