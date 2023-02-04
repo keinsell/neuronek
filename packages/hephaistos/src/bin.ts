@@ -1,10 +1,13 @@
 import figlet from 'figlet'
 
-import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
+import { Hephaistos } from './main.js'
 
 figlet('Hephaistos', function (err, data) {
 	if (err) return console.log(err)
 	console.log(data)
 })
 
-console.log(await new PsychonautWikiSubstanceProvider().load())
+console.log('Initializing...')
+
+const hephaistos = await Hephaistos.build()
+console.log(hephaistos)
