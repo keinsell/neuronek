@@ -5,3 +5,5 @@ yarn.lock
 *.py
 *.zip
 *.xml
+.gitkeep
+.gitignore

@@ -41,6 +41,7 @@ export class EffectIndexEffectProvider extends EffectProviderAdapter {
 	async load(): Promise<Effect[]> {
 		const effects: Effect[] = []
 
+		// Restore cache
 		if ((await this.localstorage.count()) !== 0) {
 			return await this.localstorage.all()
 		}
