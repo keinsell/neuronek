@@ -17,11 +17,12 @@ Neuronek is substance journal with datacenter of research collected by major poj
 
 <br>
 
-```
+```bash
 $ cp example.env .env
 $ yarn
 $ docker-compose up -f docker-compose.local.yml -d
 $ yarn db:push
+$ yarn hephaistos # Tempoerary solution for setting up database.
 ```
 
 <h2 align="center">Documentation</h2>

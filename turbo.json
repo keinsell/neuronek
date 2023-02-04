@@ -41,6 +41,12 @@
 		"db:generate": {
 			"dependsOn": ["^db:generate"],
 			"cache": false
+		},
+		"hephaistos": {
+			"inputs": ["src/**/*.ts"],
+			"outputs": ["cache/**/*.json"],
+			"dependsOn": ["^build", "^db:generate"],
+			"cache": true
 		}
 	},
 	"remoteCache": {
