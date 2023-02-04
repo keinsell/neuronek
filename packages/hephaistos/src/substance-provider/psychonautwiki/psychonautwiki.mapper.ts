@@ -1,20 +1,21 @@
+/* eslint-disable no-inner-declarations */
 import ms from 'ms'
 import {
 	Bioavailability,
 	ChemicalNomenclature,
+	ClassMembership,
 	Dosage,
 	DosageTable,
 	Effect,
-	Phase,
 	PhaseTable,
 	PsychoactiveClassification,
 	RouteOfAdministration,
 	RouteOfAdministrationClassification,
-	RouteOfAdministrationTable,
 	Substance,
+	SubstanceProperites,
 	Tolerance
 } from 'osiris'
-import { PartialDeep, Writable } from 'type-fest'
+import { LastArrayElement, Writable } from 'type-fest'
 
 import { GetSubstancesQuery, SubstanceRoa, SubstanceRoaDose } from './gql/sdk/graphql.js'
 
@@ -68,7 +69,9 @@ export namespace PsychonautwikiMapper {
 	function parseDosage(input: SubstanceRoaDose): DosageTable | undefined {
 		let responseUnits = input.units
 
-		const dosageTableConstructor: Partial<Writable<DosageTable>> = {}
+		type DosageTableConstructor = Writable<Partial<LastArrayElement<ConstructorParameters<typeof DosageTable>>>>
+
+		const dosageTableConstructor: DosageTableConstructor = {}
 
 		if (!input.units) {
 			return undefined
@@ -95,46 +98,66 @@ export namespace PsychonautwikiMapper {
 			responseUnits = 'seeds'
 		}
 
-		// Find baseScalar unit from given units
-		const baseScalarUnits = Dosage.fromString(`1 ${responseUnits}`).toBase().units()
-		const kindOfUnit = Dosage.fromString(`1 ${responseUnits}`).toBase().kind()
-
 		// Add units
-		dosageTableConstructor.unit = baseScalarUnits
-		dosageTableConstructor.kind = kindOfUnit as 'mass' | 'volume' | 'custom'
+		dosageTableConstructor.unit = responseUnits
+		// dosageTableConstructor.kind = kindOfUnit as 'mass' | 'volume' | 'custom'
 
 		// Parse thereshold dosage
 		if (input.threshold) {
-			dosageTableConstructor.thereshold = new Dosage(input.threshold, responseUnits).baseScalar
+			dosageTableConstructor.thereshold = new Dosage({
+				amount: input.threshold,
+				unit: responseUnits
+			}).scalar
 		}
 
 		// Parse light dosage
 		if (input.light) {
-			const min = new Dosage(input.light.min, responseUnits).baseScalar
-			const max = new Dosage(input.light.max, responseUnits).baseScalar
+			const min = new Dosage({
+				amount: input.light.min,
+				unit: responseUnits
+			}).scalar
+			const max = new Dosage({
+				amount: input.light.max,
+				unit: responseUnits
+			}).scalar
 
 			dosageTableConstructor.light = [min, max]
 		}
 
 		// Parse standard dosage
 		if (input.common) {
-			const min = new Dosage(input.common.min, responseUnits).baseScalar
-			const max = new Dosage(input.common.max, responseUnits).baseScalar
+			const min = new Dosage({
+				amount: input.common.min,
+				unit: responseUnits
+			}).scalar
+			const max = new Dosage({
+				amount: input.common.max,
+				unit: responseUnits
+			}).scalar
 
 			dosageTableConstructor.moderate = [min, max]
 		}
 
 		// Parse strong dosage
 		if (input.strong) {
-			const min = new Dosage(input.strong.min, responseUnits).baseScalar
-			const max = new Dosage(input.strong.max, responseUnits).baseScalar
+			const min = new Dosage({
+				amount: input.strong.min,
+				unit: responseUnits
+			}).scalar
+			const max = new Dosage({
+				amount: input.strong.max,
+				unit: responseUnits
+			}).scalar
 
 			dosageTableConstructor.strong = [min, max]
 		}
 
 		// Parse heavy dosage
 		if (input.heavy) {
-			dosageTableConstructor.heavy = new Dosage(input.heavy, responseUnits).baseScalar
+			dosageTableConstructor.heavy = new Dosage({
+				amount: input.heavy,
+				unit: responseUnits
+			}).scalar
 		}
 
 		if (!dosageTableConstructor.light || !dosageTableConstructor.moderate || !dosageTableConstructor.strong) {
@@ -146,12 +169,10 @@ export namespace PsychonautwikiMapper {
 		return dosageTable
 	}
 
-	function routeOfAdministration(input: SubstanceRoa):
-		| {
-				classification: RouteOfAdministrationClassification
-				route: RouteOfAdministration
-		  }
-		| undefined {
+	/**
+	 *
+	 */
+	function routeOfAdministration(input: SubstanceRoa): RouteOfAdministration | undefined {
 		const minimal_bioavailability = input.bioavailability?.min ?? undefined
 		const maximal_bioavailability = input.bioavailability?.max ?? undefined
 
@@ -179,65 +200,47 @@ export namespace PsychonautwikiMapper {
 			return undefined
 		}
 
-		const onset = new Phase({
-			minimalDuration: input.duration?.onset?.min
-				? ms(input.duration.onset?.min + ' ' + input.duration.onset?.units)
-				: undefined,
-			maximalDuration: input.duration?.onset?.max
-				? ms(input.duration.onset.max + ' ' + input.duration.onset.units)
-				: undefined
-		})
+		const onset: [number, number] = [
+			input.duration?.onset?.min ? ms(input.duration.onset?.min + ' ' + input.duration.onset?.units) : undefined,
+			input.duration?.onset?.max ? ms(input.duration.onset?.max + ' ' + input.duration.onset?.units) : undefined
+		]
 
-		const comeup = new Phase({
-			minimalDuration: input.duration?.comeup?.min
-				? ms(input.duration.comeup?.min + ' ' + input.duration.comeup?.units)
-				: undefined,
-			maximalDuration: input.duration?.comeup?.max
-				? ms(input.duration.comeup?.max + ' ' + input.duration.comeup?.units)
-				: undefined
-		})
+		const comeup: [number, number] = [
+			input.duration?.comeup?.min ? ms(input.duration.comeup?.min + ' ' + input.duration.comeup?.units) : undefined,
+			input.duration?.comeup?.max ? ms(input.duration.comeup?.max + ' ' + input.duration.comeup?.units) : undefined
+		]
 
-		const peak = new Phase({
-			minimalDuration: input.duration?.peak?.min
-				? ms(input.duration.peak?.min + ' ' + input.duration.peak?.units)
-				: undefined,
-			maximalDuration: input.duration?.comeup?.max
-				? ms(input.duration.peak?.max + ' ' + input.duration.peak?.units)
-				: undefined
-		})
+		const peak: [number, number] = [
+			input.duration?.peak?.min ? ms(input.duration.peak?.min + ' ' + input.duration.peak?.units) : undefined,
+			input.duration?.peak?.max ? ms(input.duration.peak?.max + ' ' + input.duration.peak?.units) : undefined
+		]
 
-		const offset = new Phase({
-			minimalDuration: input.duration?.offset?.min
-				? ms(input.duration.offset?.min + ' ' + input.duration.offset?.units)
-				: undefined,
-			maximalDuration: input.duration?.comeup?.max
-				? ms(input.duration.offset?.max + ' ' + input.duration.offset?.units)
-				: undefined
-		})
+		const offset: [number, number] = [
+			input.duration?.offset?.min ? ms(input.duration.offset?.min + ' ' + input.duration.offset?.units) : undefined,
+			input.duration?.offset?.max ? ms(input.duration.offset?.max + ' ' + input.duration.offset?.units) : undefined
+		]
 
-		const aftereffects = new Phase({
-			minimalDuration: input.duration?.afterglow?.min
+		const aftereffects: [number, number] = [
+			input.duration?.afterglow?.min
 				? ms(input.duration.afterglow?.min + ' ' + input.duration.afterglow?.units)
 				: undefined,
-			maximalDuration: input.duration?.afterglow?.max
+			input.duration?.afterglow?.max
 				? ms(input.duration.afterglow?.max + ' ' + input.duration.afterglow?.units)
 				: undefined
-		})
+		]
 
 		const phase_table = new PhaseTable({ onset, comeup, peak, offset, aftereffects })
+		const classification = input.name as RouteOfAdministrationClassification
 
 		const roa = new RouteOfAdministration({
 			bioavailability: bioavailability,
 			dosage: dosage_table,
-			phase: phase_table
+			phase: phase_table,
+			classification,
+			_substance: undefined
 		})
 
-		const classification = input.name as RouteOfAdministrationClassification
-
-		return {
-			classification: classification,
-			route: roa
-		}
+		return roa
 	}
 
 	/**
@@ -246,7 +249,7 @@ export namespace PsychonautwikiMapper {
 	export function useGetSubstancesQuery(
 		request: GetSubstancesQuery
 	): { substance: Substance; effects: Effect[] } | undefined {
-		const substanceDraft: PartialDeep<Substance> = {}
+		const substanceDraft: Partial<SubstanceProperites> = {}
 
 		if (request.substances.length === 0) {
 			return undefined
@@ -278,8 +281,6 @@ export namespace PsychonautwikiMapper {
 		}
 
 		if (result.class) {
-			substanceDraft.class_membership = { psychoactive_class: [], chemical_class: undefined }
-
 			if (result.class.psychoactive) {
 				substanceDraft.class_membership.psychoactive_class = psychoactiveClass(result.class.psychoactive)
 			}
@@ -287,6 +288,8 @@ export namespace PsychonautwikiMapper {
 			if (result.class.chemical) {
 				substanceDraft.class_membership.chemical_class = result.class.chemical.toString()
 			}
+
+			substanceDraft.class_membership = new ClassMembership(substanceDraft.class_membership)
 		}
 
 		if (result.roas) {
@@ -299,7 +302,7 @@ export namespace PsychonautwikiMapper {
 				}
 			})
 
-			substanceDraft.routes_of_administration = new RouteOfAdministrationTable(route_table)
+			substanceDraft.routes_of_administration = Object.values(route_table)
 		}
 
 		if (result.tolerance) {

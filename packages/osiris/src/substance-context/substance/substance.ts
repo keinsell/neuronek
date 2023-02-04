@@ -1,10 +1,10 @@
 import { Entity } from '../../common/entity/entity.js'
-import { Toxicity } from '../toxicity/toxicity.js'
 import { ChemicalNomenclature } from './chemical-nomenclature/chemical-nomenclature.js'
 import { ClassMembership } from './class-membership/class-membership.js'
 import { ExternalReferences } from './external-references/external-references.js'
 import { RouteOfAdministration } from './route-of-administration/route-of-administration.js'
 import { Tolerance } from './tolerance/tolerance.js'
+import { Toxicity } from './toxicity/toxicity.js'
 
 export interface SubstanceProperites {
 	/**

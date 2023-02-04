@@ -8,4 +8,3 @@ figlet('Hephaistos', function (err, data) {
 })
 
 const dataset = await new Hephaistos().build()
-await dataset.sync()

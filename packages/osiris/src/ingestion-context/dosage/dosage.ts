@@ -57,4 +57,8 @@ export class Dosage extends ValueObject<DosageProperties> {
 		// Otherwise return the string representation of the parsed quantity
 		return parsed.toString()
 	}
+
+	get scalar() {
+		return this.engine.scalar
+	}
 }

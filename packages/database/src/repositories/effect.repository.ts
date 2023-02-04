@@ -14,12 +14,15 @@ export class EffectMapper {
 	}
 
 	toDatabase(effect: Effect): Prisma.EffectCreateInput {
+		const object = effect.toJSON()
+
 		return {
-			...effect,
-			type: effect.type as unknown as string,
-			category: effect.category as unknown as string,
-			tags: effect.tags as unknown as string[],
-			see_also: effect.see_also?.map(effect => effect.slug) ?? [],
+			...object,
+			slug: effect.slug,
+			type: object.type as unknown as string,
+			category: object.category as unknown as string,
+			tags: object.tags as unknown as string[],
+			see_also: object.see_also?.map(effect => effect.slug) ?? [],
 			parameters: undefined
 		}
 	}
@@ -62,12 +65,13 @@ export class EffectRepository {
 	}
 
 	async save(effect: Effect): Promise<Effect> {
-		const isEffectExisting = await this.findOneBySlug(effect.slug)
+		const slug = effect.slug
+		const isEffectExisting = await this.findOneBySlug(slug)
 
 		if (isEffectExisting) {
 			// Update
 			const updatedEffect = await this.prisma.effect.update({
-				where: { slug: effect.slug },
+				where: { slug: slug },
 				data: this.mapper.toDatabase(effect)
 			})
 

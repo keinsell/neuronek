@@ -14,7 +14,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"inlineSources": false,
-		"isolatedModules": true,
+		"isolatedModules": false,
 		"allowJs": true,
 		"strictNullChecks": false,
 		"noUnusedParameters": false,
