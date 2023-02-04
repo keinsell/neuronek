@@ -1,17 +1,7 @@
 import { DosageClassification } from '../dosage-classification.js'
 
-export interface DosageTableProperties {
-	readonly kind: 'mass' | 'volume' | 'custom'
-	readonly unit: string
-	readonly isWeightBased?: boolean | undefined
-	readonly [DosageClassification.thereshold]: number
-	readonly [DosageClassification.light]: [number, number]
-	readonly [DosageClassification.moderate]: [number, number]
-	readonly [DosageClassification.strong]: [number, number]
-	readonly [DosageClassification.heavy]: number
-}
-
-export class DosageTable implements DosageTableProperties {
+// TODO: Probably refactor this class to use Dosage class
+export class DosageTable {
 	readonly kind: 'mass' | 'volume' | 'custom'
 	readonly unit: string
 	readonly isWeightBased?: boolean | undefined;
@@ -21,7 +11,16 @@ export class DosageTable implements DosageTableProperties {
 	readonly [DosageClassification.strong]: [number, number];
 	readonly [DosageClassification.heavy]: number
 
-	constructor(properties: DosageTableProperties) {
+	private constructor(properties: {
+		kind: 'mass' | 'volume' | 'custom'
+		unit: string
+		isWeightBased?: boolean | undefined
+		[DosageClassification.thereshold]: number
+		[DosageClassification.light]: [number, number]
+		[DosageClassification.moderate]: [number, number]
+		[DosageClassification.strong]: [number, number]
+		[DosageClassification.heavy]: number
+	}) {
 		this.kind = properties.kind
 		this.unit = properties.unit
 		this.isWeightBased = properties.isWeightBased
@@ -30,5 +29,18 @@ export class DosageTable implements DosageTableProperties {
 		this[DosageClassification.moderate] = properties[DosageClassification.moderate]
 		this[DosageClassification.strong] = properties[DosageClassification.strong]
 		this[DosageClassification.heavy] = properties[DosageClassification.heavy]
+	}
+
+	static create(properties: {
+		kind: 'mass' | 'volume' | 'custom'
+		unit: string
+		isWeightBased?: boolean | undefined
+		[DosageClassification.thereshold]: number
+		[DosageClassification.light]: [number, number]
+		[DosageClassification.moderate]: [number, number]
+		[DosageClassification.strong]: [number, number]
+		[DosageClassification.heavy]: number
+	}): DosageTable {
+		return new DosageTable(properties)
 	}
 }
