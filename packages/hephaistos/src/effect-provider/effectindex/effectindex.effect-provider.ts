@@ -2,7 +2,6 @@ import effectindex, { ParsedPage } from 'effectindex-dataset'
 import { Effect } from 'osiris'
 
 import { EffectProviderAdapter } from '../effect-provider.adapter.js'
-import { EffectCacheManager } from '../effect.cache-manager.js'
 
 class EffectIndexMapper {
 	static toDomain(effect: ParsedPage): Effect {
@@ -36,25 +35,12 @@ class EffectIndexMapper {
 }
 
 export class EffectIndexEffectProvider extends EffectProviderAdapter {
-	private effectRepository = new EffectCacheManager()
-
 	async load(): Promise<Effect[]> {
 		const effects: Effect[] = []
-
-		const cachedEffects = await this.effectRepository.all()
-
-		if (cachedEffects.length > 100) {
-			return cachedEffects
-		}
 
 		for (const effect of effectindex) {
 			effects.push(EffectIndexMapper.toDomain(effect))
 		}
-
-		for (const effect of effects) {
-			await this.effectRepository.save(effect)
-		}
-
 		return effects
 	}
 }

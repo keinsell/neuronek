@@ -1,3 +1,5 @@
+import { ValueObject } from '../../__core/valueobject.js'
+
 export interface ChemicalNomenclatureProperties {
 	/**
 	 * Common names are informal names for chemical compounds that are widely used in everyday language, but not necessarily scientifically accurate or consistent. They often reflect the historical or common usage of a compound, rather than its chemical structure or composition.
@@ -5,7 +7,6 @@ export interface ChemicalNomenclatureProperties {
 	 * @example ["Amphetamine", "Speed", "Adderall", "Pep"]
 	 */
 	common_names?: string[]
-	brand_names?: string[]
 	/**
 	 * Substitutive name is a type of chemical nomenclature used for organic compounds. In this system, the substitutive name of a compound is based on the name of the parent hydrocarbon, with the functional group (such as an alcohol or a carboxylic acid) indicated by a prefix or suffix.
 	 *
@@ -49,18 +50,4 @@ export interface ChemicalNomenclatureProperties {
 /**
  * Chemical nomenclature is the system of naming chemical compounds. The rules for naming compounds vary depending on the type of compound, but in general, they are based on the type and number of atoms present in the compound, as well as the chemical bonds between them. The most common system of chemical nomenclature is the International Union of Pure and Applied Chemistry (IUPAC) system, which is widely used in scientific literature and in industry.
  */
-export class ChemicalNomenclature implements ChemicalNomenclatureProperties {
-	brand_names: string[]
-	cas_number: string
-	common_names: string[]
-	inchi_key: string
-	iupac: string
-	smiles: string
-	substitutive_name: string
-	systematic_name: string
-	unii: string
-
-	constructor(properties: ChemicalNomenclatureProperties) {
-		Object.assign(this, properties)
-	}
-}
+export class ChemicalNomenclature extends ValueObject<ChemicalNomenclatureProperties> {}

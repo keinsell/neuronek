@@ -11,8 +11,6 @@ export interface DosageTableProperties {
 	readonly [DosageClassification.heavy]: number
 }
 
-export interface DosageTableJSON extends DosageTableProperties {}
-
 export class DosageTable implements DosageTableProperties {
 	readonly kind: 'mass' | 'volume' | 'custom'
 	readonly unit: string
@@ -32,15 +30,5 @@ export class DosageTable implements DosageTableProperties {
 		this[DosageClassification.moderate] = properties[DosageClassification.moderate]
 		this[DosageClassification.strong] = properties[DosageClassification.strong]
 		this[DosageClassification.heavy] = properties[DosageClassification.heavy]
-	}
-
-	toJSON(): DosageTableJSON {
-		return {
-			...this
-		}
-	}
-
-	static fromJSON(json: DosageTableJSON): DosageTable {
-		return new DosageTable(json)
 	}
 }
