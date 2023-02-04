@@ -31,7 +31,8 @@ export class GetEffectsController extends Controller {
 		const responses: EffectResponse[] = response.value.map(effect => ({
 			name: effect.name,
 			summary: effect.summary,
-			page: effect.description
+			page: effect.description,
+			effectindex: effect.effectindex
 		}))
 
 		// Response
