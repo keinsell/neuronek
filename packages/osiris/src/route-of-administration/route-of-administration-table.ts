@@ -25,7 +25,7 @@ export class RouteOfAdministrationTable {
 		const properties: Writable<Partial<RouteOfAdministrationTable>> = {}
 
 		for (const route of items) {
-			properties[route._v.classification] = route
+			properties[route.classification] = route
 		}
 
 		return new RouteOfAdministrationTable(properties)

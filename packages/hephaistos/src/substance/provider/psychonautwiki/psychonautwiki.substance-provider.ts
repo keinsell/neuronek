@@ -12,12 +12,9 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 		const response = await request<AllSubstancesQuery>('https://api.psychonautwiki.org', AllSubstancesDocument, {})
 		const substances: Substance[] = []
 
-		console.log(response)
-
 		for (const s of response.substances) {
 			const substance = this.mapper.Substance__Substance(s)
 			substances.push(substance)
-			console.log(substance?.nomenclature.all)
 		}
 
 		return substances

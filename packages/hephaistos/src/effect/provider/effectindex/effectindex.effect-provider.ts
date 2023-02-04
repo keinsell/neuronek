@@ -1,5 +1,6 @@
 import effectindex, { ParsedPage } from 'effectindex-dataset'
 import { Effect } from 'osiris'
+import { EffectLocalStorage } from 'src/effect/effect.localstorage.js'
 
 import { EffectProviderAdapter } from '../effect-provider.adapter.js'
 
@@ -35,12 +36,19 @@ class EffectIndexMapper {
 }
 
 export class EffectIndexEffectProvider extends EffectProviderAdapter {
+	private localstorage = new EffectLocalStorage()
+
 	async load(): Promise<Effect[]> {
 		const effects: Effect[] = []
 
-		for (const effect of effectindex) {
+		for await (const effect of effectindex) {
 			effects.push(EffectIndexMapper.toDomain(effect))
 		}
+
+		for await (const effect of effects) {
+			await this.localstorage.save(effect)
+		}
+
 		return effects
 	}
 }
