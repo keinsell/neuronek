@@ -7,16 +7,16 @@ export namespace SubstanceMapper {
 
 	export function fromSubstance(substance: Substance): CreateSubstanceRecord {
 		return {
-			name: substance._v.name,
-			common_names: substance?._v?.nomenclature?._v.common_names || [],
-			substitutive_name: substance?._v?.nomenclature?._v.substitutive_name
+			name: substance.name,
+			common_names: substance?.nomenclature?.common_names || [],
+			substitutive_name: substance?.nomenclature?.substitutive_name
 		}
 	}
 
 	export function toSubstance(substance: _Substance) {
-		return new Substance({
+		return Substance.create({
 			name: substance.name,
-			nomenclature: new ChemicalNomenclature({
+			nomenclature: ChemicalNomenclature.create({
 				common_names: substance.common_names || [],
 				substitutive_name: substance.substitutive_name
 			})
@@ -46,14 +46,14 @@ export class SubstanceRepository {
 	}
 
 	async save(substance: Substance) {
-		const isSubstance = await this.findByName(substance._v.name)
+		const isSubstance = await this.findByName(substance.name)
 
 		if (isSubstance) {
 			// Update substance
 
 			const updatedSubstance = await this.connector.substance.update({
 				where: {
-					name: substance._v.name
+					name: substance.name
 				},
 				data: SubstanceMapper.fromSubstance(substance)
 			})

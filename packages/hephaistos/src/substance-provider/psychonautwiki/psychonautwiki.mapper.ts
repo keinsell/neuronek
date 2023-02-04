@@ -4,8 +4,8 @@ import { AllSubstancesQuery, Substance as PsychonautWikiSubstance } from './gql/
 
 export class PsychonautWikiMapper {
 	private extractChemicalNomenclature(input: PsychonautWikiSubstance): ChemicalNomenclature {
-		return new ChemicalNomenclature({
-			common_names: input.commonNames ?? []
+		return ChemicalNomenclature.create({
+			common_names: [...input.commonNames]
 		})
 	}
 
@@ -16,7 +16,7 @@ export class PsychonautWikiMapper {
 	public Substance__Substance(input: PsychonautWikiSubstance): Substance {
 		const chemical_nomenclature = this.extractChemicalNomenclature(input)
 
-		return new Substance({
+		return Substance.create({
 			name: input.name,
 			nomenclature: chemical_nomenclature
 		})
