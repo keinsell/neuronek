@@ -20,22 +20,22 @@ export class PsychoactiveClass {
 	 */
 	name: PsychoactiveClassification
 
+	private constructor(properties: { name: PsychoactiveClassification }) {
+		this.name = properties.name
+	}
+
+	static build(psychoactiveClassification: PsychoactiveClassification): PsychoactiveClass {
+		return new PsychoactiveClass({
+			name: psychoactiveClassification
+		})
+	}
+
 	/**
 	 * The type of effect produced by the class
 	 * @type string
 	 * @example 'Psychedelics (also known as serotonergic hallucinogens) are a class of psychoactive substances that produce an altered state of consciousness marked by unusual changes in perception, mood, and cognitive processes.'
 	 */
-	public readonly description?: string
-
-	private constructor(properties: { name: PsychoactiveClassification; description?: string }) {
-		this.name = properties.name
-		this.description = properties.description
-	}
-
-	static build(psychoactiveClassification: PsychoactiveClassification): PsychoactiveClass {
-		return new PsychoactiveClass({
-			name: psychoactiveClassification,
-			description: _psychoactive_class_description[psychoactiveClassification]
-		})
+	get description() {
+		return _psychoactive_class_description[this.name]
 	}
 }
