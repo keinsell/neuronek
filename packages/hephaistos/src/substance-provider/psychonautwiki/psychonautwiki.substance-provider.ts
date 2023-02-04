@@ -17,6 +17,7 @@ export class PsychonautWikiSubstanceProvider implements SubstanceProviderAdapter
 		for (const s of response.substances) {
 			const substance = this.mapper.Substance__Substance(s)
 			substances.push(substance)
+			console.log(substance?.nomenclature.all)
 		}
 
 		return substances
