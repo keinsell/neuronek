@@ -1,58 +1,55 @@
+import { EffectRepository, PrismaClient, SubstanceRepository } from 'database'
 import { Effect, ExperienceReport, Substance } from 'osiris'
 
-import { PrismaDatabaseSync } from './database-sync/database-sync.adapter.js'
-import { EffectIndexEffectProvider } from './effect-provider/effectindex/effectindex.effect-provider.js'
-import { PsychonautWikiSubstanceProvider } from './substance-provider/psychonautwiki/psychonautwiki.substance-provider.js'
-
-export class HephaistosDataset {
-	public readonly substance_store: Substance[] = []
-	public readonly experience_store: ExperienceReport[] = []
-	public readonly effect_store: Effect[] = []
-	private databaseSync = new PrismaDatabaseSync()
-
-	constructor({ substances, experiences, effects }) {
-		this.substance_store = substances
-		this.experience_store = experiences
-		this.effect_store = effects
-	}
-
-	public async sync() {
-		await this.databaseSync.sync(this)
-	}
-}
+import { EffectIndexEffectProvider } from './effect/provider/effectindex/effectindex.effect-provider.js'
+import { PsychonautWikiSubstanceProvider } from './substance/provider/psychonautwiki/psychonautwiki.substance-provider.js'
 
 export class Hephaistos {
-	private readonly substance_store: Substance[] = []
-	private readonly experience_store: ExperienceReport[] = []
-	private readonly effect_store: Effect[] = []
+	substance_storage: Substance[]
+	effect_storage: Effect[]
+	experience_storage: ExperienceReport[]
 
-	/** Method will use all available sources to provide dataset of available substances, effects and experiences. */
-	public async build(): Promise<HephaistosDataset> {
-		await this.buildEffectStore()
-		await this.buildSubstanceStore()
-		await this.buildExperienceStore()
-
-		const dataset = new HephaistosDataset({
-			substances: this.substance_store,
-			experiences: this.experience_store,
-			effects: this.effect_store
-		})
-
-		return dataset
+	private constructor(dataset?: {
+		substance_storage: Substance[]
+		effect_storage: Effect[]
+		experience_storage: ExperienceReport[]
+	}) {
+		this.substance_storage = dataset.substance_storage
+		this.effect_storage = dataset.effect_storage
+		this.experience_storage = dataset.experience_storage
 	}
 
-	private async buildEffectStore() {
+	static async build() {
+		// Fetch and store all effects
 		const effectindex = await new EffectIndexEffectProvider().load()
-		this.effect_store.push(...effectindex)
-	}
-
-	private async buildSubstanceStore() {
+		const effects = [...effectindex]
+		// Fetch and store all substances
 		const psychonautwiki = await new PsychonautWikiSubstanceProvider().load()
-		this.substance_store.push(...psychonautwiki)
+		const substances = [...psychonautwiki]
+
+		return new Hephaistos({
+			substance_storage: substances,
+			effect_storage: effects,
+			experience_storage: []
+		})
 	}
 
-	private async buildExperienceStore() {
-		// const erowidExperiences = await new ErowidExperienceProvider().load()
-		// this.experience_store.push(...erowidExperiences)
+	/** Synchronize available information with database. */
+	public async sync() {
+		const prisma = new PrismaClient()
+		await prisma.$connect()
+
+		const substanceRepository = new SubstanceRepository(prisma)
+		const effectRepository = new EffectRepository(prisma)
+
+		for (const effect of this.effect_storage) {
+			await effectRepository.save(effect)
+		}
+
+		for (const substance of this.substance_storage) {
+			await substanceRepository.save(substance)
+		}
+
+		await prisma.$disconnect()
 	}
 }

@@ -81,4 +81,9 @@ export class EffectRepository {
 			return this.mapper.toDomain(createdEffect)
 		}
 	}
+
+	async findAll(): Promise<Effect[]> {
+		const effects = await this.prisma.effect.findMany()
+		return effects.map(effect => this.mapper.toDomain(effect))
+	}
 }

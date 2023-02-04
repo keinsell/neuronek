@@ -1,4 +1,4 @@
-import { PsychoactiveClassification } from '../psychoactive-class/psychoactive-class'
+import { PsychoactiveClassification } from '../substance/class-membership/psychoactive-class/psychoactive-classification'
 
 export interface ToleranceProperties {
 	development?: {
