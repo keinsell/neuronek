@@ -58,6 +58,7 @@ export interface EffectJSON {
 
 // https://effectindex.com/effects/
 export class Effect implements EffectProperties {
+	id: string
 	/**
 	 * @example "Jamais vu"
 	 */
@@ -95,9 +96,10 @@ export class Effect implements EffectProperties {
 	effectindex?: string
 	psychonautwiki?: string
 
-	constructor(properties: EffectProperties) {
+	constructor(properties: EffectProperties, id?: string) {
 		Object.assign(this, properties)
 		this.slug = slugify(this.name, { lower: true })
+		this.id = id || this.slug
 	}
 
 	static fromJSON(json: EffectJSON): Effect {

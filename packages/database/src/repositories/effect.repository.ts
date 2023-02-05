@@ -20,7 +20,8 @@ export class EffectMapper {
 			category: effect.category as unknown as string,
 			tags: effect.tags as unknown as string[],
 			see_also: effect.see_also?.map(effect => effect.slug) ?? [],
-			parameters: undefined
+			parameters: undefined,
+			id: undefined
 		}
 	}
 }
@@ -85,5 +86,15 @@ export class EffectRepository {
 	async findAll(): Promise<Effect[]> {
 		const effects = await this.prisma.effect.findMany()
 		return effects.map(effect => this.mapper.toDomain(effect))
+	}
+
+	async buildSearchIndexDocument(): Promise<{ id: string; name: string; summary: string }[]> {
+		const effects = await this.findAll()
+
+		const index: { id: string; name: string; summary: string }[] = effects.map(effect => {
+			return { id: effect.id, name: effect.name, summary: effect.summary }
+		})
+
+		return index
 	}
 }

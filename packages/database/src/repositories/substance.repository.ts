@@ -15,6 +15,7 @@ export namespace SubstanceMapper {
 
 	export function toSubstance(substance: _Substance) {
 		return Substance.create({
+			id: substance.id,
 			name: substance.name,
 			nomenclature: ChemicalNomenclature.create({
 				common_names: substance.common_names || [],
@@ -66,5 +67,25 @@ export class SubstanceRepository {
 		})
 
 		return SubstanceMapper.toSubstance(createdSubstance)
+	}
+
+	async findAll(): Promise<Substance[]> {
+		const substances = await this.connector.substance.findMany()
+
+		return substances.map(substance => SubstanceMapper.toSubstance(substance))
+	}
+
+	async buildSearchIndexDocument(): Promise<{ id: string; name: string; common_names: string[] }[]> {
+		const substances = await this.findAll()
+
+		const index: { id: string; name: string; common_names: string[] }[] = substances.map(effect => {
+			return {
+				id: effect.id,
+				name: effect.name,
+				common_names: effect?.nomenclature?.common_names
+			}
+		})
+
+		return index
 	}
 }

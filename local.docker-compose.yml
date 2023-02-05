@@ -1,15 +1,24 @@
-version: "3.7"
+version: '3.7'
 services:
   cockroachdb:
     container_name: ${REPOSITORY_NAME}-cockroachdb
     image: cockroachdb/cockroach:latest
     command: start-single-node --insecure --advertise-addr ${DATABASE_HOST}
     ports:
-      - "${DATABASE_PORT}:26257"
-      - "8081:8080"
+      - '${DATABASE_PORT}:26257'
+      - '8081:8080'
     volumes:
-      - "${PWD}/.cache/cockroach:/cockroach/cockroach-data"
+      - '${PWD}/.cache/cockroach:/cockroach/cockroach-data'
     environment:
       - COCKROACH_USER=${DATABASE_USER}
       - COCKROACH_PASSWORD=${DATABASE_PASSWORD}
       - COCKROACH_DATABASE=${DATABASE_NAME}
+  meilisearch:
+    container_name: ${REPOSITORY_NAME}-meilisearch
+    image: getmeili/meilisearch:latest
+    ports:
+      - '${MEILISEARCH_PORT}:7700'
+    volumes:
+      - '${PWD}/.cache/meilisearch:/data.ms'
+    environment:
+      - MEILI_MASTER_KEY=${MEILISEARCH_MASTER_KEY}

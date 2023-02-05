@@ -4,6 +4,7 @@ import { ClassMembership } from './class-membership/class-membership.js'
 import { ExternalReferenceTable } from './external-reference-table/external-reference-table.js'
 
 export class Substance {
+	public readonly id: string
 	/**
 	 * Most popular common name for the substance.
 	 * @example "Amphetamine"
@@ -28,32 +29,31 @@ export class Substance {
 	public readonly externals?: ExternalReferenceTable
 
 	private constructor(
-		name: string,
-		nomenclature?: ChemicalNomenclature,
-		class_membership?: ClassMembership,
-		routes_of_administration?: RouteOfAdministrationTable,
-		externals?: ExternalReferenceTable
+		payload: {
+			name: string
+			nomenclature?: ChemicalNomenclature
+			class_membership?: ClassMembership
+			routes_of_administration?: RouteOfAdministrationTable
+			externals?: ExternalReferenceTable
+		},
+		id?: string
 	) {
-		this.name = name
-		this.nomenclature = nomenclature
-		this.class_membership = class_membership
-		this.routes_of_administration = routes_of_administration
-		this.externals = externals
+		this.id = id ?? payload.name
+		this.name = payload.name
+		this.nomenclature = payload.nomenclature
+		this.class_membership = payload.class_membership
+		this.routes_of_administration = payload.routes_of_administration
+		this.externals = payload.externals
 	}
 
 	public static create(payload: {
+		id?: string
 		name: string
 		nomenclature?: ChemicalNomenclature
 		class_membership?: ClassMembership
 		routes_of_administration?: RouteOfAdministrationTable
 		externals?: ExternalReferenceTable
 	}): Substance {
-		return new Substance(
-			payload.name,
-			payload.nomenclature,
-			payload.class_membership,
-			payload.routes_of_administration,
-			payload.externals
-		)
+		return new Substance(payload, payload.id)
 	}
 }

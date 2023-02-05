@@ -2,6 +2,7 @@ import diod, { Newable } from 'diod'
 
 import { JwtStrategy } from '../../../modules/authorization/jwt-strategy.js'
 import { EffectModule } from '../../../modules/effect/effect.module.js'
+import { MeilisearchService } from '../../../modules/search/search.service.js'
 import { UserModule } from '../../../modules/user/user.module.js'
 import { DependencyInjectionModule } from '../../common/module/module.js'
 import { PrismaService } from '../prisma/prisma.js'
@@ -14,8 +15,14 @@ const modules: Newable<DependencyInjectionModule>[] = [UserModule, EffectModule]
 
 builder.register(PrismaService).useInstance(new PrismaService())
 builder.register(JwtStrategy).use(JwtStrategy)
+builder.registerAndUse(MeilisearchService)
 
 modules.forEach(module => new module(builder).register())
 
 export const container = builder.build()
+
+// Add Indexing Tasks for MeiliSearch here.
+
+container.get(MeilisearchService).index()
+
 export { container as iocContainer }

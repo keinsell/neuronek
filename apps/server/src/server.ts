@@ -1,7 +1,8 @@
-import express, { Request, Response, json, urlencoded } from 'express'
+import express, { json, Request, Response, urlencoded } from 'express'
+import swaggerUI from 'swagger-ui-express'
+
 import { RegisterRoutes } from '../dist/routes'
 import openapi from '../dist/swagger.json'
-import swaggerUI from 'swagger-ui-express'
 import { passport } from './shared/infrastructure/authorization/passport.js'
 
 export const app = express()

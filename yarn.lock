@@ -8459,6 +8459,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"meilisearch@npm:^0.30.0":
+  version: 0.30.0
+  resolution: "meilisearch@npm:0.30.0"
+  dependencies:
+    cross-fetch: ^3.1.5
+  checksum: 70a3e8797e77dd24b13ed3882f176b2cfe48b44f4eb63801a0fa484d427588f8d4560c13862589ba96a18192746b006b397498b299213fa890b5e470a2856db5
+  languageName: node
+  linkType: hard
+
 "mem@npm:^9.0.2":
   version: 9.0.2
   resolution: "mem@npm:9.0.2"
@@ -10714,6 +10723,7 @@ __metadata:
     eslint-config-node: "*"
     express: ^4.18.2
     jsonwebtoken: ^9.0.0
+    meilisearch: ^0.30.0
     nanoid: ^4.0.0
     neverthrow: ^6.0.0
     nodemon: 2.0.20
