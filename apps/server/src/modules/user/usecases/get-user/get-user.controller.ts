@@ -1,25 +1,41 @@
-import { Body, Controller, Example, Middlewares, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
-import { UserResponse } from '../user.response.js'
-import type { RegisterUserRequest } from './register-user.request.js'
+import {
+	Body,
+	Controller,
+	Example,
+	Get,
+	Header,
+	Middlewares,
+	OperationId,
+	Post,
+	Request,
+	Response,
+	Route,
+	Security,
+	SuccessResponse,
+	Tags
+} from 'tsoa'
+import { UserResponse } from '../../user.response.js'
+import { UsernameTakenError } from '../../errors/username-taken.error.js'
 import { Service } from 'diod'
-import { RegisterUserService } from './register-user.service.js'
-import { UsernameTakenError } from '../errors/username-taken.error.js'
+import { GetUserService } from './get-user.service.js'
+import passport from 'passport'
+import { User } from '../../user.entity.js'
 
 @Service()
 @Route('user')
 @Tags('user')
-export class RegisterUserController extends Controller {
-	constructor(private registerUserService: RegisterUserService) {
+export class GetUserController extends Controller {
+	constructor(private service: GetUserService) {
 		super()
 	}
 
 	/**
-	 * Register a new user.
-	 * @summary Register a new user
+	 * Get information about user profile and refresh tokens.
+	 * @summary Get user
 	 */
-	@Post()
-	@OperationId('register-user')
-	@SuccessResponse('201', 'User registered')
+	@Get()
+	@OperationId('get-user')
+	@SuccessResponse('200', 'User')
 	@Example<UserResponse>({
 		id: 'cldctwu260000pm4a9b83zgvs',
 		username: 'keinsell',
@@ -32,8 +48,10 @@ export class RegisterUserController extends Controller {
 		message: 'This username is already taken.',
 		statusCode: 400
 	})
-	async registerUser(@Body() body: RegisterUserRequest): Promise<UserResponse> {
-		const response = await this.registerUserService.execute(body)
+	@Middlewares([passport.authenticate('jwt', { session: false })])
+	@Security('Bearer')
+	async registerUser(@Request() req: Express.Request & { user: User }): Promise<UserResponse> {
+		const response = await this.service.execute(req.user.id)
 
 		// Handle Error
 		if (response.isErr()) {
@@ -44,7 +62,7 @@ export class RegisterUserController extends Controller {
 		const { access_token, refresh_token } = response.value.token.toJwtTokenAndRefreshToken()
 
 		// Response
-		this.setStatus(201)
+		this.setStatus(200)
 		return {
 			id: response.value.id,
 			username: response.value.username,

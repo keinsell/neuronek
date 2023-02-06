@@ -1,9 +1,9 @@
 import { Body, Controller, Example, Middlewares, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
-import { UserResponse } from '../user.response.js'
+import { UserResponse } from '../../user.response.js'
 import { Service } from 'diod'
 import type { LoginUserRequest } from './login-user.request.js'
 import { LoginUserService } from './login-user.service.js'
-import { UserNotFoundError } from '../errors/user-not-found.error.js'
+import { UserNotFoundError } from '../../errors/user-not-found.error.js'
 
 @Service()
 @Route('user')

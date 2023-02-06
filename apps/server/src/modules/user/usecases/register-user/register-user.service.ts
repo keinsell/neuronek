@@ -1,12 +1,12 @@
 import { Service } from 'diod'
-import { Password } from '../password/password.vo.js'
-import { User } from '../user.entity.js'
-import { UserRepository } from '../user.repository.js'
+import { Password } from '../../password/password.vo.js'
+import { User } from '../../user.entity.js'
+import { UserRepository } from '../../user.repository.js'
 import { RegisterUserRequest } from './register-user.request.js'
-import { Usecase } from '../../../shared/common/domain/usecase.js'
-import { UsernameTakenError } from '../errors/username-taken.error.js'
+import { Usecase } from '../../../../shared/common/domain/usecase.js'
+import { UsernameTakenError } from '../../errors/username-taken.error.js'
 import { Result, err, ok } from 'neverthrow'
-import { JwtToken } from '../../authorization/jwt-token.js'
+import { JwtToken } from '../../../authorization/jwt-token.js'
 
 @Service()
 export class RegisterUserService
