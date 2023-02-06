@@ -1,9 +1,11 @@
 import { Dosage } from '../dosage/dosage.js'
+import { Mixture } from '../mixtures/mixture.model.js'
 import { RouteOfAdministrationClassification } from '../route-of-administration/RouteOfAdministrationClassification.js'
 import { Substance } from '../substance/substance.js'
 
 export class Ingestion {
 	substance?: Substance
+	mixture?: Mixture
 	dosage?: Dosage
 	routeOfAdministration?: RouteOfAdministrationClassification
 	// TODO: Should this be refactored into Dosage (or maybe separate Dosage class)?
@@ -25,6 +27,18 @@ export class Ingestion {
 		isDosageEstimate?: boolean
 	}) {
 		Object.assign(this, properties)
+	}
+
+	// eslint-disable-next-line jsdoc/require-returns
+	/** Checks if ingestion contains information about ingested substance or mixture. If contains informations about mixture additionally checks if mixture contains information about it's content. */
+	public hasKnownSubstance(): boolean {
+		let hasSubstance = !!this.substance
+
+		if (!hasSubstance && this.mixture) {
+			hasSubstance = this.mixture.ingredients?.some(ingredient => !!ingredient.substance_name)
+		}
+
+		return hasSubstance
 	}
 
 	static create(properties: {
