@@ -1,30 +1,16 @@
 import Qty from 'js-quantities'
 import unitmath from 'unitmath'
 
-import { ValueObject } from '../__core/valueobject.js'
-import { RouteOfAdministrationClassification } from '../route-of-administration/RouteOfAdministrationClassification.js'
-import { DosageClassification } from './dosage-classification.js'
-
-export interface DosageProperties {
-	amount: number
-	unit: string
-	form?: 'crystal' | 'powder'
-	purity?: number
-	_classification?: DosageClassification
-	belongsTo: {
-		substanceName: string
-		routeOfAdministrationClassification: RouteOfAdministrationClassification
-	}
-}
-
-export class Dosage extends ValueObject<DosageProperties> {
+export class Dosage {
 	protected engine: Qty
+	public amount: number
+	public unit: string
+	public form?: 'crystal' | 'powder'
+	public purity?: number
 
-	constructor(properties: DosageProperties) {
-		super(properties)
-
+	constructor(properties: { amount: number; unit: string; form?: 'crystal' | 'powder'; purity?: number }) {
 		const isProvidedUnitAvailable = Qty.getUnits().find(unit => unit === unit)
-		let supportedUnit = isProvidedUnitAvailable ? this._v.unit : undefined
+		let supportedUnit = isProvidedUnitAvailable ? this.unit : undefined
 
 		if (supportedUnit === 'seeds') {
 			supportedUnit = undefined
@@ -36,7 +22,7 @@ export class Dosage extends ValueObject<DosageProperties> {
 	/** Converts value to string with attention to `baseScalar`, function will find and use lowest possible unit relative to value. */
 	toString(): string {
 		if (this.engine.isUnitless()) {
-			return `${this.engine.scalar} ${this._v.unit}`
+			return `${this.engine.scalar} ${this.unit}`
 		}
 
 		// Convert the base scalar to the units of this quantity
