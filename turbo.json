@@ -40,7 +40,8 @@
 		},
 		"db:generate": {
 			"dependsOn": ["^db:generate"],
-			"cache": false
+			"outputs": ["node_modules/@prisma/client/**"],
+			"cache": true
 		},
 		"hephaistos": {
 			"inputs": ["src/**/*.ts"],

@@ -1,0 +1,17 @@
+{
+	"name": "drugbank-dataset",
+	"version": "0.0.0",
+	"description": "",
+	"keywords": [
+		"drug"
+	],
+	"main": "dataset/drugbank.json",
+	"types": "@types/drugbank.d.ts",
+	"scripts": {
+		"build:types": "npx quicktype dataset/drugbank.json -o @types/drugbank.d.ts",
+		"prepare": "npm run build"
+	},
+	"engines": {
+		"node": ">=0.10"
+	}
+}
