@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import { EffectRepository } from './repositories/effect.repository.js'
-
+export { EffectRepository } from './repositories/effect.repository.js'
 export { SubstanceRepository } from './repositories/substance.repository.js'
 
 // declare global {
@@ -12,4 +11,4 @@ export { SubstanceRepository } from './repositories/substance.repository.js'
 
 // if (process.env.NODE_ENV !== 'production') global.prisma = prisma
 
-export { PrismaClient, EffectRepository }
+export { PrismaClient }
