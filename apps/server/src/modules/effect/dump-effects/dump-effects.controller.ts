@@ -2,13 +2,13 @@ import { Service } from 'diod'
 import { Controller, Get, OperationId, Route, SuccessResponse, Tags } from 'tsoa'
 
 import { EffectResponse } from '../effect.response.js'
-import { GetEffectsService } from './get-effects.service.js'
+import { DumpEffectsService } from './dump-effects.service.js'
 
 @Service()
-@Route('effects')
-@Tags('effect')
-export class GetEffectsController extends Controller {
-	constructor(private service: GetEffectsService) {
+@Route('dump')
+@Tags('dump', 'effect')
+export class DumpEffectsController extends Controller {
+	constructor(private service: DumpEffectsService) {
 		super()
 	}
 
@@ -16,8 +16,8 @@ export class GetEffectsController extends Controller {
 	 * Gets all available effects based on https://effectindex.com and https://psychonautwiki.org.
 	 * @summary Get all available effects.
 	 */
-	@Get()
-	@OperationId('get-effects')
+	@Get('/effects')
+	@OperationId('dump-effects')
 	@SuccessResponse('200', 'OK')
 	async registerUser(): Promise<EffectResponse[]> {
 		const response = await this.service.execute()

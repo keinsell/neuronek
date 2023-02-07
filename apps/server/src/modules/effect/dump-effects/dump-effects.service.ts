@@ -7,7 +7,7 @@ import { Usecase } from '../../../shared/common/domain/usecase.js'
 import { PrismaService } from '../../../shared/infrastructure/prisma/prisma.js'
 
 @Service()
-export class GetEffectsService implements Usecase<never, Effect[], never> {
+export class DumpEffectsService implements Usecase<never, Effect[], never> {
 	private effectRepsoitory: EffectRepository
 
 	constructor(private prismaService: PrismaService) {
