@@ -1,15 +1,17 @@
+import { Dosage } from '../dosage/dosage.js'
 import { Substance } from '../substance/substance.js'
 
 export class MixtureIngredient {
 	substance_name: string
-	dosage: number
-	dosage_unit: string
+	dosage: Dosage
 	Substance?: Substance
 
-	private constructor({ substance_name, dosage, dosage_unit, Substance }: MixtureIngredient) {
-		this.substance_name = substance_name
-		this.dosage = dosage
-		this.dosage_unit = dosage_unit
-		this.Substance = Substance
+	private constructor(intrigent: { substance_name: string; dosage: Dosage }) {
+		this.substance_name = intrigent.substance_name
+		this.dosage = intrigent.dosage
+	}
+
+	static async create(intrigent: { substance_name: string; dosage: Dosage }): Promise<MixtureIngredient> {
+		return new MixtureIngredient(intrigent)
 	}
 }

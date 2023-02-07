@@ -9,8 +9,9 @@ export class Mixture {
 	routeOfAdministration?: RouteOfAdministrationClassification
 	/** Tablets, Capsules, Powder, Liquid etc. */
 	form?: string
-	// TODO: Add serving information
-	ingredients: Array<MixtureIngredient>
+	serving_size?: Dosage
+	/** Intrigents are attached for `serving_size`, for example if serving size would be 2 pills, and user ingested single pill we'll divide ingested intrigents. */
+	ingredients: [MixtureIngredient]
 
 	private constructor(properties: {
 		id?: number
@@ -18,7 +19,8 @@ export class Mixture {
 		labeller?: string
 		routeOfAdministration?: RouteOfAdministrationClassification
 		form?: string
-		ingredients: Array<MixtureIngredient>
+		serving_size?: Dosage
+		ingredients: [MixtureIngredient]
 	}) {
 		this.id = properties.id
 		this.name = properties.name
@@ -32,9 +34,10 @@ export class Mixture {
 		id?: number
 		name: string
 		labeller?: string
+		serving_size?: Dosage
 		routeOfAdministration?: RouteOfAdministrationClassification
 		form?: string
-		ingredients: Array<MixtureIngredient>
+		ingredients: [MixtureIngredient]
 	}): Mixture {
 		return new Mixture(properties)
 	}
