@@ -3,6 +3,7 @@ import { Effect, ExperienceReport, Substance } from 'osiris'
 
 import { EffectIndexEffectProvider } from './effect/provider/effectindex/effectindex.effect-provider.js'
 import { PsychonautWikiSubstanceProvider } from './substance/provider/psychonautwiki/psychonautwiki.substance-provider.js'
+import { DrugbankSubstanceProvider } from './substance/provider/drugbank/drugbank.substance-provider.js'
 
 export class Hephaistos {
 	substance_storage: Substance[]
@@ -25,7 +26,8 @@ export class Hephaistos {
 		const effects = [...effectindex]
 		// Fetch and store all substances
 		const psychonautwiki = await new PsychonautWikiSubstanceProvider().load()
-		const substances = [...psychonautwiki]
+		const drugbank = await new DrugbankSubstanceProvider().load()
+		const substances = [...psychonautwiki, ...drugbank]
 
 		return new Hephaistos({
 			substance_storage: substances,
@@ -46,7 +48,11 @@ export class Hephaistos {
 			await effectRepository.save(effect)
 		}
 
+		console.log(`Saving ${this.substance_storage.length} substances...`)
+		let substance_counter = 1
 		for (const substance of this.substance_storage) {
+			console.log(`Saving ${substance_counter}/${this.substance_storage.length}`)
+			substance_counter++
 			await substanceRepository.save(substance)
 		}
 
