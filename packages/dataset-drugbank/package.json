@@ -8,8 +8,19 @@
 	"main": "dataset/drugbank.json",
 	"types": "@types/drugbank.d.ts",
 	"scripts": {
-		"build:types": "npx quicktype dataset/drugbank.json -o @types/drugbank.d.ts",
-		"prepare": "npm run build"
+		"dev:drugbank": "tsx --watch index.ts"
+	},
+	"dependencies": {
+		"JSONStream": "^1.3.5",
+		"bfj": "^7.0.2",
+		"ora": "^6.1.2",
+		"pretty-bytes": "^6.1.0",
+		"stream-chain": "^2.2.5",
+		"stream-json": "^1.7.5"
+	},
+	"devDependencies": {
+		"@types/stream-chain": "^2.0.1",
+		"@types/stream-json": "^1.7.3"
 	},
 	"engines": {
 		"node": ">=0.10"
