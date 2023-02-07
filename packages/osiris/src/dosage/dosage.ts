@@ -1,14 +1,25 @@
 import Qty from 'js-quantities'
 import unitmath from 'unitmath'
+import { DosageForm } from './dosage-form.js'
+
+export interface DosageProperties {
+	amount: number
+	unit: string
+	form?: DosageForm
+	purity?: number
+	isEstimate?: boolean
+}
 
 export class Dosage {
 	protected engine: Qty
 	public amount: number
 	public unit: string
-	public form?: 'crystal' | 'powder'
+	public form?: DosageForm
 	public purity?: number
+	/** This field should be marked if subject isn't sure about measured dosage, thus this should not be taken in exact calculations. */
+	public isEstimate?: boolean
 
-	constructor(properties: { amount: number; unit: string; form?: 'crystal' | 'powder'; purity?: number }) {
+	constructor(properties: DosageProperties) {
 		const isProvidedUnitAvailable = Qty.getUnits().find(unit => unit === unit)
 		let supportedUnit = isProvidedUnitAvailable ? this.unit : undefined
 
