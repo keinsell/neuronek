@@ -2399,6 +2399,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ramda@npm:^0.28.22":
+  version: 0.28.22
+  resolution: "@types/ramda@npm:0.28.22"
+  dependencies:
+    ts-toolbelt: ^6.15.1
+  checksum: 6ee8aa774ca6a981fe7586a1296965e043e2479f56eb4b4c897a54a1a3f094e2a6a180b8c9eddf9bd3a273d6f9939ee6d5f526327e9055392a8e8292cd7c9eca
+  languageName: node
+  linkType: hard
+
 "@types/range-parser@npm:*":
   version: 1.2.4
   resolution: "@types/range-parser@npm:1.2.4"
@@ -9440,6 +9449,7 @@ __metadata:
     "@types/ms": ^0.7.31
     "@types/node": ^18.11.18
     "@types/nodemon": 1.19.2
+    "@types/ramda": ^0.28.22
     ava: ^5.1.1
     c8: ^7.12.0
     eslint-config-node: "*"
@@ -9449,6 +9459,7 @@ __metadata:
     ms: ^2.1.3
     nodemon: 2.0.20
     pqm: ^1.0.0
+    ramda: ^0.28.0
     slugify: ^1.6.5
     ts-node: ^10.9.1
     tsup: ^6.5.0
@@ -10270,6 +10281,13 @@ __metadata:
   version: 5.1.1
   resolution: "quick-lru@npm:5.1.1"
   checksum: a516faa25574be7947969883e6068dbe4aa19e8ef8e8e0fd96cddd6d36485e9106d85c0041a27153286b0770b381328f4072aa40d3b18a19f5f7d2b78b94b5ed
+  languageName: node
+  linkType: hard
+
+"ramda@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "ramda@npm:0.28.0"
+  checksum: 44ea6e5010bba70151b6a92d8114a91915e8b5a16105cce65fae58c9d7386b812c429645e35f21141d7087568550ce383bc10ee1a65cdec951f4b69ea457e6a4
   languageName: node
   linkType: hard
 
@@ -11721,6 +11739,13 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 090adff1302ab20bd3486e6b4799e90f97726ed39e02b39e566f8ab674fd5bd5f727f43615debbfc580d33c6d9d1c6b1b3ce7d8e3cca3e20530a145ffa232c35
+  languageName: node
+  linkType: hard
+
+"ts-toolbelt@npm:^6.15.1":
+  version: 6.15.5
+  resolution: "ts-toolbelt@npm:6.15.5"
+  checksum: 24ad00cfd9ce735c76c873a9b1347eac475b94e39ebbdf100c9019dce88dd5f4babed52884cf82bb456a38c28edd0099ab6f704b84b2e5e034852b618472c1f3
   languageName: node
   linkType: hard
 
