@@ -1,0 +1,10 @@
+import { DependencyInjectionModule } from '../../shared/common/module/module.js'
+import { DumpSubstancesController } from './dump-substances/dump-substances.controller.js'
+import { DumpSubstancesService } from './dump-substances/dump-substances.service.js'
+
+export class SubstanceModule extends DependencyInjectionModule {
+	register(): void {
+		this.containerBuilder.registerAndUse(DumpSubstancesService)
+		this.containerBuilder.registerAndUse(DumpSubstancesController)
+	}
+}
