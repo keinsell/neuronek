@@ -39,4 +39,13 @@ export class MeilisearchService {
 			estimatedTotal: search.estimatedTotalHits
 		}
 	}
+
+	async searchSubstance(query: string): Promise<SearchResponse<{ id: string; name: string; common_names: string[] }>> {
+		const search = await this.search(query, 'substances')
+
+		return {
+			hits: search.hits as any,
+			estimatedTotal: search.estimatedTotalHits
+		}
+	}
 }
