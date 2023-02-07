@@ -7,8 +7,8 @@ import ora from 'ora'
 // Read 1GB Json File called 'drugbank.json' and console.log every drug name which is available under following keys drugbank > drugs > drug > name.
 
 async function main() {
-	const readableStream = createReadStream('dataset/drugbank.json')
-	const totalFileSizeInBytes = statSync('dataset/drugbank.json').size
+	const readableStream = createReadStream('dataset/drugbank2.json')
+	const totalFileSizeInBytes = statSync('dataset/drugbank2.json').size
 
 	let filesize = 0
 
@@ -29,7 +29,7 @@ async function main() {
 	// Perform operations on available dataset.
 	const parser = jsonStream.parse()
 
-	await parser.on('data', (data: DrugbankD) => {
+	await parser.on('data', async (data: DrugbankD) => {
 		console.log(`Found ${data.drugbank.drug.length} drugs.`)
 
 		const substances = []
@@ -42,8 +42,10 @@ async function main() {
 			})
 		}
 
-		// Write substances to a file.
-		const writeStream = createWriteStream('drugbank-processed.json')
+		console.log(`Found ${substances.length} substances.`)
+		console.log(substances)
+
+		const writeStream = createWriteStream('dataset/drugbank.json')
 		writeStream.write(JSON.stringify(substances))
 	})
 
