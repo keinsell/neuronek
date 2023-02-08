@@ -1,4 +1,4 @@
-import { Effect } from '../effect/effect.js'
+import { Effect } from '../../context-effect/effect.js'
 
 export interface ExperienceStageProperties {
 	time?: string

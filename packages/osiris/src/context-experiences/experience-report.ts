@@ -1,7 +1,7 @@
-import { Effect } from '../effect/effect.js'
+import { Effect } from '../context-effect/effect.js'
 import { Ingestion } from '../ingestion/ingestion.js'
-import { ExperienceStageTable } from './experience-stage-table.js'
-import { ExperienceSubject, ExperienceSubjectProperties } from './experience-subject.js'
+import { ExperienceStageTable } from './experience-stage/experience-stagle-table/experience-stage-table.js'
+import { ExperienceSubject, ExperienceSubjectProperties } from './experience-subject/experience-subject.js'
 
 interface ExperienceReportProperties {
 	title?: string

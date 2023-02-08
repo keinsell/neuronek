@@ -1,10 +1,17 @@
 import { RouteOfAdministrationTable } from '../route-of-administration/route-of-administration-table.js'
-import { ChemicalNomenclature } from './chemical-nomenclature/chemical-nomenclature'
+import { ChemicalNomenclature } from './chemical-nomenclature/chemical-nomenclature.js'
 import { ClassMembership } from './class-membership/class-membership.js'
-import { ExternalReferenceTable } from './external-reference-table/external-reference-table.js'
+import { ExternalReferenceTable } from '../substance/external-reference-table/external-reference-table.js'
+import { Entity } from '../__osiris-core/entity.js'
 
-export class Substance {
-	public readonly id: string
+export interface SubstanceProperties {
+	name: string
+	nomenclature: ChemicalNomenclature
+	class_membership: ClassMembership
+	routes_of_administration: RouteOfAdministrationTable
+}
+
+export class Substance extends Entity {
 	/**
 	 * Most popular common name for the substance.
 	 * @example "Amphetamine"
@@ -24,36 +31,17 @@ export class Substance {
 	/**
 	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
 	 */
-	public readonly routes_of_administration?: RouteOfAdministrationTable
+	public readonly routes_of_administration: RouteOfAdministrationTable
 
-	public readonly externals?: ExternalReferenceTable
-
-	private constructor(
-		payload: {
-			name: string
-			nomenclature?: ChemicalNomenclature
-			class_membership?: ClassMembership
-			routes_of_administration?: RouteOfAdministrationTable
-			externals?: ExternalReferenceTable
-		},
-		id?: string
-	) {
-		this.id = id ?? payload.name
+	private constructor(payload: SubstanceProperties, id?: string) {
+		super(id)
 		this.name = payload.name
 		this.nomenclature = payload.nomenclature
 		this.class_membership = payload.class_membership
 		this.routes_of_administration = payload.routes_of_administration
-		this.externals = payload.externals
 	}
 
-	public static create(payload: {
-		id?: string
-		name: string
-		nomenclature?: ChemicalNomenclature
-		class_membership?: ClassMembership
-		routes_of_administration?: RouteOfAdministrationTable
-		externals?: ExternalReferenceTable
-	}): Substance {
-		return new Substance(payload, payload.id)
+	public static create(payload: SubstanceProperties, id?: any): Substance {
+		return new Substance(payload, id)
 	}
 }

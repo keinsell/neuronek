@@ -1,4 +1,4 @@
-import { PsychoactiveClass } from './psychoactive-class/psychoactive-class.js'
+import { PsychoactiveClass } from '../psychoactive-class/psychoactive-class.js'
 
 /**
  * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.

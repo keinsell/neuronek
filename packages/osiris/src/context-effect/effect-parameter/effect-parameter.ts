@@ -1,4 +1,7 @@
-import { EffectParameterOption, EffectParameterOptionProperties } from './effect-parameter-option.js'
+import {
+	EffectParameterOption,
+	EffectParameterOptionProperties
+} from './effect-parameter-value/effect-parameter-option.js'
 
 /** Effect Parameter is used in complex effects such as "Autonomous entity" where occurance of such effect can be clasified in few different ways.  */
 export interface EffectParameterProperties {

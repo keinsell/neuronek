@@ -1,9 +1,9 @@
 import slugify from 'slugify'
 
-import { EffectCategory } from './effect-category.js'
-import { EffectParameter } from './effect-parameter.js'
-import { EffectTag } from './effect-tag.js'
-import { EffectType } from './effect-type.js'
+import { EffectCategory } from './effect-category/effect-category.js'
+import { EffectParameter } from './effect-parameter/effect-parameter.js'
+import { EffectTag } from './effect-tag/effect-tag.js'
+import { EffectType } from './effect-type/effect-type.js'
 
 export interface EffectProperties {
 	/**

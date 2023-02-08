@@ -1,4 +1,4 @@
-import { Effect, EffectJSON, EffectProperties } from '../effect/effect.js'
+import { Effect, EffectJSON, EffectProperties } from '../context-effect/effect.js'
 import { WhenRule, WhenRuleProperties } from '../rules/when.rule.js'
 
 export interface EffectPromotedBySubstanceProperties {

@@ -1,5 +1,5 @@
 import { Dosage } from '../dosage/dosage.js'
-import { Substance } from '../substance/substance.js'
+import { Substance } from '../context-substance/substance.js'
 
 export class MixtureIngredient {
 	substance_name: string
