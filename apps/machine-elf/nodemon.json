@@ -1,0 +1,7 @@
+{
+	"quiet": true,
+	"watch": ["src"],
+	"ext": ".ts,.js",
+	"ignore": [],
+	"exec": "tsx src/index.ts"
+}
