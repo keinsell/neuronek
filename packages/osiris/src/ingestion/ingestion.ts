@@ -3,6 +3,7 @@ import { Mixture } from '../mixtures/mixture.model.js'
 import { RouteOfAdministrationClassification } from '../route-of-administration/RouteOfAdministrationClassification.js'
 import { Subject } from '../subject/subject.js'
 import { Substance } from '../substance/substance.js'
+import { nanoid } from 'nanoid'
 
 export interface IngestionProperties {
 	substance_name?: string
@@ -19,6 +20,7 @@ export interface IngestionProperties {
 }
 
 export class Ingestion {
+	id: string
 	substance_name?: string
 	mixture_id?: string
 	routeOfAdministration?: RouteOfAdministrationClassification
@@ -29,8 +31,9 @@ export class Ingestion {
 	location?: string
 	notes?: string
 
-	private constructor(properties: IngestionProperties) {
+	private constructor(properties: IngestionProperties, id?: string) {
 		Object.assign(this, properties)
+		this.id = id ?? nanoid()
 	}
 
 	// eslint-disable-next-line jsdoc/require-returns
@@ -45,7 +48,7 @@ export class Ingestion {
 		return hasSubstance
 	}
 
-	static create(properties: IngestionProperties): Ingestion {
-		return new Ingestion(properties)
+	static create(properties: IngestionProperties, id?: string): Ingestion {
+		return new Ingestion(properties, id)
 	}
 }

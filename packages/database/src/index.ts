@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-
+export { IngestionRepository } from './repositories/ingestion.repository.js'
 export { EffectRepository } from './repositories/effect.repository.js'
 export { SubstanceRepository } from './repositories/substance.repository.js'
 
