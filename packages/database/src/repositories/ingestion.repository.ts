@@ -1,4 +1,4 @@
-import { IngestionPayload, Prisma, Ingestion as PrismaIngestion } from '@prisma/client'
+import { IngestionPayload, Prisma, PrismaClient, Ingestion as PrismaIngestion } from '@prisma/client'
 import { Dosage, Ingestion, RouteOfAdministrationClassification } from 'osiris'
 import { SubstanceMapper } from './substance.repository.js'
 
@@ -16,23 +16,31 @@ export class IngestionMapper {
 	}
 
 	toPersistence(ingestion: Ingestion): Prisma.IngestionCreateInput {
-		return {
+		let payload: Prisma.IngestionCreateInput = {
 			routeOfAdministration: ingestion.routeOfAdministration,
 			dosage_amount: ingestion.dosage.scalar,
-			dosage_unit: ingestion.dosage.unit,
-			Substance: {
-				connect: {
-					name: ingestion.Substance.name ?? ingestion.substance_name
+			dosage_unit: ingestion.dosage.unit
+		}
+
+		if (ingestion.substance_name || ingestion.Substance || ingestion.Substance.name) {
+			payload = {
+				...payload,
+				Substance: {
+					connect: {
+						name: ingestion.substance_name || ingestion.Substance.name
+					}
 				}
 			}
 		}
+
+		return payload
 	}
 }
 
 export class IngestionRepository {
 	private mapper = new IngestionMapper()
 
-	constructor(private prisma: Prisma.PrismaClient) {}
+	constructor(private prisma: PrismaClient) {}
 
 	async findOneById(id: string): Promise<Ingestion | undefined> {
 		const payload = await this.prisma.ingestion.findUnique({
