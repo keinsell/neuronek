@@ -11,16 +11,23 @@ generator client {
   previewFeatures = ["fullTextSearch", "fullTextIndex", "metrics", "tracing", "filteredRelationCount", "fieldReference", "multiSchema", "extendedWhereUnique", "views", "clientExtensions"]
 }
 
-model User {
+model Account {
+  id       String   @id @default(cuid())
+  username String   @unique
+  email    String?  @unique
+  password String
+  Subject  Subject?
+}
+
+model Subject {
   id          String      @id @default(cuid())
   firstName   String?
   lastName    String?
-  username    String?     @unique
-  email       String?     @unique
   dateOfBirth DateTime?
   weight      Int?
   height      Int?
-  password    String
+  account_id  String?     @unique
+  account     Account?    @relation(fields: [account_id], references: [id])
   Ingestion   Ingestion[]
 }
 
@@ -90,7 +97,7 @@ model Ingestion {
   dosage_amount         Int?
   isEstimatedDosage     Boolean?   @default(false)
   date                  DateTime?
-  userId                String?
-  User                  User?      @relation(fields: [userId], references: [id])
+  subject_id            String?
+  Subject               Subject?   @relation(fields: [subject_id], references: [id])
   Substance             Substance? @relation(fields: [substanceName], references: [name])
 }

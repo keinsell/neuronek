@@ -1,9 +1,9 @@
 import slugify from 'slugify'
-
 import { EffectCategory } from './effect-category/effect-category.js'
 import { EffectParameter } from './effect-parameter/effect-parameter.js'
 import { EffectTag } from './effect-tag/effect-tag.js'
 import { EffectType } from './effect-type/effect-type.js'
+import { Entity } from '../shared.core/entity.js'
 
 export interface EffectProperties {
 	/**
@@ -42,23 +42,8 @@ export interface EffectProperties {
 	psychonautwiki?: string
 }
 
-export interface EffectJSON {
-	name: string
-	slug: string
-	type?: EffectType
-	category?: EffectCategory
-	tags?: EffectTag[]
-	parameters?: EffectParameter[]
-	summary?: string
-	description?: string[]
-	see_also?: Effect[]
-	effectindex?: string
-	psychonautwiki?: string
-}
-
 // https://effectindex.com/effects/
-export class Effect implements EffectProperties {
-	id: string
+export class Effect extends Entity {
 	/**
 	 * @example "Jamais vu"
 	 */
@@ -96,17 +81,23 @@ export class Effect implements EffectProperties {
 	effectindex?: string
 	psychonautwiki?: string
 
-	constructor(properties: EffectProperties, id?: string) {
-		Object.assign(this, properties)
-		this.slug = slugify(this.name, { lower: true })
-		this.id = id || this.slug
+	private constructor(properties: EffectProperties, id?: string) {
+		super(id)
+
+		this.name = properties.name
+		this.slug = properties.slug || slugify(properties.name)
+		this.type = properties.type
+		this.category = properties.category
+		this.tags = properties.tags
+		this.parameters = properties.parameters
+		this.summary = properties.summary
+		this.description = properties.description
+		this.see_also = properties.see_also
+		this.effectindex = properties.effectindex
+		this.psychonautwiki = properties.psychonautwiki
 	}
 
-	static fromJSON(json: EffectJSON): Effect {
-		return new Effect(json)
-	}
-
-	toJSON(): EffectJSON {
-		return { ...this }
+	static create(properties: EffectProperties, id?: string): Effect {
+		return new Effect(properties, id)
 	}
 }
