@@ -17,4 +17,5 @@ jobs:
           labelPullRequestsWhenApproved: 'true'
           labelPullRequestsWhenReviewNeeded: 'false'
           failJobsWhenReviewNeeded: 'false'
-      - uses: sturdy-dev/codeball-action/suggester/@v2
+      - name: Suggest Changes
+        uses: sturdy-dev/codeball-action/suggester/@v2
