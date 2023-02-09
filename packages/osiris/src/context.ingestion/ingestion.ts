@@ -25,6 +25,7 @@ export interface IngestionProperties {
 	Subject?: Subject
 }
 
+// TODO: Think how to implement relations to this calss.
 export class Ingestion extends Entity {
 	/** Substance name. */
 	substance_name?: string
