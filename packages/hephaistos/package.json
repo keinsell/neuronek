@@ -13,12 +13,9 @@
 	"module": "dist/index.cjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsup-node",
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
-		"hephaistos": "tsx --watch ./src/bin.ts",
-		"predev": "yarn generate",
-		"prestart": "yarn generate"
+		"hephaistos": "tsx --watch ./src/bin.ts"
 	},
 	"dependencies": {
 		"chalk": "^5.2.0",
@@ -37,6 +34,7 @@
 		"pqm": "^1.0.0",
 		"psyxts-dataset": "*",
 		"signale": "^1.4.0",
+		"slugify": "^1.6.5",
 		"type-fest": "^3.5.3",
 		"unitmath": "^0.8.8"
 	},

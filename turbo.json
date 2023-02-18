@@ -41,7 +41,7 @@
 		"db:generate": {
 			"dependsOn": ["^db:generate"],
 			"outputs": ["node_modules/@prisma/client/generator-build/index.js"],
-			"cache": true
+			"cache": false
 		},
 		"hephaistos": {
 			"inputs": ["src/**/*.ts"],
