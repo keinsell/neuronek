@@ -25,7 +25,7 @@
 		"meilisearch": "^0.30.0",
 		"nanoid": "^4.0.0",
 		"neverthrow": "^6.0.0",
-		"openpgp": "4.10.10",
+		"openpgp": "latest",
 		"osiris": "*",
 		"passport": "^0.6.0",
 		"passport-jwt": "^4.0.1",
