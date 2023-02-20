@@ -15,6 +15,7 @@
 	},
 	"dependencies": {
 		"argon2": "^0.30.3",
+		"cors": "^2.8.5",
 		"database": "*",
 		"diod": "^2.0.0",
 		"envalid": "^7.3.1",
