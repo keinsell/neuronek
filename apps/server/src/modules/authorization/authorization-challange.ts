@@ -1,37 +1,47 @@
 import { Account } from '@prisma/client'
 import { nanoid } from 'nanoid'
 import { randomBytes } from 'node:crypto'
-import openpgp from 'openpgp'
+import { Key, readKey, encrypt, createMessage } from 'openpgp'
 import { keyv } from '../../infrastructure/keyv.infra.js'
 import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 import { JwtToken } from './jwt-token.js'
 
 export async function validatePublicPgpKey(publicKey: string) {
+	const strings = publicKey.split('\n')
+	const joinnedStrings = strings.join('\n')
+
+	let parsedKey: Key | undefined = undefined
+
 	try {
-		const { keys } = await openpgp.key.readArmored(publicKey)
-
-		if (keys.length === 0) {
-			return false
-		}
-
-		return true
+		parsedKey = await readKey({ armoredKey: joinnedStrings })
 	} catch (error) {
 		return false
 	}
+
+	if (!parsedKey || parsedKey.isPrivate()) {
+		return false
+	}
+
+	return true
 }
 
 // https://keybase.io/kbpgp
 // https://github.com/openpgpjs/openpgpjs
 export async function defineAuthorizationChallangeForAccount(account: Account) {
-	const publicKey = await openpgp.key.readArmored(account.publicKey)
+	const strings = account.publicKey.split('\n')
+	const joinnedStrings = strings.join('\n')
+
+	const publicKey = await readKey({
+		armoredKey: joinnedStrings
+	})
 
 	// 1. Generate random message
 	const secretMessage = randomBytes(32).toString('hex')
 
 	// 2. Encrypt with public-key
-	const message = await openpgp.encrypt({
-		message: openpgp.message.fromText(secretMessage),
-		publicKeys: publicKey.keys
+	const message = await encrypt({
+		message: await createMessage({ text: secretMessage }),
+		encryptionKeys: publicKey.toPublic()
 	})
 
 	// 3. Generate unique id for challange
