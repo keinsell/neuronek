@@ -23,6 +23,7 @@
 		"meilisearch": "^0.30.0",
 		"nanoid": "^4.0.0",
 		"neverthrow": "^6.0.0",
+		"openpgp": "^5.6.0",
 		"osiris": "*",
 		"passport": "^0.6.0",
 		"passport-jwt": "^4.0.1",
@@ -31,6 +32,7 @@
 		"tsoa": "^5.0.0"
 	},
 	"devDependencies": {
+		"@openpgp/web-stream-tools": "^0.0.13",
 		"@types/express": "^4.17.16",
 		"@types/jsonwebtoken": "^9.0.1",
 		"@types/node": "^18.11.18",
