@@ -13,12 +13,19 @@ const RegisterPage = () => {
 
 	const handleSubmitPublicKey = async () => {
 		try {
-			const response = await axios.post('/api/registration/public-key', { publicKey })
+			const response = await axios.post('http://localhost:1337/user', {
+				username: username,
+				public_key: publicKey.split('\n').join('\n')
+			})
 			setEncryptedMessage(response.data.encryptedMessage)
 			setError('')
+
+			// Get challangeId and message from response
+			const { challangeId, message } = response.data
+
 			// Redirect to SolveChallenge page
-			router.push('/solve-challange', {
-				query: { publicKey, username }
+			router.replace('/solve-challange', {
+				query: { challangeId, message }
 			})
 		} catch (err) {
 			setError(err.message)

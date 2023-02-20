@@ -2,4 +2,6 @@
 
 import { HttpApplication } from '../dist/index.js'
 
-HttpApplication.listen(1337).on('listening', () => console.log('Server started on http://localhost:3000/docs'))
+HttpApplication.listen(Number(process.env.PORT)).on('listening', () =>
+	console.log(`Server started on ${process.env.API_URL}/docs`)
+)

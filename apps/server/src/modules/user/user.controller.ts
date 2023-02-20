@@ -26,8 +26,9 @@ export class UserController {
 		}
 	) {
 		// Decode public key from base64
-		const decodedPublicKey = Buffer.from(body.public_key, 'base64').toString()
-		const account = await registerAccount(body.username, decodedPublicKey)
+		// const decodedPublicKey = Buffer.from(body.public_key, 'base64').toString()
+		// console.log(decodedPublicKey)
+		const account = await registerAccount(body.username, body.public_key)
 		const challange = await defineAuthorizationChallangeForAccount(account)
 		return challange
 	}

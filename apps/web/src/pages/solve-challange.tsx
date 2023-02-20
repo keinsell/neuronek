@@ -1,15 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Button, FormControl, FormLabel, Heading, Input, Text, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 
 const SolveChallenge = () => {
-	const [encodedMessage, setEncodedMessage] = useState('')
+	const router = useRouter()
+	const { challangeId, message } = router.query
+	const [encodedMessage, setEncodedMessage] = useState(message)
 	const [decodedMessage, setDecodedMessage] = useState('')
 	const [error, setError] = useState('')
 
-	const router = useRouter()
-	const { publicKey, username } = router.query
+	console.log(message)
+	console.log(challangeId)
+
+	useEffect(() => {
+		setEncodedMessage(message as string)
+	}, [message])
 
 	const handleSubmitDecodedMessage = async () => {
 		try {
