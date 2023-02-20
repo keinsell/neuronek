@@ -7,8 +7,8 @@ import { useRouter } from 'next/router.js'
 const RegisterPage = () => {
 	const [username, setUsername] = useState('')
 	const [publicKey, setPublicKey] = useState('')
-	const [encryptedMessage, setEncryptedMessage] = useState('')
 	const [error, setError] = useState('')
+	const [challengeData, setChallengeData] = useState({})
 	const router = useRouter()
 
 	const handleSubmitPublicKey = async () => {
@@ -17,15 +17,17 @@ const RegisterPage = () => {
 				username: username,
 				public_key: publicKey.split('\n').join('\n')
 			})
-			setEncryptedMessage(response.data.encryptedMessage)
+
 			setError('')
 
-			// Get challangeId and message from response
-			const { challangeId, message } = response.data
+			setChallengeData({
+				challengeId: response.data.challange_id,
+				message: response.data.message
+			})
 
 			// Redirect to SolveChallenge page
-			router.replace('/solve-challange', {
-				query: { challangeId, message }
+			router.push('/solve-challange', {
+				query: challengeData
 			})
 		} catch (err) {
 			setError(err.message)
