@@ -1,4 +1,3 @@
-import { EffectRepository, SubstanceRepository } from 'database'
 import { Service } from 'diod'
 import { MeiliSearch } from 'meilisearch'
 
@@ -7,24 +6,18 @@ import { SearchResponse } from './search.response.js'
 
 @Service()
 export class MeilisearchService {
-	private substanceRepository: SubstanceRepository
-	private effectRepository: EffectRepository
 	private melisearch: MeiliSearch = new MeiliSearch({
 		host: 'http://localhost:7700',
 		apiKey: 'masterKey'
 	})
 
-	constructor(protected prisma: PrismaService) {
-		this.substanceRepository = new SubstanceRepository(prisma)
-		this.effectRepository = new EffectRepository(prisma)
-	}
+	constructor(protected prisma: PrismaService) {}
 
 	async index() {
-		const substance_index = await this.substanceRepository.buildSearchIndexDocument()
-		const effect_index = await this.effectRepository.buildSearchIndexDocument()
-
-		await this.melisearch.index('substances').addDocuments(substance_index)
-		await this.melisearch.index('effects').addDocuments(effect_index)
+		// const substance_index = await this.substanceRepository.buildSearchIndexDocument()
+		// const effect_index = await this.effectRepository.buildSearchIndexDocument()
+		// await this.melisearch.index('substances').addDocuments(substance_index)
+		// await this.melisearch.index('effects').addDocuments(effect_index)
 	}
 
 	async search(query: string, index: 'substances' | 'effects') {

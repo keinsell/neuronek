@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Button, FormControl, FormLabel, Input, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, Input, Heading, Text, Textarea } from '@chakra-ui/react'
 import axios from 'axios'
 import { Link } from '@chakra-ui/next-js'
 import { useRouter } from 'next/router.js'
@@ -43,10 +43,11 @@ const RegisterPage = () => {
 			</FormControl>
 			<FormControl mb={4}>
 				<FormLabel htmlFor='public-key'>PGP Public Key</FormLabel>
-				<Input
+				<Textarea
 					id='public-key'
 					value={publicKey}
 					onChange={event => setPublicKey(event.target.value)}
+					rows={10}
 					sx={{
 						fontFamily: 'mono',
 						fontSize: 'sm',

@@ -16,7 +16,7 @@ const builder = new diod.ContainerBuilder()
 const modules: Newable<DependencyInjectionModule>[] = [UserModule, EffectModule, SubstanceModule, IngestionModule]
 
 builder.register(PrismaService).useInstance(new PrismaService())
-builder.register(JwtStrategy).use(JwtStrategy)
+builder.register(JwtStrategy).useInstance(new JwtStrategy())
 builder.registerAndUse(MeilisearchService)
 
 modules.forEach(module => new module(builder).register())

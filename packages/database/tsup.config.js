@@ -1,5 +1,5 @@
 export default {
-	entry: ['src/index.ts'],
+	entry: ['src/database.ts'],
 	silent: false,
 	splitting: true,
 	target: 'node18',

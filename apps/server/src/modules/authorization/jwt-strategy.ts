@@ -1,7 +1,7 @@
 import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt'
-import { UserRepository } from '../user/user.repository.js'
 import { Service } from 'diod'
 import { JWT_SECRET } from '../../shared/configuration/environment-variables.js'
+import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 
 const options: StrategyOptions = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -12,13 +12,9 @@ const options: StrategyOptions = {
 
 @Service()
 export class JwtStrategy extends Strategy {
-	constructor(private userRepository: UserRepository) {
+	constructor() {
 		super(options, async (payload, done) => {
-			console.log(payload)
-
-			const user = await this.userRepository.findByUserId(payload.sub)
-
-			console.log(user)
+			const user = await prisma.account.findUnique(payload.sub)
 
 			if (!user) {
 				return done(null, false)

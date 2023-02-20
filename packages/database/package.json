@@ -3,8 +3,8 @@
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "./dist/database.js",
+	"types": "./dist/database.d.ts",
 	"files": [
 		"src",
 		"dist"

@@ -1,9 +1,6 @@
-import { Prisma, User } from '.prisma/client'
+import { Prisma } from '@prisma/client'
 import { PrismaClient } from 'database'
 import { Service } from 'diod'
-
-export type PrismaUserRecord = User
-export type PrismaCreateUserRecord = Prisma.UserCreateInput
 
 @Service()
 export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel> {
@@ -31,3 +28,5 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
 		this.$connect()
 	}
 }
+
+export const prisma = new PrismaService()

@@ -12,11 +12,10 @@ generator client {
 }
 
 model Account {
-  id       String   @id @default(cuid())
-  username String   @unique
-  email    String?  @unique
-  password String
-  Subject  Subject?
+  id        String    @id @default(cuid())
+  username  String    @unique
+  publicKey String
+  Subject   Subject[]
 }
 
 model Subject {

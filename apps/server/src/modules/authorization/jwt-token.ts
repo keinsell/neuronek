@@ -1,7 +1,7 @@
-import { User } from '../user/user.entity.js'
 import jsonwebtoken from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
 import { JWT_SECRET } from '../../shared/configuration/environment-variables.js'
+import { Account } from '@prisma/client'
 
 export class JwtToken {
 	/**
@@ -39,9 +39,9 @@ export class JwtToken {
 		}
 	}
 
-	static fromUser(user: User): JwtToken {
+	static byAccount(account: Account): JwtToken {
 		const token = new JwtToken({
-			userId: user.id
+			userId: account.id
 		})
 		return token
 	}
