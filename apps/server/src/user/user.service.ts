@@ -12,7 +12,7 @@ export async function registerAccount(username: string, publickey: string) {
 	}
 
 	// Validate provided public-key
-	if (!validatePublicPgpKey(publickey)) {
+	if (!(await validatePublicPgpKey(publickey))) {
 		throw new Error('Provided public-key is invalid')
 	}
 
