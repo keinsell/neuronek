@@ -1,4 +1,4 @@
-import { PrismaService, prisma } from '../../shared/infrastructure/prisma/prisma.js'
+import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 import { validatePublicPgpKey } from '../authorization/authorization-challange.js'
 
 export async function registerAccount(username: string, publickey: string) {
@@ -25,4 +25,9 @@ export async function registerAccount(username: string, publickey: string) {
 	})
 
 	return account
+}
+
+export async function findAccountById(accountId: string) {
+	const account = await prisma.account.findUnique({ where: { id: accountId } })
+	return account ? account : null
 }

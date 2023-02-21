@@ -1,10 +1,7 @@
 import { Service } from 'diod'
 import { Body, Get, OperationId, Post, Query, Route, Tags } from 'tsoa'
 import { registerAccount } from './user.service.js'
-import {
-	defineAuthorizationChallangeForAccount,
-	solveAuthorizationChallange
-} from '../authorization/authorization-challange.js'
+import { AuthorizationChallange } from '../authorization/authorization-challange.js'
 import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 
 @Service()
@@ -29,7 +26,7 @@ export class UserController {
 		// const decodedPublicKey = Buffer.from(body.public_key, 'base64').toString()
 		// console.log(decodedPublicKey)
 		const account = await registerAccount(body.username, body.public_key)
-		const challange = await defineAuthorizationChallangeForAccount(account)
+		const challange = await AuthorizationChallange.defineForAccount(account)
 		return challange
 	}
 
@@ -46,7 +43,7 @@ export class UserController {
 		}
 
 		// Define authorization challange for account
-		const challange = await defineAuthorizationChallangeForAccount(account)
+		const challange = await AuthorizationChallange.defineForAccount(account)
 
 		return challange
 	}
@@ -55,7 +52,7 @@ export class UserController {
 	@OperationId('user-solve-authorization-challange')
 	async solveChallange(challangeId: string, @Query('message') message: string) {
 		// Find and solve authorization challange
-		const solution = await solveAuthorizationChallange(challangeId, message)
+		const solution = await AuthorizationChallange.solve(challangeId, message)
 
 		if (!solution) {
 			return null
