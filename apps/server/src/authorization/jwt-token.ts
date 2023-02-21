@@ -1,6 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
-import { JWT_SECRET } from '../../shared/configuration/environment-variables.js'
+import { JWT_SECRET } from '../shared/configuration/environment-variables.js'
 import { Account } from '@prisma/client'
 
 export class JwtToken {

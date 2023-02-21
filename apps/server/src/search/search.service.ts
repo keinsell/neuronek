@@ -1,7 +1,7 @@
 import { Service } from 'diod'
 import { MeiliSearch } from 'meilisearch'
 
-import { PrismaService } from '../../shared/infrastructure/prisma/prisma.js'
+import { PrismaService } from '../shared/infrastructure/prisma/prisma.js'
 import { SearchResponse } from './search.response.js'
 
 @Service()

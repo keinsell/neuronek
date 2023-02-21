@@ -1,4 +1,4 @@
-import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
+import { prisma } from '../shared/infrastructure/prisma/prisma.js'
 import { validatePublicPgpKey } from '../authorization/authorization-challange.js'
 
 export async function registerAccount(username: string, publickey: string) {

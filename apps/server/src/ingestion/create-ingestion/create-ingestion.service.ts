@@ -1,8 +1,8 @@
 import { Result, ok } from 'neverthrow'
-import { Usecase } from '../../../shared/common/domain/usecase.js'
+import { Usecase } from '../../shared/common/domain/usecase.js'
 import { CreateIngestionRequest } from './create-ingestion.request.js'
 import { Dosage, Ingestion, RouteOfAdministrationClassification } from 'osiris'
-import { PrismaService } from '../../../shared/infrastructure/prisma/prisma.js'
+import { PrismaService } from '../../shared/infrastructure/prisma/prisma.js'
 import { Service } from 'diod'
 
 @Service()

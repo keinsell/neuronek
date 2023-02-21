@@ -2,8 +2,8 @@ import { Account } from '@prisma/client'
 import { nanoid } from 'nanoid'
 import { randomBytes } from 'node:crypto'
 import { Key, readKey, encrypt, createMessage } from 'openpgp'
-import { keyv } from '../../infrastructure/keyv.infra.js'
-import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
+import { keyv } from '../infrastructure/keyv.infra.js'
+import { prisma } from '../shared/infrastructure/prisma/prisma.js'
 import { JwtToken } from './jwt-token.js'
 
 export namespace AuthorizationChallange {

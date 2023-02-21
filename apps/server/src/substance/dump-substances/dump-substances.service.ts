@@ -3,8 +3,8 @@ import { Service } from 'diod'
 import { ok, Result } from 'neverthrow'
 import { Substance } from 'osiris'
 
-import { Usecase } from '../../../shared/common/domain/usecase.js'
-import { PrismaService } from '../../../shared/infrastructure/prisma/prisma.js'
+import { Usecase } from '../../shared/common/domain/usecase.js'
+import { PrismaService } from '../../shared/infrastructure/prisma/prisma.js'
 
 @Service()
 export class DumpSubstancesService implements Usecase<never, Substance[], never> {
