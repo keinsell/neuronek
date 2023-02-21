@@ -7,7 +7,7 @@ import { prisma } from '../shared/infrastructure/prisma/prisma.js'
 import { JwtToken } from './jwt-token.js'
 
 export namespace AuthorizationChallange {
-	interface AuthorizationChallange {
+	export interface AuthorizationChallange {
 		challangeId: string
 		message: string
 	}
@@ -58,11 +58,11 @@ export namespace AuthorizationChallange {
 		return JwtToken.byAccount(account)
 	}
 
-	async function generateSecretMessage() {
+	export async function generateSecretMessage() {
 		return randomBytes(32).toString('hex')
 	}
 
-	async function readPublicKey(publicKey: string) {
+	export async function readPublicKey(publicKey: string) {
 		const strings = publicKey.split('\n')
 		const joinnedStrings = strings.join('\n')
 
@@ -71,7 +71,7 @@ export namespace AuthorizationChallange {
 		})
 	}
 
-	async function encryptMessage(message: string, to: Key) {
+	export async function encryptMessage(message: string, to: Key) {
 		return await encrypt({
 			message: await createMessage({ text: message }),
 			encryptionKeys: to.toPublic()
