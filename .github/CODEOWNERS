@@ -3,7 +3,6 @@
 /.yarn/cache/ @keinsell
 /apps/server/ @keinsell
 /apps/server/bin/server.js @keinsell
-/apps/server/src/modules/user/password/password.vo.ts @keinsell
 /apps/server/src/shared/common/domain/ @keinsell
 /apps/server/src/shared/common/module/module.ts @keinsell
 /apps/server/src/shared/configuration/environment-variables.ts @keinsell
@@ -11,11 +10,9 @@
 /apps/server/src/shared/infrastructure/ioc/container.ts @keinsell
 /apps/server/src/shared/infrastructure/prisma/prisma.ts @keinsell
 /packages/database/prisma/schema.prisma @keinsell
-/packages/database/src/index.ts @keinsell
 /packages/dataset-effectindex/effectindex.json @keinsell
 /packages/dataset-effectindex/src/index.ts @keinsell
 /packages/hephaistos/cache/.gitkeep @keinsell
-/packages/hephaistos/src/__core/localstorage.ts @keinsell
-/packages/hephaistos/src/substance/provider/tripsit/README.md @keinsell
+/packages/hephaistos/src/bin.ts @keinsell
 /packages/osiris/src/context.ingestion/ingestion.ts @keinsell
 /packages/osiris/src/index.ts @keinsell
