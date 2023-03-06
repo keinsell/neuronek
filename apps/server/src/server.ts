@@ -6,22 +6,29 @@ import { passport } from './shared/infrastructure/authorization/passport.js'
 import cors from 'cors'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
+import { ProfilingIntegration } from '@sentry/profiling-node'
+import { prisma } from './shared/infrastructure/prisma/prisma.js'
 
 export const app = express()
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN,
-	integrations: [
-		// enable HTTP calls tracing
-		new Sentry.Integrations.Http({ tracing: true }),
-		// enable Express.js middleware tracing
-		new Tracing.Integrations.Express({ app })
-	],
 
 	// Set tracesSampleRate to 1.0 to capture 100%
 	// of transactions for performance monitoring.
 	// We recommend adjusting this value in production
-	tracesSampleRate: 1.0
+	tracesSampleRate: 1.0,
+	// Profiling sample rate is relative to tracesSampleRate
+	profilesSampleRate: 1.0,
+
+	integrations: [
+		new ProfilingIntegration(),
+		// enable HTTP calls tracing
+		new Sentry.Integrations.Http({ tracing: true }),
+		// enable Express.js middleware tracing
+		new Tracing.Integrations.Express({ app }),
+		new Tracing.Integrations.Prisma({ client: prisma })
+	]
 })
 
 // RequestHandler creates a separate execution context using domains, so that every
@@ -41,7 +48,9 @@ app.use(passport.initialize())
 app.use(cors())
 
 app.use('/docs', swaggerUI.serve, (_req: Request, res: Response) => {
-	return res.send(swaggerUI.generateHTML(openapi))
+	const docs = swaggerUI.generateHTML(openapi)
+
+	return res.send(docs)
 })
 
 RegisterRoutes(app)

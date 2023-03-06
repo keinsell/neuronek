@@ -15,6 +15,7 @@
 	},
 	"dependencies": {
 		"@sentry/node": "^7.41.0",
+		"@sentry/profiling-node": "^0.2.2",
 		"@sentry/tracing": "^7.41.0",
 		"argon2": "^0.30.3",
 		"cors": "^2.8.5",
