@@ -5,12 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="282bbea3-c56c-48d8-8835-c484edeec3dc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/user/user.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/user/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/register.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/register.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/solve-challange.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/solve-challange.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/authorization/authorization-challange.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/authorization/authorization-challange.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/authorization/jwt-strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/authorization/jwt-strategy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/authorization/jwt-token.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/authorization/jwt-token.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/effect/dump-effects/dump-effects.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/effect/dump-effects/dump-effects.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/effect/dump-effects/dump-effects.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/effect/dump-effects/dump-effects.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/effect/effect.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/effect/effect.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/effect/effect.response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/effect/effect.response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/effect/search-effect/search-effect.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/effect/search-effect/search-effect.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/infrastructure/keyv.infra.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/infrastructure/keyv.infra.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/ingestion/create-ingestion/create-ingestion.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/ingestion/create-ingestion/create-ingestion.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/ingestion/create-ingestion/create-ingestion.request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/ingestion/create-ingestion/create-ingestion.request.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/ingestion/create-ingestion/create-ingestion.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/ingestion/create-ingestion/create-ingestion.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/ingestion/ingestion.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/ingestion/ingestion.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/ingestion/ingestion.response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/ingestion/ingestion.response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/search/search.response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/search/search.response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/search/search.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/search/search.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/common/domain/enity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/common/domain/enity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/common/domain/error.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/common/domain/error.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/common/domain/usecase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/common/domain/usecase.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/common/module/module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/common/module/module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/configuration/environment-variables.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/configuration/environment-variables.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/infrastructure/authorization/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/infrastructure/authorization/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/infrastructure/authorization/passport.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/infrastructure/authorization/passport.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/infrastructure/ioc/container.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/infrastructure/ioc/container.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/shared/infrastructure/prisma/prisma.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/shared/infrastructure/prisma/prisma.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/dump-substances/dump-substances.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/dump-substances/dump-substances.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/dump-substances/dump-substances.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/dump-substances/dump-substances.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/search-substance/search-substance.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/search-substance/search-substance.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/search-substance/search-substance.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/search-substance/search-substance.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/substance.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/substance.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/substance/substance.response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/substance/substance.response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/errors/user-not-found.error.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/errors/user-not-found.error.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/errors/username-taken.error.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/errors/username-taken.error.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/user.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/user.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/user.response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server/src/user/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server/src/deprecated/user/user.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +71,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "javascript.nodejs.core.library.configured.version": "19.4.0",
-    "javascript.nodejs.core.library.typings.version": "18.14.0",
+    "javascript.nodejs.core.library.typings.version": "18.15.3",
     "last_opened_file_path": "/Users/keinsell/Projects/neuronek",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -53,6 +85,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/server/src/deprecated" />
+      <recent name="$PROJECT_DIR$/apps/server/src" />
+      <recent name="$PROJECT_DIR$/apps/server/src/modules" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -68,6 +107,7 @@
       <workItem from="1675107432328" duration="1920000" />
       <workItem from="1675171254589" duration="570000" />
       <workItem from="1676999708673" duration="154000" />
+      <workItem from="1679090606979" duration="479000" />
     </task>
     <servers />
   </component>
