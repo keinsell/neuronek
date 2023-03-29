@@ -52,15 +52,15 @@ model RouteOfAdministration {
   id                  String     @id @default(cuid())
   substanceName       String?
   name                String
-  bioavailability     Int[]
+  bioavailability     Float[]
   dosage_kind         String
   dosage_unit         String
   dosage_per_kilogram Boolean    @default(false)
-  thereshold_dosage   Int
-  light_dosage        Int[]
-  common_dosage       Int[]
-  strong_dosage       Int[]
-  heavy_dosage        Int
+  thereshold_dosage   Float
+  light_dosage        Float[]
+  common_dosage       Float[]
+  strong_dosage       Float[]
+  heavy_dosage        Float
   onset_phase         Int[]
   comeup_phase        Int[]
   peak_phase          Int[]
