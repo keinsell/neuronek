@@ -3,5 +3,5 @@
 	"watch": ["src"],
 	"ext": ".ts,.js",
 	"ignore": [],
-	"exec": "tsoa spec-and-routes && tsup-node src/index.ts --format esm --silent && node ./bin/server.js"
+	"exec": "tsup-node src/index.ts --format esm --silent && node ./bin/server.js"
 }
