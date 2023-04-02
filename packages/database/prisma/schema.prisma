@@ -27,6 +27,7 @@ model AuthenticationChallange {
   valid_until  DateTime
   response     String?
   success      Boolean?
+  privateKey   String
   date_created DateTime @default(now())
 }
 

@@ -1,7 +1,6 @@
 import { PrismaClient } from 'database'
 import { Request, Response } from '@tinyhttp/app'
 import * as openpgp from 'openpgp'
-import { SHARED_SERVER_KEY } from '../create-authorization-challenge/createAuthChallenge.js'
 
 const prisma = new PrismaClient()
 
@@ -20,7 +19,7 @@ export const solveAuthChallenge = async (req: Request, res: Response): Promise<v
 		return
 	}
 
-	const privateKey = await openpgp.readKey({ armoredKey: SHARED_SERVER_KEY.privateKey })
+	const privateKey = await openpgp.readKey({ armoredKey: authChallenge.privateKey })
 
 	const { data: decryptedChallenge } = await openpgp.decrypt({
 		message: await openpgp.readMessage({ armoredMessage: authChallenge.challenge }),

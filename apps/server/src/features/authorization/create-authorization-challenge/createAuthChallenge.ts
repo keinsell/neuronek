@@ -16,15 +16,16 @@ interface AuthorizationChallange {
 	challenge: string
 }
 
-export const SHARED_SERVER_KEY = await openpgp.generateKey({
-	curve: 'ed25519',
-	userIDs: [{ name: 'Shared Server Key', email: 'neuronek@neuronek.xyz' }]
-})
-
 export const createAuthChallenge = async (username: string): Promise<AuthorizationChallange> => {
 	const challenge = generateAuthCode()
 	const validUntil = new Date()
 	validUntil.setMinutes(validUntil.getMinutes() + 10) // Challenge is valid for 10 minutes
+
+	const SHARED_SERVER_KEY = await openpgp.generateKey({
+		curve: 'ed25519',
+		userIDs: [{ name: 'Shared Server Key', email: 'neuronek@neuronek.xyz' }],
+		keyExpirationTime: 1000 * 60 * 10 // 10 Minutes
+	})
 
 	// Get user's public key
 	const user = await prisma.account.findUnique({
@@ -57,7 +58,8 @@ export const createAuthChallenge = async (username: string): Promise<Authorizati
 	const authChallenge = await prisma.authenticationChallange.create({
 		data: {
 			challenge: encryptedMessage,
-			valid_until: validUntil.toISOString()
+			valid_until: validUntil.toISOString(),
+			privateKey: SHARED_SERVER_KEY.privateKey
 		}
 	})
 
