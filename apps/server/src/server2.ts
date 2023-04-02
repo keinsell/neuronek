@@ -3,6 +3,7 @@ import { json } from 'milliparsec'
 import { PrismaClient } from '@prisma/client'
 import { createAccount } from './features/account/create-account/create-account.controller.js'
 import { defineNewAuthChallenge } from './features/authorization/create-authorization-challenge/createAuthChallenge.js'
+import { solveAuthChallenge } from './features/authorization/solve-authorization-challenge/solve-auth-challange.js'
 
 const prisma = new PrismaClient()
 const app = new App()
@@ -18,6 +19,10 @@ app.post('/account', async (req, res) => {
 
 app.get('/challange/:username', async (req, res) => {
 	return await defineNewAuthChallenge(req, res)
+})
+
+app.post('/challange', async (req, res) => {
+	return await solveAuthChallenge(req, res)
 })
 
 app.listen(666, () => {

@@ -1,11 +1,9 @@
-import { App } from '@tinyhttp/app'
 import * as openpgp from 'openpgp'
 import { PrismaClient } from '@prisma/client'
 import { randomBytes } from 'crypto'
 import { Request, Response } from '@tinyhttp/app'
 
 const prisma = new PrismaClient()
-const app = new App()
 
 function generateAuthCode(): string {
 	const randomBytesLength = 32 // 32 bytes = 256 bits
@@ -17,6 +15,11 @@ interface AuthorizationChallange {
 	id: string
 	challenge: string
 }
+
+export const SHARED_SERVER_KEY = await openpgp.generateKey({
+	curve: 'ed25519',
+	userIDs: [{ name: 'Shared Server Key', email: 'neuronek@neuronek.xyz' }]
+})
 
 export const createAuthChallenge = async (username: string): Promise<AuthorizationChallange> => {
 	const challenge = generateAuthCode()
@@ -42,9 +45,13 @@ export const createAuthChallenge = async (username: string): Promise<Authorizati
 		armoredKey: user.publicKey
 	})
 
+	const serverPublicKey = await openpgp.readKey({
+		armoredKey: SHARED_SERVER_KEY.publicKey
+	})
+
 	const encryptedMessage = await openpgp.encrypt({
 		message,
-		encryptionKeys: [publicKey]
+		encryptionKeys: [publicKey, serverPublicKey]
 	})
 
 	const authChallenge = await prisma.authenticationChallange.create({
