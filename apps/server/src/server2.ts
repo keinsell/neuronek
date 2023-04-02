@@ -1,9 +1,9 @@
 import { App } from '@tinyhttp/app'
 import { json } from 'milliparsec'
 import { PrismaClient } from '@prisma/client'
-import { createAccount } from './features/account/create-account/create-account.controller.js'
-import { defineNewAuthChallenge } from './features/authorization/create-authorization-challenge/createAuthChallenge.js'
-import { solveAuthChallenge } from './features/authorization/solve-authorization-challenge/solve-auth-challange.js'
+import { createAccount } from './features/create-account/create-account.controller.js'
+import { defineNewAuthChallenge } from './features/create-authorization-challenge/createAuthChallenge.js'
+import { solveAuthChallenge } from './features/solve-authorization-challenge/solve-auth-challange.js'
 
 const prisma = new PrismaClient()
 const app = new App()

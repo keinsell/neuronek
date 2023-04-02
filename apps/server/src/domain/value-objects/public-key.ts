@@ -16,8 +16,10 @@ const validatePublicKey = (input: unknown, context: ioTs.Context): ioTs.Validati
 }
 
 export const PublicKey = new ioTs.Type<string>(
-	'PgpPublicKey',
-	(input: unknown): input is string => validatePublicKey(input, {}),
+	'PublicKey',
+	(input: unknown): input is string => {
+		return typeof input === 'string' && validatePublicKey(input, [])._tag === 'Right'
+	},
 	validatePublicKey,
 	ioTs.identity
 )

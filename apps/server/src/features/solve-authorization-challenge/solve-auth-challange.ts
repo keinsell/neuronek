@@ -1,26 +1,29 @@
 import { PrismaClient } from 'database'
 import { Request, Response } from '@tinyhttp/app'
 import * as openpgp from 'openpgp'
+import { sign } from 'jsonwebtoken'
+import { generateJwtToken } from '../authorization/generate-jwt-token'
 
 const prisma = new PrismaClient()
 
 export const solveAuthChallenge = async (req: Request, res: Response): Promise<void> => {
 	const { authChallengeId, message } = req.body
-
 	if (!authChallengeId || !message) {
 		res.status(400).json({ error: 'Missing authChallengeId or response in request body' })
 		return
 	}
 
-	const authChallenge = await prisma.authenticationChallange.findUnique({ where: { id: authChallengeId } })
-
+	// First, we check if the given challenge id is valid
+	const authChallenge = await prisma.authenticationChallange.findUnique({
+		where: { id: authChallengeId }
+	})
 	if (!authChallenge) {
 		res.status(400).json({ error: 'Invalid authChallengeId' })
 		return
 	}
 
+	// Then, we check if the given response is valid
 	const privateKey = await openpgp.readKey({ armoredKey: authChallenge.privateKey })
-
 	const { data: decryptedChallenge } = await openpgp.decrypt({
 		message: await openpgp.readMessage({ armoredMessage: authChallenge.challenge }),
 		decryptionKeys: [privateKey as openpgp.PrivateKey]
@@ -35,6 +38,7 @@ export const solveAuthChallenge = async (req: Request, res: Response): Promise<v
 		return
 	}
 
+	// Finally, we check if the challenge has expired
 	const now = new Date()
 	if (now > new Date(authChallenge.valid_until)) {
 		await prisma.authenticationChallange.update({
@@ -45,10 +49,13 @@ export const solveAuthChallenge = async (req: Request, res: Response): Promise<v
 		return
 	}
 
+	// If all checks passed, we mark the challenge as successful and generate a new JWT
 	await prisma.authenticationChallange.update({
 		where: { id: authChallengeId },
 		data: { success: true, response: message }
 	})
 
-	res.json({ message: 'Authentication successful' })
+	const token = generateJwtToken(authChallenge.account_id)
+
+	res.json({ accountId: authChallenge.account_id, accessToken: token })
 }
