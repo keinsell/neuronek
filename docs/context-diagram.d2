@@ -1,0 +1,15 @@
+application: "Dosage Tracking Application" {
+  Subject
+  Account: Subject's Account
+  Substance: "Substance Information"
+  Ingestion: "Ingestion storage"
+  Experince: "Public storage of experiences"
+}
+
+extenrals: "External Systems" {
+  drugProvider: "Substance Information Provider"
+}
+
+application.Subject -> application.Ingestion: "User ingests substance"
+application.Ingestion -> application.Experince: "Ingestion produces experience"
+application.Substance -> extenrals.drugProvider: "Aggregates substance information"
