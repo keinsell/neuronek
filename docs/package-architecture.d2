@@ -1,0 +1,18 @@
+apps.mobile: "Mobile Application"
+apps.web: "Web Application"
+apps.server: "Server Application"
+
+packages.drugbank-dataset: "dataset-drugbank"
+packages.effectindex-dataset: "dataset-effectindex"
+packages.erowid-dataset: "dataset-erowid"
+packages.hephaistos: "hephaistos"
+
+packages.drugbank-dataset -> packages.hephaistos
+packages.effectindex-dataset -> packages.hephaistos
+packages.erowid-dataset -> packages.hephaistos
+
+packages.database -> apps.server
+packages.database -> packages.hephaistos
+
+packages.hephaistos -> infrastructure.database
+apps.server -> infrastructure.database
