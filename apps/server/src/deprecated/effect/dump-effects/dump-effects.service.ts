@@ -2,8 +2,8 @@ import { Service } from 'diod'
 import { ok, Result } from 'neverthrow'
 import { Effect } from 'osiris'
 
-import { Usecase } from '../../shared/common/domain/usecase.js'
-import { PrismaService } from '../../shared/infrastructure/prisma/prisma.js'
+import { Usecase } from '../../../shared/usecase.js'
+import { PrismaService } from '../../../shared/infrastructure/prisma/prisma.js'
 
 @Service()
 export class DumpEffectsService implements Usecase<never, Effect[], never> {

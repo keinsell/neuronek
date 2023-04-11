@@ -1,6 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
-import { JWT_SECRET } from '../../deprecated/shared/configuration/environment-variables'
+import { JWT_SECRET } from '../../shared/configuration/environment-variables'
 
 const issuer = 'neuronek.xyz'
 const audience = 'account.neuronek.xyz'

@@ -1,4 +1,4 @@
-import { DependencyInjectionModule } from '../shared/common/module/module.js'
+import { DependencyInjectionModule } from '../../shared/module.js'
 import { CreateIngestionService } from './create-ingestion/create-ingestion.service.js'
 
 export class IngestionModule extends DependencyInjectionModule {

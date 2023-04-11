@@ -2,7 +2,7 @@ import { PrismaClient } from 'database'
 import { Request, Response } from '@tinyhttp/app'
 import * as openpgp from 'openpgp'
 import { sign } from 'jsonwebtoken'
-import { generateJwtToken } from '../authorization/generate-jwt-token'
+import { generateJwtToken } from '../generate-jwt-token'
 
 const prisma = new PrismaClient()
 

@@ -1,4 +1,4 @@
-import { DependencyInjectionModule } from '../shared/common/module/module.js'
+import { DependencyInjectionModule } from '../../shared/module.js'
 import { DumpSubstancesController } from './dump-substances/dump-substances.controller.js'
 import { DumpSubstancesService } from './dump-substances/dump-substances.service.js'
 import { SearchSubstanceController } from './search-substance/search-substance.controller.js'

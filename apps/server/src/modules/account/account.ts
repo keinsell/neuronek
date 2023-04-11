@@ -1,5 +1,5 @@
-import { PublicKey } from '../value-objects/public-key.js'
-import { Username } from '../value-objects/username.js'
+import { PublicKey } from './domain/public-key.js'
+import { Username } from './domain/username.js'
 
 export interface AccountProperties {
 	publicKey: PublicKey

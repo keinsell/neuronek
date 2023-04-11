@@ -2,12 +2,12 @@ import express, { json, Request, Response, urlencoded } from 'express'
 import swaggerUI from 'swagger-ui-express'
 import { RegisterRoutes } from '../dist/routes'
 import openapi from '../dist/swagger.json'
-import { passport } from './deprecated/shared/infrastructure/authorization/passport.js'
+import { passport } from './features/authorization/passport.js'
 import cors from 'cors'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { ProfilingIntegration } from '@sentry/profiling-node'
-import { prisma } from './deprecated/shared/infrastructure/prisma/prisma.js'
+import { prisma } from './shared/infrastructure/prisma/prisma.js'
 
 export const app = express()
 

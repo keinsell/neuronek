@@ -1,6 +1,6 @@
-import { DomainError } from '../../shared/common/domain/error.js'
+import { Exception } from '../../../shared/exception.js'
 
-export class UsernameTakenError extends DomainError {
+export class UsernameTakenError extends Exception {
 	constructor() {
 		super({
 			message: 'This username is already taken.',

@@ -2,7 +2,7 @@ import { Service } from 'diod'
 import { Body, Get, OperationId, Post, Query, Route, Tags } from 'tsoa'
 import { registerAccount } from './user.service.js'
 import { AuthorizationChallange } from '../authorization/authorization-challange.js'
-import { prisma } from '../shared/infrastructure/prisma/prisma.js'
+import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 
 @Service()
 @Route('user')
