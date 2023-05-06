@@ -11,7 +11,7 @@
 
 <br>
 
-Neuronek is substance journal with datacenter of research collected by major pojects focused on researching brain functionality and it's reactions to external stimulations. Including features for tracking one's intake of adaptogens, supplements, nootropics and other kind of psychoactive-like substances to build open database of information.
+Neuronek is an innovative and valuable application that provides essential tools for people who want to use psychoactive substances in a safe and healthy way, regardless of their personal goals or usage patterns. The app offers personalized dosing recommendations, insights into usage patterns, a comprehensive database of substances, and a community of users who are also interested in promoting responsible usage of these substances.
 
 <h2 align="center">Getting started</h2>
 
