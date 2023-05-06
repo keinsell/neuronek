@@ -39,8 +39,10 @@ COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
 COPY turbo.json turbo.json
 
-# Install dependencies for application
-RUN yarn install
+# Cache Yarn packages
+RUN yarn config set cache-folder /app/.yarn-cache
+RUN yarn install --cache-folder /app/.yarn-cache
+
 # Build application
 RUN yarn turbo run build --filter=server...
 
