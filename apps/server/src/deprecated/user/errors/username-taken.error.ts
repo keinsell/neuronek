@@ -1,4 +1,4 @@
-import { Exception } from '../../../shared/exception.js'
+import { Exception } from '../../../shared/core/exception.js'
 
 export class UsernameTakenError extends Exception {
 	constructor() {

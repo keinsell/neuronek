@@ -3,7 +3,7 @@ import { Service } from 'diod'
 import { ok, Result } from 'neverthrow'
 import { Substance } from 'osiris'
 
-import { Usecase } from '../../../shared/usecase.js'
+import { Usecase } from '../../../shared/core/usecase.js'
 import { PrismaService } from '../../../shared/infrastructure/prisma/prisma.js'
 
 @Service()

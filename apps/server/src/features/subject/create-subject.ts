@@ -1,5 +1,5 @@
-import { Controller } from '../../framework/http/controller'
-import { Response } from '../../framework/http/response'
+import { Controller } from '../../shared/core/framework/http/controller'
+import { Response } from '../../shared/core/framework/http/response'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
