@@ -24,3 +24,28 @@ The Substance aggregate represents a psychoactive substance, including its prope
 - `updated_at` (timestamp): The date and time when the substance was last updated in the database.
 
 By using the Substance aggregate, you can create a comprehensive database of psychoactive substances that includes information about their properties, characteristics, and potential risks. You can also use this information to provide personalized dosing recommendations and insights into usage patterns for users of the Neuronek application.
+
+```ts
+export class Substance extends Entity {
+	/**
+	 * Most popular common name for the substance.
+	 * @example "Amphetamine"
+	 */
+	public readonly name: string
+
+	/**
+	 * Chemical nomenclature is the system of naming chemical compounds. The rules for naming compounds vary depending on the type of compound, but in general, they are based on the type and number of atoms present in the compound, as well as the chemical bonds between them. The most common system of chemical nomenclature is the International Union of Pure and Applied Chemistry (IUPAC) system, which is widely used in scientific literature and in industry.
+	 */
+	public readonly nomenclature?: ChemicalNomenclature
+
+	/**
+	 * Class membership refers to the classification of a chemical compound based on its structural and/or functional properties. In chemistry, compounds are often grouped into classes based on their chemical characteristics, such as their chemical formula, functional groups, or reactivity.
+	 */
+	public readonly class_membership?: ClassMembership
+
+	/**
+	 * Routes of administration refer to the different ways in which a chemical compound or a drug can be taken into the body.
+	 */
+	public readonly routes_of_administration: RouteOfAdministrationTable
+}
+```
