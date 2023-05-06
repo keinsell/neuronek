@@ -1,9 +1,9 @@
-import { PrismaClient, Prisma } from 'database'
+import { Prisma } from 'database'
 import type { ParsedPage } from 'effectindex-dataset'
 import dataset from 'effectindex-dataset'
+import ora from 'ora'
 import slugify from 'slugify'
 import { prisma } from './prisma-instance.js'
-import ora from 'ora'
 
 function map(effect: ParsedPage & { url: string }): Prisma.EffectCreateInput {
 	let title = effect.title
@@ -11,17 +11,6 @@ function map(effect: ParsedPage & { url: string }): Prisma.EffectCreateInput {
 	const raw_description = effect.text.split('\n')
 	const url = effect.url
 	const description = []
-
-	title === 'An' ? (title = 'Epileptic seizure') : title
-	title === 'Watery' ? (title = 'Watery eyes') : title
-	title === 'Visual' ? (title = 'Visual haze') : title
-	title === 'Pain' ? (title = 'Pain relief') : title
-	title === 'Ego' ? (title = 'Ego death') : title
-	title === 'Dry' ? (title = 'Dry mouth') : title
-	title === 'A' ? (title = 'Runny nose') : title
-	title === 'Déjà' ? (title = 'Déjà Vu') : title
-	title === 'Brain' ? (title = 'Brain zaps') : title
-	title === 'Back' ? (title = 'Back pain') : title
 
 	for (const line of raw_description) {
 		if (line.startsWith('[')) continue

@@ -194,8 +194,18 @@ async function main() {
 		if (data.title === 'Effect Index') {
 			const description = data.description.split(' ')
 			data.title = description[0]
-			signale.info(`"Effect Index" found. Replaced to ${chalk.yellow(data.title)}`)
 		}
+
+		data.title === 'An' ? (data.title = 'Epileptic seizure') : data.title
+		data.title === 'Watery' ? (data.title = 'Watery eyes') : data.title
+		data.title === 'Visual' ? (data.title = 'Visual haze') : data.title
+		data.title === 'Pain' ? (data.title = 'Pain relief') : data.title
+		data.title === 'Ego' ? (data.title = 'Ego death') : data.title
+		data.title === 'Dry' ? (data.title = 'Dry mouth') : data.title
+		data.title === 'A' ? (data.title = 'Runny nose') : data.title
+		data.title === 'Déjà' ? (data.title = 'Déjà Vu') : data.title
+		data.title === 'Brain' ? (data.title = 'Brain zaps') : data.title
+		data.title === 'Back' ? (data.title = 'Back pain') : data.title
 
 		data.url = url
 
