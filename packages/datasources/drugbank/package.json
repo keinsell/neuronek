@@ -9,7 +9,7 @@
 	"main": "dataset/drugbank.json",
 	"types": "@types/drugbank.d.ts",
 	"scripts": {
-		"dev:drugbank": "tsx --watch index.ts"
+		"dev:drugbank": "node_modules/.bin/tsx --watch index.ts"
 	},
 	"dependencies": {
 		"JSONStream": "^1.3.5",

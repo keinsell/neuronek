@@ -12,7 +12,7 @@
 	"main": "effectindex.json",
 	"types": "@types/effectindex.d.ts",
 	"scripts": {
-		"build-dataset": "tsx --watch ./src/index.ts"
+		"build-dataset": "tsx --watch src/index.ts"
 	},
 	"dependencies": {
 		"@mozilla/readability": "^0.4.2",

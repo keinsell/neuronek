@@ -6840,9 +6840,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drugbank-dataset@workspace:packages/dataset-drugbank":
+"drugbank-dataset@workspace:packages/datasources/drugbank":
   version: 0.0.0-use.local
-  resolution: "drugbank-dataset@workspace:packages/dataset-drugbank"
+  resolution: "drugbank-dataset@workspace:packages/datasources/drugbank"
   dependencies:
     JSONStream: ^1.3.5
     bfj: ^7.0.2
@@ -6892,9 +6892,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"effectindex-dataset@*, effectindex-dataset@workspace:packages/dataset-effectindex":
+"effectindex-dataset@*, effectindex-dataset@workspace:packages/datasources/effectindex":
   version: 0.0.0-use.local
-  resolution: "effectindex-dataset@workspace:packages/dataset-effectindex"
+  resolution: "effectindex-dataset@workspace:packages/datasources/effectindex"
   dependencies:
     "@ava/typescript": ^3.0.1
     "@graphql-codegen/cli": 2.16.4
@@ -7038,9 +7038,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"erowid-dataset@*, erowid-dataset@workspace:packages/dataset-erowid":
+"erowid-dataset@*, erowid-dataset@workspace:packages/datasources/erowid":
   version: 0.0.0-use.local
-  resolution: "erowid-dataset@workspace:packages/dataset-erowid"
+  resolution: "erowid-dataset@workspace:packages/datasources/erowid"
   languageName: unknown
   linkType: soft
 
@@ -12936,9 +12936,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"psyxts-dataset@*, psyxts-dataset@workspace:packages/dataset-psyxts":
+"psyxts-dataset@*, psyxts-dataset@workspace:packages/datasources/psychonautwiki-tripsit":
   version: 0.0.0-use.local
-  resolution: "psyxts-dataset@workspace:packages/dataset-psyxts"
+  resolution: "psyxts-dataset@workspace:packages/datasources/psychonautwiki-tripsit"
   dependencies:
     "@types/node": ^18.0.3
     "@typescript-eslint/eslint-plugin": ^5.30.6
