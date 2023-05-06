@@ -5,3 +5,4 @@ dist
 .cache
 npm-debug.log
 .env
+packages/datasources/*

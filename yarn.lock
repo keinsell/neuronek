@@ -11593,7 +11593,7 @@ __metadata:
     prettier-plugin-properties: 0.2.0
     prettier-plugin-sh: 0.12.8
     server: "workspace:^"
-    turbo: ^1.7.0
+    turbo: latest
     workspace: ^0.0.1-preview.1
   languageName: unknown
   linkType: soft
@@ -13762,6 +13762,7 @@ __metadata:
   resolution: "server@workspace:apps/server"
   dependencies:
     "@openpgp/web-stream-tools": ^0.0.13
+    "@prisma/client": latest
     "@sentry/node": ^7.41.0
     "@sentry/profiling-node": ^0.2.2
     "@sentry/tracing": ^7.41.0
@@ -13795,6 +13796,7 @@ __metadata:
     osiris: "*"
     passport: ^0.6.0
     passport-jwt: ^4.0.1
+    prisma: latest
     reflect-metadata: ^0.1.13
     swagger-ui-express: ^4.6.0
     ts-node: ^10.9.1
@@ -14994,58 +14996,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-darwin-64@npm:1.7.0"
+"turbo-darwin-64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-darwin-64@npm:1.9.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-darwin-arm64@npm:1.7.0"
+"turbo-darwin-arm64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-darwin-arm64@npm:1.9.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-linux-64@npm:1.7.0"
+"turbo-linux-64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-linux-64@npm:1.9.3"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-linux-arm64@npm:1.7.0"
+"turbo-linux-arm64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-linux-arm64@npm:1.9.3"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-windows-64@npm:1.7.0"
+"turbo-windows-64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-windows-64@npm:1.9.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:1.7.0":
-  version: 1.7.0
-  resolution: "turbo-windows-arm64@npm:1.7.0"
+"turbo-windows-arm64@npm:1.9.3":
+  version: 1.9.3
+  resolution: "turbo-windows-arm64@npm:1.9.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "turbo@npm:1.7.0"
+"turbo@npm:latest":
+  version: 1.9.3
+  resolution: "turbo@npm:1.9.3"
   dependencies:
-    turbo-darwin-64: "npm:1.7.0"
-    turbo-darwin-arm64: "npm:1.7.0"
-    turbo-linux-64: "npm:1.7.0"
-    turbo-linux-arm64: "npm:1.7.0"
-    turbo-windows-64: "npm:1.7.0"
-    turbo-windows-arm64: "npm:1.7.0"
+    turbo-darwin-64: 1.9.3
+    turbo-darwin-arm64: 1.9.3
+    turbo-linux-64: 1.9.3
+    turbo-linux-arm64: 1.9.3
+    turbo-windows-64: 1.9.3
+    turbo-windows-arm64: 1.9.3
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -15061,7 +15063,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: effefebefeb7531bb33205e368b2b3571fee9e8face3530af25126d4162527f105a5fe7777509a99288326be3b6e28953c7ceacab2c2ef74abb0604c8ec9bbe7
+  checksum: ebf06d3b9b1401a5baabace238cd1e0d8fc1dc062b4f7bd577f644298c555f326d15f331144641c0b43a60ae8058769bcbd9d1660874fa9927ec64b5be8ee9dc
   languageName: node
   linkType: hard
 

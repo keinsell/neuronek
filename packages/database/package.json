@@ -11,10 +11,7 @@
 	],
 	"scripts": {
 		"prebuild": "yarn db:generate",
-		"build": "tsup-node",
-		"db:generate": "prisma generate",
-		"db:push": "prisma db push --accept-data-loss",
-		"db:studio": "prisma studio"
+		"build": "tsup-node"
 	},
 	"dependencies": {
 		"@prisma/client": "latest",
