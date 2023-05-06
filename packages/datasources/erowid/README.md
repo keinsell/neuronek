@@ -15,7 +15,7 @@ npm start
 Once you've got everything installed, you should be able to do trival edits through [main.js](https://github.com/christianbundy/erowid-research-project/blob/master/main.js). For example, removing anonymous authors from the data could be done with the following code.
 
 ```js
-var erowid = require('./lib/erowid.js')
+var erowid = require('./erowid.js')
 
 erowid(function (item) {
 	if ('author' in item && 'name' in item.author) {
