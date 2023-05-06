@@ -13,13 +13,18 @@
 	"module": "dist/index.cjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
+		"db:generate": "prisma generate",
+		"db:migrate:deploy": "prisma migrate deploy",
+		"db:migrate:dev": "prisma migrate dev",
+		"db:push": "prisma db push --accept-data-loss",
+		"db:studio": "prisma studio",
 		"generate": "yarn run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
 		"hephaistos": "tsx --watch ./src/bin.ts"
 	},
 	"dependencies": {
+		"@prisma/client": "latest",
 		"chalk": "^5.2.0",
-		"database": "*",
 		"effectindex-dataset": "*",
 		"erowid-dataset": "*",
 		"figlet": "^1.5.2",
@@ -55,6 +60,7 @@
 		"c8": "^7.12.0",
 		"eslint-config-node": "*",
 		"nodemon": "2.0.20",
+		"prisma": "latest",
 		"ts-node": "^10.9.1",
 		"tsup": "^6.5.0",
 		"tsx": "3.12.2",
