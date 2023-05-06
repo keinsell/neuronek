@@ -1,13 +1,13 @@
 import diod, { Newable } from 'diod'
 
-import { JwtStrategy } from '../../../deprecated/authorization/jwt-strategy.js'
-import { EffectModule } from '../../../deprecated/effect/effect.module.js'
-import { MeilisearchService } from '../../../deprecated/search/search.service.js'
-import { UserModule } from '../../../deprecated/user/user.module.js'
+import { JwtStrategy } from '../../../modules/deprecated/authorization/jwt-strategy.js'
+import { EffectModule } from '../../../modules/deprecated/effect/effect.module.js'
+import { MeilisearchService } from '../../../modules/deprecated/search/search.service.js'
+import { UserModule } from '../../../modules/deprecated/user/user.module.js'
 import { DependencyInjectionModule } from '../../module.js'
 import { PrismaService } from '../prisma/prisma.js'
-import { SubstanceModule } from '../../../deprecated/substance/substance.module.js'
-import { IngestionModule } from '../../../deprecated/ingestion/ingestion.module.js'
+import { SubstanceModule } from '../../../modules/deprecated/substance/substance.module.js'
+import { IngestionModule } from '../../../modules/deprecated/ingestion/ingestion.module.js'
 
 const builder = new diod.ContainerBuilder()
 

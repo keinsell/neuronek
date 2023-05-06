@@ -1,0 +1,52 @@
+end_user: "End User" {shape: "person"}
+api_gateway: "API Gateway"
+controller: "Controller"
+
+# Command CQRS
+command: "Command"
+command_bus: "Command Bus"
+command_handler: "Command Handler"
+
+# Query CRQS
+query: "Query"
+query_bus: "Query Bus"
+query_handler: "Query Handler"
+
+# Event
+event: "Event"
+event_bus: "Event Bus"
+event_handler: "Event Handler"
+
+# Domain Of System
+domain: {
+
+
+    aggregate: {
+
+
+        entity: {
+
+        }
+
+        value_object: {
+        }
+    }
+
+    aggregate -> domain_event: "Raise domain events"
+}
+
+end_user -> api_gateway: "Send HTTP/GraphQL Request"
+api_gateway -> controller: "Pass request to controller"
+
+# Handling Commands
+controller -> command: "Convert request into command \n(validate data)"
+command -> command_bus: "Pass command to command \nbus which will send it \nto all command handlers \nassociated with command."
+command_bus -> command_handler: "Find all command handlers \nwhich can handle the \ncommand and pass it to them."
+
+# Handling Queries
+controller -> query: "Convert request into query \n(retrieve data)"
+query -> query_bus: "Pass query to query bus \nwhich will send it \nto all query handlers \nassociated with query."
+query_bus -> query_handler: "Find all query handlers \nwhich can handle the query \nand pass it to them."
+
+query_handler -> controller: "Pass data back"
+command_handler -> controller: "Pass data back"

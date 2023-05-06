@@ -15,6 +15,9 @@ const validatePublicKey = (input: unknown, context: ioTs.Context): ioTs.Validati
 	return ioTs.success(input)
 }
 
+/**
+ * `PublicKey` defines a value object that represents a PGP public key.
+ */
 export const PublicKey = new ioTs.Type<string>(
 	'PublicKey',
 	(input: unknown): input is string => {

@@ -1,5 +1,6 @@
 import { Entity } from './enity.js'
 import { DomainEvent } from './domain-event.js'
+import { Aggregate } from './aggregate.js'
 
 export abstract class AggregateRoot<T extends Entity> {
 	protected readonly _id: string

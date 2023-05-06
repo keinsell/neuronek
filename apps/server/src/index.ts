@@ -1,3 +1,3 @@
 import 'reflect-metadata'
 
-export { HttpApplication } from './server2.js'
+export { HttpApplication } from './interfaces/http/http.js'
