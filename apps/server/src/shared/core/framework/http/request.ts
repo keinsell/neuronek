@@ -1,3 +1,3 @@
-import { Request as TinyHttpRequest } from '@tinyhttp/app'
+import { Request as ExternalRequest } from 'express'
 
-export type Request = TinyHttpRequest
+export type Request = ExternalRequest

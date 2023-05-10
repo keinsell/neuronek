@@ -1,3 +1,3 @@
-import { Response as TinyHttpResponse } from '@tinyhttp/app'
+import { Response as ExternalResponse } from 'express'
 
-export type Response = TinyHttpResponse
+export type Response = ExternalResponse

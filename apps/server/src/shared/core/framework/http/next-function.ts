@@ -1,3 +1,3 @@
-import { NextFunction as TinyHttp } from '@tinyhttp/app'
+import { NextFunction as ExternalNextFunction } from 'express'
 
-export type NextFunction = TinyHttp
+export type NextFunction = ExternalNextFunction
