@@ -1,4 +1,4 @@
-import { Command } from '../../../../shared/core/cqrs/command/command.js'
+import { Command } from '../../../../../shared/core/cqrs/command/command.js'
 
 interface DeleteAccountProperties {
 	accountId: string

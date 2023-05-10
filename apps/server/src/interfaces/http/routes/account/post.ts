@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 import * as openpgp from 'openpgp'
+import { CreateAccount } from '../../../../modules/account/application/commands/create-account/create-account'
+import { AccountCommandBus } from '../../../../modules/account/infrastructure/account.command-bus'
 
 const prisma = new PrismaClient()
 
@@ -26,6 +28,9 @@ interface AccountData {
 export async function createAccount(req: Request, res: Response) {
 	try {
 		const { username, publicKey } = req.body as AccountData
+
+		const command = new CreateAccount({ username, publicKey })
+		await new AccountCommandBus().send(command)
 
 		// Validate username and public key
 		const errors = []
