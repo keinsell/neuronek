@@ -1,0 +1,16 @@
+{
+	"name": "infrastructure",
+	"main": "index.ts",
+	"scripts": {
+		"infra:up": "pulumi up"
+	},
+	"dependencies": {
+		"@lbrlabs/pulumi-scaleway": "^1.8.1",
+		"@pulumi/kubernetes": "^3.0.0",
+		"@pulumi/kubernetesx": "^0.1.5",
+		"@pulumi/pulumi": "^3.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^16"
+	}
+}

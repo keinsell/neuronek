@@ -11,7 +11,9 @@
 	"workspaces": [
 		"apps/*",
 		"packages/*",
-		"packages/datasources/*"
+		"packages/datasources/*",
+		"functions/*",
+		"infrastructure/*"
 	],
 	"scripts": {
 		"build": "turbo run build",
