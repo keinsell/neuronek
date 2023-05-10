@@ -1,9 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
-  provider = "cockroachdb"
-  url      = env("DATABASE_URL")
+  provider     = "cockroachdb"
+  url          = env("DATABASE_URL")
+  relationMode = "foreignKeys"
 }
 
 generator client {

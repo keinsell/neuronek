@@ -1,4 +1,6 @@
-import { Command } from '../../../../shared/core/cqrs/command/command.js'
+import { Command } from '../../../../../shared/core/cqrs/command/command.js'
+import { PublicKey } from '../../../domain/value-objects/public-key'
+import { Username } from '../../../domain/value-objects/username'
 
 /**
  * CreateAccountProperties interface defines the properties required to create an account.
@@ -6,8 +8,8 @@ import { Command } from '../../../../shared/core/cqrs/command/command.js'
  * @username - The unique username for the account.
  */
 interface CreateAccountProperties {
-	publicKey: string
-	username: string
+	publicKey: PublicKey
+	username: Username
 }
 
 /**
@@ -16,8 +18,8 @@ interface CreateAccountProperties {
  * @username - The unique username for the account.
  */
 export class CreateAccount extends Command implements CreateAccountProperties {
-	public publicKey: string
-	public username: string
+	publicKey: PublicKey
+	username: Username
 
 	constructor(payload: CreateAccountProperties) {
 		super()

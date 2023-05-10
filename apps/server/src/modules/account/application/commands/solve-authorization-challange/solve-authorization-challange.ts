@@ -1,4 +1,4 @@
-import { Command } from '../../../../shared/core/cqrs/command/command'
+import { Command } from '../../../../../shared/core/cqrs/command/command'
 
 interface SolveAuthorizationChallangeProperties {
 	challengeId: string
