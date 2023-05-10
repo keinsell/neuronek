@@ -1,73 +1,67 @@
-# Base image
-FROM node:alpine AS builder
+FROM node:18-alpine AS base
 
-# Set an argument for the target package
 ARG TURBO_TARGET_PACKAGE=server
 
-# Install necessary dependencies
-RUN apk add --no-cache libc6-compat \
-	&& apk update \
-	&& apk add --update python3 make g++
+LABEL org.opencontainers.image.source=https://github.com/keinsell/neuronek
+LABEL org.opencontainers.image.description="🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body."
+LABEL org.opencontainers.image.licenses=MIT
 
-# Set the working directory
+# -------------
+# BUILDER -----
+# -------------
+
+FROM base AS builder
+
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+RUN corepack prepare yarn@stable --activate && yarn set version berry
+RUN npm i -g turbo
+
 WORKDIR /app
 
-# Prepare Node environment and enable yarn 2
-RUN corepack prepare yarn@stable --activate \
-	&& yarn set version berry \
-	&& yarn global add turbo
-
-# Copy files into the container
 COPY . .
 
-# Prune unused dependencies and install dependencies for the target package
 RUN turbo prune --scope=${TURBO_TARGET_PACKAGE} --docker
 
-# Build the application
-RUN yarn install && yarn build
+# -------------
+# INSTALLER ---
+# -------------
 
-# Create the application image
-FROM node:alpine AS installer
+FROM base AS installer
 
-# Set working directory
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+RUN corepack prepare yarn@stable --activate && yarn set version berry
+
 WORKDIR /app
 
-# Prepare Node environment and enable yarn 2
-RUN corepack prepare yarn@stable --activate \
-	&& yarn set version berry \
-	&& yarn global add turbo
-
-# Copy the necessary files from the builder image
+COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
+
+RUN mkdir -p ~/.yarn-cache && yarn config set cacheFolder ~/.yarn-cache
+VOLUME ~/.yarn-cache
+RUN yarn install --immutable --immutable-cache
+
 COPY --from=builder /app/out/full/ .
-COPY .gitignore .gitignore
-COPY turbo.json turbo.json
+RUN yarn turbo run build --filter=${TURBO_TARGET_PACKAGE}...
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+# -------------
+# RUNNER ------
+# -------------
 
-# Copy built application from builder image
-COPY --from=builder /app .
+FROM base AS runner
 
-# Prepare runner of application
-FROM node:alpine AS runner
-
-# Set working directory
 WORKDIR /app
 
-# Expose default application port
-EXPOSE 1337
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 express
+USER express
 
-# Create user for running application
-RUN addgroup --system --gid 1001 runner \
-	&& adduser --system --uid 1001 runner
+COPY --from=installer /app/apps/${TURBO_TARGET_PACKAGE}/package.json .
 
-# Use non-root user
-USER runner
+COPY --from=installer --chown=express:nodejs /app .
 
-# Copy application from installer image
-COPY --from=installer /app .
-
-# Start application
-CMD ["node", "apps/server/bin/server.js"]
+CMD ["node", "./apps/server/bin/server.js"]
