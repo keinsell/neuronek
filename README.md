@@ -25,6 +25,10 @@ $ yarn db:push
 $ yarn hephaistos # Tempoerary solution for setting up database.
 ```
 
+<h2 align="center">Technical Approach</h2>
+
+It would be a big waste when I would not learn anything doing such project, in this case I've decided to try Emergent Design along with Evolutionary architecture and push project through a lot of iterations before releasing final solution.
+
 <h2 align="center">Documentation</h2>
 
 Documentation is actively maintained in [Notion](https://www.notion.so/neuronek/invite/3893a7eb16843e642e0155a1119216a84b343d3b), it's public so anyone can read it and understand vision of project. Besides that, our features, feedback and roadmap is available at [Hellonext](https://neuronek.hellonext.co/) where everybody is able to add new suggestions to application. There's no communication channels related to projects and I doubt that they will be created in future. In future feature planning may happen on [Linear](https://linear.app/neuronek) but as now GitHub issues are good way to go.

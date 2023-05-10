@@ -52,7 +52,7 @@ import { MessageHandler } from './message-handler'
  * }
  * ```
  */
-interface MessageConsumer {
+export interface MessageConsumer {
 	start(): Promise<void>
 
 	stop(): Promise<void>

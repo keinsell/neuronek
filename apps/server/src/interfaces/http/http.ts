@@ -1,17 +1,36 @@
-import { App } from '@tinyhttp/app'
+import * as Sentry from '@sentry/node'
+import { ProfilingIntegration } from '@sentry/profiling-node'
+import * as Tracing from '@sentry/tracing'
+import express, { Application } from 'express'
 import { json } from 'milliparsec'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '../../shared/infrastructure/prisma/prisma'
 import { createAccount } from './routes/account/post.js'
 import { defineNewAuthChallenge } from './routes/challange/[username]/get.js'
 import { solveAuthChallenge } from './routes/challange/post.js'
 
-const prisma = new PrismaClient()
-const app = new App()
+const app: Application = express()
+
+Sentry.init({
+	dsn: process.env['SENTRY_DSN']!,
+	tracesSampleRate: 1.0,
+	profilesSampleRate: 1.0,
+
+	integrations: [
+		new ProfilingIntegration(),
+		new Sentry.Integrations.Http({ tracing: true }),
+		new Tracing.Integrations.Express({ app }),
+		new Tracing.Integrations.Prisma({ client: prisma })
+	]
+})
+
+// RequestHandler creates a separate execution context using domains, so that every
+// transaction/span/breadcrumb is attached to its own Hub instance
+app.use(Sentry.Handlers.requestHandler())
+
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler())
 
 app.use(json())
-
-// Get HEllo world
-app.get('/', (req, res) => res.send('Hello World'))
 
 app.post('/account', async (req, res) => {
 	return await createAccount(req, res)
@@ -23,10 +42,6 @@ app.get('/challange/:username', async (req, res) => {
 
 app.post('/challange', async (req, res) => {
 	return await solveAuthChallenge(req, res)
-})
-
-app.listen(666, () => {
-	console.log('Server listening on port 666')
 })
 
 export { app as HttpApplication }

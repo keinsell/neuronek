@@ -5,7 +5,8 @@ interface MessageBinding {
 	queueName: string
 }
 
-interface MessageRouter {
+// TODO: Probably abstract class would be better
+export interface MessageRouter {
 	addBinding(binding: MessageBinding): void
 
 	removeBinding(binding: MessageBinding): void

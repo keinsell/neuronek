@@ -1,13 +1,13 @@
-import { Request, Response } from '@tinyhttp/app'
-import * as openpgp from 'openpgp'
 import { PrismaClient } from '@prisma/client'
+import { Request, Response } from 'express'
+import * as openpgp from 'openpgp'
 
 const prisma = new PrismaClient()
 
 async function validatePublicKey(publicKey: string) {
 	try {
 		// Parse the PGP public key
-		const key = await openpgp.readKey({
+		await openpgp.readKey({
 			armoredKey: publicKey.trim()
 		})
 
@@ -34,7 +34,7 @@ export async function createAccount(req: Request, res: Response) {
 		}
 		if (!publicKey) {
 			errors.push('Public key is required')
-		} else if (!validatePublicKey(publicKey)) {
+		} else if (!(await validatePublicKey(publicKey))) {
 			errors.push('Invalid public key')
 		}
 

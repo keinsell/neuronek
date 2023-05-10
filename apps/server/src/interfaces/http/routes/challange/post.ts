@@ -1,8 +1,7 @@
-import { PrismaClient } from 'database'
-import { Request, Response } from '@tinyhttp/app'
+import { PrismaClient } from '@prisma/client'
+import { Request, Response } from 'express'
 import * as openpgp from 'openpgp'
-import { sign } from 'jsonwebtoken'
-import { generateJwtToken } from '../../../../modules/authorization/generate-jwt-token'
+import { generateTokens } from '../../../../modules/authorization/services/jwt'
 
 const prisma = new PrismaClient()
 
@@ -55,7 +54,7 @@ export const solveAuthChallenge = async (req: Request, res: Response): Promise<v
 		data: { success: true, response: message }
 	})
 
-	const token = generateJwtToken(authChallenge.account_id)
+	const token = generateTokens(authChallenge.account_id)
 
 	res.json({ accountId: authChallenge.account_id, accessToken: token })
 }

@@ -1,5 +1,4 @@
-import { Prisma } from '@prisma/client'
-import { PrismaClient } from 'database'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { Service } from 'diod'
 
 @Service()

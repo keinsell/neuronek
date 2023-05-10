@@ -1,7 +1,7 @@
-import * as openpgp from 'openpgp'
 import { PrismaClient } from '@prisma/client'
 import { randomBytes } from 'crypto'
-import { Request, Response } from '@tinyhttp/app'
+import { Request, Response } from 'express'
+import * as openpgp from 'openpgp'
 
 const prisma = new PrismaClient()
 

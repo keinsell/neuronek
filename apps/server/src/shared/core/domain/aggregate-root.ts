@@ -1,19 +1,19 @@
-import { Entity } from './enity.js'
+import { UniqueId } from '../indexing/unique-id'
 import { DomainEvent } from './domain-event.js'
-import { Aggregate } from './aggregate.js'
+import { Entity } from './enity'
 
 export abstract class AggregateRoot<T extends Entity> {
-	protected readonly _id: string
+	protected readonly _id: UniqueId
 	protected readonly _version: number
 	protected readonly _events: DomainEvent[]
 
-	constructor(id: string) {
+	constructor(id: UniqueId, version: number) {
 		this._id = id
-		this._version = 0
+		this._version = version
 		this._events = []
 	}
 
-	public get id(): string {
+	public get id(): UniqueId {
 		return this._id
 	}
 
@@ -21,13 +21,13 @@ export abstract class AggregateRoot<T extends Entity> {
 		return this._version
 	}
 
-	public get events(): any[] {
+	public get events(): DomainEvent[] {
 		return this._events
 	}
 
-	public abstract createNew(): T
+	public abstract create(): T
 
-	public addEvent(event: any): void {
+	public addEvent(event: DomainEvent): void {
 		this._events.push(event)
 	}
 

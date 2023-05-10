@@ -15,7 +15,7 @@ interface CreateAccountProperties {
  * @publicKey - The PGP public key for the account.
  * @username - The unique username for the account.
  */
-export class CreateAccount extends Command {
+export class CreateAccount extends Command implements CreateAccountProperties {
 	public publicKey: string
 	public username: string
 
