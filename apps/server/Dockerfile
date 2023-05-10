@@ -34,7 +34,6 @@ RUN apk add --no-cache libc6-compat
 RUN apk update
 
 RUN corepack prepare yarn@stable --activate && yarn set version berry
-RUN mkdir -p /yarn-cache && yarn config set cacheFolder /yarn-cache
 
 WORKDIR /app
 
@@ -42,7 +41,7 @@ COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
 
-RUN yarn install --immutable --immutable-cache
+RUN yarn install
 
 COPY --from=builder /app/out/full/ .
 
