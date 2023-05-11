@@ -6,7 +6,7 @@ export class UsernameChanged extends DomainEvent<Account> {
 		super(account)
 	}
 
-	public eventName(): string {
+	public get name(): string {
 		return 'account.username-changed'
 	}
 }
