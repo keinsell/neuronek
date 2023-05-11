@@ -3,6 +3,7 @@ import { UniqueId } from '../../../../shared/core/indexing/unique-id'
 import { Usecase } from '../../../../shared/core/usecase'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
+import { IamEventBus } from '../../infrastructure/iam.event-bus'
 import { CreateAccount } from '../commands/create-account/create-account'
 
 export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> {
@@ -16,8 +17,7 @@ export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> 
 
 		identity.create()
 
-		// TODO: Publish events to Event Bus
-		console.log(identity.events.map(event => event.eventName()))
+		await new IamEventBus().sendMultiple(identity.events)
 
 		identity.clearEvents()
 

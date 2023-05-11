@@ -49,13 +49,6 @@ export async function createAccount(req: Request, res: Response) {
 			return res.status(500).json({ error: 'Failed to create account' })
 		}
 
-		await prisma.account.create({
-			data: {
-				username,
-				publicKey
-			}
-		})
-
 		return res.status(201).json({ id: userIdentity })
 	} catch (error) {
 		console.error(error)

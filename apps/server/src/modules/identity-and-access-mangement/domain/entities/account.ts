@@ -1,5 +1,5 @@
 import { Entity } from '../../../../shared/core/domain/enity.js'
-import { AccountCreated } from '../events/account-created'
+import { AccountCreated } from '../events/account-created/account-created'
 import { UsernameChanged } from '../events/username-changed'
 import { PublicKey } from '../value-objects/public-key.js'
 import { Username } from '../value-objects/username.js'
