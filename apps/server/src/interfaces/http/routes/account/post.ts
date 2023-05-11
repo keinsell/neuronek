@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
-import { CreateAccount } from '../../../../modules/account/application/commands/create-account/create-account'
-import { AccountCommandBus } from '../../../../modules/account/infrastructure/account.command-bus'
+import { CreateAccount } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
+import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
 import { PrettyGoodPrivacy } from '../../../../shared/common/pretty-good-privacy'
 
 const prisma = new PrismaClient()
@@ -14,9 +14,6 @@ interface AccountData {
 export async function createAccount(req: Request, res: Response) {
 	try {
 		const { username, publicKey } = req.body as AccountData
-
-		const command = new CreateAccount({ username, publicKey })
-		await new AccountCommandBus().send(command)
 
 		// Validate username and public key
 		const errors = []
@@ -41,15 +38,25 @@ export async function createAccount(req: Request, res: Response) {
 			return res.status(400).json({ errors })
 		}
 
-		// Create new account in the database
-		const account = await prisma.account.create({
+		const command = new CreateAccount({ username, publicKey })
+		const usecase = new CreateAccountUsecase()
+
+		const usecaseResult = await usecase.execute(command)
+
+		const userIdentity = usecaseResult.unwrapOr(null)
+
+		if (!userIdentity) {
+			return res.status(500).json({ error: 'Failed to create account' })
+		}
+
+		await prisma.account.create({
 			data: {
 				username,
 				publicKey
 			}
 		})
 
-		return res.status(201).json({ account })
+		return res.status(201).json({ id: userIdentity })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: 'Failed to create account' })

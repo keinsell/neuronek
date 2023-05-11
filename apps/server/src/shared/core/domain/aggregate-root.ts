@@ -4,13 +4,15 @@ import { Entity } from './enity'
 
 export abstract class AggregateRoot<T extends Entity> {
 	protected readonly _id: UniqueId
-	protected readonly _version: number
-	protected readonly _events: DomainEvent[]
+	_events: DomainEvent[]
+	protected _version: number
+	protected _entity: T
 
-	constructor(id: UniqueId, version: number) {
-		this._id = id
-		this._version = version
+	constructor(entity: T, version?: number) {
+		this._id = entity.id
+		this._version = version || 0
 		this._events = []
+		this._entity = entity
 	}
 
 	public get id(): UniqueId {
@@ -25,13 +27,16 @@ export abstract class AggregateRoot<T extends Entity> {
 		return this._events
 	}
 
-	public abstract create(): T
-
 	public addEvent(event: DomainEvent): void {
 		this._events.push(event)
+		this.incrementVersion()
 	}
 
 	public clearEvents(): void {
 		this._events.length = 0
+	}
+
+	private incrementVersion(): void {
+		this._version++
 	}
 }
