@@ -16,7 +16,7 @@ interface AuthorizationChallange {
 	challenge: string
 }
 
-export const get = async (username: string): Promise<AuthorizationChallange> => {
+export const challangeUsernameGet = async (username: string): Promise<AuthorizationChallange> => {
 	const challenge = generateAuthCode()
 	const validUntil = new Date()
 	validUntil.setMinutes(validUntil.getMinutes() + 10) // Challenge is valid for 10 minutes
@@ -78,7 +78,7 @@ export const defineNewAuthChallenge = async (req: Request, res: Response): Promi
 	}
 
 	try {
-		const authChallange = await get(username)
+		const authChallange = await challangeUsernameGet(username)
 		res.json(authChallange)
 	} catch (error) {
 		console.error(error)

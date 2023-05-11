@@ -1,7 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client'
-import { Service } from 'diod'
 
-@Service()
 export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel> {
 	constructor() {
 		super({
