@@ -1,24 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
-import * as openpgp from 'openpgp'
 import { CreateAccount } from '../../../../modules/account/application/commands/create-account/create-account'
 import { AccountCommandBus } from '../../../../modules/account/infrastructure/account.command-bus'
+import { PrettyGoodPrivacy } from '../../../../shared/common/pretty-good-privacy'
 
 const prisma = new PrismaClient()
-
-async function validatePublicKey(publicKey: string) {
-	try {
-		// Parse the PGP public key
-		await openpgp.readKey({
-			armoredKey: publicKey.trim()
-		})
-
-		return true
-	} catch (error) {
-		console.error('Error validating PGP public key:', error)
-		return false
-	}
-}
 
 interface AccountData {
 	username: string
@@ -39,7 +25,7 @@ export async function createAccount(req: Request, res: Response) {
 		}
 		if (!publicKey) {
 			errors.push('Public key is required')
-		} else if (!(await validatePublicKey(publicKey))) {
+		} else if (!(await PrettyGoodPrivacy.validatePublicKey(publicKey))) {
 			errors.push('Invalid public key')
 		}
 
