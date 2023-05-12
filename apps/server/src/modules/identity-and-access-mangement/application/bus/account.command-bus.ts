@@ -1,8 +1,8 @@
-import { Command } from '../../../shared/core/cqrs/command/command'
-import { CommandBinding } from '../../../shared/core/cqrs/command/command-binding'
-import { CommandBus } from '../../../shared/core/cqrs/command/command-bus'
-import { CreateAccount } from '../application/commands/create-account/create-account'
-import { CreateAccountHandler } from '../application/commands/create-account/create-account-handler'
+import { Command } from '../../../../shared/core/cqrs/command/command'
+import { CommandBinding } from '../../../../shared/core/cqrs/command/command-binding'
+import { CommandBus } from '../../../../shared/core/cqrs/command/command-bus'
+import { CreateAccount } from '../commands/create-account/create-account'
+import { CreateAccountHandler } from '../commands/create-account/create-account-handler'
 
 export class AccountCommandBus extends CommandBus {
 	public bindings: CommandBinding[] = [

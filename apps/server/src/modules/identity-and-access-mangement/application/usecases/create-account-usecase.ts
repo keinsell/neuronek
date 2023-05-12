@@ -3,8 +3,10 @@ import { UniqueId } from '../../../../shared/core/indexing/unique-id'
 import { Usecase } from '../../../../shared/core/usecase'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
-import { IamEventBus } from '../../infrastructure/iam.event-bus'
+import { IamEventBus } from '../bus/iam.event-bus'
+import { IamQueryBus } from '../bus/iam.query-bus'
 import { CreateAccount } from '../commands/create-account/create-account'
+import { GetAccountByUsername } from '../queries/get-account-by-username/get-account-by-username'
 
 export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> {
 	public async execute(command: CreateAccount): Promise<Result<UniqueId, any>> {
@@ -21,6 +23,11 @@ export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> 
 
 		identity.clearEvents()
 
-		return ok(identity.id)
+		const query = new GetAccountByUsername(command.username)
+		const createdAccount = await new IamQueryBus().handle<Account>(query)
+
+		console.log(createdAccount)
+
+		return ok(createdAccount._id!)
 	}
 }

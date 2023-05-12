@@ -11,7 +11,7 @@ export abstract class WriteRepository<T extends Entity> {
 	 * @param entity The entity to be saved.
 	 * @returns A `Promise` that resolves with the saved entity.
 	 */
-	public abstract save(entity: T): Promise<T>
+	public abstract save(aggregate: T): Promise<T>
 
 	/**
 	 * Deletes an entity from the write model.

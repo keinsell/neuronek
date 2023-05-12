@@ -1,8 +1,8 @@
-import { Event } from '../../../shared/core/cqrs/event/event'
-import { EventBinding } from '../../../shared/core/cqrs/event/event-binding'
-import { EventBus } from '../../../shared/core/cqrs/event/event-bus'
-import { AccountCreated } from '../domain/events/account-created/account-created'
-import { AccountCreatedHandler } from '../domain/events/account-created/account-created-handler'
+import { Event } from '../../../../shared/core/cqrs/event/event'
+import { EventBinding } from '../../../../shared/core/cqrs/event/event-binding'
+import { EventBus } from '../../../../shared/core/cqrs/event/event-bus'
+import { AccountCreated } from '../../domain/events/account-created/account-created'
+import { AccountCreatedHandler } from '../../domain/events/account-created/account-created-handler'
 
 export class IamEventBus extends EventBus {
 	bindings: EventBinding[] = [

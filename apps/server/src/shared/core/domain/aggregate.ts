@@ -1,6 +1,9 @@
+import { UniqueId } from '../indexing/unique-id'
+
 export abstract class Aggregate {
-	protected readonly _id: string
-	constructor(id: string) {
+	public readonly _id: UniqueId | undefined
+
+	protected constructor(id?: string) {
 		this._id = id
 	}
 }
