@@ -3,8 +3,12 @@ import { Account } from './entities/account'
 import { Username } from './value-objects/username'
 
 export class Identity extends AggregateRoot<Account> {
+	constructor(public account: Account) {
+		super(account)
+	}
+
 	changeUsername(username: Username): void {
-		this.addEvent(this._entity.changeUsername(username))
+		this.addEvent(this.account.changeUsername(username))
 	}
 
 	// assignRole(): void {
@@ -16,7 +20,7 @@ export class Identity extends AggregateRoot<Account> {
 	// }
 
 	create(): void {
-		this.addEvent(this._entity.create())
+		this.addEvent(this.account.create())
 	}
 
 	updatePublicKey(): void {

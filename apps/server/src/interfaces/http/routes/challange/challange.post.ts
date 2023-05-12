@@ -54,7 +54,7 @@ export const solveAuthChallenge = async (req: Request, res: Response): Promise<v
 		data: { success: true, response: message }
 	})
 
-	const token = generateTokens(authChallenge.account_id)
+	const token = generateTokens(authChallenge.account_id!)
 
 	res.json({ accountId: authChallenge.account_id, accessToken: token })
 }
