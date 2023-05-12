@@ -1,14 +1,14 @@
 import { Query } from '../../../../shared/core/cqrs/query/query'
 import { QueryBidning } from '../../../../shared/core/cqrs/query/query-bidning'
 import { QueryBus } from '../../../../shared/core/cqrs/query/query-bus'
-import { GetAccountByUsername } from '../queries/get-account-by-username/get-account-by-username'
-import { GetAccountByUsernameHandler } from '../queries/get-account-by-username/get-account-by-username.handler'
+import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
+import { FindAccountByUsernameHandler } from '../queries/get-account-by-username/find-account-by-username.handler'
 
 export class IamQueryBus extends QueryBus {
 	bindings: QueryBidning[] = [
 		{
-			handler: new GetAccountByUsernameHandler(),
-			query: GetAccountByUsername
+			handler: new FindAccountByUsernameHandler(),
+			query: FindAccountByUsername
 		}
 	]
 
