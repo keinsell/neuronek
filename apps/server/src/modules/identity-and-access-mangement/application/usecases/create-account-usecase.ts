@@ -1,6 +1,6 @@
-import { err, ok, Result } from 'neverthrow'
 import { UniqueId } from '../../../../shared/core/indexing/unique-id'
-import { Usecase } from '../../../../shared/core/usecase'
+import { left, Result, right } from '../../../../shared/core/technical/result'
+import { UseCase } from '../../../../shared/core/useCase'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { IamEventBus } from '../bus/iam.event-bus'
@@ -8,17 +8,17 @@ import { IamQueryBus } from '../bus/iam.query-bus'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
 
-export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> {
+export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, any> {
 	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IamEventBus) {
 		super()
 	}
 
-	public async execute(command: CreateAccount): Promise<Result<UniqueId, string>> {
+	public async execute(command: CreateAccount): Promise<Result<UniqueId, any>> {
 		const getAccountByUsernameQuery = new FindAccountByUsername(command.username)
 		const fetchExistingAccount = await this.queryBus.handle<Account>(getAccountByUsernameQuery)
 
 		if (fetchExistingAccount) {
-			return err(`Account with username ${command.username} already exists`)
+			return left(`Account with username ${command.username} already exists`)
 		}
 
 		const account = new Account({
@@ -33,6 +33,6 @@ export class CreateAccountUsecase extends Usecase<CreateAccount, UniqueId, any> 
 
 		const fetchAccount = await this.queryBus.handle<Account>(getAccountByUsernameQuery)
 
-		return ok(fetchAccount._id!)
+		return right(fetchAccount._id!)
 	}
 }

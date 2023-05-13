@@ -36,10 +36,10 @@ export async function createAccount(req: Request, res: Response) {
 
 		const result = await usecase.execute(command)
 
-		if (result.isOk()) {
-			return res.status(201).json({ id: result.value })
+		if (result._tag === 'Right') {
+			return res.status(201).json({ id: result.right })
 		} else {
-			return res.status(400).json({ errors: [result.error] })
+			return res.status(400).json({ errors: [result.left] })
 		}
 	} catch (error) {
 		console.error(error)
