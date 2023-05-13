@@ -4,7 +4,7 @@ import * as Tracing from '@sentry/tracing'
 import express, { Application } from 'express'
 import { json } from 'milliparsec'
 import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
-import { createAccount } from './routes/account/post.js'
+import { createAccount } from './routes/account/account.post.js'
 import { defineNewAuthChallenge } from './routes/challange/[username]/challange.[username].get.js'
 import { solveAuthChallenge } from './routes/challange/challange.post.js'
 

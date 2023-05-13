@@ -9,8 +9,12 @@
 			"dependsOn": ["^build", "^db:generate"],
 			"cache": false
 		},
+		"prebuild": {
+			"outputs": ["dist/**", ".next/**", "public/dist/**", "node_modules/@prisma/client"],
+			"cache": false
+		},
 		"build": {
-			"dependsOn": ["^build", "^db:generate"],
+			"dependsOn": ["^prebuild", "^build", "^db:generate"],
 			"outputs": ["dist/**", ".next/**", "public/dist/**"],
 			"cache": true
 		},

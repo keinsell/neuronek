@@ -29,11 +29,6 @@
 		"start": "turbo run start",
 		"test": "turbo run test"
 	},
-	"dependencies": {
-		"add": "^2.0.6",
-		"server": "workspace:^",
-		"workspace": "^0.0.1-preview.1"
-	},
 	"devDependencies": {
 		"@commitlint/cli": "17.4.2",
 		"@commitlint/config-conventional": "17.4.2",
