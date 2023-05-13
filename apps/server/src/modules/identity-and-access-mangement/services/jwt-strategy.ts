@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
-import { AccessToken } from './domain/value-objects/access-token'
-import { RefreshToken } from './domain/value-objects/refresh-token'
+import { AccessToken } from '../domain/value-objects/access-token'
+import { RefreshToken } from '../domain/value-objects/refresh-token'
 
 const prisma = new PrismaClient()
 

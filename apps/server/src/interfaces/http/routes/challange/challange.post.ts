@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 import * as openpgp from 'openpgp'
-import { generateTokens } from '../../../../modules/authorization/services/jwt'
+import { generateTokens } from '../../../../modules/identity-and-access-mangement/services/jwt'
 
 const prisma = new PrismaClient()
 
