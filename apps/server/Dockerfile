@@ -1,4 +1,4 @@
-FROM node:19-alpine AS base
+FROM node:18 AS base
 
 ARG TURBO_TARGET_PACKAGE=server
 
@@ -12,8 +12,8 @@ LABEL org.opencontainers.image.licenses=MIT
 
 FROM base AS builder
 
-RUN apk add --no-cache libc6-compat
-RUN apk update
+RUN apt-get update && apt-get install -y libc6-dev
+RUN apt-get update
 
 RUN npm i -g turbo
 
@@ -31,8 +31,8 @@ RUN turbo prune --scope=${TURBO_TARGET_PACKAGE} --docker
 
 FROM base AS installer
 
-RUN apk add --no-cache libc6-compat
-RUN apk update
+RUN apt-get update && apt-get install -y libc6-dev
+RUN apt-get update
 
 WORKDIR /app
 
