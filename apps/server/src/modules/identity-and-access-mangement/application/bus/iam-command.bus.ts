@@ -4,7 +4,7 @@ import { CommandBus } from '../../../../shared/core/cqrs/command/command-bus'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { CreateAccountHandler } from '../commands/create-account/create-account-handler'
 
-export class AccountCommandBus extends CommandBus {
+export class IamCommandBus extends CommandBus {
 	public bindings: CommandBinding[] = [
 		{
 			command: CreateAccount,
