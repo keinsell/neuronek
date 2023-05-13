@@ -13,7 +13,6 @@ export class IamEventBus extends EventBus {
 	]
 
 	public async send(event: Event<unknown>): Promise<void> {
-		console.log(`Sending event: ${JSON.stringify(event)}`)
 		const binding = this.bindings.find(b => b.event.name === event.constructor.name)
 
 		if (binding) {
