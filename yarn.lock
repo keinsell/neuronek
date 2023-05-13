@@ -11738,7 +11738,6 @@ __metadata:
   dependencies:
     "@commitlint/cli": 17.4.2
     "@commitlint/config-conventional": 17.4.2
-    add: ^2.0.6
     eslint: ^8.33.0
     husky: ^8.0.3
     lint-staged: 13.1.0
@@ -11747,9 +11746,7 @@ __metadata:
     prettier-plugin-prisma: 4.8.0
     prettier-plugin-properties: 0.2.0
     prettier-plugin-sh: 0.12.8
-    server: "workspace:^"
     turbo: latest
-    workspace: ^0.0.1-preview.1
   languageName: unknown
   linkType: soft
 
@@ -14015,7 +14012,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@workspace:^, server@workspace:apps/server":
+"server@workspace:apps/server":
   version: 0.0.0-use.local
   resolution: "server@workspace:apps/server"
   dependencies:
@@ -16110,13 +16107,6 @@ __metadata:
   version: 0.0.3
   resolution: "wordwrap@npm:0.0.3"
   checksum: dfc2d3512e857ae4b3bc2e8d4e5d2c285c28a4b87cd1d81c977ce9a1a99152d355807e046851a3d61148f39d877fbb889352e07b65a9cbdd2256aa928e159026
-  languageName: node
-  linkType: hard
-
-"workspace@npm:^0.0.1-preview.1":
-  version: 0.0.1-preview.1
-  resolution: "workspace@npm:0.0.1-preview.1"
-  checksum: 0d3a1ed8a5735bd3295f2685a92cfd59a53d9386d6177e3dc036416e0b200729632a3760d9b34d75597b826e30620d7b02d9852c9bc2e0028c64436c9c5cda2e
   languageName: node
   linkType: hard
 

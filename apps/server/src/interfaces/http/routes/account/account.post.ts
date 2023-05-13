@@ -16,9 +16,11 @@ export async function createAccount(req: Request, res: Response) {
 
 		// Validate username and public key
 		const errors = []
+
 		if (!username) {
 			errors.push('Username is required')
 		}
+
 		if (!publicKey) {
 			errors.push('Public key is required')
 		} else if (!(await PrettyGoodPrivacy.validatePublicKey(publicKey))) {
