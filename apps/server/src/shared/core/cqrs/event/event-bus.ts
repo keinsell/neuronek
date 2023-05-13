@@ -1,8 +1,8 @@
-import { Event } from './event'
+import { SimpleEvent } from './simple-event'
 
 export abstract class EventBus {
-	abstract send(event: Event<unknown>): Promise<void>
-	async sendMultiple(events: Event<unknown>[]): Promise<void> {
+	abstract send(event: SimpleEvent<unknown>): Promise<void>
+	async sendMultiple(events: SimpleEvent<unknown>[]): Promise<void> {
 		for await (const event of events) {
 			await this.send(event)
 		}

@@ -1,3 +1,3 @@
-import { Event } from '../cqrs/event/event'
+import { SimpleEvent } from '../cqrs/event/simple-event'
 
-export abstract class DomainEvent<T> extends Event<T> {}
+export abstract class DomainEvent<T> extends SimpleEvent<T> {}

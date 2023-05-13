@@ -1,5 +1,5 @@
-import { Event } from './event'
+import { SimpleEvent } from './simple-event'
 
-export abstract class EventHandler<T extends Event<any>> {
+export abstract class EventHandler<T extends SimpleEvent<any>> {
 	abstract handle(event: T): Promise<void>
 }
