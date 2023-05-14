@@ -1,11 +1,14 @@
 {
 	"name": "infrastructure",
+	"version": "0.0.0",
+	"private": true,
 	"main": "index.ts",
 	"scripts": {
-		"infra:up": "pulumi up"
+		"infra:up": "pulumi up --yes --stack dev"
 	},
 	"dependencies": {
 		"@lbrlabs/pulumi-scaleway": "^1.8.1",
+		"@pulumi/digitalocean": "latest",
 		"@pulumi/kubernetes": "^3.0.0",
 		"@pulumi/kubernetesx": "^0.1.5",
 		"@pulumi/pulumi": "^3.0.0"

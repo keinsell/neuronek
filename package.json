@@ -13,7 +13,7 @@
 		"packages/*",
 		"packages/datasources/*",
 		"functions/*",
-		"infrastructure/*"
+		"infrastructure"
 	],
 	"scripts": {
 		"build": "turbo run build",
@@ -25,6 +25,7 @@
 		"dev": "turbo run dev --parallel",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"hephaistos": "turbo run hephaistos",
+		"infra:up": "turbo run infra:up",
 		"lint": "turbo run lint",
 		"pre-commit": "lint-staged",
 		"prepare": "husky install",
@@ -33,6 +34,8 @@
 	},
 	"dependencies": {
 		"add": "^2.0.6",
+		"dotenv": "^16.0.3",
+		"infrastructure": "workspace:^",
 		"server": "workspace:^",
 		"workspace": "^0.0.1-preview.1"
 	},

@@ -1,0 +1,4 @@
+name: neuronek
+runtime: nodejs
+stack: dev
+description: 🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.
