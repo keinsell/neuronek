@@ -1,6 +1,6 @@
 import { UniqueId } from '../../../../shared/core/indexing/unique-id'
 import { left, Result, right } from '../../../../shared/core/technical/result'
-import { UseCase } from '../../../../shared/core/useCase'
+import { UseCase } from '../../../../shared/core/use-case.js'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { IamEventBus } from '../bus/iam.event-bus'
