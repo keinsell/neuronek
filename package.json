@@ -11,7 +11,9 @@
 	"workspaces": [
 		"apps/*",
 		"packages/*",
-		"packages/datasources/*"
+		"packages/datasources/*",
+		"functions/*",
+		"infrastructure"
 	],
 	"scripts": {
 		"build": "turbo run build",
@@ -23,6 +25,7 @@
 		"dev": "turbo run dev --parallel",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"hephaistos": "turbo run hephaistos",
+		"infra:up": "turbo run infra:up",
 		"lint": "turbo run lint",
 		"pre-commit": "lint-staged",
 		"prepare": "husky install",
@@ -35,6 +38,7 @@
 		"cypress": "^12.12.0",
 		"eslint": "^8.33.0",
 		"husky": "^8.0.3",
+		"infrastructure": "workspace:^",
 		"lint-staged": "13.1.0",
 		"prettier": "^2.7.1",
 		"prettier-plugin-packagejson": "2.3.0",

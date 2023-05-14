@@ -52,7 +52,8 @@
 			"outputs": ["cache/**/*.json"],
 			"dependsOn": ["^build", "^db:generate"],
 			"cache": true
-		}
+		},
+		"infra:up": {}
 	},
 	"remoteCache": {
 		"signature": true
