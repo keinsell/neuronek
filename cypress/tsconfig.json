@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"strict": false,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node",
+		"module": "NodeNext",
+		"target": "esnext",
+		"lib": ["esnext"],
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"noImplicitThis": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"types": ["cypress"]
+	},
+	"ts-node": {
+		"swc": true
+	},
+	"include": ["e2e/**/*", "utils/**/*"],
+	"exclude": ["node_modules", "dist"]
+}

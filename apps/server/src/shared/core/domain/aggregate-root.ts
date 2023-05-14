@@ -1,37 +1,48 @@
 import { UniqueId } from '../indexing/unique-id'
+import { Aggregate } from './aggregate'
 import { DomainEvent } from './domain-event.js'
-import { Entity } from './enity'
+import { Entity } from './enity.js'
+import { IdentifierMissing } from './exceptions/identifier-missing.js'
 
-export abstract class AggregateRoot<T extends Entity> {
-	protected readonly _id: UniqueId
-	protected readonly _version: number
-	protected readonly _events: DomainEvent[]
+export abstract class AggregateRoot<T extends Entity | Aggregate> {
+	protected readonly _id: UniqueId | undefined
+	protected _version: number
+	protected _entity: T
 
-	constructor(id: UniqueId, version: number) {
-		this._id = id
-		this._version = version
+	protected constructor(entity: T, version?: number) {
+		this._id = entity._id
+		this._version = version || 0
 		this._events = []
+		this._entity = entity
 	}
 
-	public get id(): UniqueId {
-		return this._id
+	protected _events: DomainEvent<T>[]
+
+	public get events(): DomainEvent<T>[] {
+		return this._events
 	}
 
 	public get version(): number {
 		return this._version
 	}
 
-	public get events(): DomainEvent[] {
-		return this._events
+	get id(): UniqueId {
+		if (!this._id) {
+			throw new IdentifierMissing(this.constructor.name)
+		}
+		return this._id
 	}
 
-	public abstract create(): T
-
-	public addEvent(event: DomainEvent): void {
+	public addEvent(event: DomainEvent<T>): void {
 		this._events.push(event)
+		this.incrementVersion()
 	}
 
 	public clearEvents(): void {
 		this._events.length = 0
+	}
+
+	private incrementVersion(): void {
+		this._version++
 	}
 }

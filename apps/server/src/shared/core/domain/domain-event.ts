@@ -1,9 +1,3 @@
-export abstract class DomainEvent {
-	readonly occurredOn: Date
+import { SimpleEvent } from '../cqrs/event/simple-event'
 
-	constructor() {
-		this.occurredOn = new Date()
-	}
-
-	abstract eventName(): string
-}
+export abstract class DomainEvent<T> extends SimpleEvent<T> {}
