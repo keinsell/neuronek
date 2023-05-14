@@ -1,14 +1,15 @@
 import * as k8s from '@pulumi/kubernetes'
 import * as pulumi from '@pulumi/pulumi'
 import * as digitalocean from '@pulumi/digitalocean'
+import * as random from '@pulumi/random'
 
-const provider = new digitalocean.Provider('digitalocean', {
+new digitalocean.Provider('digitalocean', {
 	token: process.env.DIGITALOCEAN_TOKEN
 })
 
-const cluster = new digitalocean.KubernetesCluster('k8s-1-26-3-do-0-sfo3-1684061638392', {
+const cluster = new digitalocean.KubernetesCluster(`k8s-capybara`, {
 	nodePool: {
-		name: 'pool-ljqejkq2q',
+		name: 'k8s-pool-prometheus',
 		size: 's-1vcpu-2gb',
 		autoScale: false,
 		minNodes: 1,
@@ -19,16 +20,8 @@ const cluster = new digitalocean.KubernetesCluster('k8s-1-26-3-do-0-sfo3-1684061
 	version: '1.26.3-do.0'
 })
 
-// const nodePool = new digitalocean.KubernetesNodePool('default', {
-// 	clusterId: cluster.id,
-// 	name: 'default',
-// 	size: 's-1vcpu-2gb',
-// 	autoScale: false,
-// 	minNodes: 1,
-// 	maxNodes: 1
-// })
-
 export const kubeconfig = cluster.kubeConfigs[0].rawConfig
+export const clusterEndpoint = cluster.endpoint
 
 // export const clusterName = cluster.name
 
