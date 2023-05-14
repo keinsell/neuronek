@@ -1,4 +1,4 @@
-import * as E from 'fp-ts/lib/Either'
+import * as E from 'fp-ts/lib/Either.js'
 
 export type Result<Success, Failure> = E.Either<Success, Failure>
 

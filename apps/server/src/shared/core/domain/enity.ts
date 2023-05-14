@@ -1,4 +1,5 @@
 import { UniqueId } from '../indexing/unique-id'
+import { IdentifierMissing } from './exceptions/identifier-missing'
 
 /**
  * Entities are pretty much the bread and butter of domain modeling.
@@ -14,5 +15,12 @@ export abstract class Entity {
 	public readonly _id: UniqueId | undefined
 	protected constructor(id?: UniqueId | undefined) {
 		this._id = id
+	}
+
+	get id(): UniqueId {
+		if (!this._id) {
+			throw new IdentifierMissing(this.constructor.name)
+		}
+		return this._id
 	}
 }

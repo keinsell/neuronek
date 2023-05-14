@@ -1,7 +1,8 @@
 import { UniqueId } from '../indexing/unique-id'
 import { Aggregate } from './aggregate'
 import { DomainEvent } from './domain-event.js'
-import { Entity } from './enity'
+import { Entity } from './enity.js'
+import { IdentifierMissing } from './exceptions/identifier-missing.js'
 
 export abstract class AggregateRoot<T extends Entity | Aggregate> {
 	protected readonly _id: UniqueId | undefined
@@ -25,11 +26,10 @@ export abstract class AggregateRoot<T extends Entity | Aggregate> {
 		return this._version
 	}
 
-	public get id(): UniqueId {
+	get id(): UniqueId {
 		if (!this._id) {
-			throw new Error('Aggregate is not persisted in database.')
+			throw new IdentifierMissing(this.constructor.name)
 		}
-
 		return this._id
 	}
 
