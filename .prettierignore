@@ -10,3 +10,8 @@ yarn.lock
 *.svg
 *.ico
 *.d2
+*.ttf
+*.woff
+*.woff2
+*.png
+*.jpg
