@@ -136,9 +136,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Setup prisma
         run: yarn run turbo db:generate
 
