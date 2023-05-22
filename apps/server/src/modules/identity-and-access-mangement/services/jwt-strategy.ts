@@ -1,4 +1,4 @@
-import { AccessToken } from '../domain/value-objects/access-token'
+import { AccessToken } from '../domain/value-objects/access-token.js'
 import { RefreshToken } from '../domain/value-objects/refresh-token'
 import { PrismaClient } from '@prisma/client'
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'

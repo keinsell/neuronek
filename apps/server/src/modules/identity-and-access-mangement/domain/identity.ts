@@ -1,5 +1,7 @@
 import { AggregateRoot } from '../../../shared/core/domain/aggregate-root'
 import { Account } from './entities/account'
+import { AccountCreated } from './events/account-created/account-created.js'
+import { UsernameChanged } from './events/username-changed.js'
 import { Username } from './value-objects/username'
 
 export class Identity extends AggregateRoot<Account> {
@@ -8,22 +10,11 @@ export class Identity extends AggregateRoot<Account> {
 	}
 
 	changeUsername(username: Username): void {
-		this.addEvent(this.account.changeUsername(username))
+		this.account.changeUsername(username)
+		this.addEvent(new UsernameChanged(this.account))
 	}
-
-	// assignRole(): void {
-	// 	throw new Error('Method not implemented.')
-	// }
-	//
-	// removeRole(): void {
-	// 	throw new Error('Method not implemented.')
-	// }
 
 	create(): void {
-		this.addEvent(this.account.create())
-	}
-
-	updatePublicKey(): void {
-		throw new Error('Method not implemented.')
+		this.addEvent(new AccountCreated(this.account))
 	}
 }

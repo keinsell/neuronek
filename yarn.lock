@@ -15207,6 +15207,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"monocle-ts@npm:^2.3.13":
+  version: 2.3.13
+  resolution: "monocle-ts@npm:2.3.13"
+  peerDependencies:
+    fp-ts: ^2.5.0
+  checksum: dddfa5706fe1fdb068606f5ac5215a00e723d155407de491bb53591264e281ec0ea1735759db93686d9daf676b105660bf2c656ebcd51626a4bfbb8de9accb3c
+  languageName: node
+  linkType: hard
+
 "more-entropy@npm:>=0.0.7":
   version: 0.0.7
   resolution: "more-entropy@npm:0.0.7"
@@ -15387,6 +15396,16 @@ __metadata:
   version: 6.0.0
   resolution: "neverthrow@npm:6.0.0"
   checksum: 2110457892947b0d5b1f019198fef335cfb42db98b83b3cd9ebcdf0405cf81f2cfc2fef51199daa86d4bb6269dee0ac1d328f3de5dfd6eeca23105a565f78d27
+  languageName: node
+  linkType: hard
+
+"newtype-ts@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "newtype-ts@npm:0.3.5"
+  peerDependencies:
+    fp-ts: ^2.0.0
+    monocle-ts: ^2.0.0
+  checksum: 3168c0386313156f4ecf9160eec48d5506aa372d3406f6a05fde9f75b8f9549b149dea53574e9b2f201190c01fe49af8c9554481b319f0b616a4413f89af3d16
   languageName: node
   linkType: hard
 
@@ -18243,6 +18262,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"runtypes@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "runtypes@npm:6.6.0"
+  checksum: 86cb4705285385ce3e50f8dbe1650001da1c375407735296cf86c13f5af2da408ee7f6d22849d5f849f87cf6416d841dd618548be0509886a0236294b22c551d
+  languageName: node
+  linkType: hard
+
 "rxjs@npm:^7.5.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
@@ -18534,14 +18560,17 @@ __metadata:
     keyv: ^4.5.2
     meilisearch: ^0.30.0
     milliparsec: ^2.2.2
+    monocle-ts: ^2.3.13
     nanoid: ^4.0.0
     neverthrow: ^6.0.0
+    newtype-ts: ^0.3.5
     nodemon: 2.0.20
     openpgp: latest
     passport: ^0.6.0
     passport-jwt: ^4.0.1
     prisma: latest
     reflect-metadata: ^0.1.13
+    runtypes: ^6.6.0
     supertest: ^6.3.3
     swagger-ui-express: ^4.6.0
     ts-node: ^10.9.1

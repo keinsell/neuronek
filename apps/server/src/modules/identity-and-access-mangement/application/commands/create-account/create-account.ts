@@ -1,5 +1,5 @@
 import { Command } from '../../../../../shared/core/cqrs/command/command.js'
-import { PublicKey } from '../../../domain/value-objects/public-key'
+import { Password } from '../../../domain/value-objects/password.js'
 import { Username } from '../../../domain/value-objects/username'
 
 /**
@@ -8,7 +8,7 @@ import { Username } from '../../../domain/value-objects/username'
  * @username - The unique username for the account.
  */
 interface CreateAccountProperties {
-	publicKey: PublicKey
+	password: Password
 	username: Username
 }
 
@@ -18,12 +18,12 @@ interface CreateAccountProperties {
  * @username - The unique username for the account.
  */
 export class CreateAccount extends Command implements CreateAccountProperties {
-	publicKey: PublicKey
+	password: Password
 	username: Username
 
 	constructor(payload: CreateAccountProperties) {
 		super()
-		this.publicKey = payload.publicKey
+		this.password = payload.password
 		this.username = payload.username
 	}
 }

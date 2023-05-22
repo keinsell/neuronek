@@ -19,7 +19,7 @@ export class AccountWriteRepository extends WriteRepository<Account> {
 			// Existing account, perform update
 			await this.prisma.account.update({
 				where: { id: entity._id as string },
-				data: { publicKey: entity.publicKey, username: entity.username }
+				data: { password: entity.password, username: entity.username }
 			})
 			return entity
 		} else {
@@ -29,7 +29,7 @@ export class AccountWriteRepository extends WriteRepository<Account> {
 			})
 			return new Account(
 				{
-					publicKey: account.publicKey,
+					password: entity.password,
 					username: account.username
 				},
 				account.id
