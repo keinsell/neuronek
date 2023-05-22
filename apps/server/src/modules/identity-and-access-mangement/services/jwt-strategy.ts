@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client'
-import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 import { AccessToken } from '../domain/value-objects/access-token'
 import { RefreshToken } from '../domain/value-objects/refresh-token'
+import { PrismaClient } from '@prisma/client'
+import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 
 const prisma = new PrismaClient()
 
@@ -23,7 +23,7 @@ export class JwtStrategy extends Strategy {
 			}
 
 			// TODO: Update last logged in date in Sessions.
-			this.success(user)
+			// this.success(user)
 			return done(null, false)
 		})
 	}
