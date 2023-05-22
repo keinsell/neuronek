@@ -1,9 +1,9 @@
+import { UniqueId } from '../../../shared/core/indexing/unique-id'
+import { AccessToken } from '../domain/value-objects/access-token.js'
+import { RefreshToken } from '../domain/value-objects/refresh-token'
 import jwt from 'jsonwebtoken'
 import ms from 'ms'
 import { nanoid } from 'nanoid'
-import { UniqueId } from '../../../shared/core/indexing/unique-id'
-import { AccessToken } from '../domain/value-objects/access-token'
-import { RefreshToken } from '../domain/value-objects/refresh-token'
 
 const generateTokens = (
 	accountId: UniqueId,

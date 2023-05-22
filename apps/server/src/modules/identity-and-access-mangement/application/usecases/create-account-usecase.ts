@@ -4,6 +4,7 @@ import { left, Result, right } from '../../../../shared/core/technical/result'
 import { UseCase } from '../../../../shared/core/use-case.js'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
+import { hashPassword } from '../../domain/value-objects/password.js'
 import { IamEventBus } from '../bus/iam.event-bus'
 import { IamQueryBus } from '../bus/iam.query-bus'
 import { CreateAccount } from '../commands/create-account/create-account'
@@ -22,8 +23,10 @@ export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, Polic
 			return left(new PolicyViolation(409, 'CreateAccountWhenAccountWasNotCreatedBefore'))
 		}
 
+		const passwordHash = await hashPassword(command.password)
+
 		const account = new Account({
-			publicKey: command.publicKey,
+			password: passwordHash,
 			username: command.username
 		})
 

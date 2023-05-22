@@ -10,23 +10,10 @@ generator client {
 }
 
 model Account {
-  id                      String                    @id @default(cuid())
-  username                String                    @unique
-  publicKey               String
-  Subject                 Subject[]
-  AuthenticationChallange AuthenticationChallange[]
-}
-
-model AuthenticationChallange {
-  id           String   @id @default(cuid())
-  account_id   String?
-  account      Account? @relation(fields: [account_id], references: [id])
-  challenge    String
-  valid_until  DateTime
-  response     String?
-  success      Boolean?
-  privateKey   String
-  date_created DateTime @default(now())
+  id       String    @id @default(cuid())
+  username String    @unique
+  password String
+  Subject  Subject[]
 }
 
 model Subject {

@@ -9,6 +9,7 @@ export abstract class Mapper<TInput, TOutput> {
 	 * @returns The mapped output data.
 	 */
 	public abstract map(input: TInput): TOutput
+	public abstract inverse(input: TOutput): Promise<TInput>
 
 	/**
 	 * Maps an array of input data to an array of corresponding output data.

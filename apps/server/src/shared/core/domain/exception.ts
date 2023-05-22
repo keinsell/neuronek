@@ -1,11 +1,11 @@
 interface ExceptionProperties {
 	message: string
-	statusCode?: number
+	statusCode: number
 }
 
 export class Exception implements ExceptionProperties {
 	message: string
-	statusCode?: number
+	statusCode: number
 
 	constructor(properites: ExceptionProperties) {
 		Object.assign(this, properites)
