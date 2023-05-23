@@ -2,7 +2,6 @@ import { UniqueId } from '../indexing/unique-id'
 import { Aggregate } from './aggregate'
 import { DomainEvent } from './domain-event.js'
 import { Entity } from './enity.js'
-import { IdentifierMissing } from './exceptions/identifier-missing.js'
 
 export abstract class AggregateRoot<T extends Entity | Aggregate> {
 	protected readonly _id: UniqueId | undefined
@@ -24,13 +23,6 @@ export abstract class AggregateRoot<T extends Entity | Aggregate> {
 
 	public get version(): number {
 		return this._version
-	}
-
-	get id(): UniqueId {
-		if (!this._id) {
-			throw new IdentifierMissing(this.constructor.name)
-		}
-		return this._id
 	}
 
 	public addEvent(event: DomainEvent<T>): void {

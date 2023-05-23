@@ -20,7 +20,7 @@ Neuronek is an innovative and valuable application that provides essential tools
 ```bash
 $ cp example.env .env
 $ yarn
-$ docker-compose up -f docker-compose.local.yml -d
+$ docker-compose -f local.docker-compose.yml up -d
 $ yarn db:push
 $ yarn hephaistos # Tempoerary solution for setting up database.
 ```

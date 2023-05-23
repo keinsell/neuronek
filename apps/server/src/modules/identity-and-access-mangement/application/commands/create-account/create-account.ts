@@ -1,6 +1,6 @@
 import { Command } from '../../../../../shared/core/cqrs/command/command.js'
 import { Password } from '../../../domain/value-objects/password.js'
-import { Username } from '../../../domain/value-objects/username'
+import { Username } from '../../../domain/value-objects/username/username.js'
 
 /**
  * CreateAccountProperties interface defines the properties required to create an account.

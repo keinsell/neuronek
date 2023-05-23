@@ -1,6 +1,6 @@
 import { Entity } from '../../../../shared/core/domain/enity.js'
 import { PasswordHash } from '../value-objects/password-hash.js'
-import { Username } from '../value-objects/username.js'
+import { Username } from '../value-objects/username/username.js'
 
 // TODO: This should not be extended on Database Schema, however, it's a faster way for now and I expect quite a lot of
 //  changes in this are so this is helpful.

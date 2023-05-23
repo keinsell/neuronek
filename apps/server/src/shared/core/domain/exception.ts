@@ -3,11 +3,12 @@ interface ExceptionProperties {
 	statusCode: number
 }
 
-export class Exception implements ExceptionProperties {
-	message: string
+export class Exception extends Error implements ExceptionProperties {
 	statusCode: number
 
-	constructor(properites: ExceptionProperties) {
-		Object.assign(this, properites)
+	protected constructor(properites: ExceptionProperties) {
+		super(properites.message)
+		this.statusCode = properites.statusCode
+		this.name = this.constructor.name
 	}
 }

@@ -1,7 +1,7 @@
 import { Mapper } from '../../../../shared/core/persistence/mapper.js'
 import { Account } from '../../domain/entities/account.js'
 import { createPasswordHash } from '../../domain/value-objects/password-hash.js'
-import { createUsername } from '../../domain/value-objects/username.js'
+import { createUsername } from '../../domain/value-objects/username/username.js'
 import { Account as DatabaseRecord } from '@prisma/client'
 
 export class AccountDataMapper extends Mapper<Account, DatabaseRecord> {
