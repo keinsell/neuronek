@@ -1,6 +1,5 @@
 import { NotImplemented } from '../../../../shared/core/domain/exceptions/not-implemented.js'
-import { createPasswordHash, PasswordHash } from './password-hash.js'
-import argon2 from 'argon2'
+import { hashPassword as createHashedPassword, PasswordHash } from './password-hash.js'
 import { Static, String } from 'runtypes'
 
 /** asdsadffasd */
@@ -14,7 +13,7 @@ type Password = Static<typeof Password>
  */
 async function hashPassword(password: Password): Promise<PasswordHash> {
 	try {
-		return createPasswordHash(await argon2.hash(password))
+		return createHashedPassword(password)
 	} catch {
 		throw new Error('Error hashing password')
 	}
