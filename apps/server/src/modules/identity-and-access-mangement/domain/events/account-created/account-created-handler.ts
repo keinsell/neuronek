@@ -3,8 +3,7 @@ import { AccountWriteRepository } from '../../../infrastructure/repositories/acc
 import { AccountCreated } from './account-created'
 
 export class AccountCreatedHandler extends EventHandler<AccountCreated> {
-	public async handle(event: AccountCreated): Promise<void> {
-		console.log(`${this.constructor.name} handling event: ${event.constructor.name}`)
+	public async execute(event: AccountCreated): Promise<void> {
 		await new AccountWriteRepository().save(event.payload)
 	}
 }

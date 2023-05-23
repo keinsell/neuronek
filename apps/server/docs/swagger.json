@@ -25,6 +25,39 @@
 					"username": "john_doe",
 					"password": "my-password"
 				}
+			},
+			"AuthenticateResponse": {
+				"properties": {
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": ["accessToken", "refreshToken"],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthenticateAccount": {
+				"description": "Represents the request body for creating an account.",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": "The username for the account."
+					},
+					"password": {
+						"type": "string",
+						"description": "The password for the account."
+					}
+				},
+				"required": ["username", "password"],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"username": "john_doe",
+					"password": "my-password"
+				}
 			}
 		},
 		"securitySchemes": {
@@ -94,6 +127,50 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/CreateAccount"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/authentication": {
+			"post": {
+				"operationId": "authenticate-account",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/AuthenticateResponse"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": ["error"],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates an account.",
+				"tags": ["Account"],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthenticateAccount"
 							}
 						}
 					}

@@ -1,8 +1,6 @@
 import { UniqueId } from '../../../shared/core/indexing/unique-id'
-import { AccessToken } from '../domain/value-objects/access-token.js'
-import { RefreshToken } from '../domain/value-objects/refresh-token'
+import { JsonWebToken } from '../domain/value-objects/json-web-token.js'
 import jwt from 'jsonwebtoken'
-import ms from 'ms'
 import { nanoid } from 'nanoid'
 
 const generateTokens = (
@@ -30,15 +28,15 @@ const generateTokens = (
 	}
 }
 
-const verifyToken = (token: string): RefreshToken | AccessToken => {
+const verifyToken = (token: string): JsonWebToken => {
 	try {
 		const decodedToken = jwt.verify(token, 'secretKey', {
 			issuer: 'neuronek.xyz',
 			audience: 'account.neuronek.xyz'
-		}) as RefreshToken | AccessToken
+		}) as JsonWebToken
 
 		// Validate the token with io-ts
-		const result = decodedToken.exp === ms('2h') ? AccessToken.decode(decodedToken) : RefreshToken.decode(decodedToken)
+		const result = JsonWebToken.decode(decodedToken)
 
 		if (result._tag !== 'Right') {
 			throw new Error('Invalid Token')

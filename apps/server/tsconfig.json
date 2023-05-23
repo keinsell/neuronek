@@ -1,16 +1,16 @@
 {
 	"compilerOptions": {
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"strict": false,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
 		"module": "NodeNext",
 		"target": "esnext",
 		"lib": ["esnext"],
+		"strict": false,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"resolveJsonModule": true,
-		"allowJs": true,
+		"allowJs": false,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
@@ -26,5 +26,5 @@
 		"swc": true
 	},
 	"include": ["src/**/*"],
-	"exclude": ["node_modules", "dist"]
+	"exclude": ["node_modules/**/*", "dist"]
 }

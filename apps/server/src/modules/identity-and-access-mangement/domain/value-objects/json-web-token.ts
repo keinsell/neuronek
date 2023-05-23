@@ -1,14 +1,14 @@
 import * as t from 'io-ts'
 
 /**
- * @typedef {Object} AccessToken
+ * @typedef {Object} JsonWebToken
  * @property {string} sub - Subject identifier of the token
  * @property {string} jti - Unique identifier of the token
  * @property {string} iss - Issuer of the token
  * @property {string} aud - Audience of the token
  * @property {number} exp - Expiration time of the token as a Unix timestamp
  */
-export const AccessToken = t.type({
+export const JsonWebToken = t.type({
 	sub: t.string,
 	jti: t.string,
 	iss: t.string,
@@ -16,4 +16,4 @@ export const AccessToken = t.type({
 	exp: t.number
 })
 
-export type AccessToken = t.TypeOf<typeof AccessToken>
+export type JsonWebToken = t.TypeOf<typeof JsonWebToken>

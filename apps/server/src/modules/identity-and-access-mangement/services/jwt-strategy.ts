@@ -1,5 +1,3 @@
-import { AccessToken } from '../domain/value-objects/access-token.js'
-import { RefreshToken } from '../domain/value-objects/refresh-token'
 import { PrismaClient } from '@prisma/client'
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 
@@ -12,7 +10,8 @@ const options: StrategyOptions = {
 
 export class JwtStrategy extends Strategy {
 	constructor() {
-		super(options, async (payload: RefreshToken | AccessToken, done) => {
+		// TODO: Validate payload with JsonWebToken value object.
+		super(options, async (payload: any, done) => {
 			// Find user in database.
 			const user = await prisma.account.findUnique({ where: { id: payload.sub } })
 
