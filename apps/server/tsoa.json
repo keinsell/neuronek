@@ -1,9 +1,9 @@
 {
 	"entryFile": "src/index.ts",
 	"noImplicitAdditionalProperties": "throw-on-extras",
-	"controllerPathGlobs": ["**/*.controller.ts", "*/**/*.controller.ts"],
+	"controllerPathGlobs": ["**/src/interfaces/http/routes/**/*.ts"],
 	"spec": {
-		"outputDirectory": "dist",
+		"outputDirectory": "docs",
 		"specVersion": 3,
 		"securityDefinitions": {
 			"Bearer": {
@@ -12,14 +12,22 @@
 				"bearerFormat": "JWT"
 			}
 		},
+		"tags": [
+			{
+				"name": "Account",
+				"description": "Operations related to account",
+				"externalDocs": {
+					"description": "...",
+					"url": "http://swagger.io"
+				}
+			}
+		],
 		"security": [{ "Bearer": [] }]
 	},
 	"routes": {
 		"basePath": "/",
 		"entryFile": "src/index.ts",
-		"routesDir": "dist",
-		"authenticationModule": "src/shared/infrastructure/authorization/auth.ts",
-		"iocModule": "src/shared/infrastructure/ioc/container.ts",
+		"routesDir": "dist/routes",
 		"esm": true
 	}
 }

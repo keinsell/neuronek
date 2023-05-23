@@ -1,0 +1,119 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"CreateAccount": {
+				"description": "Represents the request body for creating an account.",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": "The username for the account."
+					},
+					"password": {
+						"type": "string",
+						"description": "The password for the account."
+					}
+				},
+				"required": ["username", "password"],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"username": "john_doe",
+					"password": "my-password"
+				}
+			}
+		},
+		"securitySchemes": {
+			"Bearer": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "server",
+		"version": "0.0.0",
+		"description": "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
+		"contact": {
+			"name": "Jakub Olan",
+			"email": "keinsell@protonmail.com",
+			"url": "https://github.com/keinsell"
+		}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/account": {
+			"post": {
+				"operationId": "create-account",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"id": {
+													"type": "string"
+												}
+											},
+											"required": ["id"],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": ["error"],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "AlreadyExists"
+					}
+				},
+				"description": "Creates an account.",
+				"tags": ["Account"],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateAccount"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	],
+	"tags": [
+		{
+			"name": "Account",
+			"description": "Operations related to account",
+			"externalDocs": {
+				"description": "...",
+				"url": "http://swagger.io"
+			}
+		}
+	]
+}
