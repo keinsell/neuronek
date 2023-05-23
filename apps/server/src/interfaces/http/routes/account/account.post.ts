@@ -4,17 +4,29 @@ import { CreateAccount as CreateAccountCommand } from '../../../../modules/ident
 import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
 import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
 import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username.js'
-import { Body, Controller, OperationId, Post, Route } from 'tsoa'
+import { Body, Controller, Example, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
 
+/**
+ * Represents the request body for creating an account.
+ * @example { "username": "john_doe", "password": "my-password" }
+ */
 interface CreateAccount {
+	/** The username for the account. */
 	username: string
+	/** The password for the account. */
 	password: string
 }
 
 @Route('account')
+@Tags('Account')
 export class CreateAccountController extends Controller {
+	/**
+	 * Creates an account.
+	 */
 	@Post()
 	@OperationId('create-account')
+	@SuccessResponse('201', 'Created')
+	@Response(403, 'AlreadyExists')
 	public async createAccount(@Body() body: CreateAccount): Promise<{ id: string } | { error: string }> {
 		const command = new CreateAccountCommand({
 			username: await createUsername(body.username),

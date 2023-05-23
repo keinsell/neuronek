@@ -7,17 +7,24 @@
 		"responses": {},
 		"schemas": {
 			"CreateAccount": {
+				"description": "Represents the request body for creating an account.",
 				"properties": {
 					"username": {
-						"type": "string"
+						"type": "string",
+						"description": "The username for the account."
 					},
 					"password": {
-						"type": "string"
+						"type": "string",
+						"description": "The password for the account."
 					}
 				},
 				"required": ["username", "password"],
 				"type": "object",
-				"additionalProperties": false
+				"additionalProperties": false,
+				"example": {
+					"username": "john_doe",
+					"password": "my-password"
+				}
 			}
 		},
 		"securitySchemes": {
@@ -44,8 +51,8 @@
 			"post": {
 				"operationId": "create-account",
 				"responses": {
-					"200": {
-						"description": "Ok",
+					"201": {
+						"description": "Created",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -72,8 +79,13 @@
 								}
 							}
 						}
+					},
+					"403": {
+						"description": "AlreadyExists"
 					}
 				},
+				"description": "Creates an account.",
+				"tags": ["Account"],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
