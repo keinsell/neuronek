@@ -37,7 +37,7 @@ export const Username = new ioTs.Type<string>(
 export type Username = ioTs.TypeOf<typeof Username>
 
 /** Create new Username value object */
-export function createUsername(username: string): Username {
+export async function createUsername(username: string): Username {
 	// const validationResult = Username.decode(username)
 	//
 	// if (validationResult._tag === 'Left') {

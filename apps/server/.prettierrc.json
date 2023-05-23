@@ -13,5 +13,6 @@
 	"arrowParens": "avoid",
 	"proseWrap": "preserve",
 	"htmlWhitespaceSensitivity": "css",
-	"endOfLine": "lf"
+	"endOfLine": "lf",
+	"importOrderParserPlugins": ["typescript", "decorators-legacy"]
 }

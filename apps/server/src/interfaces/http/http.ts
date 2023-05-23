@@ -1,10 +1,11 @@
+import { RegisterRoutes } from '../../../dist/routes/routes.js'
 import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
-import { createAccount } from './routes/account/account.post.js'
 import * as Sentry from '@sentry/node'
 import { ProfilingIntegration } from '@sentry/profiling-node'
 import * as Tracing from '@sentry/tracing'
-import express, { Application } from 'express'
+import express, { Application, Response as ExResponse, Request as ExRequest } from 'express'
 import { json } from 'milliparsec'
+import swaggerUi from 'swagger-ui-express'
 
 const app: Application = express()
 
@@ -30,8 +31,10 @@ app.use(Sentry.Handlers.tracingHandler())
 
 app.use(json())
 
-app.post('/account', async (req, res) => {
-	return await createAccount(req, res)
+app.use('/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
+	return res.send(swaggerUi.generateHTML(await import('../../../docs/swagger.json')))
 })
+
+RegisterRoutes(app)
 
 export { app as HttpApplication }

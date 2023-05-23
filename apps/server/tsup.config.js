@@ -7,7 +7,7 @@ export default {
 	dts: true,
 	minify: false,
 	format: ['esm'],
-	clean: true,
+	clean: false,
 	treeshake: true,
 	metafile: true,
 	shims: true,

@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"strict": false,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,

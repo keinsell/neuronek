@@ -1,34 +1,24 @@
 import { IamEventBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.event-bus'
 import { IamQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.query-bus'
-import { CreateAccount } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
+import { CreateAccount as CreateAccountCommand } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
 import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
 import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
 import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username.js'
-import { Request, Response } from 'express'
+import { Body, Controller, OperationId, Post, Route } from 'tsoa'
 
-interface AccountData {
+interface CreateAccount {
 	username: string
 	password: string
 }
 
-export async function createAccount(req: Request, res: Response) {
-	try {
-		const { username, password } = req.body as AccountData
-
-		// Validate username and public key
-		const errors = []
-
-		if (!username) {
-			errors.push('Username is required')
-		}
-
-		if (errors.length) {
-			return res.status(400).json({ errors })
-		}
-
-		const command = new CreateAccount({
-			username: await createUsername(username),
-			password: await createPassword(password)
+@Route('account')
+export class CreateAccountController extends Controller {
+	@Post()
+	@OperationId('create-account')
+	public async createAccount(@Body() body: CreateAccount): Promise<{ id: string } | { error: string }> {
+		const command = new CreateAccountCommand({
+			username: await createUsername(body.username),
+			password: await createPassword(body.password)
 		})
 
 		const usecase = new CreateAccountUsecase(new IamQueryBus(), new IamEventBus())
@@ -36,12 +26,16 @@ export async function createAccount(req: Request, res: Response) {
 		const result = await usecase.execute(command)
 
 		if (result._tag === 'Right') {
-			return res.status(201).json({ id: result.right })
+			this.setStatus(201)
+			return { id: result.right as string }
 		} else {
-			return res.status(result.left.statusCode).json({ message: result.left.message })
+			this.setStatus(result.left.statusCode)
+			return { error: result.left.message }
 		}
-	} catch (error) {
+	}
+	catch(error: any) {
 		console.error(error)
-		return res.status(500).json({ error: 'Failed to create account' })
+		this.setStatus(500)
+		return { error: 'Failed to create account' }
 	}
 }
