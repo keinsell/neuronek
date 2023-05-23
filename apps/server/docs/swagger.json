@@ -105,5 +105,15 @@
 		{
 			"url": "/"
 		}
+	],
+	"tags": [
+		{
+			"name": "Account",
+			"description": "Operations related to account",
+			"externalDocs": {
+				"description": "...",
+				"url": "http://swagger.io"
+			}
+		}
 	]
 }
