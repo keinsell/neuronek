@@ -18770,6 +18770,7 @@ __metadata:
     tsoa: ^5.1.1
     tsup: ^6.5.0
     tsx: 3.12.2
+    type-fest: ^3.11.0
     typescript: ^4.9.4
   languageName: unknown
   linkType: soft
@@ -20412,6 +20413,13 @@ __metadata:
   version: 1.4.0
   resolution: "type-fest@npm:1.4.0"
   checksum: b011c3388665b097ae6a109a437a04d6f61d81b7357f74cbcb02246f2f5bd72b888ae33631b99871388122ba0a87f4ff1c94078e7119ff22c70e52c0ff828201
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "type-fest@npm:3.11.0"
+  checksum: ebd7968301674d8022cd180aa34a685bda5962ad3c98da7280456f97468c1b12984f6a79d4eb4652f10e1f0ab42f7016121fd762068fd6255d4d0ccc069c2566
   languageName: node
   linkType: hard
 

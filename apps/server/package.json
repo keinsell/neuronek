@@ -59,7 +59,8 @@
 		"runtypes": "^6.6.0",
 		"supertest": "^6.3.3",
 		"swagger-ui-express": "^4.6.0",
-		"tsoa": "^5.1.1"
+		"tsoa": "^5.1.1",
+		"type-fest": "^3.11.0"
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-decorators": "^7.21.0",
