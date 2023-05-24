@@ -6,7 +6,6 @@ import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { hashPassword } from '../../domain/value-objects/password.js'
 import { IamQueryBus } from '../bus/iam.query-bus'
-import { IdentityAndAccessCommandBus } from '../bus/identity-and-access-command.bus.js'
 import { IdentityAndAccessEventBus } from '../bus/identity-and-access-event.bus.js'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
@@ -24,8 +23,6 @@ export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, Polic
 			return left(new PolicyViolation(409, 'CreateAccountWhenAccountWasNotCreatedBefore'))
 		}
 
-		await new IdentityAndAccessCommandBus().handle(command)
-
 		const passwordHash = await hashPassword(command.password)
 
 		const account = new Account({
@@ -37,9 +34,12 @@ export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, Polic
 
 		identity.create()
 
-		await this.eventBus.dispatchMultiple(identity.events)
+		// TODO: This was actually only for experimental purposes.
+		for await (const event of identity.events) {
+			await this.eventBus.handle(event)
+		}
 
-		const fetchAccount = await this.queryBus.handle<Account>(getAccountByUsernameQuery)
+		let fetchAccount = await this.queryBus.handle<Account>(getAccountByUsernameQuery)
 
 		return right(fetchAccount._id!)
 	}

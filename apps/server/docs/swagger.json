@@ -18,7 +18,10 @@
 						"description": "The password for the account."
 					}
 				},
-				"required": ["username", "password"],
+				"required": [
+					"username",
+					"password"
+				],
 				"type": "object",
 				"additionalProperties": false,
 				"example": {
@@ -35,7 +38,10 @@
 						"type": "string"
 					}
 				},
-				"required": ["accessToken", "refreshToken"],
+				"required": [
+					"accessToken",
+					"refreshToken"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -51,7 +57,10 @@
 						"description": "The password for the account."
 					}
 				},
-				"required": ["username", "password"],
+				"required": [
+					"username",
+					"password"
+				],
 				"type": "object",
 				"additionalProperties": false,
 				"example": {
@@ -96,7 +105,9 @@
 													"type": "string"
 												}
 											},
-											"required": ["id"],
+											"required": [
+												"id"
+											],
 											"type": "object"
 										},
 										{
@@ -105,7 +116,9 @@
 													"type": "string"
 												}
 											},
-											"required": ["error"],
+											"required": [
+												"error"
+											],
 											"type": "object"
 										}
 									]
@@ -118,7 +131,9 @@
 					}
 				},
 				"description": "Creates an account.",
-				"tags": ["Account"],
+				"tags": [
+					"Account"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -152,7 +167,9 @@
 													"type": "string"
 												}
 											},
-											"required": ["error"],
+											"required": [
+												"error"
+											],
 											"type": "object"
 										}
 									]
@@ -162,7 +179,9 @@
 					}
 				},
 				"description": "Creates an account.",
-				"tags": ["Account"],
+				"tags": [
+					"Account"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
