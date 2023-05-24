@@ -2,8 +2,8 @@ import { EventHandler } from '../../../../../shared/core/cqrs/event/event-handle
 import { AccountWriteRepository } from '../../../infrastructure/repositories/account.write-repository'
 import { AccountCreated } from './account-created'
 
-export class AccountCreatedHandler extends EventHandler<AccountCreated> {
+export class AccountCreatedHandler extends EventHandler {
 	public async execute(event: AccountCreated): Promise<void> {
-		await new AccountWriteRepository().save(event.payload)
+		await new AccountWriteRepository().save(event.account)
 	}
 }

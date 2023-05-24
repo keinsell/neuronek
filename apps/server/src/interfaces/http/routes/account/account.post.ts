@@ -1,5 +1,5 @@
-import { IamEventBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.event-bus'
 import { IamQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.query-bus'
+import { IdentityAndAccessEventBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-event.bus.js'
 import { CreateAccount as CreateAccountCommand } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
 import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
 import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
@@ -35,7 +35,7 @@ export class CreateAccountController extends Controller {
 				password: await createPassword(body.password)
 			})
 
-			const usecase = new CreateAccountUsecase(new IamQueryBus(), new IamEventBus())
+			const usecase = new CreateAccountUsecase(new IamQueryBus(), new IdentityAndAccessEventBus())
 
 			const result = await usecase.execute(command)
 

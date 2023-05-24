@@ -5,13 +5,14 @@ import { UseCase } from '../../../../shared/core/use-case.js'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { hashPassword } from '../../domain/value-objects/password.js'
-import { IamEventBus } from '../bus/iam.event-bus'
 import { IamQueryBus } from '../bus/iam.query-bus'
+import { IdentityAndAccessCommandBus } from '../bus/identity-and-access-command.bus.js'
+import { IdentityAndAccessEventBus } from '../bus/identity-and-access-event.bus.js'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
 
 export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, PolicyViolation> {
-	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IamEventBus) {
+	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IdentityAndAccessEventBus) {
 		super()
 	}
 
@@ -22,6 +23,8 @@ export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, Polic
 		if (fetchExistingAccount) {
 			return left(new PolicyViolation(409, 'CreateAccountWhenAccountWasNotCreatedBefore'))
 		}
+
+		await new IdentityAndAccessCommandBus().handle(command)
 
 		const passwordHash = await hashPassword(command.password)
 
@@ -34,7 +37,7 @@ export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, Polic
 
 		identity.create()
 
-		await this.eventBus.sendMultiple(identity.events)
+		await this.eventBus.dispatchMultiple(identity.events)
 
 		const fetchAccount = await this.queryBus.handle<Account>(getAccountByUsernameQuery)
 
