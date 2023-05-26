@@ -20,7 +20,11 @@
 		"noImplicitThis": true,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"paths": {
+			"~foundry": ["./src/shared/@foundry"],
+			"~foundry/cqrs": ["./src/shared/@foundry/cqrs"]
+		}
 	},
 	"ts-node": {
 		"swc": true

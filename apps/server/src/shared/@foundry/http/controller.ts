@@ -1,21 +1,19 @@
-import { Request } from './request'
-import { Response } from './response'
+import { Request } from './request.js'
+import { Response } from './response.js'
 
 export abstract class Controller {
 	protected req: Request
 	protected res: Response
 
-	protected abstract executeImpl(): Promise<Response>
+	public static json(response: Response, code: number, message: string) {
+		return response.status(code).json({ message })
+	}
 
 	public execute(request: Request, response: Response): void {
 		this.req = request
 		this.res = response
 
 		this.executeImpl()
-	}
-
-	public static json(response: Response, code: number, message: string) {
-		return response.status(code).json({ message })
 	}
 
 	public ok<T>(response: Response, dto?: T) {
@@ -64,4 +62,6 @@ export abstract class Controller {
 			message: error.toString()
 		})
 	}
+
+	protected abstract executeImpl(): Promise<Response>
 }

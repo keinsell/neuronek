@@ -1,46 +1,39 @@
-import { CommandHandler } from '../../core/cqrs/command/command-handler.js'
-import { Command } from '../../core/cqrs/command/command.js'
-import { CommandBus } from './command-bus.js'
 import { EventEmitter } from 'events'
-import type { Constructor } from 'type-fest'
+import { Command, CommandBus, CommandHandler } from '~foundry/cqrs'
 
 export class InMemoryCommandBus extends CommandBus {
-	private bindingStorage: Map<Constructor<Command>, CommandHandler>
+	private bindingStorage: Map<string, CommandHandler>
 	private eventEmitter: EventEmitter
 
 	constructor() {
 		super()
-		this.bindingStorage = new Map<Constructor<Command>, CommandHandler>()
+		this.bindingStorage = new Map<string, CommandHandler>()
 		this.eventEmitter = new EventEmitter()
 	}
 
 	public async handle(command: Command): Promise<void> {
-		const handler = this.bindingStorage.get(command.constructor as Constructor<Command>)
+		const handler = this.bindingStorage.get(command._type)
 
 		if (handler) {
 			return await handler.handle(command)
 		} else {
-			throw new Error(`No handler registered for command type: ${command.constructor.name}`)
+			throw new Error(`No handler registered for command type: ${command._type}`)
 		}
 	}
 
-	public registerHandler<T extends Command = Command>(
-		commandConstructor: Constructor<T>,
-		handler: CommandHandler<T>
-	): void {
-		this.bindingStorage.set(commandConstructor, handler)
-		this.eventEmitter.on(commandConstructor.name, async (command: T) => {
+	public async dispatch(command: Command): Promise<void> {
+		this.eventEmitter.emit(command._type, command)
+	}
+
+	async subscribe(command: Command, handler: CommandHandler<Command>): Promise<void> {
+		this.bindingStorage.set(command._type, handler)
+		this.eventEmitter.on(command._type, async (command: Command) => {
 			await this.handle(command)
 		})
 	}
 
-	public async dispatch(command: Command): Promise<void> {
-		const handler = this.bindingStorage.get(command.constructor as Constructor<Command>)
-
-		if (handler) {
-			this.eventEmitter.emit(command.constructor.name, command)
-		} else {
-			throw new Error(`No handler registered for command type: ${command.constructor.name}`)
-		}
+	async unsubscribe(command: Command, _handler: CommandHandler<Command>): Promise<void> {
+		this.bindingStorage.delete(command._type)
+		this.eventEmitter.removeAllListeners(command._type)
 	}
 }

@@ -5,6 +5,6 @@ import { AccountCreatedHandler } from '../../domain/events/account-created/accou
 export class IdentityAndAccessEventBus extends InMemoryEventBus {
 	constructor() {
 		super()
-		this.registerHandler(AccountCreated, new AccountCreatedHandler())
+		this.subscribe(AccountCreated, new AccountCreatedHandler())
 	}
 }
