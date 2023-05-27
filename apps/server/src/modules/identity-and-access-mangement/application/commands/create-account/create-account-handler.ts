@@ -1,6 +1,5 @@
-import { Command } from '../../../../../shared/core/cqrs/command/command'
-import { CommandHandler } from '../../../../../shared/core/cqrs/command/command-handler'
 import { CreateAccount } from './create-account'
+import { Command, CommandHandler } from '~foundry/cqrs'
 
 export class CreateAccountHandler extends CommandHandler<CreateAccount> {
 	public async handle(command: Command): Promise<void> {
