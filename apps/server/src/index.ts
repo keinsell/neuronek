@@ -1,11 +1,12 @@
-import { Message } from 'memphis-dev'
 import 'reflect-metadata'
 import { Account } from './modules/identity-and-access-mangement/domain/entities/account.js'
 import { Identity } from './modules/identity-and-access-mangement/domain/identity.js'
 import { createPasswordHash } from './modules/identity-and-access-mangement/domain/value-objects/password-hash.js'
 import { createUsername } from './modules/identity-and-access-mangement/domain/value-objects/username/username.js'
-import { memphisConnection } from './shared/infrastructure/memphis.js'
+import { MemphisMessageConsumer } from '~components/message-consumer/memphis-message-consumer.js'
 import { MemphisMessageProducer } from '~components/message-producer/memphis-message-producer.js'
+import { MessageHandler } from '~foundry/messaging/message-handler.js'
+import { Message } from '~foundry/messaging/message.js'
 
 export { HttpApplication } from './interfaces/http/http.js'
 
@@ -18,21 +19,23 @@ new Identity(
 
 // Send 30 messages by looping
 
-for (let i = 0; i < 30; i++) {
-	await new MemphisMessageProducer().send({
-		id: '123'
-	} as any)
+class UserCreatedMessageHandler extends MessageHandler<undefined> {
+	public async handle(message: Message<undefined>): Promise<void> {
+		console.log('UserCreatedMessageHandler', message)
+	}
 }
 
-const consumer = await memphisConnection.consumer({
-	stationName: 'neuronek',
-	consumerName: 'sample-consumer',
-	consumerGroup: ''
-})
+const producer = new MemphisMessageProducer('neuronek', 'sample-producerx')
+await producer.connect()
 
-consumer.setContext({ key: 'value' })
-consumer.on('message', (message: Message, _context: object) => {
-	console.log(message.getData().toString())
-	message.ack()
-	message.getHeaders()
-})
+const consumer = new MemphisMessageConsumer('neuronek', 'sample-consumer')
+await consumer.start()
+await consumer.subscribe('user-created', new UserCreatedMessageHandler())
+
+for (let index = 0; index < 1000; index++) {
+	const userCreated = new Message({
+		payload: undefined,
+		messageType: 'user-created'
+	})
+	producer.send<undefined>(userCreated as any)
+}

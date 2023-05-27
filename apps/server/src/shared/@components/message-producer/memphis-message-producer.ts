@@ -1,26 +1,30 @@
+// eslint-disable-next-line node/no-unpublished-import
+
 import { memphisConnection } from '../../infrastructure/memphis.js'
-import { kebabSpace } from '../../utils/kebab-space.js'
-import { Memphis, memphis } from 'memphis-dev'
+import { Memphis, memphis, Producer } from 'memphis-dev'
 import { MessageProducer } from '~foundry/messaging/message-producer.js'
 import { Message } from '~foundry/messaging/message.js'
 
-export class MemphisMessageProducer extends MessageProducer {
+export class MemphisMessageProducer implements MessageProducer {
 	private conncetion: Memphis = memphisConnection
+	private producer: Producer
 
-	public async connect(): Promise<void> {}
+	constructor(private readonly station: string, private readonly producerName: string) {}
 
-	public async disconnect(): Promise<void> {
-		return Promise.resolve(undefined)
+	public async connect(): Promise<void> {
+		this.producer = await this.conncetion.producer({
+			stationName: this.station,
+			producerName: this.producerName
+		})
 	}
 
-	public async send<T>(message: Message<T>): Promise<void> {
-		const producer = await this.conncetion.producer({
-			stationName: 'neuronek',
-			producerName: kebabSpace(this.constructor.name)
-		})
+	public async disconnect(): Promise<void> {
+		await this.producer.destroy()
+	}
 
-		await producer.produce({
-			message: Buffer.from(JSON.stringify(message)), // you can also send JS object - {}
+	public async send<T>(message: new (...arguments_: any[]) => Message<T>): Promise<void> {
+		await this.producer.produce({
+			message: Buffer.from(JSON.stringify(message)),
 			headers: memphis.headers()
 		})
 	}

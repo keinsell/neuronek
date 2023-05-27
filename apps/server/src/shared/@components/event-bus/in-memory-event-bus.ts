@@ -1,12 +1,11 @@
 import { EventEmitter } from 'events'
 import { EventBus, EventHandler, SimpleEvent } from '~foundry/cqrs'
 
-export class InMemoryEventBus extends EventBus {
+export class InMemoryEventBus implements EventBus {
 	private bindingStorage: Map<string, EventHandler>
 	private eventEmitter: EventEmitter
 
 	constructor() {
-		super()
 		this.bindingStorage = new Map<string, EventHandler>()
 		this.eventEmitter = new EventEmitter()
 	}

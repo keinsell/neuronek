@@ -3,3 +3,7 @@ type SequentialIDBrand = {
 }
 
 export type SequentialID = number & SequentialIDBrand
+
+export function sequentialId(id: number): SequentialID {
+	return id as SequentialID
+}
