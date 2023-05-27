@@ -23,3 +23,75 @@ services:
       - '${PWD}/.cache/meilisearch:/data.ms'
     environment:
       - MEILI_MASTER_KEY=${MEILISEARCH_MASTER_KEY}
+
+  memphis-metadata:
+    container_name: ${REPOSITORY_NAME}-memphis-metadata
+    image: memphisos/memphis-metadata:15-docker
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U memphis -p 5005']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - memphis
+    ports:
+      - '5005:5005'
+    environment:
+      - POSTGRESQL_USERNAME=memphis
+      - POSTGRESQL_PASSWORD=memphis
+      - POSTGRESQL_DATABASE=memphis
+      - POSTGRESQL_PORT_NUMBER=5005
+
+  memphis:
+    image: 'memphisos/memphis:stable'
+    container_name: ${REPOSITORY_NAME}-memphis
+    depends_on:
+      memphis-metadata:
+        condition: service_healthy
+    healthcheck:
+      test: wget http://127.0.0.1:9000 --spider || exit 1
+      interval: 10s
+      retries: 30
+      start_period: 5s
+    restart: on-failure
+    pull_policy: always
+    networks:
+      - memphis
+    ports:
+      - '9000:9000'
+      - '6666:6666'
+      - '7770:7770'
+    environment:
+      - ROOT_PASSWORD=memphis
+      - DOCKER_ENV=true
+      - ANALYTICS=true
+      - USER_PASS_BASED_AUTH=true
+      - CONNECTION_TOKEN=memphis
+      - METADATA_DB_HOST=memphis-metadata
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  memphis-rest-gateway:
+    image: 'memphisos/memphis-rest-gateway:latest'
+    depends_on:
+      memphis:
+        condition: service_healthy
+    restart: on-failure
+    pull_policy: always
+    networks:
+      - memphis
+    ports:
+      - '4444:4444'
+    environment:
+      - JWT_SECRET=JWT_TEST_PURPOSE
+      - REFRESH_JWT_SECRET=REFRESH_JWT_TEST_PURPOSE
+      - USER_PASS_BASED_AUTH=true
+      - CONNECTION_TOKEN=memphis
+      - ROOT_USER=root
+      - ROOT_PASSWORD=memphis
+      - MEMPHIS_HOST=memphis
+      - HTTP_PORT=4444
+networks:
+  memphis:
+    ipam:
+      driver: default

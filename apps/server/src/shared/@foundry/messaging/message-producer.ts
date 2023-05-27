@@ -1,5 +1,9 @@
-import { Message } from './message'
+import { Message } from '~foundry/messaging/message.js'
 
-export interface MessageProducer {
-	send<T>(message: Message<T>): Promise<void>
+export abstract class MessageProducer {
+	abstract connect(): Promise<void>
+
+	abstract disconnect(): Promise<void>
+
+	abstract send<T = unknown>(message: Message<T>): Promise<void>
 }

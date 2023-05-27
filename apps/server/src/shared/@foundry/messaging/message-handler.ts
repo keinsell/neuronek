@@ -21,6 +21,6 @@ import { Message } from './message'
  * };
  * ```
  */
-export interface MessageHandler<T> {
-	(message: Message<T>): Promise<void>
+export abstract class MessageHandler<T> {
+	abstract handle(message: Message<T>): Promise<void>
 }
