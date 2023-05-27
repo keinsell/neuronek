@@ -12,18 +12,10 @@ export abstract class CommandBus {
 	/** Fire and forget */
 	abstract dispatch(command: Command): Promise<void>
 
-	/**
-	 * This method is used to register command handlers with the bus. It usually takes a command type (or a name, or
-	 * a  key, etc.) and a handler as parameters.
-	 */
-	abstract subscribe(command: Command, handler: CommandHandler): Promise<void>
+	abstract subscribe<T extends Command>(commandClass: new (...args: any[]) => T, handler: CommandHandler): Promise<void>
 
-	/**
-	 * This method is used to unregister command handlers with the bus. It usually takes a command type (or a name, or
-	 * a  key, etc.) and a handler as parameters.
-	 *
-	 * @param command
-	 * @param handler
-	 */
-	abstract unsubscribe(command: Command, handler: CommandHandler): Promise<void>
+	abstract unsubscribe<T extends Command>(
+		commandClass: new (...args: any[]) => T,
+		handler: CommandHandler
+	): Promise<void>
 }

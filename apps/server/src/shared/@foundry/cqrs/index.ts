@@ -8,4 +8,4 @@ export { Query } from './query/query'
 
 export { EventBus } from './event/event-bus'
 export { EventHandler } from './event/event-handler'
-export { IntegrationEvent } from './event/integration-event'
+export { SimpleEvent } from './event/simple-event.js'

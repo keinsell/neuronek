@@ -1,5 +1,5 @@
 import { EventHandler } from './event-handler.js'
-import { IntegrationEvent } from './integration-event.js'
+import { SimpleEvent } from './simple-event.js'
 
 /**
  * Event bus is to enable loosely coupled communication between components or modules in a software system. It
@@ -10,11 +10,17 @@ export abstract class EventBus {
 	 * Dispatch event to all subscribed handlers, this method uses "fire-and-forget" methods which makes the whole
 	 *  process asynchronous.
 	 */
-	abstract dispatch(event: IntegrationEvent): Promise<void>
+	abstract dispatch(event: SimpleEvent): Promise<void> | void
 
-	abstract handle(event: IntegrationEvent): Promise<void>
+	abstract handle(event: SimpleEvent): Promise<void>
 
-	abstract subscribe(event: IntegrationEvent, handler: EventHandler): Promise<void> | void
+	abstract subscribe<T extends SimpleEvent>(
+		eventClass: new (...args: any[]) => T,
+		handler: EventHandler
+	): Promise<void> | void
 
-	abstract unsubscribe(event: IntegrationEvent, eventHandler: EventHandler): Promise<void> | void
+	abstract unsubscribe<T extends SimpleEvent>(
+		eventClass: new (...args: any[]) => T,
+		handler: EventHandler
+	): Promise<void> | void
 }

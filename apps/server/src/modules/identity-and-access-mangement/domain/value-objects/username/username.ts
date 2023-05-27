@@ -1,7 +1,7 @@
-import { InvalidValue } from '../../../../../shared/core/domain/exceptions/invalid-value.js'
 import { UsernameIsAboveMinimalCharacterLimit } from './specification/username-is-above-minimal-character-limit.js'
 import { UsernameIsBelowMaxiumCharacterLimit } from './specification/username-is-below-maxium-character-limit.js'
 import * as t from 'io-ts'
+import { InvalidValue } from '~foundry/exceptions/invalid-value.js'
 
 /** Username defines the shape and constraints of a username value object. */
 export const Username = new t.Type<string>(

@@ -1,5 +1,5 @@
-import { UniqueId } from '../../../../shared/core/indexing/unique-id'
-import { WriteRepository } from '../../../../shared/core/persistence/write-repository'
+import { UniqueId } from '../../../../shared/@foundry/indexing/unique-id.js'
+import { WriteRepository } from '../../../../shared/@foundry/persistence/write-repository.js'
 import { prisma } from '../../../../shared/infrastructure/prisma/prisma'
 import { Account } from '../../domain/entities/account'
 

@@ -22,8 +22,11 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"noUncheckedIndexedAccess": true,
 		"paths": {
-			"~foundry": ["./src/shared/@foundry"],
-			"~foundry/cqrs": ["./src/shared/@foundry/cqrs"]
+			"~foundry/*": ["./src/shared/@foundry/*"],
+			"~foundry/cqrs": ["./src/shared/@foundry/cqrs"],
+			"~foundry/domain": ["./src/shared/@foundry/domain"],
+			"~components/*": ["./src/shared/@components/*"],
+			"~domain/iam": ["./src/modules/identity-and-access-mangement/*"]
 		}
 	},
 	"ts-node": {

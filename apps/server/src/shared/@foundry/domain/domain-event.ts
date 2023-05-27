@@ -1,8 +1,8 @@
 import { Entity } from './enity.js'
-import { IntegrationEvent } from '~foundry/cqrs'
+import { SimpleEvent } from '~foundry/cqrs'
 
-export abstract class DomainEvent<T extends Entity> extends IntegrationEvent {
-	protected constructor(name: string, public aggregate: T) {
-		super(name)
+export abstract class DomainEvent<T extends Entity> extends SimpleEvent {
+	protected constructor(public aggregate: T) {
+		super()
 	}
 }

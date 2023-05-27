@@ -1,5 +1,5 @@
+import { kebabSpace } from '../../../utils/kebab-space.js'
 import { UniqueId } from '../../indexing/unique-id.js'
-import { kebabCase } from 'lodash'
 import { nanoid } from 'nanoid'
 
 export abstract class Command {
@@ -14,6 +14,10 @@ export abstract class Command {
 		this._correlationId = correlationId
 		this._id = id || nanoid(256)
 		this._timestamp = new Date()
-		this._type = kebabCase(this.constructor.name)
+		this._type = kebabSpace(this.constructor.name)
+	}
+
+	static get type() {
+		return kebabSpace(this.name)
 	}
 }

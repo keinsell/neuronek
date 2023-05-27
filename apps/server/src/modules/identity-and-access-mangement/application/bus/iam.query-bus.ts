@@ -1,8 +1,7 @@
-import { Query } from '../../../../shared/core/cqrs/query/query'
-import { QueryBidning } from '../../../../shared/core/cqrs/query/query-bidning'
-import { QueryBus } from '../../../../shared/core/cqrs/query/query-bus'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
 import { FindAccountByUsernameHandler } from '../queries/get-account-by-username/find-account-by-username.handler'
+import { Query, QueryBus } from '~foundry/cqrs'
+import { QueryBidning } from '~foundry/cqrs/query/query-bidning.js'
 
 export class IamQueryBus extends QueryBus {
 	bindings: QueryBidning[] = [

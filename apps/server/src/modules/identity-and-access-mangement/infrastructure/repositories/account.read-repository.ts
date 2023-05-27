@@ -1,5 +1,5 @@
-import { UniqueId } from '../../../../shared/core/indexing/unique-id'
-import { QueryRepository } from '../../../../shared/core/persistence/read-repository'
+import { UniqueId } from '../../../../shared/@foundry/indexing/unique-id.js'
+import { QueryRepository } from '../../../../shared/@foundry/persistence/read-repository.js'
 import { prisma } from '../../../../shared/infrastructure/prisma/prisma'
 import { Account } from '../../domain/entities/account'
 import { AccountDataMapper } from '../data-mappers/account.data-mapper.js'

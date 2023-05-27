@@ -1,14 +1,14 @@
-import { InvalidCredentials } from '../../../../shared/core/domain/exceptions/Invalid-credentials.js'
-import { NotFound } from '../../../../shared/core/domain/exceptions/not-found.js'
-import { PolicyViolation } from '../../../../shared/core/domain/exceptions/policy-violation.js'
-import { left, Result, right } from '../../../../shared/core/technical/result.js'
-import { UseCase } from '../../../../shared/core/use-case.js'
 import { Account } from '../../domain/entities/account.js'
 import { comparePasswordHash } from '../../domain/value-objects/password-hash.js'
 import { generateTokens } from '../../services/jwt.js'
 import { IamQueryBus } from '../bus/iam.query-bus.js'
 import { Authenticate } from '../commands/authenticate/authenticate.js'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username.js'
+import { UseCase } from '~foundry/domain'
+import { InvalidCredentials } from '~foundry/exceptions/Invalid-credentials.js'
+import { NotFound } from '~foundry/exceptions/not-found.js'
+import { PolicyViolation } from '~foundry/exceptions/policy-violation.js'
+import { left, Result, right } from '~foundry/technical/result.js'
 
 export interface AuthenticateResponse {
 	accessToken: string

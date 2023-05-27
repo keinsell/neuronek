@@ -1,4 +1,4 @@
-import { Entity } from '../../../../shared/core/domain/enity.js'
+import { Entity } from '../../../../shared/@foundry/domain/enity.js'
 import { PasswordHash } from '../value-objects/password-hash.js'
 import { Username } from '../value-objects/username/username.js'
 
