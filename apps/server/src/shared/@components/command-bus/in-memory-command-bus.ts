@@ -11,11 +11,6 @@ export class InMemoryCommandBus extends CommandBus {
 		this.eventEmitter = new EventEmitter()
 	}
 
-	public async dispatch(command: Command): Promise<void> {
-		const commandType = command.constructor.name
-		this.eventEmitter.emit(commandType, command)
-	}
-
 	public async handle(command: Command): Promise<void> {
 		const commandType = command.constructor.name
 		const handler = this.bindingStorage.get(commandType)
@@ -24,6 +19,11 @@ export class InMemoryCommandBus extends CommandBus {
 		} else {
 			throw new Error(`No handler registered for command: ${commandType}`)
 		}
+	}
+
+	public async dispatch(command: Command): Promise<void> {
+		const commandType = command.constructor.name
+		this.eventEmitter.emit(commandType, command)
 	}
 
 	public async subscribe<T extends Command>(

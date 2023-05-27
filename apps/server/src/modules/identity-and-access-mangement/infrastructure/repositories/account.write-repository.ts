@@ -5,14 +5,6 @@ import { Account } from '../../domain/entities/account'
 
 export class AccountWriteRepository extends WriteRepository<Account> {
 	private prisma = prisma
-	public async delete(id: UniqueId): Promise<boolean> {
-		try {
-			await this.prisma.account.delete({ where: { id: id as string } })
-			return true
-		} catch (error) {
-			return false
-		}
-	}
 
 	public async save(entity: Account): Promise<Account> {
 		if (entity._id) {
@@ -34,6 +26,15 @@ export class AccountWriteRepository extends WriteRepository<Account> {
 				},
 				account.id
 			)
+		}
+	}
+
+	public async delete(id: UniqueId): Promise<boolean> {
+		try {
+			await this.prisma.account.delete({ where: { id: id as string } })
+			return true
+		} catch (error) {
+			return false
 		}
 	}
 }

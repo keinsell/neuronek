@@ -11,6 +11,11 @@ export class AccountReadRepository implements QueryRepository<Account> {
 		this.accountDataMapper = new AccountDataMapper()
 	}
 
+	public async findById(id: UniqueId): Promise<Account | null> {
+		const account = await prisma.account.findUnique({ where: { id: id as string } })
+		return account ? this.accountDataMapper.inverse(account) : null
+	}
+
 	public async findAll(): Promise<Account[]> {
 		const accounts = await prisma.account.findMany()
 		return Promise.all(
@@ -18,11 +23,6 @@ export class AccountReadRepository implements QueryRepository<Account> {
 				return await this.accountDataMapper.inverse(account)
 			})
 		)
-	}
-
-	public async findById(id: UniqueId): Promise<Account | null> {
-		const account = await prisma.account.findUnique({ where: { id: id as string } })
-		return account ? this.accountDataMapper.inverse(account) : null
 	}
 
 	public async findByUsername(username: string): Promise<Account | null> {
