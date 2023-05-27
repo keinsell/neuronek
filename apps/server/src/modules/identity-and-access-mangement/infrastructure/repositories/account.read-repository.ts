@@ -1,5 +1,5 @@
-import { UniqueId } from '../../../../shared/core/indexing/unique-id'
-import { QueryRepository } from '../../../../shared/core/persistence/read-repository'
+import { UniqueId } from '../../../../shared/@foundry/indexing/unique-id.js'
+import { QueryRepository } from '../../../../shared/@foundry/persistence/read-repository.js'
 import { prisma } from '../../../../shared/infrastructure/prisma/prisma'
 import { Account } from '../../domain/entities/account'
 import { AccountDataMapper } from '../data-mappers/account.data-mapper.js'
@@ -11,6 +11,11 @@ export class AccountReadRepository implements QueryRepository<Account> {
 		this.accountDataMapper = new AccountDataMapper()
 	}
 
+	public async findById(id: UniqueId): Promise<Account | null> {
+		const account = await prisma.account.findUnique({ where: { id: id as string } })
+		return account ? this.accountDataMapper.inverse(account) : null
+	}
+
 	public async findAll(): Promise<Account[]> {
 		const accounts = await prisma.account.findMany()
 		return Promise.all(
@@ -18,11 +23,6 @@ export class AccountReadRepository implements QueryRepository<Account> {
 				return await this.accountDataMapper.inverse(account)
 			})
 		)
-	}
-
-	public async findById(id: UniqueId): Promise<Account | null> {
-		const account = await prisma.account.findUnique({ where: { id: id as string } })
-		return account ? this.accountDataMapper.inverse(account) : null
 	}
 
 	public async findByUsername(username: string): Promise<Account | null> {

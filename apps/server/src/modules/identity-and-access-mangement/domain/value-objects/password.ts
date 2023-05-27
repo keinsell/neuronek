@@ -1,4 +1,4 @@
-import { NotImplemented } from '../../../../shared/core/domain/exceptions/not-implemented.js'
+import { NotImplemented } from '../../../../shared/@foundry/exceptions/not-implemented.js'
 import { hashPassword as createHashedPassword, PasswordHash } from './password-hash.js'
 import { Static, String } from 'runtypes'
 

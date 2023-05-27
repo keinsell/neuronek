@@ -1,4 +1,4 @@
-import { Command } from '../../../../../shared/core/cqrs/command/command.js'
+import { Command } from '~foundry/cqrs'
 
 interface DeleteAccountProperties {
 	accountId: string

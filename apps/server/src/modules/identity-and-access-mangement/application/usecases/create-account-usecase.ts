@@ -1,17 +1,17 @@
-import { PolicyViolation } from '../../../../shared/core/domain/exceptions/policy-violation.js'
-import { UniqueId } from '../../../../shared/core/indexing/unique-id'
-import { left, Result, right } from '../../../../shared/core/technical/result'
-import { UseCase } from '../../../../shared/core/use-case.js'
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { hashPassword } from '../../domain/value-objects/password.js'
 import { IamQueryBus } from '../bus/iam.query-bus'
-import { IdentityAndAccessEventBus } from '../bus/identity-and-access-event.bus.js'
+import { IdentityAndAccessDomainBus } from '../bus/identity-and-access-domain-bus.js'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
+import { UseCase } from '~foundry/domain'
+import { PolicyViolation } from '~foundry/exceptions/policy-violation.js'
+import { UniqueId } from '~foundry/indexing/unique-id.js'
+import { left, Result, right } from '~foundry/technical/result.js'
 
 export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, PolicyViolation> {
-	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IdentityAndAccessEventBus) {
+	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IdentityAndAccessDomainBus) {
 		super()
 	}
 

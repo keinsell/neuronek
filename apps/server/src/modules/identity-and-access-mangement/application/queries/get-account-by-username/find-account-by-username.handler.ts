@@ -1,7 +1,7 @@
-import { QueryHandler } from '../../../../../shared/core/cqrs/query/query-handler'
 import { Account } from '../../../domain/entities/account'
 import { AccountReadRepository } from '../../../infrastructure/repositories/account.read-repository'
 import { FindAccountByUsername } from './find-account-by-username'
+import { QueryHandler } from '~foundry/cqrs'
 
 export class FindAccountByUsernameHandler extends QueryHandler<Account | null> {
 	public async execute(query: FindAccountByUsername): Promise<Account | null> {

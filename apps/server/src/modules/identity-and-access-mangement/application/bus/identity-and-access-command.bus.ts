@@ -1,10 +1,12 @@
-import { InMemoryCommandBus } from '../../../../shared/common/command-bus/in-memory-command-bus.js'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { CreateAccountHandler } from '../commands/create-account/create-account-handler'
+import { InMemoryCommandBus } from '~components/command-bus/index.js'
 
 export class IdentityAndAccessCommandBus extends InMemoryCommandBus {
 	constructor() {
 		super()
-		this.registerHandler(CreateAccount, new CreateAccountHandler())
+		this.subscribe<CreateAccount>(CreateAccount, new CreateAccountHandler()).then(() =>
+			console.log(`CreateAccountHandler`)
+		)
 	}
 }

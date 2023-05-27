@@ -1,10 +1,10 @@
 import { IamQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.query-bus'
-import { IdentityAndAccessEventBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-event.bus.js'
+import { IdentityAndAccessDomainBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-domain-bus.js'
 import { CreateAccount as CreateAccountCommand } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
 import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
 import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
 import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js'
-import { Exception } from '../../../../shared/core/domain/exception.js'
+import { Exception } from '../../../../shared/@foundry/exceptions/exception.js'
 import { Body, Controller, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
 
 /**
@@ -35,7 +35,7 @@ export class CreateAccountController extends Controller {
 				password: await createPassword(body.password)
 			})
 
-			const usecase = new CreateAccountUsecase(new IamQueryBus(), new IdentityAndAccessEventBus())
+			const usecase = new CreateAccountUsecase(new IamQueryBus(), new IdentityAndAccessDomainBus())
 
 			const result = await usecase.execute(command)
 

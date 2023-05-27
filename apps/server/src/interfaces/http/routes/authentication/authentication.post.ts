@@ -6,8 +6,8 @@ import {
 } from '../../../../modules/identity-and-access-mangement/application/usecases/authenticate-usecase.js'
 import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
 import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js'
-import { Exception } from '../../../../shared/core/domain/exception.js'
 import { Body, Controller, OperationId, Post, Route, Tags } from 'tsoa'
+import { Exception } from '~foundry/exceptions/exception.js'
 
 /**
  * Represents the request body for creating an account.
