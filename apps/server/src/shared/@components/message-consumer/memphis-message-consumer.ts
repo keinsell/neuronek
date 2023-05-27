@@ -34,10 +34,10 @@ export class MemphisMessageConsumer implements MessageConsumer {
 				return
 			}
 
-			await handler.handle(deserializedMessage as any)
-
 			message.ack()
 			message.getHeaders()
+
+			await handler.handle(deserializedMessage as any)
 		})
 	}
 }
