@@ -1,0 +1,7 @@
+{
+	"quiet": true,
+	"watch": ["src"],
+	"ext": ".ts,.js",
+	"ignore": [],
+	"exec": "tsup-node src/index.ts --format esm --silent && node ./bin/server.js"
+}
