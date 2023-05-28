@@ -10,7 +10,7 @@ chardet==4.0.0
 idna==2.10
 multidict==5.1.0
 python-graphql-client==0.4.3
-requests==2.25.1
+requests==2.31.0
 soupsieve==2.2.1
 typing-extensions==3.10.0.0
 urllib3==1.26.5
