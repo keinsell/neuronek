@@ -18,6 +18,7 @@
 		"db:push": "prisma db push --accept-data-loss",
 		"db:studio": "prisma studio",
 		"dev": "nodemon",
+		"dev:fast": "nodemon --config nodemon.blazing.json",
 		"test": "ava"
 	},
 	"ava": {

@@ -11,7 +11,7 @@
 		},
 		"prebuild": {
 			"outputs": ["dist/**", ".next/**", "public/dist/**", "node_modules/@prisma/client"],
-			"cache": false
+			"cache": true
 		},
 		"build": {
 			"dependsOn": ["^prebuild", "^build", "^db:generate"],
@@ -23,6 +23,10 @@
 			"cache": false
 		},
 		"dev": {
+			"cache": false,
+			"dependsOn": ["^build", "^db:generate", "^db:push"]
+		},
+		"dev:fast": {
 			"cache": false,
 			"dependsOn": ["^build", "^db:generate", "^db:push"]
 		},
