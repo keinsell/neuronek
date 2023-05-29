@@ -1,8 +1,8 @@
 import { Account } from '../../domain/entities/account'
 import { Identity } from '../../domain/identity'
 import { hashPassword } from '../../domain/value-objects/password.js'
-import { IamQueryBus } from '../bus/iam.query-bus'
 import { IdentityAndAccessDomainBus } from '../bus/identity-and-access-domain-bus.js'
+import { IdentityAndAccessQueryBus } from '../bus/identity-and-access-query-bus.js'
 import { CreateAccount } from '../commands/create-account/create-account'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username'
 import { UseCase } from '~foundry/domain'
@@ -11,7 +11,10 @@ import { UniqueId } from '~foundry/indexing/unique-id.js'
 import { left, Result, right } from '~foundry/technical/result.js'
 
 export class CreateAccountUsecase extends UseCase<CreateAccount, UniqueId, PolicyViolation> {
-	constructor(private readonly queryBus: IamQueryBus, private readonly eventBus: IdentityAndAccessDomainBus) {
+	constructor(
+		private readonly queryBus: IdentityAndAccessQueryBus,
+		private readonly eventBus: IdentityAndAccessDomainBus
+	) {
 		super()
 	}
 

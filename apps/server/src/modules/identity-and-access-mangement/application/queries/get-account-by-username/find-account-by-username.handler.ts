@@ -4,7 +4,7 @@ import { FindAccountByUsername } from './find-account-by-username'
 import { QueryHandler } from '~foundry/cqrs'
 
 export class FindAccountByUsernameHandler extends QueryHandler<Account | null> {
-	public async execute(query: FindAccountByUsername): Promise<Account | null> {
+	public async handle(query: FindAccountByUsername): Promise<Account | null> {
 		const repository = new AccountReadRepository()
 		const account = await repository.findByUsername(query.username)
 
