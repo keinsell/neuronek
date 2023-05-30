@@ -41,7 +41,7 @@ RUN corepack prepare pnpm@8.4.0 --activate
 
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json .
-COPY --from=builder /app/out/yarn.lock .
+COPY --from=builder /app/out/pnpm-lock.yaml .
 
 RUN pnpm install
 
