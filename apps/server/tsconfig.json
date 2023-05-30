@@ -21,7 +21,9 @@
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"noUncheckedIndexedAccess": true,
-		"paths": {
+	  "outDir" : "dist" ,
+	  "baseUrl" : "." ,
+	  "paths" : {
 			"~foundry/*": ["./src/shared/@foundry/*"],
 			"~foundry/cqrs": ["./src/shared/@foundry/cqrs"],
 			"~foundry/domain": ["./src/shared/@foundry/domain"],
