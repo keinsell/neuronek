@@ -15,15 +15,15 @@ FROM base AS builder
 RUN apt-get update && apt-get install -y libc6-dev
 RUN apt-get update
 
-RUN npm install -g pnpm@latest
+RUN npm install -g pnpm turbo
 
 WORKDIR /app
 
-RUN echo "nodeLinker: pnpm" >> /app/.pnp.js
+RUN corepack prepare pnpm --activate
 
 COPY . .
 
-RUN pnpm prune --scope=${TURBO_TARGET_PACKAGE} --filter ./packages/${TURBO_TARGET_PACKAGE}
+RUN turbo prune --scope=${TURBO_TARGET_PACKAGE} --docker
 
 # -------------
 # INSTALLER ---
@@ -36,7 +36,8 @@ RUN apt-get update
 
 WORKDIR /app
 
-RUN npm install -g pnpm@latest
+RUN npm install -g pnpm turbo
+RUN corepack prepare pnpm --activate
 
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json .
