@@ -7,7 +7,7 @@ on:
     branches: [trunk]
 
 env:
-  GIT_LFS_CACHE_DIR: '${{github.workspace}}/git-lfs-cache'
+  GIT_LFS_CACHE_DIR: '${{ github.workspace }}/git-lfs-cache'
 
 jobs:
   build:
@@ -23,10 +23,10 @@ jobs:
         uses: actions/cache@v2
         id: git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
           restore-keys: |
-            ${{runner.os}}-git-lfs-
+            ${{ runner.os }}-git-lfs-
 
       - name: Skip Git LFS checkout for cached files
         if: steps.git-lfs-cache.outputs.cache-hit == 'true'
@@ -42,38 +42,37 @@ jobs:
         uses: actions/cache@v2
         id: save-git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-          cache: yarn
+          node-version: 18
 
       - uses: volta-cli/action@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Get pnpm cache directory path
+        id: pnpm-cache-dir-path
+        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
 
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
+      - name: Cache pnpm cache
+        uses: actions/cache@v2
+        id: cache-pnpm-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Setup prisma
-        run: yarn run turbo db:generate
+        run: pnpm run turbo db:generate
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
 
   test:
     runs-on: ubuntu-latest
@@ -90,10 +89,10 @@ jobs:
         uses: actions/cache@v2
         id: git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
           restore-keys: |
-            ${{runner.os}}-git-lfs-
+            ${{ runner.os }}-git-lfs-
 
       - name: Skip Git LFS checkout for cached files
         if: steps.git-lfs-cache.outputs.cache-hit == 'true'
@@ -109,38 +108,37 @@ jobs:
         uses: actions/cache@v2
         id: save-git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-          cache: yarn
+          node-version: 18
 
       - uses: volta-cli/action@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Get pnpm cache directory path
+        id: pnpm-cache-dir-path
+        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
 
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
+      - name: Cache pnpm cache
+        uses: actions/cache@v2
+        id: cache-pnpm-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Setup prisma
-        run: yarn run turbo db:generate
+        run: pnpm run turbo db:generate
 
       - name: Test
-        run: yarn test
+        run: pnpm run test
 
       - uses: codecov/codecov-action@v3
         with:
@@ -155,10 +153,10 @@ jobs:
         uses: actions/cache@v2
         id: git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
           restore-keys: |
-            ${{runner.os}}-git-lfs-
+            ${{ runner.os }}-git-lfs-
 
       - name: Skip Git LFS checkout for cached files
         if: steps.git-lfs-cache.outputs.cache-hit == 'true'
@@ -174,8 +172,8 @@ jobs:
         uses: actions/cache@v2
         id: save-git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -185,7 +183,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2

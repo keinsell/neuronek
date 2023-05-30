@@ -15,15 +15,15 @@ FROM base AS builder
 RUN apt-get update && apt-get install -y libc6-dev
 RUN apt-get update
 
-RUN npm i -g turbo
+RUN npm install -g pnpm@latest
 
 WORKDIR /app
 
-RUN corepack prepare yarn@stable --activate && yarn set version berry && echo "nodeLinker: node-modules" >> /app/.yarnrc.yml
+RUN echo "nodeLinker: pnpm" >> /app/.pnp.js
 
 COPY . .
 
-RUN turbo prune --scope=${TURBO_TARGET_PACKAGE} --docker
+RUN pnpm prune --scope=${TURBO_TARGET_PACKAGE} --filter ./packages/${TURBO_TARGET_PACKAGE}
 
 # -------------
 # INSTALLER ---
@@ -36,17 +36,17 @@ RUN apt-get update
 
 WORKDIR /app
 
-RUN corepack prepare yarn@stable --activate && yarn set version berry && echo "nodeLinker: node-modules" >> /app/.yarnrc.yml
+RUN npm install -g pnpm@latest
 
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json .
 COPY --from=builder /app/out/yarn.lock .
 
-RUN yarn install
+RUN pnpm install
 
 COPY --from=builder /app/out/full/ .
 
-RUN yarn run turbo build --scope=${TURBO_TARGET_PACKAGE}
+RUN pnpm run turbo build --scope=${TURBO_TARGET_PACKAGE}
 
 # -------------
 # RUNNER ------

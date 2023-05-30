@@ -1,41 +1,46 @@
 name: Pulumi
 on:
-  - pull_request
+  pull_request:
+    branches:
+      - main
+
 jobs:
   preview:
     name: Preview
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: yarn
+
       - name: Configure DigitalOcean Credentials
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - uses: volta-cli/action@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Cache yarn cache
+      - name: Get pnpm store directory path
+        id: pnpm-store-dir-path
+        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
+
+      - name: Cache pnpm store
         uses: actions/cache@v3
-        id: cache-yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.pnpm-store-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - uses: pulumi/actions@v3
-        with:
-          command: preview
-          stack-name: dev
+        run: pnpm install --frozen-lockfile
+
+      - name: Pulumi Preview
+        run: pnpm pulumi preview --stack dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
