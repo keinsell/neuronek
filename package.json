@@ -42,6 +42,7 @@
 		"husky": "^8.0.3",
 		"infrastructure": "workspace:^",
 		"lint-staged": "13.1.0",
+	  "pnpm" : "^8.6.0" ,
 		"prettier": "^2.7.1",
 		"prettier-plugin-packagejson": "2.3.0",
 		"prettier-plugin-prisma": "4.8.0",
@@ -49,9 +50,8 @@
 		"prettier-plugin-sh": "0.12.8",
 		"turbo": "latest"
 	},
-	"packageManager": "yarn@3.3.1",
+  "packageManager" : "pnpm@8.6.0" ,
 	"volta": {
-		"node": "19.4.0",
-		"yarn": "3.3.1"
+		"node": "19.4.0"
 	}
 }

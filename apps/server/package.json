@@ -11,7 +11,7 @@
 	"type": "module",
 	"scripts": {
 		"prebuild": "prisma generate && tsoa spec-and-routes",
-		"build": "yarn prebuild && tsup-node src/index.ts",
+	  "build" : "pnpm run prebuild && tsup-node src/index.ts" ,
 		"db:generate": "prisma generate",
 		"db:migrate:deploy": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
@@ -93,9 +93,8 @@
 		"tsx": "3.12.2",
 		"typescript": "^4.9.4"
 	},
-	"packageManager": "yarn@4.0.0-rc.35",
+  "packageManager" : "pnpm@8.6.0" ,
 	"volta": {
-		"node": "19.4.0",
-		"yarn": "4.0.0-rc.35"
+	  "node" : "19.4.0"
 	}
 }

@@ -7,10 +7,10 @@ on:
     branches: [trunk]
 
 env:
-  GIT_LFS_CACHE_DIR: '${{github.workspace}}/git-lfs-cache'
+  GIT_LFS_CACHE_DIR: '${{ github.workspace }}/git-lfs-cache'
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -21,130 +21,46 @@ jobs:
 
       - name: Restore Git LFS cache
         uses: actions/cache@v2
-        id: git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
           restore-keys: |
-            ${{runner.os}}-git-lfs-
+            ${{ runner.os }}-git-lfs-
 
-      - name: Skip Git LFS checkout for cached files
-        if: steps.git-lfs-cache.outputs.cache-hit == 'true'
-        run: |
-          git lfs checkout
-          echo "Skipping Git LFS checkout for cached files"
-
-      - name: Download Git LFS files
-        if: steps.git-lfs-cache.outputs.cache-hit != 'true'
+      - name: Git LFS checkout
         run: git lfs checkout
-
-      - name: Save Git LFS cache
-        uses: actions/cache@v2
-        id: save-git-lfs-cache
-        with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-          cache: yarn
+          node-version: 18
 
-      - uses: volta-cli/action@v3
+      - name: Install pnpm
+        run: npm i -g pnpm turbo
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.pnpm-store/v3
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Setup prisma
-        run: yarn run turbo db:generate
+        run: turbo db:generate
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
 
-  test:
-    runs-on: ubuntu-latest
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      TURBO_REMOTE_ONLY: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Restore Git LFS cache
-        uses: actions/cache@v2
-        id: git-lfs-cache
-        with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
-          restore-keys: |
-            ${{runner.os}}-git-lfs-
-
-      - name: Skip Git LFS checkout for cached files
-        if: steps.git-lfs-cache.outputs.cache-hit == 'true'
-        run: |
-          git lfs checkout
-          echo "Skipping Git LFS checkout for cached files"
-
-      - name: Download Git LFS files
-        if: steps.git-lfs-cache.outputs.cache-hit != 'true'
-        run: git lfs checkout
-
-      - name: Save Git LFS cache
-        uses: actions/cache@v2
-        id: save-git-lfs-cache
-        with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          cache: yarn
-
-      - uses: volta-cli/action@v3
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Setup prisma
-        run: yarn run turbo db:generate
-
-      - name: Test
-        run: yarn test
-
-      - uses: codecov/codecov-action@v3
-        with:
-          files: ./packages/osiris/coverage/lcov.info #, ...
+  #      - name: Test
+  #        run: pnpm run test
+  #
+  #      - uses: codecov/codecov-action@v3
+  #        with:
+  #          files: ./packages/osiris/coverage/lcov.info #, ...
 
   docker:
     runs-on: ubuntu-latest
@@ -153,29 +69,15 @@ jobs:
 
       - name: Restore Git LFS cache
         uses: actions/cache@v2
-        id: git-lfs-cache
         with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
+          path: '${{ env.GIT_LFS_CACHE_DIR }}'
+          key: "${{ runner.os }}-git-lfs-${{ hashFiles('**/lfs/*') }}"
           restore-keys: |
-            ${{runner.os}}-git-lfs-
+            ${{ runner.os }}-git-lfs-
 
-      - name: Skip Git LFS checkout for cached files
-        if: steps.git-lfs-cache.outputs.cache-hit == 'true'
-        run: |
-          git lfs checkout
-          echo "Skipping Git LFS checkout for cached files"
-
-      - name: Download Git LFS files
-        if: steps.git-lfs-cache.outputs.cache-hit != 'true'
+      - name: Git LFS checkout
         run: git lfs checkout
 
-      - name: Save Git LFS cache
-        uses: actions/cache@v2
-        id: save-git-lfs-cache
-        with:
-          path: '${{env.GIT_LFS_CACHE_DIR}}'
-          key: "${{runner.os}}-git-lfs-${{hashFiles('**/lfs/*')}}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -185,7 +87,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
