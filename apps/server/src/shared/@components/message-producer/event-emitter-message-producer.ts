@@ -14,7 +14,7 @@ export class EventEmitterMessageProducer extends MessageProducer {
 
 	async disconnect(): Promise<void> {}
 
-	async send<T>(message: Message<T>): Promise<void> {
-		this.eventEmitter.emit(message.messageType, message)
+	async send<T extends Message<unknown>>(message: new (...arguments_: any[]) => T): Promise<void> {
+		this.eventEmitter.emit(message.name, new message())
 	}
 }
