@@ -19,7 +19,7 @@ RUN npm install -g pnpm turbo
 
 WORKDIR /app
 
-RUN corepack prepare pnpm --activate
+RUN corepack prepare pnpm@8.4.0 --activate
 
 COPY . .
 
@@ -37,7 +37,7 @@ RUN apt-get update
 WORKDIR /app
 
 RUN npm install -g pnpm turbo
-RUN corepack prepare pnpm --activate
+RUN corepack prepare pnpm@8.4.0 --activate
 
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json .
