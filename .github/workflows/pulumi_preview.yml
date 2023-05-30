@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
 
       - name: Configure DigitalOcean Credentials
         uses: digitalocean/action-doctl@v2
@@ -23,16 +23,12 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm i -g pnpm
 
-      - name: Get pnpm store directory path
-        id: pnpm-store-dir-path
-        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v3
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.pnpm-store-dir-path.outputs.dir }}
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-

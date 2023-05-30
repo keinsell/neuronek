@@ -50,17 +50,13 @@ jobs:
         with:
           node-version: 18
 
-      - uses: volta-cli/action@v3
+      - name: Install pnpm
+        run: npm i -g pnpm
 
-      - name: Get pnpm cache directory path
-        id: pnpm-cache-dir-path
-        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
-
-      - name: Cache pnpm cache
+      - name: Cache pnpm modules
         uses: actions/cache@v2
-        id: cache-pnpm-cache
         with:
-          path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
@@ -116,17 +112,13 @@ jobs:
         with:
           node-version: 18
 
-      - uses: volta-cli/action@v3
+      - name: Install pnpm
+        run: npm i -g pnpm
 
-      - name: Get pnpm cache directory path
-        id: pnpm-cache-dir-path
-        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
-
-      - name: Cache pnpm cache
+      - name: Cache pnpm modules
         uses: actions/cache@v2
-        id: cache-pnpm-cache
         with:
-          path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
