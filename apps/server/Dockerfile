@@ -47,7 +47,7 @@ RUN pnpm install
 
 COPY --from=builder /app/out/full/ .
 
-RUN pnpm run turbo build --scope=${TURBO_TARGET_PACKAGE}
+RUN turbo build --scope=${TURBO_TARGET_PACKAGE}
 
 # -------------
 # RUNNER ------

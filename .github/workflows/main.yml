@@ -51,7 +51,7 @@ jobs:
           node-version: 18
 
       - name: Install pnpm
-        run: npm i -g pnpm
+        run: npm i -g pnpm turbo
 
       - name: Cache pnpm modules
         uses: actions/cache@v2
@@ -65,7 +65,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Setup prisma
-        run: pnpm run turbo db:generate
+        run: turbo db:generate
 
       - name: Build
         run: pnpm run build
@@ -113,7 +113,7 @@ jobs:
           node-version: 18
 
       - name: Install pnpm
-        run: npm i -g pnpm
+        run: npm i -g pnpm turbo
 
       - name: Cache pnpm modules
         uses: actions/cache@v2
@@ -127,7 +127,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Setup prisma
-        run: pnpm run turbo db:generate
+        run: turbo db:generate
 
       - name: Test
         run: pnpm run test

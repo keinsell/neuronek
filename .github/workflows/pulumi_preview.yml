@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Install pnpm
-        run: npm i -g pnpm
+        run: npm i -g pnpm turbo
 
       - name: Cache pnpm modules
         uses: actions/cache@v2
