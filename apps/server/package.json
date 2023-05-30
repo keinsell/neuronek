@@ -11,7 +11,7 @@
 	"type": "module",
 	"scripts": {
 		"prebuild": "prisma generate && tsoa spec-and-routes",
-	  "build" : "pnpm run prebuild && tsup-node src/index.ts" ,
+		"build": "pnpm run prebuild && tsup-node src/index.ts",
 		"db:generate": "prisma generate",
 		"db:migrate:deploy": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
@@ -63,7 +63,8 @@
 		"supertest": "^6.3.3",
 		"swagger-ui-express": "^4.6.0",
 		"tsoa": "^5.1.1",
-		"type-fest": "^3.11.0"
+		"type-fest": "^3.11.0",
+		"ulid": "^2.3.0"
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-decorators": "^7.21.0",
@@ -93,8 +94,8 @@
 		"tsx": "3.12.2",
 		"typescript": "^4.9.4"
 	},
-  "packageManager" : "pnpm@8.6.0" ,
+	"packageManager": "pnpm@8.6.0",
 	"volta": {
-	  "node" : "19.4.0"
+		"node": "19.4.0"
 	}
 }
