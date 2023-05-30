@@ -22,7 +22,7 @@ export class MemphisMessageProducer implements MessageProducer {
 		await this.producer.destroy()
 	}
 
-	public async send<T>(message: new (...arguments_: any[]) => Message<T>): Promise<void> {
+	public async send<T extends Message<any>>(message: new (...arguments_: any[]) => T): Promise<void> {
 		await this.producer.produce({
 			message: Buffer.from(JSON.stringify(message)),
 			headers: memphis.headers()

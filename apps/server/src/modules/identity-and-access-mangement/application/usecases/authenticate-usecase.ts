@@ -1,7 +1,7 @@
 import { Account } from '../../domain/entities/account.js'
 import { comparePasswordHash } from '../../domain/value-objects/password-hash.js'
 import { generateTokens } from '../../services/jwt.js'
-import { IamQueryBus } from '../bus/iam.query-bus.js'
+import { IdentityAndAccessQueryBus } from '../bus/identity-and-access-query-bus.js'
 import { Authenticate } from '../commands/authenticate/authenticate.js'
 import { FindAccountByUsername } from '../queries/get-account-by-username/find-account-by-username.js'
 import { UseCase } from '~foundry/domain'
@@ -16,7 +16,7 @@ export interface AuthenticateResponse {
 }
 
 export class AuthenticateUsecase extends UseCase<Authenticate, AuthenticateResponse, PolicyViolation> {
-	constructor(private readonly queryBus: IamQueryBus) {
+	constructor(private readonly queryBus: IdentityAndAccessQueryBus) {
 		super()
 	}
 

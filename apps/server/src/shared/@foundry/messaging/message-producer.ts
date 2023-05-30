@@ -5,5 +5,5 @@ export abstract class MessageProducer {
 
 	abstract disconnect(): Promise<void>
 
-	abstract send<T = unknown>(message: Message<T>): Promise<void>
+	abstract send<T extends Message<unknown>>(message: new (...arguments_: any[]) => T): Promise<void>
 }

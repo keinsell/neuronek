@@ -1,4 +1,4 @@
-import { IamQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/iam.query-bus'
+import { IdentityAndAccessQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-query-bus.js'
 import { Authenticate } from '../../../../modules/identity-and-access-mangement/application/commands/authenticate/authenticate.js'
 import {
 	AuthenticateResponse,
@@ -35,7 +35,7 @@ export class AuthenticateController extends Controller {
 				password: await createPassword(body.password)
 			})
 
-			const usecase = new AuthenticateUsecase(new IamQueryBus())
+			const usecase = new AuthenticateUsecase(new IdentityAndAccessQueryBus())
 
 			const result = await usecase.execute(command)
 
