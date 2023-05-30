@@ -18,9 +18,7 @@
 		"dev": "tsx src/index.ts --watch --no-clear",
 		"generate": "pnpm run generate:gql:pw",
 		"generate:gql:pw": "graphql-codegen-esm --config psychonautwiki.gql-codegen.yml",
-		"prestart": "pnpm run generate",
-		"test:coverage": "c8 ava",
-		"test:unit": "ava"
+	  "prestart" : "pnpm run generate"
 	},
 	"dependencies": {
 		"graphql": "^16.6.0",
