@@ -1,5 +1,7 @@
 import { IdentifierMissing } from '../exceptions/identifier-missing.js'
-import { UniqueId } from '../indexing/unique-id.js'
+import { UniqueId }          from '../indexing/unique-id.js'
+
+
 
 /**
  * Entities are pretty much the bread and butter of domain modeling.
@@ -10,7 +12,7 @@ import { UniqueId } from '../indexing/unique-id.js'
  * @author Jakub "keinsell" Olan <keinsell@protonmail.com>
  * @see [Understanding Domain Entities](https://khalilstemmler.com/articles/typescript-domain-driven-design/entities/)
  */
-export abstract class Entity<T extends UniqueId = UniqueId> {
+export abstract class Entity<T = UniqueId> {
 	/** Automatically generated (or imported) id of specific entity. Used to reference a right object in the persistence layer. */
 	public readonly _id: T | undefined
 

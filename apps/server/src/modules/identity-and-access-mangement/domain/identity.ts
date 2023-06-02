@@ -1,10 +1,12 @@
-import { Account } from './entities/account'
-import { AccountCreated } from './events/account-created/account-created.js'
+import { Aggregate }       from '~foundry/domain'
+import { Account }         from './entities/account'
+import { AccountCreated }  from './events/account-created/account-created.js'
 import { UsernameChanged } from './events/username-changed/username-changed.js'
-import { Username } from './value-objects/username/username.js'
-import { AggregateRoot } from '~foundry/domain'
+import { Username }        from './value-objects/username/username.js'
 
-export class Identity extends AggregateRoot<Account> {
+
+
+export class Identity extends Aggregate<Account> {
 	constructor(public account: Account) {
 		super(account)
 	}
