@@ -36,7 +36,7 @@ export class Message<T>
 		Object.assign( this, message )
 	}
 	
-	static type() : string {
+	static get type() : string {
 		return kebabSpace( this.name )
 	}
 }
