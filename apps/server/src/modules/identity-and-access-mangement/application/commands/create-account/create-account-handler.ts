@@ -19,7 +19,7 @@ export class CreateAccountHandler
 		super()
 	}
 	
-	public async handle(command : CreateAccount) : Promise<Account> {
+	public async handle(command : CreateAccount) : Promise<CreateAccount['_response']> {
 		console.log( `${ this.constructor.name } handling ${ command.constructor.name }` )
 		
 		const passwordHash = await hashPassword( command.password )
