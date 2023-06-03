@@ -1,26 +1,13 @@
-import { kebabSpace }     from '../../../utils/kebab-space.js'
-import { nanoid, NanoID } from '../../indexing/nanoid/index.js'
-import { UniqueId }       from '../../indexing/unique-id.js'
+import { Message, MessagePayload } from '../../messaging/message.js'
 
 
 
-export abstract class Command<T = void> {
-	public readonly _cast : T
-	public readonly _id : NanoID
-	public readonly _timestamp : Date
-	public readonly _causationId? : UniqueId
-	public readonly _correlationId? : UniqueId
-	public readonly _type : string
+export abstract class Command<PAYLOAD, RESPONSE = unknown>
+	extends Message<PAYLOAD> {
+	public readonly _response : RESPONSE
 	
-	protected constructor(causationId? : UniqueId, correlationId? : UniqueId, id? : NanoID) {
-		this._causationId = causationId
-		this._correlationId = correlationId
-		this._id = id || nanoid()
-		this._timestamp = new Date()
-		this._type = kebabSpace( this.constructor.name )
-	}
-	
-	static get type() {
-		return kebabSpace( this.name )
+	constructor(properties : MessagePayload<PAYLOAD>) {
+		super( properties )
+		Object.assign( this, properties )
 	}
 }

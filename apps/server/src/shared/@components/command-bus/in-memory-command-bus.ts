@@ -14,7 +14,7 @@ export class InMemoryCommandBus<COMMANDS extends Command<unknown>>
 		this.eventEmitter = new EventEmitter()
 	}
 	
-	public async handle<T extends COMMANDS>(command : T) : Promise<T['_cast']> {
+	public async handle<T extends COMMANDS>(command : T) : Promise<T['_response']> {
 		const commandType = command.constructor.name
 		const handler = this.bindingStorage.get( commandType )
 		if(handler) {

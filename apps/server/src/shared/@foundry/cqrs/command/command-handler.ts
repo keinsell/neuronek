@@ -1,3 +1,4 @@
+import { Handler } from '../../base/handler.js'
 import { Command } from './command'
 
 
@@ -7,6 +8,7 @@ import { Command } from './command'
  * Command handlers are typically registered with the command bus or processor, associating specific command types with
  * their respective handlers. This allows for dispatching commands to the appropriate handlers based on the command
  * type. */
-export abstract class CommandHandler<COMMAND extends Command<unknown>> {
-	abstract handle<T extends COMMAND>(command : T) : T['_cast'] | Promise<T['_cast']>
+export abstract class CommandHandler<COMMAND extends Command<unknown>>
+	implements Handler {
+	abstract handle<T extends COMMAND>(command : T) : T['_response'] | Promise<T['_response']>
 }

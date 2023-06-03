@@ -11,7 +11,7 @@ import { Command }          from './command.js'
  */
 export abstract class CommandBus<COMMANDS extends Command<unknown>> {
 	/** Ensure execution of command */
-	abstract handle<T extends COMMANDS>(command : T) : T['_cast'] | Promise<T['_cast']>
+	abstract handle<T extends COMMANDS>(command : T) : T['_response'] | Promise<T['_response']>
 	
 	/** Fire and forget */
 	abstract dispatch<T extends COMMANDS>(command : T) : Promise<void> | void

@@ -1,7 +1,8 @@
-import { Command }  from '~foundry/cqrs'
-import { Account }  from '../../../domain/entities/account.js'
-import { Password } from '../../../domain/value-objects/password.js'
-import { Username } from '../../../domain/value-objects/username/username.js'
+import { Command }        from '~foundry/cqrs'
+import { MessagePayload } from '~foundry/messaging/message.js'
+import { Account }        from '../../../domain/entities/account.js'
+import { Password }       from '../../../domain/value-objects/password.js'
+import { Username }       from '../../../domain/value-objects/username/username.js'
 
 
 
@@ -22,13 +23,13 @@ interface CreateAccountProperties {
  * @username - The unique username for the account.
  */
 export class CreateAccount
-	extends Command<Account>
+	extends Command<CreateAccountProperties, Account>
 	implements CreateAccountProperties {
 	password : Password
 	username : Username
 	
-	constructor(payload : CreateAccountProperties) {
-		super()
+	constructor(payload : MessagePayload<CreateAccountProperties>) {
+		super( payload )
 		this.password = payload.password
 		this.username = payload.username
 	}
