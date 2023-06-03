@@ -3,6 +3,7 @@ import { InvalidCredentials }        from '~foundry/exceptions/Invalid-credentia
 import { NotFound }                  from '~foundry/exceptions/not-found.js'
 import { PolicyViolation }           from '~foundry/exceptions/policy-violation.js'
 import { left, Result, right }       from '~foundry/technical/result.js'
+import { Account }                   from '../../domain/entities/account.js'
 import { comparePasswordHash }       from '../../domain/value-objects/password-hash.js'
 import { generateTokens }            from '../../services/jwt.js'
 import { IdentityAndAccessQueryBus } from '../bus/identity-and-access-query-bus.js'
@@ -28,7 +29,7 @@ export class AuthenticateUsecase
 		const account = await this.queryBus.handle<FindAccountByUsername>( getAccountByUsernameQuery )
 		
 		if(!account) {
-			return left( new NotFound( 'Account' ) )
+			return left( new NotFound( typeof Account ) )
 		}
 		
 		const isPasswordSame = await comparePasswordHash( account.password, command.password )
