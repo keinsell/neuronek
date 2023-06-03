@@ -1,4 +1,5 @@
 import { Command }  from '~foundry/cqrs'
+import { Account }  from '../../../domain/entities/account.js'
 import { Password } from '../../../domain/value-objects/password.js'
 import { Username } from '../../../domain/value-objects/username/username.js'
 
@@ -10,20 +11,23 @@ import { Username } from '../../../domain/value-objects/username/username.js'
  * @username - The unique username for the account.
  */
 interface CreateAccountProperties {
-	password: Password
-	username: Username
+	password : Password
+	username : Username
 }
+
 
 /**
  * The CreateAccount command is used to create a new account. It extends the Command class.
  * @publicKey - The PGP public key for the account.
  * @username - The unique username for the account.
  */
-export class CreateAccount extends Command implements CreateAccountProperties {
-	password: Password
-	username: Username
-
-	constructor(payload: CreateAccountProperties) {
+export class CreateAccount
+	extends Command<Account>
+	implements CreateAccountProperties {
+	password : Password
+	username : Username
+	
+	constructor(payload : CreateAccountProperties) {
 		super()
 		this.password = payload.password
 		this.username = payload.username

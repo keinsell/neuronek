@@ -14,7 +14,7 @@ export class AccountWriteRepository
 		if(entity._id) {
 			// Existing account, perform update
 			await this.prisma.account.update( {
-				where: { id: entity._id as string }, data: { password: entity.password, username: entity.username },
+				where: { id: entity.id as string }, data: { password: entity.password, username: entity.username },
 			} )
 			return entity
 		}

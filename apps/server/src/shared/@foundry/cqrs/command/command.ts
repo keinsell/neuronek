@@ -4,7 +4,8 @@ import { UniqueId }       from '../../indexing/unique-id.js'
 
 
 
-export abstract class Command {
+export abstract class Command<T = void> {
+	public readonly _cast : T
 	public readonly _id : NanoID
 	public readonly _timestamp : Date
 	public readonly _causationId? : UniqueId
@@ -14,7 +15,7 @@ export abstract class Command {
 	protected constructor(causationId? : UniqueId, correlationId? : UniqueId, id? : NanoID) {
 		this._causationId = causationId
 		this._correlationId = correlationId
-		this._id = id || nanoid( undefined, 256 )
+		this._id = id || nanoid()
 		this._timestamp = new Date()
 		this._type = kebabSpace( this.constructor.name )
 	}

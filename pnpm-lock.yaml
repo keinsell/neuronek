@@ -64,6 +64,9 @@ importers:
       '@sentry/tracing':
         specifier: ^7.41.0
         version: 7.41.0
+      '@tsoa/runtime':
+        specifier: ^5.0.0
+        version: 5.0.0
       argon2:
         specifier: ^0.30.3
         version: 0.30.3
