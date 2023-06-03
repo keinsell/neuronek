@@ -1,6 +1,8 @@
-import { kebabSpace } from '../../utils/kebab-space.js'
 import { Query, QueryBus, QueryHandler } from '~foundry/cqrs'
-import { NotFound } from '~foundry/exceptions/not-found.js'
+import { NotFound }                      from '~foundry/exceptions/not-found.js'
+import { kebabSpace }                    from '../../utils/kebab-space.js'
+
+
 
 export class InMemoryQueryBus implements QueryBus {
 	private readonly bindingStorage: Map<string, QueryHandler<any>>

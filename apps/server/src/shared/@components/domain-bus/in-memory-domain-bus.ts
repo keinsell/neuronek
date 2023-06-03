@@ -1,6 +1,8 @@
-import { DomainBus } from '../../@foundry/domain/domain-bus.js'
-import { EventEmitter } from 'events'
+import { EventEmitter }                                  from 'events'
 import { Aggregate, DomainEvent, DomainHandler, Entity } from '~foundry/domain'
+import { DomainBus }                                     from '../../@foundry/domain/domain-bus.js'
+
+
 
 export class InMemoryDomainBus<T extends Aggregate | Entity> implements DomainBus<T> {
 	private bindingStorage: Map<string, DomainHandler<DomainEvent<T>>>

@@ -1,7 +1,9 @@
-import { Aggregate } from './aggregate.js'
-import { DomainEvent } from './domain-event.js'
+import { Aggregate }     from './aggregate.js'
+import { DomainEvent }   from './domain-event.js'
 import { DomainHandler } from './domain-handler.js'
-import { Entity } from './enity.js'
+import { Entity }        from './enity.js'
+
+
 
 export abstract class DomainBus<T extends Aggregate | Entity> {
 	/**

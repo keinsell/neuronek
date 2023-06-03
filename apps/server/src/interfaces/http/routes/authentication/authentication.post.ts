@@ -1,13 +1,23 @@
-import { IdentityAndAccessQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-query-bus.js'
-import { Authenticate } from '../../../../modules/identity-and-access-mangement/application/commands/authenticate/authenticate.js'
+import { Body, Controller, OperationId, Post, Route, Tags } from 'tsoa'
+import { Exception }                                        from '~foundry/exceptions/exception.js'
+import {
+	IdentityAndAccessQueryBus,
+}                                                           from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-query-bus.js'
+import {
+	Authenticate,
+}                                                           from '../../../../modules/identity-and-access-mangement/application/commands/authenticate/authenticate.js'
 import {
 	AuthenticateResponse,
-	AuthenticateUsecase
-} from '../../../../modules/identity-and-access-mangement/application/usecases/authenticate-usecase.js'
-import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
-import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js'
-import { Body, Controller, OperationId, Post, Route, Tags } from 'tsoa'
-import { Exception } from '~foundry/exceptions/exception.js'
+	AuthenticateUsecase,
+}                                                           from '../../../../modules/identity-and-access-mangement/application/usecases/authenticate-usecase.js'
+import {
+	createPassword,
+}                                                           from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
+import {
+	createUsername,
+}                                                           from '../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js'
+
+
 
 /**
  * Represents the request body for creating an account.

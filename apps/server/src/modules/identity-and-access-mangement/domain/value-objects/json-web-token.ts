@@ -1,5 +1,7 @@
 import * as t from 'io-ts'
 
+
+
 /**
  * @typedef {Object} JsonWebToken
  * @property {string} sub - Subject identifier of the token

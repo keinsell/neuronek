@@ -1,5 +1,7 @@
-import { Entity } from '../domain/enity'
+import { Entity }   from '../domain/enity'
 import { UniqueId } from '../indexing/unique-id'
+
+
 
 /**
  * The `QueryRepository` interface defines the methods required to retrieve entities from a read model.

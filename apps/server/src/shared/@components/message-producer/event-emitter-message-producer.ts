@@ -1,6 +1,8 @@
-import { EventEmitter } from 'events'
+import { EventEmitter }    from 'events'
 import { MessageProducer } from '~foundry/messaging/message-producer.js'
-import { Message } from '~foundry/messaging/message.js'
+import { Message }         from '~foundry/messaging/message.js'
+
+
 
 export class EventEmitterMessageProducer extends MessageProducer {
 	private eventEmitter: EventEmitter

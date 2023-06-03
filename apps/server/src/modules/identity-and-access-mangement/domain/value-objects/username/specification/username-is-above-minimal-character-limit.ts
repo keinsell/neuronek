@@ -1,5 +1,7 @@
-import { Username } from '../username.js'
 import { Specification } from 'server/src/shared/@foundry/technical/specification.js'
+import { Username }      from '../username.js'
+
+
 
 export class UsernameIsAboveMinimalCharacterLimit extends Specification<Username> {
 	static MINIMAL_LENGTH = 4

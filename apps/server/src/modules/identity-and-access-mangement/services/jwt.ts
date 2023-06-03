@@ -1,7 +1,9 @@
+import jwt              from 'jsonwebtoken'
+import { nanoid }       from 'nanoid'
+import { UniqueId }     from '~foundry/indexing/unique-id.js'
 import { JsonWebToken } from '../domain/value-objects/json-web-token.js'
-import jwt from 'jsonwebtoken'
-import { nanoid } from 'nanoid'
-import { UniqueId } from '~foundry/indexing/unique-id.js'
+
+
 
 const generateTokens = (
 	accountId: UniqueId,

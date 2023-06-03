@@ -1,7 +1,14 @@
-import type { Subject } from '../../../../modules/subject/subject.js'
-import { createSubject } from '../../../../modules/subject/subject.js'
-import { Exception } from '../../../../shared/@foundry/exceptions/exception.js'
 import { Body, Controller, OperationId, Post, Route, SuccessResponse, Tags } from 'tsoa'
+import type {
+	Subject,
+}                                                                            from '../../../../modules/subject/subject.js'
+import {
+	createSubject,
+}                                                                            from '../../../../modules/subject/subject.js'
+import {
+	Exception,
+}                                                                            from '../../../../shared/@foundry/exceptions/exception.js'
+
 
 // TODO: This should be refactored to use CQRS/Domain.
 @Route('subject')

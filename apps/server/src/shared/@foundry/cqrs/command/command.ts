@@ -1,6 +1,8 @@
+import { nanoid }     from 'nanoid'
 import { kebabSpace } from '../../../utils/kebab-space.js'
-import { UniqueId } from '../../indexing/unique-id.js'
-import { nanoid } from 'nanoid'
+import { UniqueId }   from '../../indexing/unique-id.js'
+
+
 
 export abstract class Command {
 	public readonly _id: UniqueId

@@ -1,5 +1,7 @@
 import { Exception } from './exception.js'
 
+
+
 export class InvalidValue extends Exception {
 	constructor(message: string) {
 		super({

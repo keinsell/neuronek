@@ -1,7 +1,9 @@
-import { UniqueId } from '../../../../shared/@foundry/indexing/unique-id.js'
+import { UniqueId }        from '../../../../shared/@foundry/indexing/unique-id.js'
 import { WriteRepository } from '../../../../shared/@foundry/persistence/write-repository.js'
-import { prisma } from '../../../../shared/infrastructure/prisma/prisma'
-import { Account } from '../../domain/entities/account'
+import { prisma }          from '../../../../shared/infrastructure/prisma/prisma'
+import { Account }         from '../../domain/entities/account'
+
+
 
 export class AccountWriteRepository extends WriteRepository<Account> {
 	private prisma = prisma

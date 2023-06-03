@@ -1,6 +1,8 @@
-import { CreateAccount } from '../commands/create-account/create-account'
+import { InMemoryCommandBus }   from '~components/command-bus/index.js'
+import { CreateAccount }        from '../commands/create-account/create-account'
 import { CreateAccountHandler } from '../commands/create-account/create-account-handler'
-import { InMemoryCommandBus } from '~components/command-bus/index.js'
+
+
 
 export class IdentityAndAccessCommandBus extends InMemoryCommandBus {
 	constructor() {

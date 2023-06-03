@@ -1,5 +1,7 @@
 import { Exception } from './exception.js'
 
+
+
 export class NotFound extends Exception {
 	constructor(entity?: string) {
 		super({
