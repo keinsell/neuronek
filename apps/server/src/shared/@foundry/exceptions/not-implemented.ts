@@ -1,5 +1,7 @@
 import { Exception } from './exception.js'
 
+
+
 export class NotImplemented extends Exception {
 	constructor(feature: Function | Object) {
 		super({

@@ -1,5 +1,7 @@
 import { MessageHandler } from './message-handler'
 
+
+
 export abstract class MessageConsumer {
 	abstract start(): Promise<void>
 

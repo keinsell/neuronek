@@ -1,8 +1,10 @@
-import { memphisConnection } from '../../infrastructure/memphis.js'
 import { Consumer, Memphis, Message as MemphisMessage } from 'memphis-dev'
-import { MessageConsumer } from '~foundry/messaging/message-consumer.js'
-import { MessageHandler } from '~foundry/messaging/message-handler.js'
-import { Message } from '~foundry/messaging/message.js'
+import { MessageConsumer }                              from '~foundry/messaging/message-consumer.js'
+import { MessageHandler }                               from '~foundry/messaging/message-handler.js'
+import { Message }                                      from '~foundry/messaging/message.js'
+import { memphisConnection }                            from '../../infrastructure/memphis.js'
+
+
 
 export class MemphisMessageConsumer implements MessageConsumer {
 	private conncetion: Memphis = memphisConnection

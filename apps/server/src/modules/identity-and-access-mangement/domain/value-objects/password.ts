@@ -1,6 +1,10 @@
-import { NotImplemented } from '../../../../shared/@foundry/exceptions/not-implemented.js'
+import { Static, String }                                     from 'runtypes'
+import {
+	NotImplemented,
+}                                                             from '../../../../shared/@foundry/exceptions/not-implemented.js'
 import { hashPassword as createHashedPassword, PasswordHash } from './password-hash.js'
-import { Static, String } from 'runtypes'
+
+
 
 /** asdsadffasd */
 const Password = String.withBrand('Password')

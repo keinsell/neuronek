@@ -1,5 +1,7 @@
 import * as openpgp from 'openpgp'
 
+
+
 export namespace PrettyGoodPrivacy {
 	export async function validatePublicKey(publicKey: string) {
 		try {

@@ -1,6 +1,8 @@
+import { Command }  from '~foundry/cqrs'
 import { Password } from '../../../domain/value-objects/password.js'
 import { Username } from '../../../domain/value-objects/username/username.js'
-import { Command } from '~foundry/cqrs'
+
+
 
 /**
  * CreateAccountProperties interface defines the properties required to create an account.

@@ -1,9 +1,11 @@
 // eslint-disable-next-line node/no-unpublished-import
 
-import { memphisConnection } from '../../infrastructure/memphis.js'
 import { Memphis, memphis, Producer } from 'memphis-dev'
-import { MessageProducer } from '~foundry/messaging/message-producer.js'
-import { Message } from '~foundry/messaging/message.js'
+import { MessageProducer }            from '~foundry/messaging/message-producer.js'
+import { Message }                    from '~foundry/messaging/message.js'
+import { memphisConnection }          from '../../infrastructure/memphis.js'
+
+
 
 export class MemphisMessageProducer implements MessageProducer {
 	private conncetion: Memphis = memphisConnection

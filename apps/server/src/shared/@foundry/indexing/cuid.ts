@@ -1,6 +1,8 @@
-import generateCuid from 'cuid'
-import * as t from 'io-ts'
+import generateCuid     from 'cuid'
+import * as t           from 'io-ts'
 import { InvalidValue } from '~foundry/exceptions/invalid-value.js'
+
+
 
 interface CUIDBrand {
 	readonly CUID: unique symbol

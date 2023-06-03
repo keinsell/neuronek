@@ -1,5 +1,7 @@
-import { Entity } from '../domain/enity.js'
+import { Entity }    from '../domain/enity.js'
 import { Exception } from './exception.js'
+
+
 
 /**
  * IdentifierMissing is responsible for when identifier is missing, this is mostly a case where we decide to save

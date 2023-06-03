@@ -1,6 +1,8 @@
+import { Command }  from '~foundry/cqrs'
 import { Password } from '../../../domain/value-objects/password.js'
 import { Username } from '../../../domain/value-objects/username/username.js'
-import { Command } from '~foundry/cqrs'
+
+
 
 interface AuthenticateProperties {
 	password: Password

@@ -1,5 +1,7 @@
 import { Message } from '~foundry/messaging/message.js'
 
+
+
 export abstract class MessageProducer {
 	abstract connect(): Promise<void>
 

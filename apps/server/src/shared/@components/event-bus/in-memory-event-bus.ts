@@ -1,5 +1,7 @@
-import { EventEmitter } from 'events'
+import { EventEmitter }                        from 'events'
 import { EventBus, EventHandler, SimpleEvent } from '~foundry/cqrs'
+
+
 
 export class InMemoryEventBus implements EventBus {
 	private bindingStorage: Map<string, EventHandler>

@@ -1,11 +1,15 @@
-import { RegisterRoutes } from '../../../dist/routes/routes.js'
-import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
-import * as Sentry from '@sentry/node'
-import { ProfilingIntegration } from '@sentry/profiling-node'
-import * as Tracing from '@sentry/tracing'
+import * as Sentry                                                            from '@sentry/node'
+import { ProfilingIntegration }                                               from '@sentry/profiling-node'
+import * as Tracing                                                           from '@sentry/tracing'
 import express, { Application, Request as ExRequest, Response as ExResponse } from 'express'
-import { json } from 'milliparsec'
-import swaggerUi from 'swagger-ui-express'
+import { json }                                                               from 'milliparsec'
+import swaggerUi                                                              from 'swagger-ui-express'
+import { RegisterRoutes }                                                     from '../../../dist/routes/routes.js'
+import {
+	prisma,
+}                                                                             from '../../shared/infrastructure/prisma/prisma.js'
+
+
 
 const app: Application = express()
 

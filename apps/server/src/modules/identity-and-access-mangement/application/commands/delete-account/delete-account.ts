@@ -1,5 +1,7 @@
 import { Command } from '~foundry/cqrs'
 
+
+
 interface DeleteAccountProperties {
 	accountId: string
 }
