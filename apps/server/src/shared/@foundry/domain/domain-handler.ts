@@ -1,8 +1,8 @@
-import { Aggregate }   from './aggregate.js'
 import { DomainEvent } from './domain-event.js'
+import { Entity }      from './enity.js'
 
 
 
-export abstract class DomainHandler<T extends DomainEvent<Aggregate>> {
-	abstract handle(event: T): Promise<void>
+export abstract class DomainHandler<T extends DomainEvent<Entity>> {
+	abstract handle(event : T) : Promise<void>
 }

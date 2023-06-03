@@ -1,17 +1,17 @@
-import { nanoid }     from 'nanoid'
-import { kebabSpace } from '../../../utils/kebab-space.js'
-import { UniqueId }   from '../../indexing/unique-id.js'
+import { kebabSpace }     from '../../../utils/kebab-space.js'
+import { nanoid, NanoID } from '../../indexing/nanoid/index.js'
 
 
 
 export abstract class SimpleEvent {
-	public readonly _id: UniqueId = nanoid(256)
-	public readonly _occurredOn: Date = new Date()
-	public readonly _type: string = kebabSpace(this.constructor.name)
-
-	protected constructor() {}
-
-	static get type(): string {
-		return kebabSpace(this.constructor.name)
+	public readonly _id : NanoID = nanoid()
+	public readonly _occurredOn : Date = new Date()
+	public readonly _type : string = kebabSpace( this.constructor.name )
+	
+	protected constructor() {
+	}
+	
+	static get type() : string {
+		return kebabSpace( this.constructor.name )
 	}
 }

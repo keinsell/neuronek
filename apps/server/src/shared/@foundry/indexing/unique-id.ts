@@ -5,7 +5,4 @@ import { SequentialID } from './sequential-id/sequential-id.js'
 
 
 
-type Brand<T, BrandName extends string> = T & { __brand: BrandName }
-type UniqueIdBrand = 'UniqueIdBrand'
-
-export type UniqueId = Brand<string | number | bigint | SequentialID | CUID | ULID | NanoID, UniqueIdBrand>
+export type UniqueId = SequentialID | CUID | ULID | NanoID
