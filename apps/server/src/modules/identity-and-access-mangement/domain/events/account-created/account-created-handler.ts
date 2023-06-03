@@ -7,5 +7,8 @@ export class AccountCreatedHandler
 	extends DomainHandler<AccountCreated> {
 	public async handle(event : AccountCreated) : Promise<void> {
 		console.log( 'AccountCreatedHandler', event )
+		console.log( 'AccountCreatedHandler', event )
+		console.log( 'AccountCreatedHandler', event )
+		console.log( 'AccountCreatedHandler', event )
 	}
 }
