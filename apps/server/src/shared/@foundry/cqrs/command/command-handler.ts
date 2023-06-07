@@ -9,6 +9,6 @@ import { Command } from './command'
  * their respective handlers. This allows for dispatching commands to the appropriate handlers based on the command
  * type. */
 export abstract class CommandHandler<COMMAND extends Command<unknown>>
-	implements Handler {
-	abstract handle<T extends COMMAND>(command : T) : T['_response'] | Promise<T['_response']>
+  implements Handler<COMMAND, COMMAND['_response']> {
+  public abstract handle(message: COMMAND): Promise<COMMAND['_response']> | COMMAND['_response']
 }
