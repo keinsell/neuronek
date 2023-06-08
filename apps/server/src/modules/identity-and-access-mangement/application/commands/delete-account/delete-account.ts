@@ -3,12 +3,12 @@ import { Command } from '~foundry/cqrs'
 
 
 interface DeleteAccountProperties {
-	accountId : string
+  accountId: string
 }
 
 
 export class DeleteAccount
-	extends Command<DeleteAccountProperties>
-	implements DeleteAccountProperties {
-	public accountId : string
+  extends Command<DeleteAccountProperties>
+  implements DeleteAccountProperties {
+  public accountId: string
 }

@@ -3,9 +3,7 @@
 // Additionall data will be anonimized and maybe sent to analitics to support public reseach.
 
 import { NotImplemented } from '~foundry/exceptions/not-implemented.js'
-import { prisma }         from '../../shared/infrastructure/prisma/prisma.js'
-
-
+import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 
 export interface Subject {
 	// Subject may be linked to specific account.
@@ -20,23 +18,6 @@ export interface Subject {
 	height?: number
 	nationality?: string
 	// TODO: We may think about health conditions, mental disorders or some other data that may be worthly for analitics.
-}
-
-// TODO: This should be refactored to use CQRS/Domain.
-export async function createSubject(_payload: Subject): Promise<any> {
-	return prisma.subject.create({
-		data: {
-			account: {
-				connect: {
-					id: _payload.accountId
-				}
-			},
-			firstName: _payload.firstName,
-			lastName: _payload.lastName,
-			weight: _payload.weight,
-			height: _payload.height
-		}
-	})
 }
 
 export function updateSubject(_subjectId: string, _payload: Partial<Subject>): Subject {

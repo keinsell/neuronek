@@ -1,6 +1,6 @@
 import { ClassConstructor } from '../../technical/class-constructor.js'
-import { CommandHandler }   from './command-handler.js'
-import { Command }          from './command.js'
+import { CommandHandler } from './command-handler.js'
+import { Command } from './command.js'
 
 
 
@@ -10,15 +10,15 @@ import { Command }          from './command.js'
  * details of how the command is sent and processed.
  */
 export abstract class CommandBus<COMMANDS extends Command<unknown>> {
-	/** Ensure execution of command */
-	abstract handle<T extends COMMANDS>(command : T) : T['_response'] | Promise<T['_response']>
-	
-	/** Fire and forget */
-	abstract dispatch<T extends COMMANDS>(command : T) : Promise<void> | void
-	
-	abstract subscribe<T extends COMMANDS>(
-		command : ClassConstructor<T>, handler : CommandHandler<T>) : Promise<void> | void
-	
-	abstract unsubscribe<T extends COMMANDS>(
-		command : ClassConstructor<T>, handler : CommandHandler<T>) : Promise<void> | void
+  /** Ensure execution of command */
+  abstract handle<T extends COMMANDS>(command: T): T['_response'] | Promise<T['_response']>
+
+  /** Fire and forget */
+  abstract dispatch<T extends COMMANDS>(command: T): Promise<void> | void
+
+  abstract subscribe<T extends COMMANDS>(
+    command: ClassConstructor<T>, handler: CommandHandler<T>): Promise<void> | void
+
+  abstract unsubscribe<T extends COMMANDS>(
+    command: ClassConstructor<T>, handler: CommandHandler<T>): Promise<void> | void
 }

@@ -1,14 +1,12 @@
-import * as t                from 'io-ts'
+import * as t from 'io-ts'
 import { nanoid as _nanoid } from 'nanoid'
-import { InvalidValue }      from '~foundry/exceptions/invalid-value.js'
-import { IsNanoid }          from '~foundry/indexing/nanoid/is-nanoid.js'
-
-
+import { InvalidValue } from '~foundry/exceptions/invalid-value.js'
+import { IsNanoid } from '~foundry/indexing/nanoid/is-nanoid.js'
 
 const NanoidCodec = t.brand(
 	t.string,
 	(s: string): s is t.Branded<string, { readonly NanoID: unique symbol }> => new IsNanoid().satisfy(s),
-	'NanoID',
+	'NanoID'
 )
 
 /**
@@ -26,8 +24,7 @@ export function nanoid(id?: string, size: number = 36): NanoID {
 	const validationResult = NanoidCodec.decode(id || _nanoid(size))
 	if (validationResult._tag === 'Left') {
 		throw new InvalidValue('Invalid Nanoid')
-	}
-	else {
+	} else {
 		return validationResult.right
 	}
 }

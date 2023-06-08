@@ -1,16 +1,8 @@
+import { CreateSubjectUseCase } from '../../../../modules/subject/application/usecases/create-subject-usecase.js'
+import type { Subject } from '../../../../modules/subject/subject.js'
+import { Exception } from '../../../../shared/@foundry/exceptions/exception.js'
 import { Body, Controller, OperationId, Post, Route, SuccessResponse, Tags } from 'tsoa'
-import type {
-	Subject,
-}                                                                            from '../../../../modules/subject/subject.js'
-import {
-	createSubject,
-}                                                                            from '../../../../modules/subject/subject.js'
-import {
-	Exception,
-}                                                                            from '../../../../shared/@foundry/exceptions/exception.js'
 
-
-// TODO: This should be refactored to use CQRS/Domain.
 @Route('subject')
 @Tags('Subject')
 export class CreateSubjectController extends Controller {
@@ -22,19 +14,15 @@ export class CreateSubjectController extends Controller {
 	@SuccessResponse('201', 'Created')
 	public async createAccount(@Body() body: Subject): Promise<any> {
 		try {
-			await createSubject(body)
+			const result = await new CreateSubjectUseCase().execute(body)
 
-			//			const usecase = new CreateAccountUsecase(new IamQueryBus(), new IdentityAndAccessDomainBus())
-			//
-			//			const result = await usecase.execute(command)
-			//
-			//			if (result._tag === 'Right') {
-			//				this.setStatus(201)
-			//				return { id: result.right as string }
-			//			} else {
-			//				this.setStatus(result.left.statusCode)
-			//				return { error: result.left.message }
-			//			}
+			if (result._tag === 'Right') {
+				this.setStatus(201)
+				return { id: result.right }
+			} else {
+				this.setStatus(result.left.statusCode)
+				return { error: result.left.message }
+			}
 		} catch (error: unknown) {
 			if (error instanceof Exception) {
 				this.setStatus(error.statusCode)
