@@ -29,7 +29,7 @@ interface MessageProperties {
 export type MessagePayload<T> = Omit<MessageProperties, '_id' | '_type' | '_timestamp' | '_topic'> & T
 
 
-export class Message<T>
+export class Message<T = unknown>
   implements MessageProperties {
   public readonly _id: string = nanoid()
   public readonly _causationId?: UniqueId | undefined
