@@ -1,11 +1,20 @@
-import { IdentityAndAccessDomainBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-domain-bus.js'
-import { IdentityAndAccessQueryBus } from '../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-query-bus.js'
-import { CreateAccount as CreateAccountCommand } from '../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account'
-import { CreateAccountUsecase } from '../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase'
-import { createPassword } from '../../../../modules/identity-and-access-mangement/domain/value-objects/password.js'
-import { createUsername } from '../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js'
-import { Exception } from '../../../../shared/@foundry/exceptions/exception.js'
-import { Body, Controller, OperationId, Post, Response, Route, SuccessResponse, Tags } from 'tsoa'
+import { IdentityAndAccessDomainBus } from "../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-domain-bus.js"
+import { IdentityAndAccessQueryBus } from "../../../../modules/identity-and-access-mangement/application/bus/identity-and-access-query-bus.js"
+import { CreateAccount as CreateAccountCommand } from "../../../../modules/identity-and-access-mangement/application/commands/create-account/create-account"
+import { CreateAccountUsecase } from "../../../../modules/identity-and-access-mangement/application/usecases/create-account-usecase"
+import { createPassword } from "../../../../modules/identity-and-access-mangement/domain/value-objects/password.js"
+import { createUsername } from "../../../../modules/identity-and-access-mangement/domain/value-objects/username/username.js"
+import { Exception } from "../../../../shared/@foundry/exceptions/exception.js"
+import {
+	Body,
+	Controller,
+	OperationId,
+	Post,
+	Response,
+	Route,
+	SuccessResponse,
+	Tags,
+} from "tsoa"
 
 /**
  * Represents the request body for creating an account.
@@ -18,28 +27,33 @@ interface CreateAccount {
 	password: string
 }
 
-@Route('account')
-@Tags('Account')
+@Route("account")
+@Tags("Account")
 export class CreateAccountController extends Controller {
 	/**
 	 * Creates an account.
 	 */
 	@Post()
-	@OperationId('create-account')
-	@SuccessResponse('201', 'Created')
-	@Response(403, 'AlreadyExists')
-	public async createAccount(@Body() body: CreateAccount): Promise<{ id: string } | { error: string }> {
+	@OperationId("create-account")
+	@SuccessResponse("201", "Created")
+	@Response(403, "AlreadyExists")
+	public async createAccount(
+		@Body() body: CreateAccount
+	): Promise<{ id: string } | { error: string }> {
 		try {
 			const command = new CreateAccountCommand({
 				username: await createUsername(body.username),
-				password: await createPassword(body.password)
+				password: await createPassword(body.password),
 			})
 
-			const usecase = new CreateAccountUsecase(new IdentityAndAccessQueryBus(), new IdentityAndAccessDomainBus())
+			const usecase = new CreateAccountUsecase(
+				new IdentityAndAccessQueryBus(),
+				new IdentityAndAccessDomainBus()
+			)
 
 			const result = await usecase.execute(command)
 
-			if (result._tag === 'Right') {
+			if (result._tag === "Right") {
 				this.setStatus(201)
 				return { id: result.right as string }
 			} else {
@@ -53,7 +67,7 @@ export class CreateAccountController extends Controller {
 			}
 
 			this.setStatus(500)
-			return { error: 'Failed to create account' }
+			return { error: "Failed to create account" }
 		}
 	}
 }
