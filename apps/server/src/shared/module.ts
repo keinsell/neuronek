@@ -1,4 +1,4 @@
-import diod, { ContainerBuilder } from 'diod'
+import diod, { ContainerBuilder } from "diod"
 
 /**
  * This class tries to copy app.module.ts from Nest.js, but based on diod
