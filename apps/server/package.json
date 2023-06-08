@@ -17,7 +17,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push --accept-data-loss",
     "db:studio": "prisma studio",
-    "format": "pnpx rome format src/**/*.ts --write",
+    "format": "rome format src/**/*.ts --write",
     "dev": "nodemon",
     "dev:fast": "nodemon --config nodemon.blazing.json",
     "test": "ava"
