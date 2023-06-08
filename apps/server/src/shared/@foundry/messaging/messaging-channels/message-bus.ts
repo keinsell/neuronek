@@ -1,6 +1,6 @@
-import { ClassConstructor } from '../technical/class-constructor.js'
-import { MessageHandler } from './message-handler.js';
-import { Message } from './message.js';
+import { MessageHandler } from '~foundry/messaging/message-handler.js'
+import { Message } from '~foundry/messaging/message.js'
+import { ClassConstructor } from '~foundry/technical/class-constructor'
 
 
 
