@@ -1,13 +1,11 @@
 import { UniqueId } from '../../indexing/unique-id'
+import { ModelPayload } from './model-payload'
 
+export abstract class ReadModel<ID extends UniqueId = UniqueId, Properties = unknown> {
+  readonly id: ID
 
-// TODO: Current state of system do not require such.
-export abstract class ReadModel {
-	readonly id: UniqueId
-
-	constructor(id: UniqueId) {
-		this.id = id
-	}
-
-	abstract toJSON(): Record<string, unknown>
+  constructor(payload: ModelPayload<ID, Properties>) {
+    this.id = payload.id
+    Object.assign(this, payload)
+  }
 }

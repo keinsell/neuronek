@@ -1,13 +1,5 @@
-import { UniqueId } from '../../indexing/unique-id'
 
+import { UniqueId } from '~foundry/indexing/unique-id';
+import { ReadModel } from './read-model'
 
-// TODO: Current state of system do not require such.
-export abstract class WriteModel {
-	readonly id: UniqueId
-
-	constructor(id: UniqueId) {
-		this.id = id
-	}
-
-	abstract toJSON(): Record<string, unknown>
-}
+export abstract class WriteModel<ID extends UniqueId, Properites> extends ReadModel<ID, Properites> { }
