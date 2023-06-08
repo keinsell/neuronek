@@ -1,33 +1,39 @@
 {
-	"entryFile": "src/index.ts",
-	"noImplicitAdditionalProperties": "throw-on-extras",
-	"controllerPathGlobs": ["**/src/interfaces/http/routes/**/*.ts"],
-	"spec": {
-		"outputDirectory": "docs",
-		"specVersion": 3,
-		"securityDefinitions": {
-			"Bearer": {
-				"type": "http",
-				"scheme": "bearer",
-				"bearerFormat": "JWT"
-			}
-		},
-		"tags": [
-			{
-				"name": "Account",
-				"description": "Operations related to account",
-				"externalDocs": {
-					"description": "...",
-					"url": "http://swagger.io"
-				}
-			}
-		],
-		"security": [{ "Bearer": [] }]
-	},
-	"routes": {
-		"basePath": "/",
-		"entryFile": "src/index.ts",
-		"routesDir": "dist/routes",
-		"esm": true
-	}
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "**/src/interfaces/http/routes/**/*.ts"
+  ],
+  "spec": {
+    "outputDirectory": "docs",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "tags": [
+      {
+        "name": "Account",
+        "description": "Operations related to account",
+        "externalDocs": {
+          "description": "...",
+          "url": "http://swagger.io"
+        }
+      }
+    ],
+    "security": [
+      {
+        "Bearer": []
+      }
+    ]
+  },
+  "routes": {
+    "basePath": "/",
+    "entryFile": "src/index.ts",
+    "routesDir": "dist/routes",
+    "esm": true
+  }
 }

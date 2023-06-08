@@ -1,5 +1,12 @@
 {
-	"reporter": ["text-summary", "json", "html", "lcov"],
-	"reportsDir": "./coverage",
-	"src": ["src/**/*.ts"]
+  "reporter": [
+    "text-summary",
+    "json",
+    "html",
+    "lcov"
+  ],
+  "reportsDir": "./coverage",
+  "src": [
+    "src/**/*.ts"
+  ]
 }
