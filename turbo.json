@@ -1,65 +1,104 @@
 {
-	"$schema": "https://turborepo.org/schema.json",
-	"pipeline": {
-		"lint": {
-			"outputs": []
-		},
-		"test": {
-			"inputs": ["src/**/*.test.ts"],
-			"dependsOn": ["^build", "^db:generate"],
-			"cache": false
-		},
-		"prebuild": {
-			"outputs": ["dist/**", ".next/**", "public/dist/**", "node_modules/@prisma/client"],
-			"cache": true
-		},
-		"build": {
-			"dependsOn": ["^prebuild", "^build", "^db:generate"],
-			"outputs": ["dist/**", ".next/**", "public/dist/**"],
-			"cache": true
-		},
-		"start": {
-			"dependsOn": ["^build"],
-			"cache": false
-		},
-		"dev": {
-			"cache": false,
-			"dependsOn": ["^build", "^db:generate", "^db:push"]
-		},
-		"dev:fast": {
-			"cache": false,
-			"dependsOn": ["^build", "^db:generate", "^db:push"]
-		},
-		"db:migrate:deploy": {
-			"outputs": [],
-			"cache": false
-		},
-		"db:push": {
-			"outputs": [],
-			"cache": false
-		},
-		"db:seed": {
-			"outputs": [],
-			"cache": false
-		},
-		"db:studio": {
-			"outputs": [],
-			"cache": false
-		},
-		"db:generate": {
-			"dependsOn": ["^db:generate"],
-			"outputs": ["node_modules/@prisma/client/generator-build/index.js"],
-			"cache": false
-		},
-		"hephaistos": {
-			"inputs": ["src/**/*.ts"],
-			"outputs": ["cache/**/*.json"],
-			"dependsOn": ["^build", "^db:generate"],
-			"cache": true
-		},
-		"infra:up": {}
-	},
-	"remoteCache": {
-		"signature": true
-	}
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "inputs": [
+        "src/**/*.test.ts"
+      ],
+      "dependsOn": [
+        "^build",
+        "^db:generate"
+      ],
+      "cache": false
+    },
+    "prebuild": {
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/dist/**",
+        "node_modules/@prisma/client"
+      ],
+      "cache": true
+    },
+    "build": {
+      "dependsOn": [
+        "^prebuild",
+        "^build",
+        "^db:generate"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/dist/**"
+      ],
+      "cache": true
+    },
+    "start": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": [
+        "^build",
+        "^db:generate",
+        "^db:push"
+      ]
+    },
+    "dev:fast": {
+      "cache": false,
+      "dependsOn": [
+        "^build",
+        "^db:generate",
+        "^db:push"
+      ]
+    },
+    "db:migrate:deploy": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:push": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:seed": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:studio": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:generate": {
+      "dependsOn": [
+        "^db:generate"
+      ],
+      "outputs": [
+        "node_modules/@prisma/client/generator-build/index.js"
+      ],
+      "cache": false
+    },
+    "hephaistos": {
+      "inputs": [
+        "src/**/*.ts"
+      ],
+      "outputs": [
+        "cache/**/*.json"
+      ],
+      "dependsOn": [
+        "^build",
+        "^db:generate"
+      ],
+      "cache": true
+    },
+    "infra:up": {}
+  },
+  "remoteCache": {
+    "signature": true
+  }
 }
