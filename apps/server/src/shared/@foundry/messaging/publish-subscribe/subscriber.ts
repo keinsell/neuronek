@@ -10,4 +10,5 @@ export class Subscriber<MessageTypes extends Message<unknown>> {
 	
 	async handle<T extends MessageTypes>(message : T) {
 		return this.handler.handle( message )
+	}
 }
