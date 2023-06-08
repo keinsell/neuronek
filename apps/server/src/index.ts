@@ -1,24 +1,24 @@
 import 'reflect-metadata'
-import { EventEmitterBroker } from './shared/@foundry/messaging/broker.js'
-import { UsernameChanged } from './modules/identity-and-access-mangement/domain/events/username-changed/username-changed.js'
+import { EventEmitterBroker } from '~foundry/messaging/publish-subscribe/broker.js'
+import { PublishSubscribe } from '~foundry/messaging/publish-subscribe/pubsub.js'
+import { Subscriber } from '~foundry/messaging/publish-subscribe/subscriber.js'
+import { createTopic } from '~foundry/messaging/publish-subscribe/topic.js'
 import { Account } from './modules/identity-and-access-mangement/domain/entities/account.js'
-import { createTopic } from './shared/@foundry/base/topic.js'
-import { AccountCreated } from './modules/identity-and-access-mangement/domain/events/account-created/account-created.js'
-import { AccountCreatedHandler } from './modules/identity-and-access-mangement/domain/events/account-created/account-created-handler.js'
-import { EventEmitterPublisher } from './shared/@foundry/messaging/publisher.js'
+import {
+  AccountCreatedHandler,
+} from './modules/identity-and-access-mangement/domain/events/account-created/account-created-handler.js'
+import {
+  AccountCreated,
+} from './modules/identity-and-access-mangement/domain/events/account-created/account-created.js'
 
 
 
 export { HttpApplication } from './interfaces/http/http.js'
 
 const messageBroker = new EventEmitterBroker()
-const messagePublisher = new EventEmitterPublisher(messageBroker)
+//const messagePublisher = new EventEmitterPublisher( messageBroker )
+const messageSubscriber = new Subscriber(createTopic('account-created'), new AccountCreatedHandler())
 
-const message = new UsernameChanged(undefined as unknown as Account)
-const message2 = new AccountCreated(undefined as unknown as Account)
-
-messageBroker.subscribe(createTopic('account-created'), new AccountCreatedHandler())
-
-messagePublisher.publish(message, createTopic('username-changed'))
-messagePublisher.publish(message, createTopic('username-changed'))
-messagePublisher.publish(message2, createTopic('account-created'))
+const pubSub = new PublishSubscribe(messageBroker)
+await pubSub.subscribe(messageSubscriber)
+await pubSub.publish(new AccountCreated(undefined as unknown as Account), createTopic('account-created'))
