@@ -4,20 +4,20 @@ import * as digitalocean from '@pulumi/digitalocean'
 import * as random from '@pulumi/random'
 
 new digitalocean.Provider('digitalocean', {
-  token: process.env.DIGITALOCEAN_TOKEN
+	token: process.env.DIGITALOCEAN_TOKEN
 })
 
 const cluster = new digitalocean.KubernetesCluster(`k8s-capybara`, {
-  nodePool: {
-    name: 'k8s-pool-prometheus',
-    size: 's-1vcpu-2gb',
-    autoScale: false,
-    minNodes: 1,
-    maxNodes: 1,
-    nodeCount: 1
-  },
-  region: digitalocean.Region.AMS3,
-  version: '1.26.3-do.0'
+	nodePool: {
+		name: 'k8s-pool-prometheus',
+		size: 's-1vcpu-2gb',
+		autoScale: false,
+		minNodes: 1,
+		maxNodes: 1,
+		nodeCount: 1
+	},
+	region: digitalocean.Region.AMS3,
+	version: '1.26.3-do.0'
 })
 
 export const kubeconfig = cluster.kubeConfigs[0].rawConfig
