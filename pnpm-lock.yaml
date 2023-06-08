@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -46,9 +50,12 @@ importers:
       prettier-plugin-sh:
         specifier: 0.12.8
         version: 0.12.8(prettier@2.7.1)
+      rome:
+        specifier: 12.1.3
+        version: 12.1.3
       turbo:
         specifier: latest
-        version: 1.10.0
+        version: 1.10.2
 
   apps/server:
     dependencies:
@@ -5003,6 +5010,54 @@ packages:
     resolution: {integrity: sha512-pWIG9a/x1ky8gXKRhPH1OPKpHFoMN1ISLbJ+O+gPXQHIAKhNd5I28RlWf7q576hAOQA9JZTlo3p/M2uyLzJmmw==}
     engines: {node: '>= 10'}
     dev: false
+
+  /@rometools/cli-darwin-arm64@12.1.3:
+    resolution: {integrity: sha512-AmFTUDYjBuEGQp/Wwps+2cqUr+qhR7gyXAUnkL5psCuNCz3807TrUq/ecOoct5MIavGJTH6R4aaSL6+f+VlBEg==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rometools/cli-darwin-x64@12.1.3:
+    resolution: {integrity: sha512-k8MbWna8q4LRlb005N2X+JS1UQ+s3ZLBBvwk4fP8TBxlAJXUz17jLLu/Fi+7DTTEmMhM84TWj4FDKW+rNar28g==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rometools/cli-linux-arm64@12.1.3:
+    resolution: {integrity: sha512-X/uLhJ2/FNA3nu5TiyeNPqiD3OZoFfNfRvw6a3ut0jEREPvEn72NI7WPijH/gxSz55znfQ7UQ6iM4DZumUknJg==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rometools/cli-linux-x64@12.1.3:
+    resolution: {integrity: sha512-csP17q1eWiUXx9z6Jr/JJPibkplyKIwiWPYNzvPCGE8pHlKhwZj3YHRuu7Dm/4EOqx0XFIuqqWZUYm9bkIC8xg==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rometools/cli-win32-arm64@12.1.3:
+    resolution: {integrity: sha512-RymHWeod57EBOJY4P636CgUwYA6BQdkQjh56XKk4pLEHO6X1bFyMet2XL7KlHw5qOTalzuzf5jJqUs+vf3jdXQ==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rometools/cli-win32-x64@12.1.3:
+    resolution: {integrity: sha512-yHSKYidqJMV9nADqg78GYA+cZ0hS1twANAjiFibQdXj9aGzD+s/IzIFEIi/U/OBLvWYg/SCw0QVozi2vTlKFDQ==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /@rushstack/eslint-patch@1.3.0:
     resolution: {integrity: sha512-IthPJsJR85GhOkp3Hvp8zFOPK5ynKn6STyHa/WZpioK7E1aYDiBzpqQPrngc14DszIUkIrdd3k9Iu0XSzlP/1w==}
@@ -15001,6 +15056,20 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /rome@12.1.3:
+    resolution: {integrity: sha512-e+ff72hxDpe/t5/Us7YRBVw3PBET7SeczTQNn6tvrWdrCaAw3qOukQQ+tDCkyFtS4yGsnhjrJbm43ctNbz27Yg==}
+    engines: {node: '>=14.*'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@rometools/cli-darwin-arm64': 12.1.3
+      '@rometools/cli-darwin-x64': 12.1.3
+      '@rometools/cli-linux-arm64': 12.1.3
+      '@rometools/cli-linux-x64': 12.1.3
+      '@rometools/cli-win32-arm64': 12.1.3
+      '@rometools/cli-win32-x64': 12.1.3
+    dev: true
+
   /run-applescript@5.0.0:
     resolution: {integrity: sha512-XcT5rBksx1QdIhlFOCtgZkB99ZEouFZ1E2Kc2LHqNW13U3/74YGdkQRmThTwxy4QIyookibDKYZOPqX//6BlAg==}
     engines: {node: '>=12'}
@@ -16287,65 +16356,65 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
 
-  /turbo-darwin-64@1.10.0:
-    resolution: {integrity: sha512-N0aVGFtBgOKd7pIdUiKREwnDhNHRIvpMJbmUw04c1AqEoTiKAKT6iuzcCozO5N/gYMVr0hxrXgLal5OLYXtcsw==}
+  /turbo-darwin-64@1.10.2:
+    resolution: {integrity: sha512-sVLpVVANByfMgqf7OYPcZM4KiDnjGu7ITvAzBSa9Iwe14yoWLn8utrNsWCRaQEB6kEqBGLPmvL7AKwkl8M2Gqg==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.10.0:
-    resolution: {integrity: sha512-boXzhaHTS5MsTMv48I/JmYp9/fYplXk5nACUDrqV6nD1hzO5PMn5wNg75ATbpkaMaeuD+hjuobeSxn1p4vpqQg==}
+  /turbo-darwin-arm64@1.10.2:
+    resolution: {integrity: sha512-TKG91DSoYQjsCft4XBx4lYycVT5n3UQB/nOKgv/WJCSfwshLWulya3yhP8JT5erv9rPF8gwgnx87lrCmT4EAVA==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@1.10.0:
-    resolution: {integrity: sha512-crKQuS1jrp4vp+Th6EmUqqmAlvYNnzGmwWMLeckmYILrV7zAddu87eJu4hB7V6uV+W1qHZUTw8WXa1w1+8boBw==}
+  /turbo-linux-64@1.10.2:
+    resolution: {integrity: sha512-ZIzAkfrzjJFkSM/uEfxU6JjseCsT5PHRu0s0lmYce37ApQbv/HC7tI0cFhuosI30+O8109/mkyZykKE7AQfgqA==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.10.0:
-    resolution: {integrity: sha512-Y2fhWe0xepLjl7doIvsJK7mp2h8E+OF6qJsUHRgxFeRWQWi1I6clD2aEQeykHK8Tp+qp8pKFMocj32nFBvuCcg==}
+  /turbo-linux-arm64@1.10.2:
+    resolution: {integrity: sha512-G4uZA+RBQ5S1X/oUxO5KoLL2NDMkrrBZF52+00jQv6UEb9lWDgwzqSwoAGjdXxeDCrqMW5rBVwb/IBIF2/yhwA==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@1.10.0:
-    resolution: {integrity: sha512-uh8rEqH6teaHysEMjinwWBqyNwv4IvgSAwbq/OphP8jObstTYHoR+gFPo8RQUSTaBYy4QVszgi5eO5YLvEQqNA==}
+  /turbo-windows-64@1.10.2:
+    resolution: {integrity: sha512-ObfQO37kGu1jBzFs/L+hybrCXBwdnimotJwzg7pCoSyGijKITlugrpJoPDKlg0eMr3/1Y6KUeHy26vZaDXrbuQ==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.10.0:
-    resolution: {integrity: sha512-JaVj3iM7qyRD6xYGZLL/Gs4mQKfM1zL0f91AwHZLNkk1CrJ6i5kO4ZjhKkwXSpVOTNKW3sX0Q7dExXj85Vv7UQ==}
+  /turbo-windows-arm64@1.10.2:
+    resolution: {integrity: sha512-7S6dx4738R/FIT2cxbsunqgHN5LelXzuzkcaZgdkU33oswRf/6KOfOABzQLdTX7Uos59cBSdwayf6KQJxuOXUg==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@1.10.0:
-    resolution: {integrity: sha512-GWxoL2zJduiNaEHz78o74l2jCQEeuUZ3MdpMPz0SpZOvt3nimpvQPNxiyfbqt3U9/V5G375PWKYSbXkVnIbQcA==}
+  /turbo@1.10.2:
+    resolution: {integrity: sha512-m9sR5XHhuzxUQACf0vI2qCG5OqDYAZiPTaAsTwECnwUF4/cXwEmcYddbLJnO+K9orNvcnjjent5oBNBVQ/o0ow==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.10.0
-      turbo-darwin-arm64: 1.10.0
-      turbo-linux-64: 1.10.0
-      turbo-linux-arm64: 1.10.0
-      turbo-windows-64: 1.10.0
-      turbo-windows-arm64: 1.10.0
+      turbo-darwin-64: 1.10.2
+      turbo-darwin-arm64: 1.10.2
+      turbo-linux-64: 1.10.2
+      turbo-linux-arm64: 1.10.2
+      turbo-windows-64: 1.10.2
+      turbo-windows-arm64: 1.10.2
     dev: true
 
   /turndown@7.1.2:
