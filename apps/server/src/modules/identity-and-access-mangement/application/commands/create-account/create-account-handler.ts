@@ -1,8 +1,40 @@
+import { CommandHandler } from '~foundry/cqrs'
+import { Account } from '../../../domain/entities/account.js'
+import { Identity } from '../../../domain/identity.js'
+import { hashPassword } from '../../../domain/value-objects/password.js'
+import { AccountWriteRepository } from '../../../infrastructure/repositories/account.write-repository.js'
 import { CreateAccount } from './create-account'
-import { Command, CommandHandler } from '~foundry/cqrs'
 
-export class CreateAccountHandler extends CommandHandler<CreateAccount> {
-	public async handle(command: Command): Promise<void> {
-		console.log('CreateAccountHandler', command)
-	}
+
+
+export class CreateAccountHandler
+  extends CommandHandler<CreateAccount> {
+
+  constructor(private accountWriteRepository: AccountWriteRepository) {
+    super()
+  }
+
+  public async handle(command: CreateAccount): Promise<CreateAccount['_response']> {
+    console.log(`${this.constructor.name} handling ${command.constructor.name}`)
+
+    const passwordHash = await hashPassword(command.password)
+
+    const account = new Account({
+      password: passwordHash, username: command.username,
+    })
+
+    const identity = new Identity(account)
+
+    const saved = await this.accountWriteRepository.save(identity.account)
+
+    identity.create()
+
+    //		for await (const event of identity.events) {
+    //			await this.domainBus.dispatch( event )
+    //		}
+
+    // TODO: Save events in persistence.
+
+    return saved
+  }
 }

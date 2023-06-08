@@ -1,5 +1,7 @@
-import { Entity } from '../domain/enity'
+import { Entity }   from '../domain/enity'
 import { UniqueId } from '../indexing/unique-id'
+
+
 
 /**
  * The `WriteRepository` interface defines the methods required to store and retrieve entities in a write model.

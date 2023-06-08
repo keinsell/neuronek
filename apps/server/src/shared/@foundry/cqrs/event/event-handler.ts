@@ -1,10 +1,9 @@
-import { SimpleEvent } from './simple-event.js'
+import { Handler }     from '../../base/handler.js'
+import { SystemEvent } from './system.event.js'
 
-export abstract class EventHandler<T extends SimpleEvent = SimpleEvent> {
-	async handle(event: T): Promise<void> {
-		console.log(`Handling ${event.constructor.name} with ${this.constructor.name}`)
-		await this.execute(event)
-	}
 
-	protected abstract execute(event: T): Promise<void>
+
+export abstract class EventHandler<T extends SystemEvent>
+	implements Handler<T, void> {
+	abstract handle(message : T) : Promise<void> | void
 }

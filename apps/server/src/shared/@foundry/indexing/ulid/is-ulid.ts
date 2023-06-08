@@ -1,5 +1,7 @@
 import { Specification } from '~foundry/technical/specification.js'
 
+
+
 export class IsUlid extends Specification<string> {
 	public satisfy(i: string): boolean {
 		const ulidRegex = /^[0-9A-Z]{26}$/

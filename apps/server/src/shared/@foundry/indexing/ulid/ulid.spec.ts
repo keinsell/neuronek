@@ -1,7 +1,9 @@
-import test from 'ava'
+import test             from 'ava'
 import { InvalidValue } from '../../exceptions/invalid-value.js'
-import { IsUlid } from './is-ulid.js'
-import { ULID, ulid } from './ulid'
+import { IsUlid }       from './is-ulid.js'
+import { ULID, ulid }   from './ulid'
+
+
 
 test('ulid() generates a valid ULID', t => {
 	const id = ulid()

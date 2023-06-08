@@ -1,6 +1,8 @@
-import { Password } from './password.js'
-import argon2 from 'argon2'
+import argon2             from 'argon2'
 import { Static, String } from 'runtypes'
+import { Password }       from './password.js'
+
+
 
 const PasswordHash = String.withBrand('PasswordHash')
 type PasswordHash = Static<typeof PasswordHash>

@@ -3,6 +3,7 @@
 // Additionall data will be anonimized and maybe sent to analitics to support public reseach.
 
 import { NotImplemented } from '~foundry/exceptions/not-implemented.js'
+import { prisma } from '../../shared/infrastructure/prisma/prisma.js'
 
 export interface Subject {
 	// Subject may be linked to specific account.

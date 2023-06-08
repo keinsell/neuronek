@@ -1,7 +1,10 @@
 import { Message } from './message'
 
+
+
 /**
- * A message handler function is responsible for processing the message payload, updating application state, and sending additional messages to the message queue.
+ * A message handler function is responsible for processing the message payload, updating application state, and
+ * sending additional messages to the message queue.
  *
  * ```
  * import { MessageHandler } from './message';
@@ -21,6 +24,6 @@ import { Message } from './message'
  * };
  * ```
  */
-export abstract class MessageHandler<T> {
-	abstract handle(message: Message<T>): Promise<void>
+export abstract class MessageHandler<T extends Message<unknown>> {
+	abstract handle(message : T) : Promise<void>
 }
