@@ -26,6 +26,7 @@ model Subject {
   account_id  String?     @unique
   account     Account?    @relation(fields: [account_id], references: [id])
   Ingestion   Ingestion[]
+  Stash       Stash[]
 }
 
 model Substance {
@@ -42,29 +43,40 @@ model Substance {
   smiles                   String?
   psychoactive_class       String[]
   chemical_class           String?
+  description              String?
   routes_of_administration RouteOfAdministration[]
   Ingestion                Ingestion[]
+  Stash                    Stash[]
+  SubstanceInteraction     SubstanceInteraction[]
 }
 
 model RouteOfAdministration {
-  id                  String     @id @default(cuid())
-  substanceName       String?
-  name                String
-  bioavailability     Float[]
-  dosage_kind         String
-  dosage_unit         String
-  dosage_per_kilogram Boolean    @default(false)
-  thereshold_dosage   Float
-  light_dosage        Float[]
-  common_dosage       Float[]
-  strong_dosage       Float[]
-  heavy_dosage        Float
-  onset_phase         Int[]
-  comeup_phase        Int[]
-  peak_phase          Int[]
-  offset_phase        Int[]
-  afterglow_phase     Int[]
-  Substance           Substance? @relation(fields: [substanceName], references: [name])
+  id              String     @id @default(cuid())
+  substanceName   String?
+  name            String
+  bioavailability Float[]
+  dosage_kind     String
+  dosage          Dosage[]
+  phases          Phase[]
+  Substance       Substance? @relation(fields: [substanceName], references: [name])
+}
+
+model Phase {
+  id                      String                 @id @default(cuid())
+  from                    Int?
+  to                      Int?
+  RouteOfAdministration   RouteOfAdministration? @relation(fields: [routeOfAdministrationId], references: [id])
+  routeOfAdministrationId String?
+  effects                 Effect[]
+}
+
+model Dosage {
+  id                      String                 @id @default(cuid())
+  amount                  Float
+  unit                    String
+  perKilogram             Boolean                @default(false)
+  RouteOfAdministration   RouteOfAdministration? @relation(fields: [routeOfAdministrationId], references: [id])
+  routeOfAdministrationId String?
 }
 
 model Effect {
@@ -84,6 +96,7 @@ model Effect {
 
   effectindex    String?
   psychonautwiki String?
+  Phase          Phase[]
 }
 
 model Ingestion {
@@ -97,4 +110,28 @@ model Ingestion {
   subject_id            String?
   Subject               Subject?   @relation(fields: [subject_id], references: [id])
   Substance             Substance? @relation(fields: [substanceName], references: [name])
+  Stash                 Stash?     @relation(fields: [stashId], references: [id])
+  stashId               String?
+}
+
+model Stash {
+  id           String      @id @default(cuid())
+  owner_id     String
+  Subject      Subject?    @relation(fields: [owner_id], references: [id])
+  substance_id String
+  Substance    Substance   @relation(fields: [substance_id], references: [name])
+  addedDate    DateTime?   @default(now())
+  expiration   DateTime?
+  amount       Int?
+  price        String?
+  vendor       String?
+  description  String?
+  purity       Int?        @default(100)
+  ingestions   Ingestion[]
+}
+
+model SubstanceInteraction {
+  id          String     @id @default(cuid())
+  Substance   Substance? @relation(fields: [substanceId], references: [id])
+  substanceId String?
 }
