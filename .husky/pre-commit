@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpx rome format apps/server/src/**/*.ts --write
+# pnpx rome format apps/server/src/**/*.ts --write

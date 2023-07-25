@@ -1,67 +1,67 @@
 {
-  "compilerOptions" : {
-	"moduleResolution" : "node" ,
-	"module" : "NodeNext" ,
-	"target" : "esnext" ,
-	"lib" : [
-	  "esnext"
-	] ,
-	"strict" : true ,
-	"composite" : false ,
-	"exactOptionalPropertyTypes" : true ,
-	"incremental" : true ,
-	"importHelpers" : true ,
-	"esModuleInterop" : true ,
-	"forceConsistentCasingInFileNames" : true ,
-	"experimentalDecorators" : true ,
-	"emitDecoratorMetadata" : true ,
-	"resolveJsonModule" : true ,
-	"allowJs" : false ,
-	"noUnusedLocals" : true ,
-	"noUnusedParameters" : true ,
-	"noImplicitReturns" : true ,
-	"noFallthroughCasesInSwitch" : true ,
-	"noImplicitAny" : true ,
-	"strictNullChecks" : true ,
-	"noImplicitThis" : true ,
-	"noImplicitOverride" : true ,
-	"noPropertyAccessFromIndexSignature" : true ,
-	"noUncheckedIndexedAccess" : true ,
-	"skipLibCheck" : true ,
-	"sourceMap" : true ,
-	"inlineSources" : true ,
-	"inlineSourceMap" : false ,
-	"declaration" : true ,
-	"tsBuildInfoFile" : ".tsbuildinfo" ,
-	"outDir" : "dist" ,
-	"baseUrl" : "." ,
-	"paths" : {
-	  "~foundry/*" : [
-		"./src/shared/@foundry/*"
-	  ] ,
-	  "~foundry/cqrs" : [
-		"./src/shared/@foundry/cqrs"
-	  ] ,
-	  "~foundry/domain" : [
-		"./src/shared/@foundry/domain"
-	  ] ,
-	  "~components/*" : [
-		"./src/shared/@components/*"
-	  ] ,
-	  "~domain/iam" : [
-		"./src/modules/identity-and-access-mangement/*"
-	  ]
-	}
-  } ,
-  "ts-node" : {
-	"swc" : true ,
-	"pretty" : true
-  } ,
-  "include" : [
-	"src/**/*"
-  ] ,
-  "exclude" : [
-	"node_modules" ,
-	"../../node_modules"
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "NodeNext",
+    "target": "esnext",
+    "lib": [
+      "esnext"
+    ],
+    "strict": true,
+    "composite": false,
+    "exactOptionalPropertyTypes": true,
+    "incremental": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "inlineSourceMap": false,
+    "declaration": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "~foundry/*": [
+        "./src/shared/@foundry/*"
+      ],
+      "~foundry/cqrs": [
+        "./src/shared/@foundry/cqrs"
+      ],
+      "~foundry/domain": [
+        "./src/shared/@foundry/domain"
+      ],
+      "~components/*": [
+        "./src/shared/@components/*"
+      ],
+      "~domain/iam/*": [
+        "./src/modules/identity-and-access-mangement/*"
+      ]
+    }
+  },
+  "ts-node": {
+    "swc": true,
+    "pretty": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "../../node_modules"
   ]
 }
