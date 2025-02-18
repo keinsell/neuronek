@@ -1,36 +1,36 @@
-use crate::cli::OutputFormat;
-use crate::core::config::Config;
+use crate::cli::MessageFormat;
 use crate::core::config::CONFIG;
+use crate::core::config::Config;
 use crate::database::Migrator;
 use async_std::task::block_on;
 use atty::Stream;
 use chrono::Local;
 use chrono_english::Dialect;
-use log::debug;
-use log::error;
-use log::info;
-use log::warn;
 use miette::IntoDiagnostic;
-use sea_orm::prelude::async_trait;
 use sea_orm::Database;
 use sea_orm::DatabaseConnection;
+use sea_orm::prelude::async_trait;
 use sea_orm_migration::IntoSchemaManagerConnection;
 use sea_orm_migration::MigratorTrait;
 use std::env::temp_dir;
 use std::io::stdout;
 use std::path::PathBuf;
 use std::thread::sleep;
+use tracing::debug;
+use tracing::error;
+use tracing::info;
 use tracing::instrument;
+use tracing::warn;
 use tracing_indicatif::IndicatifLayer;
+use tracing_subscriber::Layer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::Layer;
 
 #[derive(Debug, Clone)]
 pub struct AppContext<'a>
 {
     pub database_connection: &'a sea_orm::DatabaseConnection,
-    pub stdout_format: OutputFormat,
+    pub stdout_format: MessageFormat,
 }
 
 lazy_static::lazy_static! {

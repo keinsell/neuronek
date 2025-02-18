@@ -1,15 +1,14 @@
 use crate::core::CommandHandler;
 use crate::substance::error::SubstanceError;
-use crate::substance::SubstanceTable;
 use crate::utils::AppContext;
 use async_trait::async_trait;
+use bon::builder;
 use clap::Args;
 use clap::Parser;
 use clap::Subcommand;
 use serde::Deserialize;
 use serde::Serialize;
 use tabled::Tabled;
-use typed_builder::TypedBuilder;
 
 
 #[derive(Debug, Serialize, Tabled)]
@@ -141,7 +140,7 @@ impl CommandHandler for SubstanceCommand
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Tabled, TypedBuilder)]
+#[derive(Debug, Serialize, Deserialize, Tabled, bon::Builder)]
 pub struct ViewModel
 {
     pub id: String,
@@ -149,9 +148,9 @@ pub struct ViewModel
     pub common_names: String,
 }
 
-impl From<SubstanceTable> for ViewModel
+impl From<crate::database::entities::substance::Model> for ViewModel
 {
-    fn from(model: SubstanceTable) -> Self
+    fn from(model: crate::database::entities::substance::Model) -> Self
     {
         ViewModel {
             id: model.id.clone().chars().take(6).collect(),

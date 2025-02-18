@@ -8,7 +8,7 @@ use crate::substance::route_of_administration::phase::DurationRange;
 use crate::substance::route_of_administration::phase::PhaseClassification;
 use crate::substance::route_of_administration::RouteOfAdministration;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
-use crate::substance::RoutesOfAdministration;
+use crate::substance::{RoutesOfAdministration, SystematicName};
 use crate::substance::Substance;
 use cached::proc_macro::io_cached;
 use futures::stream::FuturesUnordered;
@@ -68,6 +68,7 @@ pub async fn get_substance(
 
     let mut substance = Substance {
         name: db_substance.name,
+        systematic_name: None,
         routes_of_administration: RoutesOfAdministration::new(),
     };
 
@@ -149,11 +150,11 @@ pub async fn get_substance(
         match result
         {
             | Ok((classification, roa)) =>
-            {
-                substance
-                    .routes_of_administration
-                    .insert(classification, roa);
-            }
+                {
+                    substance
+                        .routes_of_administration
+                        .insert(classification, roa);
+                }
             | Err(e) => return Err(e),
         }
     }

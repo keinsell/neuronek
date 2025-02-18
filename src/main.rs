@@ -1,13 +1,13 @@
+#![feature(new_range_api)]
 #![allow(unused_imports)]
-#[macro_use] extern crate log;
 #[macro_use] extern crate serde_derive;
 use self::core::error_handling::setup_diagnostics;
 use self::core::logging::setup_logger;
 
-use crate::cli::Cli;
-use crate::utils::migrate_database;
+use crate::cli::CommandLineInterface;
 use crate::utils::AppContext;
 use crate::utils::DATABASE_CONNECTION;
+use crate::utils::migrate_database;
 
 use atty::Stream;
 use clap::Parser;
@@ -16,6 +16,8 @@ use miette::Result;
 use std::env;
 use tracing_subscriber::util::SubscriberInitExt;
 
+mod analyzer;
+mod application;
 mod cli;
 mod core;
 mod database;
@@ -49,7 +51,7 @@ async fn main() -> Result<()>
     //     return tui::run();
     // }
 
-    let cli = Cli::parse();
+    let cli = CommandLineInterface::parse();
 
     let context = AppContext {
         database_connection: &DATABASE_CONNECTION,

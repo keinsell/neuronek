@@ -11,20 +11,21 @@ use hashbrown::HashMap;
 use serde::Deserialize;
 use serde::Serialize;
 use std::str::FromStr;
+use crate::cli::formatter::Formatter;
+use route_of_administration::RouteOfAdministration;
+use tabled::Tabled;
 
+#[derive(Clone, Debug)]
+pub(super) struct SystematicName(pub String);
 
 pub type RoutesOfAdministration =
-    HashMap<RouteOfAdministrationClassification, RouteOfAdministration>;
+HashMap<RouteOfAdministrationClassification, RouteOfAdministration>;
 
 #[derive(Debug, Clone)]
 pub struct Substance
 {
     pub name: String,
+    pub systematic_name: Option<SystematicName>,
     pub routes_of_administration: RoutesOfAdministration,
 }
 
-use crate::cli::formatter::Formatter;
-use route_of_administration::RouteOfAdministration;
-use tabled::Tabled;
-
-pub(crate) type SubstanceTable = crate::database::entities::substance::Model;

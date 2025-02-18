@@ -3,8 +3,8 @@ use crate::core::QueryHandler;
 use crate::database::entities::ingestion;
 use crate::database::entities::ingestion::Entity as IngestionEntity;
 use crate::database::entities::ingestion_phase;
+use crate::ingestion::IngestionPhase;
 use crate::ingestion::model::Ingestion;
-use crate::ingestion::model::IngestionPhase;
 use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::RouteOfAdministration;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
@@ -29,12 +29,12 @@ use sea_orm::EntityTrait;
 use sea_orm::QueryOrder;
 use sea_orm::QuerySelect;
 use sea_orm_migration::IntoSchemaManagerConnection;
+use std::ops::Range;
 use std::str::FromStr;
 use tracing::field::debug;
-use typed_builder::TypedBuilder;
 use uuid::Uuid;
 
-#[derive(Parser, Debug, Copy, Clone, Serialize, Deserialize, TypedBuilder)]
+#[derive(Parser, Debug, Copy, Clone, Serialize, Deserialize, bon::Builder)]
 #[command(version, about = "Query ingestions", long_about, aliases = vec!["ls", "get"])]
 pub struct ListIngestion
 {
@@ -48,7 +48,7 @@ pub struct ListIngestion
 /// Either the `ingestion_id` **or** the combination of `substance.rs` and
 /// `dosage` must be provided, but not both at the same time. If
 /// `ingestion_id` is provided, all other arguments are ignored.
-#[derive(Parser, Debug, TypedBuilder)]
+#[derive(Parser, Debug, bon::Builder)]
 #[command(
     version,
     about = "Generate insights about a given ingestion",
@@ -223,9 +223,9 @@ impl QueryHandler<Ingestion> for AnalyzeIngestion
                 let phase = IngestionPhase {
                     id: None,
                     class: *phase_class,
-                    start_time: start_time..(start_time + start_duration),
-                    end_time: end_time..(end_time + (end_duration - start_duration)),
-                    duration: start_duration..end_duration,
+                    start_time: Range::from(start_time..(start_time + start_duration)),
+                    end_time: Range::from(end_time..(end_time + (end_duration - start_duration))),
+                    duration: Range::from(start_duration..end_duration),
                 };
 
                 current_time = end_time;

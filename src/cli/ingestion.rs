@@ -1,6 +1,6 @@
+use crate::cli::MessageFormat;
 use crate::cli::formatter::Formatter;
 use crate::cli::formatter::FormatterVector;
-use crate::cli::OutputFormat;
 use crate::core::CommandHandler;
 use crate::core::QueryHandler;
 use crate::database::entities::ingestion;
@@ -10,12 +10,13 @@ use crate::database::entities::ingestion_phase;
 use crate::database::entities::ingestion_phase::Entity as IngestionPhase;
 use crate::ingestion::command::LogIngestion;
 use crate::ingestion::query::AnalyzeIngestion;
+use crate::ingestion::service::IngestionService;
 use crate::substance::repository::get_substance;
-use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
-use crate::utils::parse_date_string;
+use crate::substance::route_of_administration::dosage::Dosage;
 use crate::utils::AppContext;
 use crate::utils::DATABASE_CONNECTION;
+use crate::utils::parse_date_string;
 use async_std::task;
 use async_trait::async_trait;
 use chrono::DateTime;
@@ -29,11 +30,10 @@ use chrono_humanize::Humanize;
 use chrono_humanize::Tense;
 use clap::Parser;
 use clap::Subcommand;
-use log::info;
-use miette::miette;
 use miette::IntoDiagnostic;
-use owo_colors::style;
+use miette::miette;
 use owo_colors::OwoColorize;
+use owo_colors::style;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue;
 use sea_orm::ColumnTrait;
@@ -50,140 +50,15 @@ use std::fmt::Display;
 use std::str::FromStr;
 use tabled::Table;
 use tabled::Tabled;
-use termimad::rgb;
 use termimad::MadSkin;
+use termimad::rgb;
 use textplots::Chart;
 use textplots::Plot;
 use textplots::Shape;
-use tracing::event;
 use tracing::Level;
-use typed_builder::TypedBuilder;
+use tracing::event;
+use tracing::info;
 use uuid::Uuid;
-
-#[async_trait]
-impl CommandHandler for LogIngestion
-{
-    async fn handle<'a>(&self, context: AppContext<'a>) -> miette::Result<()>
-    {
-        let substance_name = pubchem::Compound::with_name(&self.substance_name)
-            .title()
-            .into_diagnostic()
-            .unwrap_or(self.substance_name.clone());
-
-        let ingestion = Ingestion::insert(ingestion::ActiveModel {
-            id: ActiveValue::default(),
-            substance_name: ActiveValue::Set(substance_name.to_lowercase().clone()),
-            route_of_administration: ActiveValue::Set(
-                serde_json::to_value(self.route_of_administration)
-                    .unwrap()
-                    .as_str()
-                    .unwrap()
-                    .to_string(),
-            ),
-            dosage: ActiveValue::Set(self.dosage.as_base_units() as f32),
-            dosage_classification: ActiveValue::NotSet,
-            ingested_at: ActiveValue::Set(self.ingestion_date.to_utc().naive_local()),
-            updated_at: ActiveValue::Set(Local::now().to_utc().naive_local()),
-            created_at: ActiveValue::Set(Local::now().to_utc().naive_local()),
-        })
-        .exec_with_returning(context.database_connection)
-        .await
-        .into_diagnostic()?;
-
-        event!(name: "ingestion_logged", Level::INFO, ingestion=?&ingestion);
-
-        let analysis_query = AnalyzeIngestion::builder()
-            .substance(self.substance_name.clone())
-            .date(self.ingestion_date)
-            .dosage(self.dosage)
-            .roa(self.route_of_administration)
-            .ingestion_id(Some(ingestion.id))
-            .build();
-
-        match analysis_query.query().await
-        {
-            | Ok(analysis) =>
-            {
-                let mut analysis = analysis;
-                analysis.id = Some(ingestion.id);
-                println!(
-                    "{}",
-                    IngestionViewModel::from(analysis.clone()).format(context.stdout_format)
-                );
-
-                if analysis.dosage_classification.is_some()
-                {
-                    let update_model = ingestion::ActiveModel {
-                        id: ActiveValue::Set(ingestion.id),
-                        dosage_classification: ActiveValue::Set(
-                            analysis.dosage_classification.map(|d| d.to_string()),
-                        ),
-                        ..Default::default()
-                    };
-
-                    update_model
-                        .update(context.database_connection)
-                        .await
-                        .into_diagnostic()?;
-
-                    if !analysis.phases.is_empty()
-                    {
-                        let phase_models = analysis
-                            .phases
-                            .clone()
-                            .into_iter()
-                            .map(|phase| ingestion_phase::ActiveModel {
-                                id: ActiveValue::Set(Uuid::new_v4().to_string()),
-                                ingestion_id: ActiveValue::Set(ingestion.id),
-                                classification: ActiveValue::Set(phase.class.to_string()),
-                                start_date_min: ActiveValue::Set(
-                                    phase.start_time.start.naive_utc(),
-                                ),
-                                start_date_max: ActiveValue::Set(phase.start_time.end.naive_utc()),
-                                end_date_min: ActiveValue::Set(phase.end_time.start.naive_utc()),
-                                end_date_max: ActiveValue::Set(phase.end_time.end.naive_utc()),
-                                common_dosage_weight: ActiveValue::Set(
-                                    self.dosage.as_base_units() as i32
-                                ),
-                                duration_min: ActiveValue::Set(
-                                    phase.duration.start.num_minutes() as i32
-                                ),
-                                duration_max: ActiveValue::Set(
-                                    phase.duration.end.num_minutes() as i32
-                                ),
-                                notes: ActiveValue::NotSet,
-                                created_at: ActiveValue::Set(Local::now().to_string()),
-                                updated_at: ActiveValue::Set(Local::now().to_string()),
-                            })
-                            .collect::<Vec<_>>();
-
-                        IngestionPhase::insert_many(phase_models)
-                            .exec(context.database_connection)
-                            .await
-                            .into_diagnostic()?;
-
-                        event!(
-                            name: "ingestion_analyzed",
-                            Level::INFO,
-                            ingestion = ?&analysis,
-                        );
-                    }
-                }
-            }
-            | Err(e) =>
-            {
-                event!(
-                    name: "ingestion_analysis_failed",
-                    Level::WARN,
-                    error = ?e,
-                    ingestion_id = ingestion.id
-                );
-            }
-        }
-
-        Ok(())
-    }
-}
 
 #[derive(Parser, Debug)]
 #[command(version, about = "Update an existing ingestion", aliases = vec![ "edit"])]
@@ -202,7 +77,8 @@ pub struct UpdateIngestion
     pub dosage: Option<Dosage>,
 
     /// New ingestion date (optional, e.g., "today 10:00")
-    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=parse_date_string)]
+    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=parse_date_string
+    )]
     pub ingestion_date: Option<DateTime<Local>>,
 
     /// New route of administration (optional, defaults to "oral")
@@ -375,7 +251,7 @@ impl CommandHandler for GetIngestion
                     .parse()
                     .unwrap_or(RouteOfAdministrationClassification::Oral),
             )
-            .ingestion_id(Some(ingestion.id))
+            .ingestion_id(ingestion.id)
             .build();
 
         match analysis_query.query().await
@@ -435,7 +311,15 @@ impl CommandHandler for IngestionCommand
     {
         match &self.commands
         {
-            | IngestionCommands::Log(log_ingestion) => log_ingestion.handle(ctx).await,
+            | IngestionCommands::Log(log_ingestion) =>
+            {
+                let ingestion = IngestionService::log(log_ingestion)
+                    .await
+                    .map_err(|e| miette!(e))?;
+                let message = IngestionViewModel::from(ingestion).format(ctx.stdout_format);
+                println!("{}", message);
+                Ok(())
+            }
             | IngestionCommands::List(list_ingestions) => list_ingestions.handle(ctx).await,
             | IngestionCommands::Delete(delete_ingestion) => delete_ingestion.handle(ctx).await,
             | IngestionCommands::Update(update_ingestion) => update_ingestion.handle(ctx).await,
@@ -446,7 +330,7 @@ impl CommandHandler for IngestionCommand
 
 fn display_date(date: &DateTime<Local>) -> String { HumanTime::from(*date).to_string() }
 
-#[derive(Debug, Serialize, Tabled, TypedBuilder)]
+#[derive(Debug, Serialize, Tabled, bon::Builder)]
 pub struct IngestionViewModel
 {
     #[tabled(rename = "ID")]
@@ -468,13 +352,13 @@ pub struct IngestionViewModel
     pub active_phase: Option<IngestionPhaseViewModel>,
 }
 
-#[derive(Debug, Serialize, TypedBuilder, Clone)]
+#[derive(Debug, Serialize, bon::Builder, Clone)]
 pub struct IngestionPhaseViewModel
 {
     pub classification: String,
-    pub start_time: chrono::DateTime<Local>,
-    pub end_time: chrono::DateTime<Local>,
-    pub duration: chrono::Duration,
+    pub start_time: DateTime<Local>,
+    pub end_time: DateTime<Local>,
+    pub duration: Duration,
 }
 
 #[derive(Debug, Tabled)]
@@ -527,7 +411,7 @@ impl Formatter for IngestionViewModel
         md.push_str(&format!(
             "**Ingested**: {} _{}_\n\n",
             self.ingested_at.format("%Y-%m-%d %H:%M:%S"),
-            time_since.to_string()
+            time_since
         ));
 
         if let Some(active_phase) = &self.active_phase
@@ -618,7 +502,6 @@ impl From<Model> for IngestionViewModel
                     .map_or("n/a".to_string(), |c| c.to_string()),
             )
             .phases(vec![])
-            .active_phase(None)
             .build()
     }
 }
@@ -671,7 +554,7 @@ impl From<crate::ingestion::model::Ingestion> for IngestionViewModel
                     .map_or("n/a".to_string(), |c| c.to_string()),
             )
             .phases(phases)
-            .active_phase(active_phase)
+            .maybe_active_phase(active_phase)
             .build()
     }
 }

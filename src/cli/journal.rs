@@ -1,12 +1,12 @@
+use crate::cli::MessageFormat;
 use crate::cli::formatter::Formatter;
-use crate::cli::OutputFormat;
-use crate::core::foundation::QueryHandler;
 use crate::core::CommandHandler;
+use crate::core::QueryHandler;
 use crate::database::entities::ingestion::Entity as Ingestion;
 use crate::database::entities::ingestion::Model as IngestionModel;
 use crate::ingestion::query::AnalyzeIngestion;
-use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::route_of_administration::dosage::Dosage;
 use crate::utils::AppContext;
 use async_trait::async_trait;
 use chrono::DateTime;
@@ -27,8 +27,8 @@ use serde::Serialize;
 use std::borrow::Cow;
 use std::collections::HashMap;
 use tabled::Tabled;
-use termimad::rgb;
 use termimad::MadSkin;
+use termimad::rgb;
 
 
 #[derive(Parser, Debug)]
@@ -93,7 +93,7 @@ impl JournalViewModel
                         .parse()
                         .unwrap_or_default(),
                 )
-                .ingestion_id(Some(ingestion.id))
+                .ingestion_id(ingestion.id)
                 .build();
 
             let enhanced = if let Ok(analysis) = analysis_query.query().await
@@ -139,12 +139,12 @@ impl JournalViewModel
 
 impl Formatter for JournalViewModel
 {
-    fn format(&self, format: OutputFormat) -> String
+    fn format(&self, format: MessageFormat) -> String
     {
         match format
         {
-            | OutputFormat::Pretty => self.pretty(),
-            | OutputFormat::Json => serde_json::to_string_pretty(self).unwrap(),
+            | MessageFormat::Pretty => self.pretty(),
+            | MessageFormat::Json => serde_json::to_string_pretty(self).unwrap(),
         }
     }
 

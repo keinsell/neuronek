@@ -8,10 +8,10 @@ CREATE TABLE `atlas_schema_revisions`
     `total`            integer  NOT NULL DEFAULT 0,
     `executed_at`      datetime NOT NULL,
     `execution_time`   integer  NOT NULL,
-    `error`            text     NULL,
-    `error_stmt`       text     NULL,
+    `error`            text NULL,
+    `error_stmt`       text NULL,
     `hash`             text     NOT NULL,
-    `partial_hashes`   json     NULL,
+    `partial_hashes`   json NULL,
     `operator_version` text     NOT NULL,
     PRIMARY KEY (`version`)
 );
@@ -29,10 +29,10 @@ CREATE TABLE `substance`
     `name`               text    NOT NULL,
     `common_names`       text    NOT NULL,
     `pubchem_cid`        integer NOT NULL,
-    `psychonautwiki_url` text    NULL,
+    `psychonautwiki_url` text NULL,
     `psychoactive_class` text    NOT NULL,
-    `chemical_class`     text    NULL,
-    `description`        text    NULL,
+    `chemical_class`     text NULL,
+    `description`        text NULL,
     PRIMARY KEY (`id`)
 );
 -- Create index "substance_id_key" to table: "substance"
@@ -86,7 +86,7 @@ CREATE TABLE `ingestion`
     `substance_name`          varchar       NOT NULL,
     `route_of_administration` varchar       NOT NULL,
     `dosage`                  float         NOT NULL,
-    `dosage_classification`   text          NULL,
+    `dosage_classification`   text NULL,
     `ingested_at`             datetime_text NOT NULL,
     `updated_at`              datetime_text NOT NULL,
     `created_at`              datetime_text NOT NULL,
@@ -96,19 +96,19 @@ CREATE TABLE `ingestion`
 -- Create "ingestion_phase" table
 CREATE TABLE ingestion_phase
 (
-    id                   TEXT    NOT NULL,
-    ingestion_id         INTEGER NOT NULL,
-    classification       TEXT    NOT NULL,
-    start_date_min       datetime_text    NOT NULL,
-    start_date_max       datetime_text    NOT NULL,
-    end_date_min         datetime_text    NOT NULL,
-    end_date_max         datetime_text    NOT NULL,
-    common_dosage_weight INTEGER NOT NULL,
-    duration_min         INTEGER NOT NULL,
-    duration_max         INTEGER NOT NULL,
+    id                   TEXT          NOT NULL,
+    ingestion_id         INTEGER       NOT NULL,
+    classification       TEXT          NOT NULL,
+    start_date_min       datetime_text NOT NULL,
+    start_date_max       datetime_text NOT NULL,
+    end_date_min         datetime_text NOT NULL,
+    end_date_max         datetime_text NOT NULL,
+    common_dosage_weight INTEGER       NOT NULL,
+    duration_min         INTEGER       NOT NULL,
+    duration_max         INTEGER       NOT NULL,
     notes                TEXT,
-    created_at           TEXT    NOT NULL,
-    updated_at           TEXT    NOT NULL,
+    created_at           TEXT          NOT NULL,
+    updated_at           TEXT          NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT ingestion_phase_ingestion_id_fkey
         FOREIGN KEY (ingestion_id) REFERENCES ingestion (id)

@@ -1,4 +1,4 @@
-use crate::cli::Cli;
+use crate::cli::CommandLineInterface;
 use directories::ProjectDirs;
 use lazy_static::lazy_static;
 use serde::Deserialize;

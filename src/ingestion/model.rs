@@ -11,10 +11,12 @@ use clap::builder::TypedValueParser;
 use hashbrown::HashMap;
 use std::ops::Range;
 use std::str::FromStr;
+use crate::ingestion::phase::model::IngestionPhase;
 
 pub type IngestionDate = DateTime<Local>;
+pub type IngestionPhases = HashMap<PhaseClassification, IngestionPhase>;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct Ingestion
 {
     pub id: Option<i32>,
@@ -26,10 +28,6 @@ pub struct Ingestion
     /// This field is an `Option` to allow for cases where the dosage
     /// classification cannot be determined.
     pub dosage_classification: Option<DosageClassification>,
-    /// The substance.rs ingested in this event.
-    /// This field is wrapped in an `Option` and a `Box` to allow for optional
-    /// ownership.
-    #[serde(skip_serializing, skip_deserializing)]
     pub substance: Option<Box<crate::substance::Substance>>,
     /// A vector of `IngestionPhase` structs representing the different phases
     /// of the ingestion event.
@@ -56,31 +54,3 @@ impl From<Model> for Ingestion
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IngestionPhase
-{
-    pub id: Option<String>,
-    pub class: PhaseClassification,
-    pub start_time: Range<DateTime<Local>>,
-    pub end_time: Range<DateTime<Local>>,
-    pub duration: Range<Duration>,
-}
-impl From<crate::database::entities::ingestion_phase::Model> for IngestionPhase
-{
-    fn from(value: crate::database::entities::ingestion_phase::Model) -> Self
-    {
-        let duration_lower = value.duration_min;
-        let duration_upper = value.duration_max;
-
-        Self {
-            id: Some(value.id),
-            class: PhaseClassification::from_str(&value.classification).unwrap(),
-            start_time: (Local.from_utc_datetime(&value.start_date_min)
-                ..Local.from_utc_datetime(&value.start_date_max)),
-            end_time: (Local.from_utc_datetime(&value.end_date_min)
-                ..Local.from_utc_datetime(&value.end_date_max)),
-            duration: Duration::minutes(duration_lower as i64)
-                ..Duration::minutes(duration_upper as i64),
-        }
-    }
-}
