@@ -88,4 +88,3 @@ When no ingestions are present, the view shows:
   - Updated time since ingestion
   - Phase transitions
   - Completion status changes
-

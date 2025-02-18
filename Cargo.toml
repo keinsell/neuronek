@@ -82,6 +82,8 @@ bon = "3.3.2"
 termimad = "0.31.2"
 humantime = "2.1.0"
 nutype = "0.6.1"
+rust_decimal = "1.36.0"
+rust_decimal_macros = "1.36.0"
 
 [features]
 default = []

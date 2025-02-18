@@ -8,6 +8,7 @@ use crate::ingestion::query::AnalyzeIngestion;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::utils::AppContext;
+use async_std::task::block_on;
 use async_trait::async_trait;
 use chrono::DateTime;
 use chrono::Duration;
@@ -30,7 +31,8 @@ use tabled::Tabled;
 use termimad::MadSkin;
 use termimad::rgb;
 
-
+// Added imports for TUI intensity plot integration
+use crate::ingestion::query::ListIngestion;
 #[derive(Parser, Debug)]
 pub struct ViewJournal
 {

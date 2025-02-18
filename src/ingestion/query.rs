@@ -11,6 +11,7 @@ use crate::substance::route_of_administration::RouteOfAdministrationClassificati
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::phase::PhaseClassification;
+use crate::substance::route_of_administration::phase::PhaseClassificationFactor;
 use crate::utils::AppContext;
 use async_trait::async_trait;
 use chrono::DateTime;
@@ -22,12 +23,16 @@ use clap::arg;
 use clap::command;
 use derive_more::FromStr;
 use miette::IntoDiagnostic;
+use rust_decimal::Decimal;
+use rust_decimal::prelude::FromPrimitive;
+use rust_decimal_macros::dec;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue;
 use sea_orm::DatabaseConnection;
 use sea_orm::EntityTrait;
 use sea_orm::QueryOrder;
 use sea_orm::QuerySelect;
+use sea_orm::sea_query::ExprTrait;
 use sea_orm_migration::IntoSchemaManagerConnection;
 use std::ops::Range;
 use std::str::FromStr;
@@ -60,14 +65,6 @@ pub struct AnalyzeIngestion
     #[arg(short, long, value_name = "INGESTION_ID")]
     pub ingestion_id: Option<i32>,
     /// Name of the substance involved in the ingestion.
-    // #[arg(
-    //     short,
-    //     long,
-    //     value_name = "SUBSTANCE",
-    //     help = "Name of the substance",
-    //     requires = "dosage",
-    //     conflicts_with = "ingestion_id"
-    // )]
     #[arg(short, long, value_name = "SUBSTANCE")]
     pub substance: String,
 
@@ -146,7 +143,6 @@ impl QueryHandler<Ingestion> for AnalyzeIngestion
         let date = self.date;
         let route = self.roa;
 
-        // Fetch substance with related data
         let substance = get_substance(substance_name, db)
             .await
             .map_err(|e| miette::miette!("Failed to get substance: {}", e))?;
@@ -204,35 +200,47 @@ impl QueryHandler<Ingestion> for AnalyzeIngestion
             });
 
         let phases = &route_of_administration.phases;
-        let mut current_time = ingestion.ingestion_date;
         let mut ingestion_phases = Vec::new();
+        let mut prev_phase_end = ingestion.ingestion_date..ingestion.ingestion_date;
 
         for phase_class in crate::substance::route_of_administration::phase::PHASE_ORDER.iter()
         {
             if let Some(duration_range) = phases.get(phase_class)
             {
-                let start_minutes = duration_range.start.num_minutes().unwrap_or(0.0) as i64;
-                let end_minutes = duration_range.end.num_minutes().unwrap_or(0.0) as i64;
+                let min_duration =
+                    chrono::Duration::from_std(duration_range.start.to_std().unwrap()).unwrap();
+                let max_duration =
+                    chrono::Duration::from_std(duration_range.end.to_std().unwrap()).unwrap();
 
-                let start_duration = TimeDelta::minutes(start_minutes);
-                let end_duration = TimeDelta::minutes(end_minutes);
+                let phase_start_time_min = prev_phase_end.start;
+                let phase_start_time_max = prev_phase_end.end;
+                let phase_end_time_min = phase_start_time_min + min_duration;
+                let phase_end_time_max = phase_start_time_max + max_duration;
+                prev_phase_end = phase_end_time_min..phase_end_time_max;
 
-                let start_time = current_time;
-                let end_time = current_time + end_duration;
 
                 let phase = IngestionPhase {
                     id: None,
                     class: *phase_class,
-                    start_time: Range::from(start_time..(start_time + start_duration)),
-                    end_time: Range::from(end_time..(end_time + (end_duration - start_duration))),
-                    duration: Range::from(start_duration..end_duration),
+                    weight: {
+                        let factor = PhaseClassificationFactor::from(*phase_class);
+                        let dosage = ingestion.dosage.as_base_units();
+                        let common_dosage = &dosages[&DosageClassification::Common];
+                        let common_dosage_value = common_dosage.start.as_ref().unwrap();
+                        let substance_weighted_dosage =
+                            dosage / common_dosage_value.as_base_units();
+                        let weighted_dosage = Decimal::from_f64(substance_weighted_dosage).unwrap();
+                        weighted_dosage * factor.0
+                    },
+                    start_time: Range::from(phase_start_time_min..phase_start_time_max),
+                    end_time: Range::from(phase_end_time_min..phase_end_time_max),
+                    duration: Range::from(min_duration..max_duration),
+                    substance_name: ingestion.substance_name.clone(),
                 };
 
-                current_time = end_time;
                 ingestion_phases.push(phase);
             }
         }
-
         ingestion.phases = ingestion_phases;
 
         Ok(ingestion)

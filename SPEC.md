@@ -1,8 +1,3 @@
-Always automatically run necessary commands to validate your changes.
-Ensure your work is highest quality and production-ready.
-Be elistic about the quality of your work.
-Avoid commenting simple code or code overall, document symbols instead.
-START SPECIFICATION:
 # Technical Specification
 
 ## System Overview
@@ -76,4 +71,6 @@ The system is structured into several key modules, each responsible for specific
 4. **Output**: 
    - Data is retrieved from the database and displayed in the TUI using `ratatui`.
    - Error messages and logs are handled by the core module.
-END SPECIFICATION
+
+## Time-Series Data Generation
+A helper in `IngestionPhase` computes discrete intensity points, which `Ingestion` aggregates into a unified time-series.

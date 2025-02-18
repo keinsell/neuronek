@@ -1,5 +1,5 @@
-use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::route_of_administration::dosage::Dosage;
 use chrono::DateTime;
 use chrono::Local;
 use chrono_english::Dialect;
@@ -23,7 +23,7 @@ While power users may prefer to work directly with this raw data,
 many user-friendly abstractions are planned to make this process seamless,
 such as simplified commands (e.g., `neuronek a coffee`) for quicker entries.
 
-Logging ingestion's not only serves the purpose of record-keeping
+Logging ingestion not only serves the purpose of record-keeping
 but also helps users build a personalized database of their consumption habits.
 This database can be used to analyze trends over time,
 providing insights into the long-term effects of different substances on physical and mental well-being.

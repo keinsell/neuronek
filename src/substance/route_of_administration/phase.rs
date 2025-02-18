@@ -1,6 +1,9 @@
 use iso8601_duration::Duration;
+use rust_decimal::Decimal;
+use rust_decimal_macros::dec;
 use serde::Deserialize;
 use serde::Serialize;
+use std::f64;
 use std::fmt;
 use std::ops::Range;
 use std::str::FromStr;
@@ -65,3 +68,21 @@ impl Default for PhaseClassification
 }
 
 pub type DurationRange = Range<Duration>;
+
+pub struct PhaseClassificationFactor(pub Decimal);
+
+impl From<PhaseClassification> for PhaseClassificationFactor
+{
+    fn from(class: PhaseClassification) -> Self
+    {
+        match class
+        {
+            | PhaseClassification::Onset => Self(dec!(0.0)),
+            | PhaseClassification::Comeup => Self(dec!(0.5)),
+            | PhaseClassification::Peak => Self(dec!(1)),
+            | PhaseClassification::Comedown => Self(dec!(0.3)),
+            | PhaseClassification::Afterglow => Self(dec!(0.0)),
+            | PhaseClassification::Unknown => Self(dec!(0.0)),
+        }
+    }
+}

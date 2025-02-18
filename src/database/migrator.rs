@@ -107,6 +107,11 @@ impl MigratorTrait for Migrator
                 "20250211000000_fix_dosage_classification",
                 "20250211000000_fix_dosage_classification"
             ),
+            import_migration!(
+                M20250218212411IngestionPhaseAddSubstanceInformation,
+                "20250218212411_ingestion_phase_add_substance_information",
+                "20250218212411_ingestion_phase_add_substance_information"
+            ),
         ]
     }
 }

@@ -45,3 +45,33 @@ onset, peak) related to the ingestion experience.
 0.0 ─ ─────┘                            └─────
     0h    2h    4h    6h    8h    10h   12h
 ```
+
+### Ingestion Timeline
+
+#### Horizontal Timeline with Proportional Scaling
+
+```
+▲────△──────────◆──────────────────────▽────────────○────────────────────
+│    │          │                      │            │                    
+01:06 01:11    01:21                 02:06        03:06                07:06
+```
+
+#### Vertical Flow Diagram
+
+```
+▲ Onset (5m)
+│
+├─01:11
+△ Comeup (10m)
+│
+├─01:21
+◆ Peak (45m)
+│
+├─02:06
+▽ Comedown (1h)
+│
+├─03:06
+○ Afterglow (4h)
+│
+└─07:06
+```

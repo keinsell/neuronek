@@ -8,7 +8,7 @@ use std::env::temp_dir;
 use std::path::PathBuf;
 
 pub const NAME: &str = env!("CARGO_PKG_NAME");
-// pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 lazy_static! {
     pub static ref DATA_DIR: PathBuf = {

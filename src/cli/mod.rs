@@ -1,5 +1,6 @@
 use crate::cli::ingestion::IngestionCommands;
 use crate::core::CommandHandler;
+use crate::core::config::VERSION;
 use crate::database::entities::ingestion::Column as IngestionColumn;
 use crate::database::entities::ingestion::Entity as IngestionEntity;
 use crate::database::entities::ingestion_phase::Column as IngestionPhaseColumn;
@@ -102,6 +103,7 @@ pub(crate) enum ApplicationCommands
     long_about = "🧬 Intelligent dosage tracker application with purpose to monitor supplements, nootropics and psychoactive substances along with their long-term influence on one's mind and body.",
     about = "🧬 Intelligent dosage tracker",
     color = ColorChoice::Auto,
+    version=VERSION
 )]
 pub struct CommandLineInterface
 {

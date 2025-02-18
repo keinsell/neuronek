@@ -1,8 +1,9 @@
 use crate::database::entities::ingestion::Model;
+use crate::ingestion::phase::model::IngestionPhase;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::phase::PhaseClassification;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Local;
@@ -11,10 +12,9 @@ use clap::builder::TypedValueParser;
 use hashbrown::HashMap;
 use std::ops::Range;
 use std::str::FromStr;
-use crate::ingestion::phase::model::IngestionPhase;
 
 pub type IngestionDate = DateTime<Local>;
-pub type IngestionPhases = HashMap<PhaseClassification, IngestionPhase>;
+pub type IngestionPhases = HashMap<PhaseClassification, Option<IngestionPhase>>;
 
 #[derive(Debug, Clone)]
 pub struct Ingestion
@@ -53,4 +53,3 @@ impl From<Model> for Ingestion
         }
     }
 }
-

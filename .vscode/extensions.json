@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "giga-ai.giga-ai",
+        "ms-vscode.vscode-diagnostic-tools",
+        "ms-vscode.vscode-websearchforcopilot",
+        "rust-lang.rust-analyzer"
+    ]
+}
