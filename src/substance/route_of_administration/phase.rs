@@ -7,6 +7,7 @@ use std::f64;
 use std::fmt;
 use std::ops::Range;
 use std::str::FromStr;
+use std::string;
 
 pub const PHASE_ORDER: [PhaseClassification; 5] = [
     PhaseClassification::Onset,
@@ -84,5 +85,26 @@ impl From<PhaseClassification> for PhaseClassificationFactor
             | PhaseClassification::Afterglow => Self(dec!(0.0)),
             | PhaseClassification::Unknown => Self(dec!(0.0)),
         }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct PhaseIcon(pub String);
+
+impl From<&PhaseClassification> for PhaseIcon
+{
+    fn from(value: &PhaseClassification) -> Self
+    {
+        let icon = match value
+        {
+            | PhaseClassification::Comeup => "△".to_string(),
+            | PhaseClassification::Onset => "▲".to_string(),
+            | PhaseClassification::Peak => "◆".to_string(),
+            | PhaseClassification::Comedown => "▽".to_string(),
+            | PhaseClassification::Afterglow => "○".to_string(),
+            | _ => "".to_string(),
+        };
+
+        PhaseIcon(icon)
     }
 }

@@ -58,25 +58,52 @@ scriptable interface which allows for storage and retrieval of structured data.
 
 #### Log Ingestion
 
+*Logs the ingestion of a specified substance with the given dosage.*
 ```bash
 neuronek ingestion log -s caffeine -d 80mg
 ```
 
+<details>
+<summary>Output</summary>
+
 ```
-╭────┬───────────┬──────┬─────────┬────────────────╮
-│ ID │ Substance │ ROA  │ Dosage  │ Ingestion Date │
-├────┼───────────┼──────┼─────────┼────────────────┤
-│ 14 │ caffeine  │ Oral │ 80.0 mg │      now       │
-╰────┴───────────┴──────┴─────────┴────────────────╯
+caffeine #2
+
+The ingestion of caffeine occurred via the Oral route, with a dosage of 80.0 mg _(Common)_, and was ingested on 2025-02-19 07:32:36 _now_.
+
+Details
+
+Route: Oral
+Dosage: 80.0 mg _(Common)_
+Ingested: 2025-02-19 07:32:36 _now_
+
+Progress
+
+[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0%
+
+Phases
+
+╭─────────────┬────────────────────┬─────────────┬──────────────╮
+│    Phase    │      Duration      │ Start Time  │   End Time   │
+├─────────────┼────────────────────┼─────────────┼──────────────┤
+│   ▲ Onset   │  in 7 minutes ±2m  │    07:32    │  07:37 ±5m   │
+│  △ Comeup   │ in 20 minutes ±10m │  07:37 ±5m  │  07:47 ±25m  │
+│   ◆ Peak    │  in an hour ±0.4h  │ 07:47 ±25m  │ 08:32 ±1.2h  │
+│ ▽ Comedown  │  in an hour ±0.5h  │ 08:32 ±1.2h │ 09:32 ±2.2h  │
+│ ○ Afterglow │  in 8 hours ±4.0h  │ 09:32 ±2.2h │ 13:32 ±10.2h │
+╰─────────────┴────────────────────┴─────────────┴──────────────╯
 ```
+</details>
 
 #### View Ingestion (Experimental)
 
-View Ingestion is a ongoing experiment (availabile from `0.0.1-alpha.4`) to find human-friendly way to display information about ingestion, currently it's a skeleton that do not provide much value (yet more than listing ingestions). Ongoing discussion about model is available under [#521](https://github.com/keinsell/neuronek/issues/521).
-
-```
+*Displays detailed information about a specific ingestion identified by its ID.*
+```bash
 neuronek ingestion view <INGESTION_ID>
 ```
+
+<details>
+<summary>Output</summary>
 
 ```
 Ingestion #296
@@ -106,12 +133,17 @@ Peak
 │ ○ Afterglow │ 4h               │ 02:05      │ 14:05    │
 └─────────────┴──────────────────┴────────────┴──────────┘
 ```
+</details>
 
 #### List Ingestions
 
+*Lists all recorded ingestions along with their details such as ID, substance, route of administration, dosage, and ingestion date.*
 ```bash
 neuronek ingestion list
 ```
+
+<details>
+<summary>Output</summary>
 
 ```
 ┌────┬─────────────────────┬──────┬─────────┬────────────────┐
@@ -122,12 +154,17 @@ neuronek ingestion list
 │ 13 │ caffeine            │ Oral │ 10.0 mg │ 2 hours ago    │
 └────┴─────────────────────┴──────┴─────────┴────────────────┘
 ```
+</details>
 
-#### Update ingestion
+#### Update Ingestion
 
+*Updates the dosage of a specific ingestion identified by its ID.*
 ```bash
 neuronek ingestion update 14 -d 90mg
 ```
+
+<details>
+<summary>Output</summary>
 
 ```
 ╭────┬───────────┬──────┬─────────┬────────────────╮
@@ -136,16 +173,22 @@ neuronek ingestion update 14 -d 90mg
 │ 14 │ caffeine  │ Oral │ 90.0 mg │      now       │
 ╰────┴───────────┴──────┴─────────┴────────────────╯
 ```
+</details>
 
 #### Delete Ingestion
 
+*Deletes a specific ingestion identified by its ID from the records.*
 ```bash
 neuronek ingestion delete 14
 ```
 
-```
+<details>
+<summary>Output</summary>
 
 ```
+Ingestion #14 has been successfully deleted.
+```
+</details>
 
 ### Substances
 

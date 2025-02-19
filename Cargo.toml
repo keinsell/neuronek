@@ -84,6 +84,7 @@ humantime = "2.1.0"
 nutype = "0.6.1"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
+plotlib = "0.5.1"
 
 [features]
 default = []

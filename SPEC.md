@@ -1,76 +1,57 @@
 # Technical Specification
 
 ## System Overview
-The system is a Rust-based intelligent dosage tracker application designed to log and analyze substance ingestions over time. The primary purpose is to provide users with a tool to track their substance intake, analyze patterns, and visualize data through a terminal user interface (TUI). The main components include a command-line interface (CLI) for user interaction, a database for storing ingestion data, and a TUI for data visualization.
-
-### Main Components and Their Roles
-- **CLI**: Handled by `clap` and defined in `src/cli/mod.rs`. It allows users to interact with the application through commands like logging ingestions, viewing journals, and managing substances.
-- **Database**: Managed by `sea-orm` and defined in `src/database/mod.rs`. It stores ingestion data, substance information, and related entities.
-- **Ingestion Logging**: Core functionality for logging ingestions is implemented in `src/ingestion/command.rs` and `src/ingestion/service.rs`.
-- **Configuration**: Managed in `src/core/config.rs`.
-- **Error Handling and Logging**: Configured in `src/core/error_handling.rs` and `src/core/logging.rs`.
-- **CI/CD**: Defined in `.github/workflows/main.yaml`.
-- **Build System**: Configured using `justfile` and `flake.nix`.
-- **Dependency Management**: Configured using `deny.toml`.
+The system is designed to manage and process ingestion data related to substances, including their routes of administration, dosages, and phases. The primary purpose is to provide a comprehensive framework for ingesting, analyzing, and visualizing substance-related data. The system comprises several main components:
+- **Frontend Components**: Text User Interface (TUI) for user interaction.
+- **Backend Services**: Rust-based services handling data ingestion, analysis, and storage.
+- **Databases**: SQL database for storing ingestion and substance data.
+- **External APIs**: None directly integrated, but the system is designed to be extensible for future API integrations.
 
 ## Core Functionality
-### Primary Features and Their Implementation
-1. **CLI Handling**
-   - **File**: `src/cli/mod.rs`
-   - **Description**: Defines `ApplicationCommands` enum for CLI subcommands and implements `CommandHandler` trait for handling CLI commands.
-   - **Core Functions**: 
-     - `handle_command`: Executes the appropriate command based on user input.
+### Data Ingestion
+- **Ingestion Module**: Located in `src/ingestion`, this module handles the ingestion of substance data. Key files include:
+  - `src/ingestion/command.rs`: Defines commands for ingesting data.
+  - `src/ingestion/model.rs`: Models the data structures for ingestion.
+  - `src/ingestion/service.rs`: Provides services for ingesting data into the system.
+- **Ingestion Phases**: Managed in `src/ingestion/phase`, this sub-module deals with different phases of ingestion:
+  - `src/ingestion/phase/model.rs`: Models the phases of ingestion.
 
-2. **Database Operations**
-   - **File**: `src/database/mod.rs`
-   - **Description**: Manages database connections and migrations. Re-exports entities and migrator.
-   - **Core Functions**: 
-     - `migrations`: Returns a list of migrations (defined in `src/database/migrator.rs`).
+### Substance Management
+- **Substance Module**: Located in `src/substance`, this module manages substance-related data:
+  - `src/substance/mod.rs`: Main module file.
+  - `src/substance/repository.rs`: Repository pattern for accessing substance data.
+  - `src/substance/route_of_administration`: Sub-module handling routes of administration:
+    - `src/substance/route_of_administration/dosage.rs`: Manages dosage-related data.
+    - `src/substance/route_of_administration/phase.rs`: Manages phases related to routes of administration.
 
-3. **Ingestion Logging**
-   - **File**: `src/ingestion/command.rs` and `src/ingestion/service.rs`
-   - **Description**: Core functionality for logging new ingestions and retrieving ingestion data.
-   - **Core Functions**: 
-     - `log`: Logs a new ingestion (defined in `src/ingestion/service.rs`).
-     - `get_ingestion_intensity_over_time`: Retrieves ingestion intensity data over time (defined in `src/ingestion/service.rs`).
+### CLI Tools
+- **CLI Module**: Located in `src/cli`, this module provides command-line interface tools for interacting with the system:
+  - `src/cli/formatter.rs`: Formats CLI output.
+  - `src/cli/ingestion.rs`: Handles CLI commands related to ingestion.
+  - `src/cli/parser.rs`: Parses CLI arguments.
 
-4. **Configuration Management**
-   - **File**: `src/core/config.rs`
-   - **Description**: Defines configuration paths and the `Config` struct for application configuration.
-   - **Core Functions**: 
-     - None directly, but critical for setting up application configuration.
+### Database Management
+- **Database Module**: Located in `src/database`, this module handles database interactions:
+  - `src/database/migrator.rs`: Manages database migrations.
+  - `src/database/schema.sql`: Defines the database schema.
+  - Migration files in `src/database/migrations`: Specific migration scripts for schema changes.
 
-5. **Error Handling and Logging**
-   - **File**: `src/core/error_handling.rs` and `src/core/logging.rs`
-   - **Description**: Sets up diagnostic panic hooks and application logger.
-   - **Core Functions**: 
-     - `setup_diagnostics`: Sets up diagnostic panic hooks (defined in `src/core/error_handling.rs`).
-     - `setup_logger`: Sets up the application logger (defined in `src/core/logging.rs`).
+### Core Utilities
+- **Core Module**: Located in `src/core`, this module provides essential utilities:
+  - `src/core/config.rs`: Manages configuration settings.
+  - `src/core/error_handling.rs`: Handles error management.
+  - `src/core/logging.rs`: Provides logging functionality.
 
-### Complex Algorithms and Business Logic
-- **Ingestion Intensity Calculation**: 
-  - Calculates the intensity of substance ingestions over time, used for visualization in the TUI.
-  - Implemented in `src/ingestion/service.rs`.
+### Text User Interface (TUI)
+- **TUI Module**: Located in `src/tui`, this module provides a text-based user interface:
+  - `src/tui/app.rs`: Main application logic for TUI.
+  - `src/tui/ui.rs`: Defines the UI components.
 
 ## Architecture
-### System Structure and Component Interaction
-The system is structured into several key modules, each responsible for specific functionality:
-- **CLI Module**: Handles user commands and interactions.
-- **Database Module**: Manages database connections, migrations, and entity definitions.
-- **Ingestion Module**: Logs and retrieves ingestion data.
-- **Core Module**: Manages configuration, error handling, and logging.
-- **TUI Module**: Provides a terminal-based user interface for data visualization.
+The system follows a modular architecture where each component is responsible for a specific aspect of the functionality. Data flows from the CLI or TUI into the ingestion module, where it is processed and stored in the database. The core module provides utilities like configuration, error handling, and logging that are used across the system. The database module ensures data persistence and integrity through well-defined migrations and schema definitions.
 
 ### Data Flow
-1. **Input**: User inputs commands via the CLI.
-2. **Processing**: 
-   - CLI parses commands using `clap`.
-   - Commands are handled by appropriate modules (e.g., `src/ingestion/command.rs` for logging ingestions).
-   - Database operations are performed using `sea-orm`.
-3. **Storage**: Ingestion data is stored in the database.
-4. **Output**: 
-   - Data is retrieved from the database and displayed in the TUI using `ratatui`.
-   - Error messages and logs are handled by the core module.
-
-## Time-Series Data Generation
-A helper in `IngestionPhase` computes discrete intensity points, which `Ingestion` aggregates into a unified time-series.
+1. **Ingestion**: Data is ingested via CLI commands defined in `src/cli/ingestion.rs`.
+2. **Processing**: The ingestion data is processed by services in `src/ingestion/service.rs`.
+3. **Storage**: Processed data is stored in the database, managed by `src/database/migrator.rs`.
+4. **Retrieval and Display**: Data can be retrieved and displayed via the TUI, defined in `src/tui/app.rs` and `src/tui/ui.rs`.

@@ -15,6 +15,7 @@ use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::PhaseClassification;
+use crate::substance::route_of_administration::phase::PhaseIcon;
 use crate::utils::AppContext;
 use crate::utils::DATABASE_CONNECTION;
 use crate::utils::parse_date_string;
@@ -31,6 +32,8 @@ use chrono_humanize::Humanize;
 use chrono_humanize::Tense;
 use clap::Parser;
 use clap::Subcommand;
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
 use miette::IntoDiagnostic;
 use miette::miette;
 use owo_colors::OwoColorize;
@@ -45,6 +48,7 @@ use sea_orm::QuerySelect;
 use sea_orm_migration::IntoSchemaManagerConnection;
 use serde::Deserialize;
 use serde::Serialize;
+use std::cmp::Ordering;
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::fmt::Display;
@@ -52,6 +56,12 @@ use std::range::Range;
 use std::str::FromStr;
 use tabled::Table;
 use tabled::Tabled;
+use tabled::settings::Alignment;
+use tabled::settings::Modify;
+use tabled::settings::Padding;
+use tabled::settings::Style;
+use tabled::settings::object::Columns;
+use tabled::settings::object::Segment;
 use termimad::MadSkin;
 use termimad::rgb;
 use textplots::Chart;
@@ -394,13 +404,17 @@ struct Phase
     pub start_time: DateRange,
     pub end_time: DateRange,
     pub duration: DurationRange,
+    #[serde(skip)]
+    pub icon: PhaseIcon,
 }
+
 #[derive(Debug, Serialize, bon::Builder, Clone)]
-pub struct DateRange
+struct DateRange
 {
     min: DateTime<Local>,
     max: DateTime<Local>,
 }
+
 #[derive(Debug, Serialize, bon::Builder, Clone)]
 pub struct DurationRange
 {
@@ -408,11 +422,111 @@ pub struct DurationRange
     end: Duration,
 }
 
+impl Display for DurationRange
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+    {
+        // Calculate average duration
+        let avg_duration =
+            Duration::seconds((self.start.num_seconds() + self.end.num_seconds()) / 2);
+
+        // Calculate the difference from the average
+        let duration_diff = (self.end.num_seconds() - self.start.num_seconds()).abs() / 2;
+
+        // If start and end are the same, just display the duration
+        if self.start == self.end
+        {
+            write!(f, "{}", self.start.humanize())
+        }
+        else
+        {
+            // Decide whether to use hours or minutes
+            if avg_duration.num_hours() > 0
+            {
+                // Convert duration_diff to hours
+                let diff_hours = duration_diff as f64 / 3600.0;
+                write!(f, "{} ±{:.1}h", avg_duration.humanize(), diff_hours)
+            }
+            else
+            {
+                // Display average duration with ± range in minutes
+                write!(f, "{} ±{}m", avg_duration.humanize(), duration_diff / 60)
+            }
+        }
+    }
+}
+
+// Helper function to format DateRange concisely
+fn format_date_range(range: &DateRange, ingestion_date: &DateTime<Local>) -> String
+{
+    let min_str = if range.min.date_naive() == ingestion_date.date_naive()
+    {
+        range.min.format("%H:%M").to_string()
+    }
+    else
+    {
+        range.min.format("%Y-%m-%d %H:%M").to_string()
+    };
+    let max_str = if range.max.date_naive() == ingestion_date.date_naive()
+    {
+        range.max.format("%H:%M").to_string()
+    }
+    else
+    {
+        range.max.format("%Y-%m-%d %H:%M").to_string()
+    };
+
+    // If min and max are the same, just return the time
+    if min_str == max_str
+    {
+        min_str
+    }
+    else
+    {
+        // Calculate the time difference
+        let time_diff = (range.max - range.min).num_minutes();
+
+        // If time difference is large (more than 60 minutes), use hours
+        if time_diff >= 60
+        {
+            let time_diff_hours = time_diff as f64 / 60.0;
+            format!("{} ±{:.1}h", min_str, time_diff_hours)
+        }
+        else
+        {
+            // Otherwise, use minutes
+            format!("{} ±{}m", min_str, time_diff)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Tabled)]
+struct PhaseRow
+{
+    #[tabled(rename = "Phase")]
+    phase: String,
+    #[tabled(rename = "Duration")]
+    duration: String,
+    #[tabled(rename = "Start Time")]
+    start_time: String,
+    #[tabled(rename = "End Time")]
+    end_time: String,
+}
+
 impl Formatter for IngestionViewModel
 {
     fn pretty(&self) -> String
     {
-        let skin = MadSkin::default();
+        let mut skin = MadSkin::default();
+
+        // Tokyo Night inspired colors
+        skin.set_fg(rgb(169, 177, 214)); // Base text color
+        skin.bold.set_fg(rgb(192, 202, 245)); // Bold text
+        skin.italic.set_fg(rgb(125, 207, 255)); // Italic text
+        skin.headers[0].set_fg(rgb(187, 154, 247)); // Main header
+        skin.headers[1].set_fg(rgb(255, 158, 100)); // Sub header
+        skin.paragraph.set_fg(rgb(169, 177, 214)); // Paragraphs
+        skin.table.set_fg(rgb(192, 202, 245)); // Table text
 
         fn ingestion_sentence(vm: &IngestionViewModel) -> String
         {
@@ -444,10 +558,18 @@ impl Formatter for IngestionViewModel
 
         let mut md = String::new();
 
-        md.push_str("\n\n");
-        md.push_str(&format!("# Ingestion #{}\n\n", self.id));
-        md.push_str(&ingestion_sentence(&self));
-        md.push_str(&format!("**Substance**: {}\n", self.substance_name));
+        // Add more spacing at the top
+        md.push('\n');
+        md.push('\n');
+
+        // Main header with substance name
+        md.push_str(&format!("# {} #{}\n\n", self.substance_name, self.id));
+
+        // Summary section
+        md.push_str(&ingestion_sentence(self));
+
+        // Details section with improved spacing
+        md.push_str("## Details\n\n");
         md.push_str(&format!("**Route**: {}\n", self.route));
         md.push_str(&format!(
             "**Dosage**: {} _{}_\n",
@@ -463,12 +585,52 @@ impl Formatter for IngestionViewModel
         ));
 
         let time_since = HumanTime::from(self.ingested_at);
-
         md.push_str(&format!(
             "**Ingested**: {} _{}_\n\n",
             self.ingested_at.format("%Y-%m-%d %H:%M:%S"),
             time_since
         ));
+
+        if !self.phases.is_empty()
+        {
+            // Progress section
+            md.push_str("## Progress\n\n");
+            let progress_bar = self.progress_bar();
+            md.push_str(&format!("{}\n\n", progress_bar));
+
+            // Phases section with improved table
+            md.push_str("## Phases\n\n");
+
+            // Create table rows
+            let phase_rows: Vec<PhaseRow> = self
+                .phases
+                .iter()
+                .map(|phase| {
+                    let start_range = format_date_range(&phase.start_time, &self.ingested_at);
+                    let end_range = format_date_range(&phase.end_time, &self.ingested_at);
+                    let phase_name_with_icon = format!("{} {}", phase.icon.0, phase.classification);
+
+                    PhaseRow {
+                        phase: phase_name_with_icon,
+                        duration: phase.duration.to_string(),
+                        start_time: start_range,
+                        end_time: end_range,
+                    }
+                })
+                .collect();
+
+            // Create and style the table
+            let table = Table::new(phase_rows)
+                .with(Style::rounded())
+                .with(Padding::new(1, 1, 0, 0))
+                .with(Modify::new(Columns::new(1..)).with(Alignment::center()))
+                .with(Modify::new(Segment::all()).with(Alignment::center()))
+                .to_string();
+
+            md.push_str(&table);
+            md.push('\n');
+            md.push('\n');
+        }
 
         skin.text(&md, None).to_string()
     }
@@ -530,6 +692,7 @@ impl From<crate::ingestion::model::Ingestion> for IngestionViewModel
                             .end(phase.duration.end)
                             .build(),
                     )
+                    .icon(PhaseIcon::from(&phase.class))
                     .build()
             })
             .collect::<Vec<_>>();
@@ -547,5 +710,76 @@ impl From<crate::ingestion::model::Ingestion> for IngestionViewModel
             )
             .phases(phases)
             .build()
+    }
+}
+
+impl IngestionViewModel
+{
+    /// Calculates the progress from onset to end of comedown as a percentage.
+    pub fn progress_percentage(&self) -> u8
+    {
+        // Ensure there are phases to calculate progress
+        if self.phases.is_empty()
+        {
+            return 0;
+        }
+
+        // Find onset and comedown phases
+        let onset = self
+            .phases
+            .iter()
+            .find(|p| p.classification == PhaseClassification::Onset);
+        let comedown = self
+            .phases
+            .iter()
+            .find(|p| p.classification == PhaseClassification::Comedown);
+
+        if let (Some(onset_phase), Some(comedown_phase)) = (onset, comedown)
+        {
+            let total_duration = comedown_phase.end_time.max - onset_phase.start_time.min;
+            let elapsed = Local::now() - onset_phase.start_time.min;
+
+            match elapsed.partial_cmp(&total_duration)
+            {
+                | Some(Ordering::Greater) | Some(Ordering::Equal) => 100,
+                | Some(Ordering::Less) =>
+                {
+                    ((elapsed.num_seconds() as f64 / total_duration.num_seconds() as f64) * 100.0)
+                        as u8
+                }
+                | None => 0,
+            }
+        }
+        else
+        {
+            0
+        }
+    }
+
+    /// Generates a progress bar using indicatif
+    pub fn progress_bar(&self) -> String
+    {
+        let percentage = self.progress_percentage();
+
+        // Create a progress bar with a fixed length
+        let pb = ProgressBar::new(100);
+
+        // Customize the progress bar style
+        let style =
+            ProgressStyle::with_template("{spinner:.green} [{bar:30.cyan/blue}] {percent}%")
+                .unwrap()
+                .progress_chars("█░");
+        pb.set_style(style);
+
+        // Set the current progress
+        pb.set_position(percentage as u64);
+
+        // Manually create a string representation
+        format!(
+            "[{:30}] {}%",
+            "█".repeat(((percentage as f64 / 100.0) * 30.0).round() as usize)
+                + &"░".repeat(30 - ((percentage as f64 / 100.0) * 30.0).round() as usize),
+            percentage
+        )
     }
 }

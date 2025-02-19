@@ -1,9 +1,0 @@
-Ingestion: Caffeine (Oral) - 200 mg - Started: 17:21 UTC
-
-Phase Durations (Probabilistic):
-
-Onset     : [==--]  (Most likely: Short)
-Come-up   : [--====-] (Most likely: Medium)
-Peak      : [-----======------] (Most likely: Around Average)
-Comedown  : [---=========------] (Most likely: Slightly Longer)
-Afterglow : [-------===========---------] (Wide Range, Centered Around Average)
