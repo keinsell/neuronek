@@ -26,6 +26,7 @@ mod prelude;
 mod substance;
 mod tui;
 mod utils;
+mod visualization;
 
 #[async_std::main]
 async fn main() -> Result<()>

@@ -1,8 +1,11 @@
-use serde::{Deserialize, Serialize};
-use tabled::{Table, Tabled};
 use crate::cli::MessageFormat;
+use serde::Deserialize;
+use serde::Serialize;
+use tabled::Table;
+use tabled::Tabled;
 
-pub trait Parser<'a>: Deserialize<'a> {
+pub trait Parser<'a>: Deserialize<'a>
+{
     type Output;
     type Error: std::error::Error;
 

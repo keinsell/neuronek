@@ -146,6 +146,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.96"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b964d184e89d9b6b67dd2715bc8e74cf3107fb2b529990c90cf517326150bf4"
+
+[[package]]
 name = "arrayvec"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2283,6 +2289,7 @@ dependencies = [
 name = "neuronek"
 version = "0.0.1-alpha.4"
 dependencies = [
+ "anyhow",
  "assert_cmd",
  "async-std",
  "async-trait",
@@ -2331,6 +2338,7 @@ dependencies = [
  "termimad",
  "textplots",
  "thiserror 2.0.11",
+ "time_series_generator",
  "tracing",
  "tracing-appender",
  "tracing-indicatif",
@@ -2966,6 +2974,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom 0.2.15",
+]
+
+[[package]]
+name = "rand_distr"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "32cb0b9bc82b0a0876c2dd994a7e7a2683d3e7390ca40e6886785ef0c7e3ee31"
+dependencies = [
+ "num-traits",
+ "rand",
 ]
 
 [[package]]
@@ -4260,6 +4278,16 @@ checksum = "2834e6017e3e5e4b9834939793b282bc03b37a3336245fa820e35e233e2a85de"
 dependencies = [
  "num-conv",
  "time-core",
+]
+
+[[package]]
+name = "time_series_generator"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5418bfed9dd0df167de93131a26475a4dbdcfa3441ccba2fc3360462e70df086"
+dependencies = [
+ "rand",
+ "rand_distr",
 ]
 
 [[package]]

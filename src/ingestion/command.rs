@@ -65,6 +65,46 @@ pub struct LogIngestion
     pub route_of_administration: RouteOfAdministrationClassification,
 }
 
+#[derive(Parser, Debug)]
+#[command(version, about = "Update an existing ingestion", aliases = vec![ "edit"])]
+pub struct UpdateIngestion
+{
+    /// ID of the ingestion to update
+    #[arg(index = 1, value_name = "INGESTION_ID")]
+    pub ingestion_identifier: i32,
+
+    /// New name of the substance.rs (optional)
+    #[arg(short = 'n', long = "name", value_name = "SUBSTANCE_NAME")]
+    pub substance_name: Option<String>,
+
+    /// New dosage (optional, e.g., 20 mg)
+    #[arg(short = 'd', long = "dosage", value_name = "DOSAGE", value_parser=Dosage::from_str)]
+    pub dosage: Option<Dosage>,
+
+    /// New ingestion date (optional, e.g., "today 10:00")
+    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=parse_date_string
+    )]
+    pub ingestion_date: Option<DateTime<Local>>,
+
+    /// New route of administration (optional, defaults to "oral")
+    #[arg(short = 'r', long = "roa", value_enum)]
+    pub route_of_administration: Option<RouteOfAdministrationClassification>,
+}
+
+#[derive(Parser, Debug)]
+#[command(version, about = "Delete selected ingestion", long_about, aliases = vec!["rm", "del",
+                                                                                   "remove"])]
+pub struct DeleteIngestion
+{
+    #[arg(
+        index = 1,
+        value_name = "INGESTION_ID",
+        help = "ID of the ingestion to delete"
+    )]
+    pub ingestion_id: i32,
+}
+
+
 fn parse_date_string(humanized_input: &str) -> miette::Result<chrono::DateTime<chrono::Local>>
 {
     chrono_english::parse_date_string(humanized_input, Local::now(), Dialect::Us).into_diagnostic()
@@ -74,4 +114,6 @@ fn parse_date_string(humanized_input: &str) -> miette::Result<chrono::DateTime<c
 pub enum Commands
 {
     Log(LogIngestion),
+    Update(UpdateIngestion),
+    Delete(DeleteIngestion),
 }

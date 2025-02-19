@@ -1,15 +1,15 @@
-use assert_cmd::prelude::*;
-use std::process::Command;
+use assert_cmd::Command;
+use predicates::prelude::*;
 
 #[test]
-fn test_log_ingestion() -> Result<(), Box<dyn std::error::Error>>
+fn test_log_ingestion()
 {
-    let mut cmd = Command::cargo_bin("neuronek")?;
-    cmd.env("RUST_TEST", "1")  // Set test environment variable
-        .arg("ingestion")
+    let mut cmd = Command::cargo_bin("neuronek").unwrap();
+    cmd.arg("ingestion")
         .arg("log")
-        .arg("-s caffeine")
-        .arg("-d 100mg");
-    cmd.assert().success();
-    Ok(())
+        .args(["-s", "caffeine"])
+        .args(["-d", "100mg"]);
+
+    cmd.assert()
+        .success();
 }

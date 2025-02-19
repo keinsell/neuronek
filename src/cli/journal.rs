@@ -228,8 +228,8 @@ impl Formatter for JournalViewModel
                         status_icon,
                         ingestion.model.substance_name,
                         ingestion.model.id,
-                        dosage.to_string(),
-                        route_enum.to_string(),
+                        dosage,
+                        route_enum,
                         dosage_class,
                         phase_info,
                         time_info

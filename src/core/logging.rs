@@ -5,9 +5,9 @@ use std::fs::create_dir_all;
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_appender::rolling::RollingFileAppender;
 use tracing_appender::rolling::Rotation;
+use tracing_subscriber::EnvFilter;
 use tracing_subscriber::fmt;
 use tracing_subscriber::prelude::*;
-use tracing_subscriber::EnvFilter;
 
 pub fn setup_logger() -> Result<WorkerGuard, Box<dyn std::error::Error>>
 {

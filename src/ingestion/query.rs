@@ -232,9 +232,9 @@ impl QueryHandler<Ingestion> for AnalyzeIngestion
                         let weighted_dosage = Decimal::from_f64(substance_weighted_dosage).unwrap();
                         weighted_dosage * factor.0
                     },
-                    start_time: Range::from(phase_start_time_min..phase_start_time_max),
-                    end_time: Range::from(phase_end_time_min..phase_end_time_max),
-                    duration: Range::from(min_duration..max_duration),
+                    start_time: phase_start_time_min..phase_start_time_max,
+                    end_time: phase_end_time_min..phase_end_time_max,
+                    duration: min_duration..max_duration,
                     substance_name: ingestion.substance_name.clone(),
                 };
 

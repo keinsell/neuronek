@@ -85,6 +85,8 @@ nutype = "0.6.1"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 plotlib = "0.5.1"
+time_series_generator = "0.2.0"
+anyhow = "1.0.96"
 
 [features]
 default = []

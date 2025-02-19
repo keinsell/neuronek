@@ -8,7 +8,9 @@ use crate::database::entities::ingestion::Entity as Ingestion;
 use crate::database::entities::ingestion::Model;
 use crate::database::entities::ingestion_phase;
 use crate::database::entities::ingestion_phase::Entity as IngestionPhase;
+use crate::ingestion::command::DeleteIngestion;
 use crate::ingestion::command::LogIngestion;
+use crate::ingestion::command::UpdateIngestion;
 use crate::ingestion::query::AnalyzeIngestion;
 use crate::ingestion::service::IngestionService;
 use crate::substance::repository::get_substance;
@@ -19,6 +21,8 @@ use crate::substance::route_of_administration::phase::PhaseIcon;
 use crate::utils::AppContext;
 use crate::utils::DATABASE_CONNECTION;
 use crate::utils::parse_date_string;
+use crate::visualization::TimeSeriesData;
+use crate::visualization::plot_ingestion_phases;
 use async_std::task;
 use async_trait::async_trait;
 use chrono::DateTime;
@@ -32,11 +36,13 @@ use chrono_humanize::Humanize;
 use chrono_humanize::Tense;
 use clap::Parser;
 use clap::Subcommand;
+use crossterm::style::Color::Rgb;
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use miette::IntoDiagnostic;
 use miette::miette;
 use owo_colors::OwoColorize;
+use owo_colors::colors::xterm::White;
 use owo_colors::style;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue;
@@ -71,32 +77,6 @@ use tracing::Level;
 use tracing::event;
 use tracing::info;
 use uuid::Uuid;
-
-#[derive(Parser, Debug)]
-#[command(version, about = "Update an existing ingestion", aliases = vec![ "edit"])]
-pub struct UpdateIngestion
-{
-    /// ID of the ingestion to update
-    #[arg(index = 1, value_name = "INGESTION_ID")]
-    pub ingestion_identifier: i32,
-
-    /// New name of the substance.rs (optional)
-    #[arg(short = 'n', long = "name", value_name = "SUBSTANCE_NAME")]
-    pub substance_name: Option<String>,
-
-    /// New dosage (optional, e.g., 20 mg)
-    #[arg(short = 'd', long = "dosage", value_name = "DOSAGE", value_parser=Dosage::from_str)]
-    pub dosage: Option<Dosage>,
-
-    /// New ingestion date (optional, e.g., "today 10:00")
-    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=parse_date_string
-    )]
-    pub ingestion_date: Option<DateTime<Local>>,
-
-    /// New route of administration (optional, defaults to "oral")
-    #[arg(short = 'r', long = "roa", value_enum)]
-    pub route_of_administration: Option<RouteOfAdministrationClassification>,
-}
 
 #[async_trait]
 impl CommandHandler for UpdateIngestion
@@ -227,18 +207,6 @@ impl CommandHandler for ListIngestion
     }
 }
 
-#[derive(Parser, Debug)]
-#[command(version, about = "Delete selected ingestion", long_about, aliases = vec!["rm", "del",
-                                                                                   "remove"])]
-pub struct DeleteIngestion
-{
-    #[arg(
-        index = 1,
-        value_name = "INGESTION_ID",
-        help = "ID of the ingestion to delete"
-    )]
-    pub ingestion_id: i32,
-}
 
 #[async_trait]
 impl CommandHandler for DeleteIngestion
@@ -303,10 +271,9 @@ impl CommandHandler for GetIngestion
         {
             | Ok(analysis) =>
             {
-                println!(
-                    "{}",
-                    IngestionViewModel::from(analysis).format(ctx.stdout_format)
-                );
+                let view_model = IngestionViewModel::from(analysis.clone());
+                println!("{}", view_model.format(ctx.stdout_format));
+                crate::visualization::plot_ingestion_phases(&analysis.phases);
             }
             | Err(e) =>
             {
@@ -363,8 +330,11 @@ impl CommandHandler for IngestionCommand
                     .map_err(|e| miette!(e))?;
 
                 // Immediately display the complete ingestion data including phases
-                let message = IngestionViewModel::from(analysis).format(ctx.stdout_format);
+                let message = IngestionViewModel::from(analysis.clone()).format(ctx.stdout_format);
                 println!("{}", message);
+
+                plot_ingestion_phases(&analysis.phases);
+
                 Ok(())
             }
             | IngestionCommands::List(list_ingestions) => list_ingestions.handle(ctx).await,
@@ -406,6 +376,7 @@ struct Phase
     pub duration: DurationRange,
     #[serde(skip)]
     pub icon: PhaseIcon,
+    pub weight: f32,
 }
 
 #[derive(Debug, Serialize, bon::Builder, Clone)]
@@ -426,213 +397,237 @@ impl Display for DurationRange
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
     {
-        // Calculate average duration
         let avg_duration =
             Duration::seconds((self.start.num_seconds() + self.end.num_seconds()) / 2);
-
-        // Calculate the difference from the average
         let duration_diff = (self.end.num_seconds() - self.start.num_seconds()).abs() / 2;
-
-        // If start and end are the same, just display the duration
         if self.start == self.end
         {
             write!(f, "{}", self.start.humanize())
         }
         else
         {
-            // Decide whether to use hours or minutes
             if avg_duration.num_hours() > 0
             {
-                // Convert duration_diff to hours
                 let diff_hours = duration_diff as f64 / 3600.0;
                 write!(f, "{} ±{:.1}h", avg_duration.humanize(), diff_hours)
             }
             else
             {
-                // Display average duration with ± range in minutes
                 write!(f, "{} ±{}m", avg_duration.humanize(), duration_diff / 60)
             }
         }
     }
 }
 
-// Helper function to format DateRange concisely
+/// Formats a date range into a concise human-readable string based on its
+/// relation to the ingestion date.
+///
+/// The function takes a reference to a `DateRange` (which contains a minimum
+/// and maximum `DateTime<Local>`) and a reference to an ingestion date
+/// (`DateTime<Local>`). It performs the following actions:
+///
+/// 1. Defines a closure (`format_time`) that formats a given date as follows:
+///    - If the date falls on the same day as the ingestion date, formats it as
+///      `HH:MM`.
+///    - Otherwise, formats it as `YYYY-MM-DD HH:MM`.
+///
+/// 2. Applies this closure to both the minimum (`min`) and maximum (`max`)
+///    dates of the range.
+///
+/// 3. Compares the formatted `min` and `max` strings:
+///    - If they are identical, returns the formatted date (indicating that both
+///      dates fall at the same formatted point).
+///    - If they differ, calculates the difference in minutes between `max` and
+///      `min`.
+///       - If the difference is 60 minutes or more, converts the difference to
+///         hours (with one decimal precision) and returns a string in the
+///         format: `<min_str> ±<hours>h`.
+///       - If the difference is less than 60 minutes, returns a string in the
+///         format: `<min_str> ±<minutes>m`.
 fn format_date_range(range: &DateRange, ingestion_date: &DateTime<Local>) -> String
 {
-    let min_str = if range.min.date_naive() == ingestion_date.date_naive()
-    {
-        range.min.format("%H:%M").to_string()
-    }
-    else
-    {
-        range.min.format("%Y-%m-%d %H:%M").to_string()
-    };
-    let max_str = if range.max.date_naive() == ingestion_date.date_naive()
-    {
-        range.max.format("%H:%M").to_string()
-    }
-    else
-    {
-        range.max.format("%Y-%m-%d %H:%M").to_string()
+    let format_time = |dt: &DateTime<Local>| {
+        if dt.date_naive() == ingestion_date.date_naive()
+        {
+            dt.format("%H:%M").to_string()
+        }
+        else
+        {
+            dt.format("%Y-%m-%d %H:%M").to_string()
+        }
     };
 
-    // If min and max are the same, just return the time
+    let min_str = format_time(&range.min);
+    let max_str = format_time(&range.max);
+
     if min_str == max_str
     {
         min_str
     }
     else
     {
-        // Calculate the time difference
         let time_diff = (range.max - range.min).num_minutes();
 
-        // If time difference is large (more than 60 minutes), use hours
         if time_diff >= 60
         {
-            let time_diff_hours = time_diff as f64 / 60.0;
-            format!("{} ±{:.1}h", min_str, time_diff_hours)
+            let hours = time_diff as f64 / 60.0;
+            format!("{} ±{:.1}h", min_str, hours)
         }
         else
         {
-            // Otherwise, use minutes
             format!("{} ±{}m", min_str, time_diff)
         }
     }
 }
 
-#[derive(Debug, Serialize, Tabled)]
-struct PhaseRow
-{
-    #[tabled(rename = "Phase")]
-    phase: String,
-    #[tabled(rename = "Duration")]
-    duration: String,
-    #[tabled(rename = "Start Time")]
-    start_time: String,
-    #[tabled(rename = "End Time")]
-    end_time: String,
-}
 
 impl Formatter for IngestionViewModel
 {
     fn pretty(&self) -> String
     {
         let mut skin = MadSkin::default();
+        skin.set_fg(rgb(248, 248, 242)); // Base text (off\-white)
+        skin.bold.set_fg(rgb(224, 108, 117)); // Bold (soft red)
+        skin.italic.set_fg(rgb(80, 250, 123)); // Italic (vivid green)
+        skin.headers[0].set_fg(rgb(189, 147, 249)); // Main header (pastel purple)
+        skin.headers[1].set_fg(rgb(139, 233, 253)); // Sub header (pastel cyan)
+        skin.paragraph.set_fg(rgb(248, 248, 242)); // Paragraph text (off\-white)
+        skin.table.set_fg(rgb(224, 108, 117)); // Table texts (soft red)
 
-        // Tokyo Night inspired colors
-        skin.set_fg(rgb(169, 177, 214)); // Base text color
-        skin.bold.set_fg(rgb(192, 202, 245)); // Bold text
-        skin.italic.set_fg(rgb(125, 207, 255)); // Italic text
-        skin.headers[0].set_fg(rgb(187, 154, 247)); // Main header
-        skin.headers[1].set_fg(rgb(255, 158, 100)); // Sub header
-        skin.paragraph.set_fg(rgb(169, 177, 214)); // Paragraphs
-        skin.table.set_fg(rgb(192, 202, 245)); // Table text
+        let mut output = String::new();
 
-        fn ingestion_sentence(vm: &IngestionViewModel) -> String
+        output.push_str(&skin.text(&self.render_header(), None).to_string());
+        output.push_str(
+            &skin
+                .text(&self.render_ingestion_information(), None)
+                .to_string(),
+        );
+        output.push_str(&skin.text(&self.render_progress_section(), None).to_string());
+        output.push_str(&skin.text(&self.render_phases_timeline(), None).to_string());
+
+        output
+    }
+}
+
+impl IngestionViewModel
+{
+    // Header could be something like this I think
+    //
+    // Ingestion #70 | Oral | 90.0 mg | 18 minutes ago
+    // Status: Comeup (7%) [▶──────]...........
+    // ─────────────────────────────────────────────
+    //
+    // Or this...
+    //
+    // ┌─────────────────────────────┬───────────────────────┐
+    // │ Ingestion #70 | Oral        │ Status: Comeup (7%)   │
+    // │ 90.0 mg | 18 min ago        │ [▶──────────────]     │
+    // └─────────────────────────────┴───────────────────────┘
+    //
+    /// Render a top-level header with more pronounced styling.
+    fn render_header(&self) -> String
+    {
+        let mut substance = self.substance_name.clone();
+        if let Some(first) = substance.chars().next()
         {
-            let dosage = format!(
-                "{} _{}_",
-                vm.dosage,
-                if vm.dosage_classification != "n/a"
-                {
-                    format!("({})", vm.dosage_classification)
-                }
-                else
-                {
-                    String::new()
-                }
-            );
-            let time_since = HumanTime::from(vm.ingested_at);
-            let ingested_at = format!(
-                "{} _{}_",
-                vm.ingested_at.format("%Y-%m-%d %H:%M:%S"),
-                time_since
-            );
-
-            format!(
-                "The ingestion of **{}** occurred via the **{}** route, with a dosage of **{}**, \
-                 and was ingested on **{}**.\n\n",
-                vm.substance_name, vm.route, dosage, ingested_at
-            )
+            let first_upper = first.to_uppercase().to_string();
+            substance.replace_range(0..first.len_utf8(), &first_upper);
         }
 
-        let mut md = String::new();
+        format!("\n\n# Ingestion #{}\n\n", self.id)
+    }
 
-        // Add more spacing at the top
-        md.push('\n');
-        md.push('\n');
+    // Potential Design Inspiration for Administration Section Display:
 
-        // Main header with substance name
-        md.push_str(&format!("# {} #{}\n\n", self.substance_name, self.id));
+    // 1. Compact Single-Line:
+    // Administered: [Date/Time] | [Route] | [Dosage]  (e.g., 2024-07-27 10:30:00 |
+    // Oral | 100mg)
 
-        // Summary section
-        md.push_str(&ingestion_sentence(self));
+    // 2. Two-Line Format:
+    // Date/Time: [Date/Time]  Route: [Route]
+    // Dosage: [Dosage]
 
-        // Details section with improved spacing
-        md.push_str("## Details\n\n");
-        md.push_str(&format!("**Route**: {}\n", self.route));
-        md.push_str(&format!(
-            "**Dosage**: {} _{}_\n",
-            self.dosage,
-            if self.dosage_classification != "n/a"
-            {
-                format!("({})", self.dosage_classification)
-            }
-            else
-            {
-                String::new()
-            }
-        ));
+    // 3. Table-like Layout:
+    // Date/Time:      [Date/Time]
+    // Route:          [Route]
+    // Dosage:         [Dosage]
 
-        let time_since = HumanTime::from(self.ingested_at);
-        md.push_str(&format!(
-            "**Ingested**: {} _{}_\n\n",
+    // 4. Markdown List:
+    // - **Date/Time:** [Date/Time]
+    // - **Route:** [Route]
+    // - **Dosage:** [Dosage]
+
+    // 5. Key-Value Pairs:
+    // Date/Time = [Date/Time]
+    // Route = [Route]
+    // Dosage = [Dosage]
+
+    /// Render the Administration section.
+    fn render_ingestion_information(&self) -> String
+    {
+        format!(
+            "**Date/Time:** {} (Now)\n**Route:** {}\n**Dosage:** {}\n\n",
             self.ingested_at.format("%Y-%m-%d %H:%M:%S"),
-            time_since
-        ));
+            self.route,
+            self.dosage,
+        )
+    }
 
-        if !self.phases.is_empty()
+    /// Render the Progress section with a progress bar.
+    fn render_progress_section(&self) -> String
+    {
+        let status = self
+            .get_current_phase()
+            .map_or("Not started".to_string(), |phase| {
+                phase.classification.to_string()
+            });
+        let percentage = self.progress_percentage();
+        let bar = self.generate_fancy_progress_bar(percentage);
+        format!("Status: {} ({}%)\n[{}]\n\n", status, percentage, bar)
+    }
+
+    fn render_phases_timeline(&self) -> String
+    {
+        let mut timeline = String::new();
+        timeline.push_str("## Phases\n\n");
+        let phase_strs: Vec<String> = self
+            .phases
+            .iter()
+            .map(|phase| {
+                format!(
+                    "● {}: {} ({} - {})",
+                    phase.classification.to_string(),
+                    phase.duration.to_string(),
+                    format_date_range(&phase.start_time, &self.ingested_at),
+                    format_date_range(&phase.end_time, &self.ingested_at)
+                )
+            })
+            .collect();
+        timeline.push_str(&phase_strs.join("\n"));
+        timeline
+    }
+    fn generate_fancy_progress_bar(&self, percentage: u8) -> String
+    {
+        let width = 15;
+        let filled = ((percentage as f32 / 100.0) * width as f32) as usize;
+        let empty = width - filled;
+
+        let mut bar = String::with_capacity(width);
+        if filled > 0
         {
-            // Progress section
-            md.push_str("## Progress\n\n");
-            let progress_bar = self.progress_bar();
-            md.push_str(&format!("{}\n\n", progress_bar));
-
-            // Phases section with improved table
-            md.push_str("## Phases\n\n");
-
-            // Create table rows
-            let phase_rows: Vec<PhaseRow> = self
-                .phases
-                .iter()
-                .map(|phase| {
-                    let start_range = format_date_range(&phase.start_time, &self.ingested_at);
-                    let end_range = format_date_range(&phase.end_time, &self.ingested_at);
-                    let phase_name_with_icon = format!("{} {}", phase.icon.0, phase.classification);
-
-                    PhaseRow {
-                        phase: phase_name_with_icon,
-                        duration: phase.duration.to_string(),
-                        start_time: start_range,
-                        end_time: end_range,
-                    }
-                })
-                .collect();
-
-            // Create and style the table
-            let table = Table::new(phase_rows)
-                .with(Style::rounded())
-                .with(Padding::new(1, 1, 0, 0))
-                .with(Modify::new(Columns::new(1..)).with(Alignment::center()))
-                .with(Modify::new(Segment::all()).with(Alignment::center()))
-                .to_string();
-
-            md.push_str(&table);
-            md.push('\n');
-            md.push('\n');
+            bar.push_str(&"─".repeat(filled - 1));
+            bar.push('▶');
         }
+        bar.push_str(&"─".repeat(empty));
+        bar
+    }
 
-        skin.text(&md, None).to_string()
+    fn get_current_phase(&self) -> Option<&Phase>
+    {
+        let now = Local::now();
+        self.phases
+            .iter()
+            .find(|phase| now >= phase.start_time.min && now <= phase.end_time.max)
     }
 }
 
@@ -665,9 +660,6 @@ impl From<crate::ingestion::model::Ingestion> for IngestionViewModel
 {
     fn from(model: crate::ingestion::model::Ingestion) -> Self
     {
-        let dosage = model.dosage;
-        let route_enum = model.route;
-
         let phases = model
             .phases
             .into_iter()
@@ -693,15 +685,16 @@ impl From<crate::ingestion::model::Ingestion> for IngestionViewModel
                             .build(),
                     )
                     .icon(PhaseIcon::from(&phase.class))
+                    .weight(phase.weight.try_into().unwrap_or(0.0))
                     .build()
             })
-            .collect::<Vec<_>>();
+            .collect();
 
         Self::builder()
             .id(model.id.unwrap_or(0))
             .substance_name(model.substance_name)
-            .route(RouteOfAdministrationClassification::to_string(&route_enum))
-            .dosage(dosage.to_string())
+            .route(RouteOfAdministrationClassification::to_string(&model.route))
+            .dosage(model.dosage.to_string())
             .ingested_at(model.ingestion_date)
             .dosage_classification(
                 model
@@ -754,32 +747,5 @@ impl IngestionViewModel
         {
             0
         }
-    }
-
-    /// Generates a progress bar using indicatif
-    pub fn progress_bar(&self) -> String
-    {
-        let percentage = self.progress_percentage();
-
-        // Create a progress bar with a fixed length
-        let pb = ProgressBar::new(100);
-
-        // Customize the progress bar style
-        let style =
-            ProgressStyle::with_template("{spinner:.green} [{bar:30.cyan/blue}] {percent}%")
-                .unwrap()
-                .progress_chars("█░");
-        pb.set_style(style);
-
-        // Set the current progress
-        pb.set_position(percentage as u64);
-
-        // Manually create a string representation
-        format!(
-            "[{:30}] {}%",
-            "█".repeat(((percentage as f64 / 100.0) * 30.0).round() as usize)
-                + &"░".repeat(30 - ((percentage as f64 / 100.0) * 30.0).round() as usize),
-            percentage
-        )
     }
 }
