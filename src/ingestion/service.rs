@@ -4,7 +4,6 @@ use crate::database::entities::ingestion;
 use crate::database::entities::ingestion_phase;
 use crate::ingestion::Ingestion;
 use crate::ingestion::LogIngestion;
-use crate::ingestion::query::AnalyzeIngestion;
 use crate::utils::DATABASE_CONNECTION;
 use chrono::Local;
 use chrono::Utc;
@@ -16,6 +15,7 @@ use std::ops::Deref;
 use tracing::Level;
 use tracing::event;
 use uuid::Uuid;
+use crate::analyzer::AnalyzeIngestion;
 
 pub struct IngestionService {}
 

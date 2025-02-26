@@ -9,6 +9,7 @@ use sea_orm::prelude::Decimal;
 use std::ops::Range;
 use std::str::FromStr;
 
+#[deprecated(note = "Use neuronek::analyzer::phase::Phase instead, this structure should not be concern of the ingestion module.")]
 /// Represents a phase of substance ingestion, capturing various details about
 /// the phase.
 #[derive(Debug, Clone)]
