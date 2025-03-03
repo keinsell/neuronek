@@ -1,0 +1,62 @@
+{
+    "[nix]": {
+        "editor.defaultFormatter": "jnoortheen.nix-ide",
+        "editor.formatOnSave": true
+    },
+    "nix.enableLanguageServer": true,
+    "nix.serverPath": "nixd",
+    "nix.serverSettings": {
+        "nixd": {
+            "eval": {
+                "target": {
+                    "args": [ ],
+                    "installable": "."
+                }
+            }
+        }
+    },
+    "nix.formatterPath": [ "nixfmt-rfc-style" ],
+    "files.watcherExclude": {
+        "**/.direnv/**": true,
+        "**/.devenv/**": true
+    },
+    "rust-analyzer.cargo.buildScripts.invocationStrategy": "once",
+    "rust-analyzer.diagnostics.experimental.enable": true,
+    "rust-analyzer.check.invocationStrategy": "once",
+    "rust-analyzer.imports.granularity.enforce": true,
+    "rust-analyzer.inlayHints.reborrowHints.enable": "always",
+    "rust-analyzer.inlayHints.typeHints.hideClosureInitialization": true,
+    "rust-analyzer.inlayHints.closureCaptureHints.enable": true,
+    "rust-analyzer.inlayHints.closureReturnTypeHints.enable": "with_block",
+    "rust-analyzer.inlayHints.closureStyle": "rust_analyzer",
+    "rust-analyzer.inlayHints.discriminantHints.enable": "always",
+    "rust-analyzer.inlayHints.expressionAdjustmentHints.enable": "always",
+    "rust-analyzer.inlayHints.expressionAdjustmentHints.hideOutsideUnsafe": true,
+    "rust-analyzer.inlayHints.expressionAdjustmentHints.mode": "prefer_prefix",
+    "rust-analyzer.inlayHints.genericParameterHints.lifetime.enable": true,
+    "rust-analyzer.inlayHints.genericParameterHints.type.enable": true,
+    "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "skip_trivial",
+    "rust-analyzer.inlayHints.lifetimeElisionHints.useParameterNames": true,
+    "rust-analyzer.inlayHints.rangeExclusiveHints.enable": true,
+    "rust-analyzer.inlayHints.typeHints.hideClosureParameter": true,
+    "rust-analyzer.inlayHints.typeHints.hideNamedConstructor": true,
+    "rust-analyzer.interpret.tests": true,
+    "rust-analyzer.lens.location": "above_whole_item",
+    "rust-analyzer.rustfmt.rangeFormatting.enable": true,
+    "rust-analyzer.workspace.symbol.search.kind": "all_symbols",
+    "rust-analyzer.diagnostics.styleLints.enable": true,
+    "rust-analyzer.references.excludeImports": true,
+    "rust-analyzer.references.excludeTests": true,
+    "rust-analyzer.lens.references.adt.enable": true,
+    "rust-analyzer.lens.references.enumVariant.enable": true,
+    "rust-analyzer.lens.references.method.enable": true,
+    "rust-analyzer.lens.references.trait.enable": true,
+    "rust-analyzer.inlayHints.bindingModeHints.enable": true,
+    "rust-analyzer.imports.preferPrelude": true,
+    "rust-analyzer.semanticHighlighting.operator.specialization.enable": true,
+    "rust-analyzer.semanticHighlighting.punctuation.enable": true,
+    "rust-analyzer.semanticHighlighting.punctuation.separate.macro.bang": true,
+    "rust-analyzer.semanticHighlighting.punctuation.specialization.enable": true,
+    "rust-analyzer.files.watcher": "server",
+    "rust-analyzer.hover.actions.references.enable": true
+}

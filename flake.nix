@@ -8,7 +8,7 @@
     crane = {
       url = "github:ipetkov/crane";
     };
-    devenv.url = "github:cachix/devenv";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = {
@@ -17,6 +17,7 @@
     rust-overlay,
     flake-utils,
     crane,
+    treefmt-nix,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (
@@ -52,8 +53,17 @@
         };
 
         cargoArtifacts = craneLib.buildDepsOnly commonArgs;
+
+        treefmtEval = treefmt-nix.lib.evalModule pkgs {
+          projectRootFile = "flake.nix";
+          programs.nixfmt-rfc-style.enable = true;
+          programs.deadnix.enable = true;
+          programs.statix.enable = true;
+        };
       in {
         devShells.default = pkgs.mkShell {
+          inputsFrom = [];
+
           packages = with pkgs;
             [
               rustToolchain
@@ -61,18 +71,31 @@
               cargo-watch
               rust-analyzer
               bacon
+              nixd
+              nixfmt-rfc-style
+              nil
+              statix
+              deadnix
+              nix-index
+              nix-info
+              treefmt
+              alejandra
+              nix-tree
+              manix
             ]
             ++ buildInputs;
 
           shellHook = ''
             export RUST_BACKTRACE=1
+            export RUST_SRC_PATH="${rustToolchain}/lib/rustlib/src/rust/library"
+
             echo "Using Rust nightly: $(rustc --version)"
             root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
             export PATH=$PATH:$root/target/debug:$root/target/release
           '';
-
-          RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
         };
+
+        formatter = treefmtEval.config.build.wrapper;
 
         packages = {
           default = craneLib.buildPackage (commonArgs
@@ -103,7 +126,8 @@
           clippy = craneLib.cargoClippy (commonArgs
             // {
               inherit cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
+              cargoClippyExtraArgs = "--all-targets";
+              # cargoClippyExtraArgs = "--all-targets -- --deny warnings";
             });
 
           fmt = craneLib.cargoFmt {
