@@ -112,6 +112,11 @@ impl MigratorTrait for Migrator
                 "20250218212411_ingestion_phase_add_substance_information",
                 "20250218212411_ingestion_phase_add_substance_information"
             ),
+            import_migration!(
+                M20250303072935RemoveDosageClassificationFromIngestion,
+                "20250303072935_remove_dosage_classification_from_ingestion",
+                "20250303072935_remove_dosage_classification_from_ingestion"
+            ),
         ]
     }
 }

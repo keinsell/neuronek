@@ -34,7 +34,8 @@ supported package managers or build it from source.
 #### Installation from source (Advanced)
 
 Application can be installed with `cargo` and providing url to this repository,
-this may be the most conformable way for users which are looking for the latest version of application, proceed only if you have development experience as application might require manual fixes from your side by this release channel.
+this may be the most conformable way for users which are looking for the latest version of application, proceed only if
+you have development experience as application might require manual fixes from your side by this release channel.
 
 ```
 cargo install --git https://github.com/keinsell/neuronek
@@ -59,125 +60,185 @@ scriptable interface which allows for storage and retrieval of structured data.
 #### Log Ingestion
 
 *Logs the ingestion of a specified substance with the given dosage.*
+
 ```bash
 neuronek ingestion log -s caffeine -d 80mg
 ```
 
 <details>
-<summary>Output</summary>
+<summary>---</summary>
 
 ```
-caffeine #2
+Ingestion #88 
 
-The ingestion of caffeine occurred via the Oral route, with a dosage of 80.0 mg _(Common)_, and was ingested on 2025-02-19 07:32:36 _now_.
-
-Details
-
+ID: 88
+Substance: caffeine
+Dosage: 80.0 mg
 Route: Oral
-Dosage: 80.0 mg _(Common)_
-Ingested: 2025-02-19 07:32:36 _now_
+Ingested At: 2025-03-06 11:23:06
 
-Progress
+Timeline
 
-[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0%
+Analysis of ingestion progression based on substance information in database.
+Note: Estimates may not be accurate.
 
-Phases
+│   Phase   │ Start Time │  End Time  │  Duration  │
+├───────────┼────────────┼────────────┼────────────┤
+│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
+│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
+│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
+│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
+│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
 
-╭─────────────┬────────────────────┬─────────────┬──────────────╮
-│    Phase    │      Duration      │ Start Time  │   End Time   │
-├─────────────┼────────────────────┼─────────────┼──────────────┤
-│   ▲ Onset   │  in 7 minutes ±2m  │    07:32    │  07:37 ±5m   │
-│  △ Comeup   │ in 20 minutes ±10m │  07:37 ±5m  │  07:47 ±25m  │
-│   ◆ Peak    │  in an hour ±0.4h  │ 07:47 ±25m  │ 08:32 ±1.2h  │
-│ ▽ Comedown  │  in an hour ±0.5h  │ 08:32 ±1.2h │ 09:32 ±2.2h  │
-│ ○ Afterglow │  in 8 hours ±4.0h  │ 09:32 ±2.2h │ 13:32 ±10.2h │
-╰─────────────┴────────────────────┴─────────────┴──────────────╯
+Timeline Visualization
+
+Total Duration: ~2.0 hours
+Start: 11:23 | Current: 11:23 | End: 13:23
+[>                                                 ] 0%
+[▲ △   ◆                  ▽                        ]
+
+Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
 ```
+
 </details>
 
-#### View Ingestion (Experimental)
+#### View Ingestion
 
 *Displays detailed information about a specific ingestion identified by its ID.*
+
+> ![WARNING]
+> Ingestion viewing user interface is a subject to change to one that would be compact yet will contain most important information, please share your feedback and expectations in revelant github issues.
+
 ```bash
 neuronek ingestion view <INGESTION_ID>
 ```
 
 <details>
-<summary>Output</summary>
+<summary>---</summary>
 
 ```
-Ingestion #296
+Ingestion #88 
 
+ID: 88
 Substance: caffeine
+Dosage: 80.0 mg
 Route: Oral
-Dosage: 80.0 mg _(Common)_
-Ingested: 2025-02-15 22:55:39 _now_
+Ingested At: 2025-03-06 11:23:06
 
-Current Phase
+Timeline
 
-Peak
-- Time elapsed: _in 20 minutes_
-- Time remaining: _in an hour_
+Analysis of ingestion progression based on substance information in database.
+Note: Estimates may not be accurate.
 
-┌─────────────┬──────────────────┬────────────┬──────────┐
-│ Phase       │ Average Duration │ Start Time │ End Time │
-├─────────────┼──────────────────┼────────────┼──────────┤
-│ ▲ Onset     │ 5m               │ 21:55      │ 22:05    │
-├─────────────┼──────────────────┼────────────┼──────────┤
-│ △ Comeup    │ 10m              │ 22:05      │ 22:35    │
-├─────────────┼──────────────────┼────────────┼──────────┤
-│ ◆ Peak      │ 45m              │ 22:35      │ 00:05    │
-├─────────────┼──────────────────┼────────────┼──────────┤
-│ ▽ Comedown  │ 1h               │ 00:05      │ 02:05    │
-├─────────────┼──────────────────┼────────────┼──────────┤
-│ ○ Afterglow │ 4h               │ 02:05      │ 14:05    │
-└─────────────┴──────────────────┴────────────┴──────────┘
+│   Phase   │ Start Time │  End Time  │  Duration  │
+├───────────┼────────────┼────────────┼────────────┤
+│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
+│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
+│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
+│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
+│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
+
+Timeline Visualization
+
+Total Duration: ~2.0 hours
+Start: 11:23 | Current: 11:23 | End: 13:23
+[>                                                 ] 0%
+[▲ △   ◆                  ▽                        ]
+
+Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
 ```
+
 </details>
 
 #### List Ingestions
 
-*Lists all recorded ingestions along with their details such as ID, substance, route of administration, dosage, and ingestion date.*
+*Lists all recorded ingestions along with their details such as ID, substance, route of administration, dosage, and
+ingestion date.*
+
 ```bash
 neuronek ingestion list
 ```
 
 <details>
-<summary>Output</summary>
+<summary>---</summary>
 
 ```
-┌────┬─────────────────────┬──────┬─────────┬────────────────┐
-│ ID │ Substance           │ ROA  │ Dosage  │ Ingestion Date │
-├────┼─────────────────────┼──────┼─────────┼────────────────┤
-│ 14 │ caffeine            │ Oral │ 80.0 mg │ 20 seconds ago │
-├────┼─────────────────────┼──────┼─────────┼────────────────┤
-│ 13 │ caffeine            │ Oral │ 10.0 mg │ 2 hours ago    │
-└────┴─────────────────────┴──────┴─────────┴────────────────┘
+╭────┬───────────┬─────────┬───────┬──────────────────────────────────────╮
+│ ID │ Substance │ Dosage  │ Route │ Ingested At                          │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 33 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:40:04.705901008 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 32 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:30:43.702279077 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 31 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:29:44.948833745 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 30 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:29:38.685091465 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 29 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:24:43.550999449 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 28 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:17:41.020152562 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 27 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:15:57.546015179 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 26 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:10:23.044092301 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 25 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:09:47.632702987 +01:00 │
+├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+│ 24 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:08:58.809500208 +01:00 │
+╰────┴───────────┴─────────┴───────┴──────────────────────────────────────╯
 ```
+
 </details>
 
 #### Update Ingestion
 
 *Updates the dosage of a specific ingestion identified by its ID.*
+
 ```bash
 neuronek ingestion update 14 -d 90mg
 ```
 
 <details>
-<summary>Output</summary>
+<summary>---</summary>
 
 ```
-╭────┬───────────┬──────┬─────────┬────────────────╮
-│ ID │ Substance │ ROA  │ Dosage  │ Ingestion Date │
-├────┼───────────┼──────┼─────────┼────────────────┤
-│ 14 │ caffeine  │ Oral │ 90.0 mg │      now       │
-╰────┴───────────┴──────┴─────────┴────────────────╯
+Ingestion #88 
+
+ID: 88
+Substance: caffeine
+Dosage: 80.0 mg
+Route: Oral
+Ingested At: 2025-03-06 11:23:06
+
+Timeline
+
+Analysis of ingestion progression based on substance information in database.
+Note: Estimates may not be accurate.
+
+│   Phase   │ Start Time │  End Time  │  Duration  │
+├───────────┼────────────┼────────────┼────────────┤
+│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
+│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
+│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
+│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
+│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
+
+Timeline Visualization
+
+Total Duration: ~2.0 hours
+Start: 11:23 | Current: 11:23 | End: 13:23
+[>                                                 ] 0%
+[▲ △   ◆                  ▽                        ]
+
+Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
 ```
+
 </details>
 
 #### Delete Ingestion
 
 *Deletes a specific ingestion identified by its ID from the records.*
+
 ```bash
 neuronek ingestion delete 14
 ```
@@ -188,6 +249,7 @@ neuronek ingestion delete 14
 ```
 Ingestion #14 has been successfully deleted.
 ```
+
 </details>
 
 ### Substances
@@ -206,6 +268,9 @@ to this application by its nature is questionable.
 ```bash
 neuronek substance get caffeine
 ```
+
+<details>
+<summary>---</summary>
 
 ```json
 {
@@ -330,6 +395,14 @@ neuronek substance get caffeine
 }
 
 ```
+
+</details>
+
+### Statistics
+
+#### View Statistics
+
+### Journal
 
 ## Contributing
 

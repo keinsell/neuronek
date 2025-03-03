@@ -17,7 +17,7 @@ pub const PHASE_ORDER: [PhaseClassification; 5] = [
     PhaseClassification::Afterglow,
 ];
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, PartialOrd, Ord)]
 pub enum PhaseClassification
 {
     Onset,
@@ -70,25 +70,8 @@ impl Default for PhaseClassification
 
 pub type DurationRange = Range<Duration>;
 
-pub struct PhaseClassificationFactor(pub Decimal);
-
-impl From<PhaseClassification> for PhaseClassificationFactor
-{
-    fn from(class: PhaseClassification) -> Self
-    {
-        match class
-        {
-            | PhaseClassification::Onset => Self(dec!(0.0)),
-            | PhaseClassification::Comeup => Self(dec!(0.5)),
-            | PhaseClassification::Peak => Self(dec!(1)),
-            | PhaseClassification::Comedown => Self(dec!(0.3)),
-            | PhaseClassification::Afterglow => Self(dec!(0.0)),
-            | PhaseClassification::Unknown => Self(dec!(0.0)),
-        }
-    }
-}
-
 #[derive(Clone, Debug)]
+#[allow(dead_code)]
 pub struct PhaseIcon(pub String);
 
 impl From<&PhaseClassification> for PhaseIcon

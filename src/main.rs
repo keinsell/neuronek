@@ -1,32 +1,72 @@
 #![feature(new_range_api)]
 #![allow(unused_imports)]
-#[macro_use] extern crate serde_derive;
-use self::core::error_handling::setup_diagnostics;
-use self::core::logging::setup_logger;
 
+use crate::analyzer::AnalyzeIngestion;
+use crate::analyzer::IngestionReport;
+use crate::cli::ApplicationCommands;
 use crate::cli::CommandLineInterface;
-use crate::utils::AppContext;
-use crate::utils::DATABASE_CONNECTION;
-use crate::utils::migrate_database;
-
-use atty::Stream;
+use crate::cli::Displayable;
+use crate::cli::MessageFormat;
+use crate::database::DATABASE_CONNECTION;
+use crate::database::migrate_database;
+use crate::ingestion::Ingestion;
+use crate::ingestion::IngestionActions;
+use crate::statistics::show_statistics;
+use crate::substance::repository::get_substance;
+use r#abstract::CommandHandler;
+use atty::Stream::Stdout;
+use chrono::DateTime;
+use chrono::Local;
+use chrono_english::Dialect;
 use clap::Parser;
-use core::CommandHandler;
+use error_handling::setup_diagnostics;
+use logging::setup_logger;
+use miette::IntoDiagnostic;
 use miette::Result;
-use std::env;
+use miette::miette;
+use ratatui::Terminal;
+use ratatui::prelude::Buffer;
+use ratatui::prelude::Style;
+use ratatui::widgets::Paragraph;
+use sea_orm::prelude::DateTimeLocal;
+use std::fmt::Display;
 use tracing_subscriber::util::SubscriberInitExt;
 
+mod r#abstract;
 mod analyzer;
-mod application;
 mod cli;
-mod core;
+pub mod config;
 mod database;
+pub(crate) mod error_handling;
 mod ingestion;
+pub(crate) mod logging;
 mod prelude;
+mod statistics;
 mod substance;
-mod tui;
-mod utils;
-mod visualization;
+mod theme;
+
+pub trait ValueParser
+{
+    type Output;
+    fn parse_value(input: &str) -> miette::Result<Self::Output>;
+}
+
+impl ValueParser for DateTime<Local>
+{
+    type Output = DateTime<Local>;
+    fn parse_value(input: &str) -> miette::Result<Self::Output>
+    {
+        chrono_english::parse_date_string(input, Local::now(), Dialect::Us).into_diagnostic()
+    }
+}
+
+
+pub struct Application<'a>
+{
+    pub database_connection: &'a sea_orm::DatabaseConnection,
+    pub stdout_format: MessageFormat,
+}
+
 
 #[async_std::main]
 async fn main() -> Result<()>
@@ -54,10 +94,53 @@ async fn main() -> Result<()>
 
     let cli = CommandLineInterface::parse();
 
-    let context = AppContext {
+    let context = Application {
         database_connection: &DATABASE_CONNECTION,
         stdout_format: cli.format,
     };
 
-    cli.command.handle(context).await
+    match cli.command
+    {
+        | ApplicationCommands::Ingestion(cmd) => match &cmd.commands
+        {
+            | IngestionActions::Log(log_ingestion) =>
+            {
+                let ingestion = crate::ingestion::service::log_ingestion(log_ingestion)
+                    .await
+                    .map_err(|e| miette!(e))?;
+
+                ingestion.display(context.stdout_format);
+                Ok(())
+            }
+            | IngestionActions::List(list_ingestions) => list_ingestions.handle(context).await,
+            | IngestionActions::Delete(delete_ingestion) => delete_ingestion.handle(context).await,
+            | IngestionActions::Update(update_ingestion) => update_ingestion.handle(context).await,
+            | IngestionActions::View(view_ingestion) =>
+            {
+                let ingestion =
+                    crate::ingestion::service::get_ingestion(view_ingestion.ingestion_id)
+                        .await
+                        .map_err(|e| miette!(e))?;
+
+                if let Some(ingestion) = ingestion
+                {
+                    ingestion.display(context.stdout_format);
+                    Ok(())
+                }
+                else
+                {
+                    Err(miette!(
+                        "Ingestion with ID {} not found",
+                        view_ingestion.ingestion_id
+                    ))
+                }
+            }
+        },
+        | ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
+        | ApplicationCommands::Stats(cmd) =>
+        {
+            show_statistics(&cmd).await;
+            Ok(())
+        }
+    }
 }

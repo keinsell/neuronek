@@ -5,6 +5,7 @@ use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::dosage::DosageRange;
 use crate::substance::route_of_administration::phase::DurationRange;
 use crate::substance::route_of_administration::phase::PhaseClassification;
+use derive_more::Display;
 use hashbrown::HashMap;
 use serde::Deserialize;
 use serde::Serialize;

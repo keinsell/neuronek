@@ -39,7 +39,7 @@ impl fmt::Display for Dosage
 impl Dosage
 {
     pub fn from_base_units(units: f64) -> Dosage { Dosage(Mass::from_base_units(units)) }
-    pub fn from_miligrams(units: f64) -> Dosage { Dosage(Mass::from_milligrams(units)) }
+    pub fn from_milligrams(units: f64) -> Dosage { Dosage(Mass::from_milligrams(units)) }
 
     delegate! {
         to self.0 {

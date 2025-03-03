@@ -1,12 +1,10 @@
-use crate::cli::ingestion::IngestionCommands;
-use crate::core::CommandHandler;
-use crate::core::config::VERSION;
+use crate::Application;
+use crate::config::VERSION;
 use crate::database::entities::ingestion::Column as IngestionColumn;
 use crate::database::entities::ingestion::Entity as IngestionEntity;
 use crate::database::entities::ingestion_phase::Column as IngestionPhaseColumn;
 use crate::database::entities::ingestion_phase::Entity as IngestionPhaseEntity;
 use crate::ingestion::LogIngestion;
-use crate::utils::AppContext;
 use atty::Stream;
 use chrono::Duration;
 use chrono::NaiveDateTime;
@@ -16,23 +14,28 @@ use clap::CommandFactory;
 use clap::Parser;
 use clap::Subcommand;
 use ingestion::IngestionCommand;
-use journal::ViewJournal;
+use json_to_table::json_to_table;
 use miette::IntoDiagnostic;
+use minimo::Printable;
 use sea_orm::ColumnTrait;
 use sea_orm::EntityTrait;
 use sea_orm::QueryFilter;
 use sea_orm::QueryOrder;
 use sea_orm::prelude::*;
+use serde::Serialize;
+use serde_json::json;
 use std::collections::HashMap;
+use std::fmt::Debug;
+use std::fmt::Display;
 use substance::SubstanceCommand;
+use tabled::Table;
+use tabled::Tabled;
+use tabled::settings::Style;
 use textplots::Chart;
 use textplots::Plot;
 use textplots::Shape;
 use tracing::log::Log;
-pub mod formatter;
 mod ingestion;
-mod journal;
-mod parser;
 pub mod substance;
 
 fn is_interactive() -> bool { atty::is(Stream::Stdout) }
@@ -71,20 +74,37 @@ impl Default for MessageFormat
     }
 }
 
-#[async_trait::async_trait]
-impl CommandHandler for ApplicationCommands
+trait PrettyPrintable: Printable
 {
-    async fn handle<'a>(&self, ctx: AppContext<'a>) -> miette::Result<()>
-    {
-        match self
-        {
-            | ApplicationCommands::Ingestion(cmd) => cmd.handle(ctx).await,
-            | ApplicationCommands::Substance(cmd) => cmd.handle(ctx).await,
-            | ApplicationCommands::Journal(cmd) => cmd.handle(ctx).await,
-        }
-    }
+    fn print(&self) {}
 }
 
+/// TODO: Display in alternative screen vs direct
+pub trait Displayable: Serialize + Sized + Debug
+{
+    fn as_json(&self) -> String { serde_json::to_string(self).unwrap() }
+    fn as_table(&self) -> String
+    where Self: Tabled
+    {
+        let mut table = Table::new(vec![self]);
+        table.with(Style::modern_rounded());
+        table.to_string()
+    }
+    fn as_debug(&self) -> String { format!("{:?}", self) }
+
+    fn as_pretty(&self) -> String { self.as_debug() }
+
+    fn display(&self, format: MessageFormat)
+    {
+        let formatted_output = match format
+        {
+            | MessageFormat::Pretty => self.as_pretty(),
+            | MessageFormat::Json => self.as_json(),
+        };
+
+        println!("{}", formatted_output);
+    }
+}
 
 #[derive(Subcommand)]
 pub(crate) enum ApplicationCommands
@@ -93,8 +113,7 @@ pub(crate) enum ApplicationCommands
     Ingestion(IngestionCommand),
     #[command(hide = true)]
     Substance(SubstanceCommand),
-    /// View today's ingestion journal
-    Journal(ViewJournal),
+    Stats(crate::statistics::ShowStatistics),
 }
 
 #[derive(Parser)]

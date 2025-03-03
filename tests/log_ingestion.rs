@@ -10,6 +10,5 @@ fn test_log_ingestion()
         .args(["-s", "caffeine"])
         .args(["-d", "100mg"]);
 
-    cmd.assert()
-        .success();
+    cmd.assert().success();
 }

@@ -5,7 +5,8 @@ use predicates::prelude::*;
 fn test_show_ingestion() -> Result<(), Box<dyn std::error::Error>>
 {
     let mut ingestion_log_command = Command::cargo_bin("neuronek")?;
-    ingestion_log_command.env("RUST_TEST", "1")
+    ingestion_log_command
+        .env("RUST_TEST", "1")
         .arg("ingestion")
         .arg("log")
         .args(["-s", "caffeine", "-d", "100mg"]);

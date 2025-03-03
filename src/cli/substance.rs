@@ -1,6 +1,5 @@
-use crate::core::CommandHandler;
+use crate::r#abstract::CommandHandler;
 use crate::substance::error::SubstanceError;
-use crate::utils::AppContext;
 use async_trait::async_trait;
 use bon::builder;
 use clap::Args;
@@ -9,7 +8,7 @@ use clap::Subcommand;
 use serde::Deserialize;
 use serde::Serialize;
 use tabled::Tabled;
-
+use crate::Application;
 
 #[derive(Debug, Serialize, Tabled)]
 struct SubstanceRouteOfAdministrationDosage
@@ -101,10 +100,10 @@ pub struct GetSubstance
 #[async_trait]
 impl CommandHandler<Substance> for GetSubstance
 {
-    async fn handle<'a>(&self, ctx: AppContext<'a>) -> miette::Result<Substance>
+    async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<Substance>
     {
         let substance: Substance =
-            crate::substance::repository::get_substance(&self.name, ctx.database_connection)
+            crate::substance::repository::get_substance(&self.name)
                 .await?
                 .unwrap_or_else(|| panic!("{}", SubstanceError::NotFound))
                 .into();
@@ -131,7 +130,7 @@ pub struct SubstanceCommand
 #[async_trait]
 impl CommandHandler for SubstanceCommand
 {
-    async fn handle<'a>(&self, ctx: AppContext<'a>) -> miette::Result<()>
+    async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
     {
         match &self.commands
         {

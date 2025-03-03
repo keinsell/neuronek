@@ -1,3 +1,4 @@
+use crate::ValueParser;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use chrono::DateTime;
@@ -6,6 +7,8 @@ use chrono_english::Dialect;
 use clap::Parser;
 use clap::Subcommand;
 use miette::IntoDiagnostic;
+use serde::Deserialize;
+use serde::Serialize;
 use std::str::FromStr;
 
 /**
@@ -57,7 +60,7 @@ pub struct LogIngestion
         short='t',
         long="date",
         default_value = "now",
-        value_parser=parse_date_string
+        value_parser=DateTime::<Local>::parse_value
     )]
     pub ingestion_date: DateTime<Local>,
     /// Route of administration related to given ingestion (defaults to "oral")
@@ -82,7 +85,7 @@ pub struct UpdateIngestion
     pub dosage: Option<Dosage>,
 
     /// New ingestion date (optional, e.g., "today 10:00")
-    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=parse_date_string
+    #[arg(short = 't', long = "date", value_name = "INGESTION_DATE", value_parser=DateTime::<Local>::parse_value
     )]
     pub ingestion_date: Option<DateTime<Local>>,
 
@@ -104,16 +107,44 @@ pub struct DeleteIngestion
     pub ingestion_id: i32,
 }
 
-
-fn parse_date_string(humanized_input: &str) -> miette::Result<chrono::DateTime<chrono::Local>>
+#[derive(Parser, Debug)]
+#[command(version, about = "View detailed information about a specific ingestion", aliases = vec!["show", "display", "info"])]
+pub struct ViewIngestion
 {
-    chrono_english::parse_date_string(humanized_input, Local::now(), Dialect::Us).into_diagnostic()
+    #[arg(
+        index = 1,
+        value_name = "INGESTION_ID",
+        help = "ID of the ingestion to view"
+    )]
+    pub ingestion_id: i32,
 }
 
-#[derive(Debug, Subcommand)]
-pub enum Commands
+#[derive(Parser, Debug, Copy, Clone, Serialize, Deserialize, bon::Builder)]
+#[command(version, about = "Query ingestions", long_about, aliases = vec!["ls", "get"])]
+pub struct ListIngestion
 {
+    /// Defines the amount of ingestion to display
+    #[arg(short = 'l', long, default_value_t = 10)]
+    pub limit: u64,
+}
+
+impl std::default::Default for ListIngestion
+{
+    fn default() -> Self { Self::builder().limit(100).build() }
+}
+
+
+#[derive(Debug, Subcommand)]
+pub enum Actions
+{
+    /// Create a new ingestion record
     Log(LogIngestion),
-    Update(UpdateIngestion),
+    /// List all ingestions
+    List(ListIngestion),
+    /// Delete an ingestion
     Delete(DeleteIngestion),
+    /// Update an existing ingestion
+    Update(UpdateIngestion),
+    /// View details of a specific ingestion
+    View(ViewIngestion),
 }

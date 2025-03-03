@@ -10,8 +10,7 @@ fn test_update_ingestion()
         .args(["-s", "caffeine"])
         .args(["-d", "100mg"]);
 
-    cmd.assert()
-        .success();
+    cmd.assert().success();
 
     let mut cmd2 = Command::cargo_bin("neuronek").unwrap();
     cmd2.arg("ingestion")
@@ -19,6 +18,5 @@ fn test_update_ingestion()
         .arg("1")
         .args(["-d", "200mg"]);
 
-    cmd2.assert()
-        .success();
+    cmd2.assert().success();
 }

@@ -1,4 +1,5 @@
-use crate::database::entities;
+use std::ops::Deref;
+use crate::database::{entities, DATABASE_CONNECTION};
 use crate::database::entities::substance;
 use crate::substance::RoutesOfAdministration;
 use crate::substance::Substance;
@@ -23,27 +24,15 @@ use sea_orm::ModelTrait;
 use sea_orm::QueryFilter;
 use std::str::FromStr;
 
-// #[io_cached(
-//     disk = true,
-//     sync_to_disk_on_cache_change = false,
-//     map_error = r##"|e| SubstanceError::DiskError"##,
-//     time = 2592000000
-// )]
-async fn enrich_substance_name_query(name: &str) -> Result<String, SubstanceError>
-{
-    Ok(pubchem::Compound::with_name(name)
-        .title()
-        .into_diagnostic()
-        .unwrap_or(name.to_string()))
-}
-
 
 pub async fn get_substance(
     name: &str,
-    db: &sea_orm::DatabaseConnection,
 ) -> miette::Result<Option<Substance>>
 {
-    let substance_name = enrich_substance_name_query(name).await?;
+    let substance_name = pubchem::Compound::with_name(name)
+        .title()
+        .into_diagnostic()
+        .unwrap_or(name.to_string());
 
     let db_substance = substance::Entity::find()
         .filter(
@@ -51,7 +40,7 @@ pub async fn get_substance(
                 .eq(substance_name.to_lowercase())
                 .or(substance::Column::CommonNames.contains(name.to_lowercase())),
         )
-        .one(db)
+        .one(DATABASE_CONNECTION.deref())
         .await
         .into_diagnostic()?;
 
@@ -63,7 +52,7 @@ pub async fn get_substance(
 
     let routes_of_administration = db_substance
         .find_related(entities::substance_route_of_administration::Entity)
-        .all(db)
+        .all(DATABASE_CONNECTION.deref())
         .await
         .into_diagnostic()?;
 
@@ -72,10 +61,8 @@ pub async fn get_substance(
         systematic_name: None,
         routes_of_administration: RoutesOfAdministration::new(),
     };
-
-    let db_connection = db.clone();
+    
     let route_futures = routes_of_administration.into_iter().map(|route| {
-        let db = db_connection.clone();
         async move {
             let classification = RouteOfAdministrationClassification::from_str(&route.name)
                 .map_err(|e| miette!(format!("{:?}", e)))?;
@@ -87,7 +74,7 @@ pub async fn get_substance(
 
             let dosages = route
                 .find_related(entities::substance_route_of_administration_dosage::Entity)
-                .all(&db)
+                .all(DATABASE_CONNECTION.deref())
                 .await
                 .into_diagnostic()?;
 
@@ -120,7 +107,7 @@ pub async fn get_substance(
 
             let phases = route
                 .find_related(entities::substance_route_of_administration_phase::Entity)
-                .all(&db)
+                .all(DATABASE_CONNECTION.deref())
                 .await
                 .into_diagnostic()?;
 
