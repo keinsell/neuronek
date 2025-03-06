@@ -44,6 +44,16 @@ mod prelude;
 mod statistics;
 mod substance;
 mod theme;
+mod tui;
+
+use crossterm::ExecutableCommand;
+use crossterm::event::DisableMouseCapture;
+use crossterm::event::EnableMouseCapture;
+use crossterm::terminal::EnterAlternateScreen;
+use crossterm::terminal::LeaveAlternateScreen;
+use crossterm::terminal::disable_raw_mode;
+use crossterm::terminal::enable_raw_mode;
+use std::io;
 
 pub trait ValueParser
 {
@@ -142,5 +152,52 @@ async fn main() -> Result<()>
             show_statistics(&cmd).await;
             Ok(())
         }
+        | ApplicationCommands::Monitor => run_tui().await,
     }
+}
+
+async fn run_tui() -> Result<()>
+{
+    // Setup terminal
+    enable_raw_mode().into_diagnostic()?;
+    let mut stdout = io::stdout();
+    stdout.execute(EnterAlternateScreen).into_diagnostic()?;
+    stdout.execute(EnableMouseCapture).into_diagnostic()?;
+    let backend = ratatui::backend::CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend).into_diagnostic()?;
+
+    // Create app and run it
+    let mut app = tui::App::new().await?;
+
+    terminal.clear().into_diagnostic()?;
+
+    // Set terminal background color to Catppuccin Mocha base
+    terminal
+        .backend_mut()
+        .execute(crossterm::style::SetBackgroundColor(
+            crossterm::style::Color::from((30, 30, 46)),
+        ))
+        .into_diagnostic()?;
+
+    while app.running
+    {
+        terminal
+            .draw(|f| tui::ui::ui(f, &app))
+            .map_err(|e| miette!(e))?;
+        app.run()?;
+    }
+
+    // Restore terminal
+    disable_raw_mode().into_diagnostic()?;
+    terminal
+        .backend_mut()
+        .execute(LeaveAlternateScreen)
+        .into_diagnostic()?;
+    terminal
+        .backend_mut()
+        .execute(DisableMouseCapture)
+        .into_diagnostic()?;
+    terminal.show_cursor().into_diagnostic()?;
+
+    Ok(())
 }

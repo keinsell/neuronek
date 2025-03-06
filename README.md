@@ -252,6 +252,14 @@ Ingestion #14 has been successfully deleted.
 
 </details>
 
+### Monitor Command
+
+*Launch an interactive Terminal User Interface (TUI) to visualize and monitor substance effects in real-time.*
+
+```bash
+neuronek monitor
+```
+
 ### Substances
 
 Application comes with a pre-bundled database of psychoactive substances built on top
@@ -402,7 +410,6 @@ neuronek substance get caffeine
 
 #### View Statistics
 
-### Journal
 
 ## Contributing
 

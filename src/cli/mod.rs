@@ -114,6 +114,8 @@ pub(crate) enum ApplicationCommands
     #[command(hide = true)]
     Substance(SubstanceCommand),
     Stats(crate::statistics::ShowStatistics),
+    /// Launch the TUI monitor for ingestion intensity
+    Monitor,
 }
 
 #[derive(Parser)]
