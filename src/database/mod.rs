@@ -1,15 +1,21 @@
 pub mod entities;
 pub mod migrator;
 
-use std::path::PathBuf;
+use crate::config::CONFIG;
 use async_std::task::block_on;
 use atty::Stream;
-use sea_orm::{Database, DatabaseConnection};
-use sea_orm_migration::{IntoSchemaManagerConnection, MigratorTrait};
-use tracing::{debug, error, info, instrument, warn};
 pub use entities::prelude::*;
 pub use migrator::Migrator;
-use crate::config::CONFIG;
+use sea_orm::Database;
+use sea_orm::DatabaseConnection;
+use sea_orm_migration::IntoSchemaManagerConnection;
+use sea_orm_migration::MigratorTrait;
+use std::path::PathBuf;
+use tracing::debug;
+use tracing::error;
+use tracing::info;
+use tracing::instrument;
+use tracing::warn;
 
 lazy_static::lazy_static! {
     #[derive(Clone, Debug)]
@@ -95,27 +101,30 @@ lazy_static::lazy_static! {
 
 fn initialize_sqlite_by_path(path: &PathBuf) -> std::result::Result<(), String>
 {
-    if let Some(parent_dir) = path.parent() {
-        if !parent_dir.exists() {
+    if let Some(parent_dir) = path.parent()
+    {
+        if !parent_dir.exists()
+        {
             std::fs::create_dir_all(parent_dir)
                 .map_err(|e| format!("Failed to create database directory: {}", e))?;
             debug!("Created database directory at {}", parent_dir.display());
         }
     }
 
-    std::fs::File::create(path)
-        .map_err(|e| format!("Failed to create database file: {}", e))?;
+    std::fs::File::create(path).map_err(|e| format!("Failed to create database file: {}", e))?;
     debug!("Created database file at {}", path.display());
 
     Ok(())
 }
 
 #[instrument]
-pub async fn migrate_database(database_connection: &DatabaseConnection)
-                              -> Result<(), Box<dyn std::error::Error>>
+pub async fn migrate_database(
+    database_connection: &DatabaseConnection,
+) -> Result<(), Box<dyn std::error::Error>>
 {
     let is_interactive_terminal = atty::is(Stream::Stdout);
-    let spinner = if is_interactive_terminal {
+    let spinner = if is_interactive_terminal
+    {
         let s = indicatif::ProgressBar::new_spinner();
         s.enable_steady_tick(std::time::Duration::from_millis(10));
         Some(s)
@@ -127,20 +136,23 @@ pub async fn migrate_database(database_connection: &DatabaseConnection)
         Migrator::get_pending_migrations(&database_connection.into_schema_manager_connection())
             .await?;
 
-    if !pending_migrations.is_empty() {
-        info!("There are {} pending database migrations.", pending_migrations.len());
+    if !pending_migrations.is_empty()
+    {
+        info!(
+            "There are {} pending database migrations.",
+            pending_migrations.len()
+        );
         info!("Applying migrations...");
 
-        if let Some(spinner) = &spinner {
+        if let Some(spinner) = &spinner
+        {
             spinner.set_message("Applying migrations...");
         }
 
-        Migrator::up(
-            database_connection.into_schema_manager_connection(),
-            None,
-        ).await?;
+        Migrator::up(database_connection.into_schema_manager_connection(), None).await?;
 
-        if let Some(spinner) = spinner {
+        if let Some(spinner) = spinner
+        {
             spinner.finish_with_message("Migrations applied successfully.");
         }
     }

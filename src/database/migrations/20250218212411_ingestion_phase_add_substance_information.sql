@@ -1,6 +1,6 @@
 -- Disable the enforcement of foreign-keys constraints
 PRAGMA
-foreign_keys = off;
+    foreign_keys = off;
 -- Drop "ingestion_phase" table after copying rows
 DROP TABLE `ingestion_phase`;
 -- Create "new_ingestion_phase" table
@@ -14,8 +14,8 @@ CREATE TABLE `ingestion_phase`
     `end_date_min`   datetime_text NOT NULL,
     `end_date_max`   datetime_text NOT NULL,
     `weight`         real          NOT NULL DEFAULT 1,
-    `duration_min`   text       NOT NULL,
-    `duration_max`   text       NOT NULL,
+    `duration_min`   text          NOT NULL,
+    `duration_max`   text          NOT NULL,
     `substance_name` text          NOT NULL,
     `created_at`     text          NOT NULL,
     `updated_at`     text          NOT NULL,
@@ -37,4 +37,4 @@ CREATE INDEX `ingestion_phase_ingestion_id_idx` ON `ingestion_phase` (`ingestion
 CREATE INDEX `ingestion_phase_classification_idx` ON `ingestion_phase` (`classification`);
 -- Enable back the enforcement of foreign-keys constraints
 PRAGMA
-foreign_keys = on;
+    foreign_keys = on;

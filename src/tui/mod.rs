@@ -3,4 +3,3 @@ pub mod chart;
 pub mod ui;
 
 pub use app::App;
-pub use ui::ui;

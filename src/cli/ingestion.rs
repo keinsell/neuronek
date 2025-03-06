@@ -23,6 +23,7 @@ use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::PHASE_ORDER;
 use crate::substance::route_of_administration::phase::PhaseClassification;
 use crate::substance::route_of_administration::phase::PhaseIcon;
+use crate::theme::THEME;
 use async_std::task;
 use async_trait::async_trait;
 use chrono::DateTime;
@@ -106,56 +107,6 @@ impl Displayable for crate::ingestion::Ingestion
 {
     fn as_pretty(&self) -> String
     {
-        // Create a Catppuccin-inspired MadSkin
-        let mut skin = MadSkin::default_dark();
-
-        // Catppuccin Mocha palette
-        let lavender = rgb(180, 190, 254); // #B4BEFE
-        let blue = rgb(137, 180, 250); // #89B4FA
-        let sapphire = rgb(116, 199, 236); // #74C7EC
-        let sky = rgb(137, 220, 235); // #89DCEB
-        let teal = rgb(148, 226, 213); // #94E2D5
-        let green = rgb(166, 227, 161); // #A6E3A1
-        let yellow = rgb(249, 226, 175); // #F9E2AF
-        let peach = rgb(250, 179, 135); // #FAB387
-        let maroon = rgb(235, 160, 172); // #EBA0AC
-        let red = rgb(243, 139, 168); // #F38BA8
-        let mauve = rgb(203, 166, 247); // #CBA6F7
-        let pink = rgb(245, 194, 231); // #F5C2E7
-        let text = rgb(205, 214, 244); // #CDD6F4
-
-        // Apply Catppuccin colors to the skin
-        skin.paragraph.set_fg(text);
-        skin.bold.set_fg(lavender);
-        skin.italic.set_fg(sky);
-        skin.strikeout.set_fg(red);
-        skin.inline_code.set_fg(green);
-        skin.code_block.set_bg(rgb(36, 39, 58)); // Slightly lighter than background
-        skin.code_block.set_fg(green);
-
-        // Set header colors with gradient from mauve to lavender
-        skin.set_headers_fg(mauve);
-        skin.headers[0].set_fg(mauve);
-        skin.headers[1].set_fg(lavender);
-        skin.headers[2].set_fg(blue);
-
-        // Style lists and quotes
-        skin.bullet.set_fg(peach);
-        skin.quote_mark.set_fg(teal);
-        skin.horizontal_rule.set_fg(mauve);
-
-        // Style links - fix for non-existent fields
-        // Remove the non-existent link styles
-        // skin.link.set_fg(sapphire);
-        // skin.link.set_underline(true);
-
-        // Table styling
-        skin.table_border_chars = ROUNDED_TABLE_BORDER_CHARS;
-        skin.table.set_fg(text);
-        // Fix for non-existent table_border field
-        // skin.table_border.set_fg(mauve);
-        skin.scrollbar.thumb.set_fg(pink);
-
         let mut output = String::new();
 
         output.push_str(&format!("\n# Ingestion #{} \n\n", self.id.unwrap()));
@@ -179,7 +130,7 @@ impl Displayable for crate::ingestion::Ingestion
         content.push_str(&format!("**Ingested At**: {}\n", timestamp));
 
         // Render the content with the Catppuccin skin
-        output.push_str(&skin.term_text(&content).to_string());
+        output.push_str(&content.to_string());
         output.push_str("\n");
 
         // If there are phases, add the phase visualization
@@ -187,10 +138,6 @@ impl Displayable for crate::ingestion::Ingestion
         {
             output.push_str(&{
                 let ingestion = self;
-
-                // Add more color variations for visual hierarchy
-                skin.paragraph.set_fg(gray(18));
-                skin.bullet.set_fg(AnsiValue(208));
 
                 let mut md_text = String::new();
                 md_text.push_str("## Timeline\n\n");
@@ -369,7 +316,7 @@ impl Displayable for crate::ingestion::Ingestion
                         {
                             md_text.truncate(md_text.len() - 2);
                         }
-                        md_text.push_str("\n");
+                        md_text.push('\n');
                     }
                 }
 
@@ -377,7 +324,7 @@ impl Displayable for crate::ingestion::Ingestion
             });
         }
 
-        skin.text(&output, None).to_string()
+        THEME.text(&output, None).to_string()
     }
 }
 
@@ -399,8 +346,6 @@ impl Displayable for IngestionList
         let mut table = Table::new(self.0.clone());
         table.with(Style::modern_rounded());
         output.push_str(&table.to_string());
-        output.push_str("\n\n");
-
         output
     }
 }
@@ -482,7 +427,7 @@ impl CommandHandler for ListIngestion
             .map(|i| crate::ingestion::Ingestion::from(i.clone()))
             .collect();
 
-        println!("{:?}", IngestionList(ingestions).display(ctx.stdout_format));
+        IngestionList(ingestions).display(ctx.stdout_format);
 
         Ok(())
     }

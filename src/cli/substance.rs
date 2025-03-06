@@ -1,14 +1,13 @@
 use crate::r#abstract::CommandHandler;
 use crate::substance::error::SubstanceError;
+use crate::Application;
 use async_trait::async_trait;
-use bon::builder;
 use clap::Args;
 use clap::Parser;
 use clap::Subcommand;
 use serde::Deserialize;
 use serde::Serialize;
 use tabled::Tabled;
-use crate::Application;
 
 #[derive(Debug, Serialize, Tabled)]
 struct SubstanceRouteOfAdministrationDosage
@@ -102,11 +101,10 @@ impl CommandHandler<Substance> for GetSubstance
 {
     async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<Substance>
     {
-        let substance: Substance =
-            crate::substance::repository::get_substance(&self.name)
-                .await?
-                .unwrap_or_else(|| panic!("{}", SubstanceError::NotFound))
-                .into();
+        let substance: Substance = crate::substance::repository::get_substance(&self.name)
+            .await?
+            .unwrap_or_else(|| panic!("{}", SubstanceError::NotFound))
+            .into();
 
         println!("{}", serde_json::to_string_pretty(&substance).unwrap());
 

@@ -8,10 +8,10 @@ use chrono::Duration;
 use chrono::Local;
 use chrono::TimeZone;
 use clap::builder::TypedValueParser;
-use hashbrown::HashMap;
 use serde::Serialize;
 use std::fmt::Display;
 use std::range::Range;
+use std::str::FromStr;
 use tabled::Tabled;
 
 #[derive(Debug, Clone, Tabled, Serialize)]
@@ -37,6 +37,7 @@ impl From<Model> for Ingestion
 {
     fn from(value: Model) -> Self
     {
+        dbg!(&value);
         Ingestion {
             id: Some(value.id),
             substance_name: value.substance_name,
@@ -85,8 +86,8 @@ impl IngestionPhases
             {
                 continue;
             }
-            min_duration = min_duration + phase.duration.start;
-            max_duration = max_duration + phase.duration.end;
+            min_duration += phase.duration.start;
+            max_duration += phase.duration.end;
         }
 
         Some((min_duration..max_duration).into())

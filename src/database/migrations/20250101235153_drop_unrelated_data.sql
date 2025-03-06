@@ -1,6 +1,6 @@
 alter table substance
-drop
-brand_names;
+    drop
+        brand_names;
 drop table substance_interactions;
 drop table effect;
 drop table psychoactive_class;
@@ -13,20 +13,20 @@ drop index substance_smiles_key;
 drop index substance_systematic_name_key;
 drop index substance_substitutive_name_key;
 alter table substance
-drop
-systematic_name;
+    drop
+        systematic_name;
 alter table substance
-drop
-substitutive_name;
+    drop
+        substitutive_name;
 alter table substance
-drop
-inchi_key;
+    drop
+        inchi_key;
 alter table substance
-drop
-unii;
+    drop
+        unii;
 alter table substance
-drop
-cas_number;
+    drop
+        cas_number;
 alter table substance
-drop
-smiles;
+    drop
+        smiles;

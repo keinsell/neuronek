@@ -1,4 +1,3 @@
-use chrono::Local;
 use ratatui::prelude::*;
 use ratatui::widgets::*;
 
@@ -23,9 +22,7 @@ pub fn ui(frame: &mut Frame, app: &super::App)
     let substances = if app.datasets.is_empty()
     {
         "No Data".to_string()
-    }
-    else
-    {
+    } else {
         app.datasets
             .iter()
             .map(|(name, _)| name.as_str())

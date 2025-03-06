@@ -1,33 +1,29 @@
-use std::ops::Deref;
-use crate::database::{entities, DATABASE_CONNECTION};
+use crate::database::entities;
 use crate::database::entities::substance;
-use crate::substance::RoutesOfAdministration;
-use crate::substance::Substance;
-use crate::substance::SystematicName;
-use crate::substance::error::SubstanceError;
-use crate::substance::route_of_administration::RouteOfAdministration;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::database::DATABASE_CONNECTION;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::dosage::DosageRange;
 use crate::substance::route_of_administration::phase::DurationRange;
 use crate::substance::route_of_administration::phase::PhaseClassification;
-use cached::proc_macro::io_cached;
-use futures::StreamExt;
+use crate::substance::route_of_administration::RouteOfAdministration;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::RoutesOfAdministration;
+use crate::substance::Substance;
 use futures::stream::FuturesUnordered;
+use futures::StreamExt;
 use iso8601_duration::Duration;
-use miette::IntoDiagnostic;
 use miette::miette;
+use miette::IntoDiagnostic;
 use sea_orm::ColumnTrait;
 use sea_orm::EntityTrait;
 use sea_orm::ModelTrait;
 use sea_orm::QueryFilter;
+use std::ops::Deref;
 use std::str::FromStr;
 
 
-pub async fn get_substance(
-    name: &str,
-) -> miette::Result<Option<Substance>>
+pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
 {
     let substance_name = pubchem::Compound::with_name(name)
         .title()
@@ -61,9 +57,10 @@ pub async fn get_substance(
         systematic_name: None,
         routes_of_administration: RoutesOfAdministration::new(),
     };
-    
-    let route_futures = routes_of_administration.into_iter().map(|route| {
-        async move {
+
+    let route_futures = routes_of_administration
+        .into_iter()
+        .map(|route| async move {
             let classification = RouteOfAdministrationClassification::from_str(&route.name)
                 .map_err(|e| miette!(format!("{:?}", e)))?;
             let mut roa = RouteOfAdministration {
@@ -128,8 +125,7 @@ pub async fn get_substance(
             }
 
             Ok::<_, miette::Report>((classification, roa))
-        }
-    });
+        });
 
     let mut route_stream = FuturesUnordered::from_iter(route_futures);
 
@@ -138,11 +134,11 @@ pub async fn get_substance(
         match result
         {
             | Ok((classification, roa)) =>
-            {
-                substance
-                    .routes_of_administration
-                    .insert(classification, roa);
-            }
+                {
+                    substance
+                        .routes_of_administration
+                        .insert(classification, roa);
+                }
             | Err(e) => return Err(e),
         }
     }

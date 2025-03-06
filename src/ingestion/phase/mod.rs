@@ -21,15 +21,15 @@ use std::ops::Range;
 use std::str::FromStr;
 use tabled::Tabled;
 
-/// Newtype dedicated for encapsulating logic and representation of "weight"
+/// New-type dedicated for encapsulating logic and representation of "weight"
 /// associated to a given phase which is combination of common dosage associated
 /// with ingestion's substance and phase classification factors used to add
 /// intensity to the phase.
 #[derive(Debug, Clone, Serialize, From, Into, new)]
-pub struct Weight(pub(crate) Decimal);
+pub struct PhaseWeight(pub(crate) Decimal);
 
 
-impl Weight
+impl PhaseWeight
 {
     pub fn calculate(
         ingestion_dosage: Dosage,
@@ -41,7 +41,7 @@ impl Weight
             ingestion_dosage.as_base_units() / common_dosage_of_substance.as_base_units();
         let phase_factor = PhaseClassificationFactor::from(ingestion_phase_classification).0;
         let weight = Decimal::from_f64(dosage_factor).unwrap() * phase_factor;
-        Weight(weight)
+        PhaseWeight(weight)
     }
 }
 
@@ -84,7 +84,7 @@ pub struct IngestionPhase
     /// The weight associated with the phase.
     /// This is a `Decimal` value that may represent the significance or impact
     /// of the phase.
-    pub weight: Weight,
+    pub weight: PhaseWeight,
 
     /// The name of the substance associated with this ingestion phase.
     /// This is a string value representing the substance name.

@@ -18,7 +18,7 @@ use tabled::Tabled;
 pub(super) struct SystematicName(pub String);
 
 pub type RoutesOfAdministration =
-    HashMap<RouteOfAdministrationClassification, RouteOfAdministration>;
+HashMap<RouteOfAdministrationClassification, RouteOfAdministration>;
 
 #[derive(Debug, Clone)]
 pub struct Substance

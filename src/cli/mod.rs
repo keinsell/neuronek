@@ -1,39 +1,25 @@
-use crate::Application;
 use crate::config::VERSION;
-use crate::database::entities::ingestion::Column as IngestionColumn;
-use crate::database::entities::ingestion::Entity as IngestionEntity;
-use crate::database::entities::ingestion_phase::Column as IngestionPhaseColumn;
-use crate::database::entities::ingestion_phase::Entity as IngestionPhaseEntity;
-use crate::ingestion::LogIngestion;
 use atty::Stream;
-use chrono::Duration;
-use chrono::NaiveDateTime;
-use chrono::Utc;
 use clap::ColorChoice;
 use clap::CommandFactory;
 use clap::Parser;
 use clap::Subcommand;
 use ingestion::IngestionCommand;
-use json_to_table::json_to_table;
 use miette::IntoDiagnostic;
 use minimo::Printable;
+use sea_orm::prelude::*;
 use sea_orm::ColumnTrait;
 use sea_orm::EntityTrait;
 use sea_orm::QueryFilter;
 use sea_orm::QueryOrder;
-use sea_orm::prelude::*;
 use serde::Serialize;
-use serde_json::json;
-use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fmt::Display;
 use substance::SubstanceCommand;
+use tabled::settings::Style;
 use tabled::Table;
 use tabled::Tabled;
-use tabled::settings::Style;
-use textplots::Chart;
 use textplots::Plot;
-use textplots::Shape;
 use tracing::log::Log;
 mod ingestion;
 pub mod substance;
@@ -66,9 +52,7 @@ impl Default for MessageFormat
         if is_interactive()
         {
             MessageFormat::Pretty
-        }
-        else
-        {
+        } else {
             MessageFormat::Json
         }
     }
@@ -84,7 +68,8 @@ pub trait Displayable: Serialize + Sized + Debug
 {
     fn as_json(&self) -> String { serde_json::to_string(self).unwrap() }
     fn as_table(&self) -> String
-    where Self: Tabled
+    where
+        Self: Tabled,
     {
         let mut table = Table::new(vec![self]);
         table.with(Style::modern_rounded());

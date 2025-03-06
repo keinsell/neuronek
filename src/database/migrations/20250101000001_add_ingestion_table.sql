@@ -13,16 +13,16 @@ CREATE TABLE `ingestion`
 CREATE TABLE IF NOT EXISTS `seaql_migrations`
 (
     `version`
-    varchar
-    NOT
-    NULL,
+        varchar
+        NOT
+            NULL,
     `applied_at`
-    bigint
-    NOT
-    NULL,
+        bigint
+        NOT
+            NULL,
     PRIMARY
-    KEY
-(
-    `version`
-)
-    );
+        KEY
+        (
+         `version`
+            )
+);

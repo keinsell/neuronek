@@ -5,17 +5,17 @@ CREATE TABLE `substance`
     `name`               text    NOT NULL,
     `common_names`       text    NOT NULL,
     `brand_names`        text    NOT NULL,
-    `substitutive_name`  text NULL,
+    `substitutive_name`  text    NULL,
     `systematic_name`    text    NOT NULL,
     `pubchem_cid`        integer NOT NULL,
-    `unii`               text NULL,
-    `cas_number`         text NULL,
+    `unii`               text    NULL,
+    `cas_number`         text    NULL,
     `inchi_key`          text    NOT NULL,
     `smiles`             text    NOT NULL,
-    `psychonautwiki_url` text NULL,
+    `psychonautwiki_url` text    NULL,
     `psychoactive_class` text    NOT NULL,
-    `chemical_class`     text NULL,
-    `description`        text NULL,
+    `chemical_class`     text    NULL,
+    `description`        text    NULL,
     PRIMARY KEY (`id`)
 );
 -- Create index "substance_id_key" to table: "substance"
@@ -156,7 +156,7 @@ CREATE TABLE `substance_route_of_administration_dosage`
 CREATE UNIQUE INDEX `route_of_administration_dosage_intensivity_routeOfAdministrationId_key` ON `substance_route_of_administration_dosage` (`intensity`, `routeOfAdministrationId`);
 -- Disable the enforcement of foreign-keys constraints
 PRAGMA
-foreign_keys = off;
+    foreign_keys = off;
 -- Create "new_substance_route_of_administration_phase" table
 CREATE TABLE `new_substance_route_of_administration_phase`
 (
@@ -13656,64 +13656,64 @@ VALUES ('3b54f9aead9bf6a954607ca9314b57461b19ec95a0681499d5acad2547d11122d5cc9e6
         'heavy', 15.0, 0.0, 'mg',
         '319bdcc6327775a15fbce77e9fc1a3bb22a2a62acca3fe71f00b57c5d1094607047975ae4e88c548a8d6711be13d82c27bb45dba92e061df92feb834aeb3a8b7');
 PRAGMA
-foreign_keys = on;
+    foreign_keys = on;
 -- Create "atlas_schema_revisions" table
 CREATE TABLE IF NOT EXISTS `atlas_schema_revisions`
 (
     `version`
-    text
-    NOT
-    NULL,
+        text
+        NOT
+            NULL,
     `description`
-    text
-    NOT
-    NULL,
+        text
+        NOT
+            NULL,
     `type`
-    integer
-    NOT
-    NULL
-    DEFAULT
-    2,
+        integer
+        NOT
+            NULL
+        DEFAULT
+            2,
     `applied`
-    integer
-    NOT
-    NULL
-    DEFAULT
-    0,
+        integer
+        NOT
+            NULL
+        DEFAULT
+            0,
     `total`
-    integer
-    NOT
-    NULL
-    DEFAULT
-    0,
+        integer
+        NOT
+            NULL
+        DEFAULT
+            0,
     `executed_at`
-    datetime
-    NOT
-    NULL,
+        datetime
+        NOT
+            NULL,
     `execution_time`
-    integer
-    NOT
-    NULL,
+        integer
+        NOT
+            NULL,
     `error`
-    text
-    NULL,
+        text
+        NULL,
     `error_stmt`
-    text
-    NULL,
+        text
+        NULL,
     `hash`
-    text
-    NOT
-    NULL,
+        text
+        NOT
+            NULL,
     `partial_hashes`
-    json
-    NULL,
+        json
+        NULL,
     `operator_version`
-    text
-    NOT
-    NULL,
+        text
+        NOT
+            NULL,
     PRIMARY
-    KEY
-(
-    `version`
-)
-    );
+        KEY
+        (
+         `version`
+            )
+);

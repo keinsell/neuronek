@@ -1,6 +1,6 @@
 -- Disable foreign key constraints
 PRAGMA
-foreign_keys = off;
+    foreign_keys = off;
 
 -- Create new table with correct constraint
 CREATE TABLE `new_ingestion`
@@ -9,7 +9,7 @@ CREATE TABLE `new_ingestion`
     `substance_name`          varchar       NOT NULL,
     `route_of_administration` varchar       NOT NULL,
     `dosage`                  float         NOT NULL,
-    `dosage_classification`   text NULL,
+    `dosage_classification`   text          NULL,
     `ingested_at`             datetime_text NOT NULL,
     `updated_at`              datetime_text NOT NULL,
     `created_at`              datetime_text NOT NULL,
@@ -34,8 +34,9 @@ FROM `ingestion`;
 DROP TABLE `ingestion`;
 
 -- Rename new table
-ALTER TABLE `new_ingestion` RENAME TO `ingestion`;
+ALTER TABLE `new_ingestion`
+    RENAME TO `ingestion`;
 
 -- Enable foreign key constraints
 PRAGMA
-foreign_keys = on;
+    foreign_keys = on;

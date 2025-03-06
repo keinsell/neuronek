@@ -1,6 +1,6 @@
-use crate::ValueParser;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::ValueParser;
 use chrono::DateTime;
 use chrono::Local;
 use chrono_english::Dialect;
@@ -108,7 +108,11 @@ pub struct DeleteIngestion
 }
 
 #[derive(Parser, Debug)]
-#[command(version, about = "View detailed information about a specific ingestion", aliases = vec!["show", "display", "info"])]
+#[command(
+    version,
+    about = "View detailed information about a specific ingestion",
+    aliases = vec!["show", "display", "info"]
+)]
 pub struct ViewIngestion
 {
     #[arg(

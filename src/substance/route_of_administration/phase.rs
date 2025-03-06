@@ -1,13 +1,9 @@
 use iso8601_duration::Duration;
-use rust_decimal::Decimal;
-use rust_decimal_macros::dec;
 use serde::Deserialize;
 use serde::Serialize;
-use std::f64;
 use std::fmt;
 use std::ops::Range;
 use std::str::FromStr;
-use std::string;
 
 pub const PHASE_ORDER: [PhaseClassification; 5] = [
     PhaseClassification::Onset,

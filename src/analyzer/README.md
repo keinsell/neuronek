@@ -1,17 +1,23 @@
 # Ingestion Analyzer
 
-The `analyzer` module is a core component of the ingestion tracking system, responsible for **analyzing and interpreting ingestion data** to provide meaningful insights and classifications. It acts as a bridge between the `substance` module (which holds knowledge about substances) and the `ingestion` module (which records individual ingestion events). The `analyzer` takes raw ingestion data and substance information, processes it, and generates valuable insights, such as dosage classifications, predicted ingestion phases, and time-series intensity curves.
+The `analyzer` module is a core component of the ingestion tracking system, responsible for **analyzing and interpreting
+ingestion data** to provide meaningful insights and classifications. It acts as a bridge between the `substance`
+module (which holds knowledge about substances) and the `ingestion` module (which records individual ingestion events).
+The `analyzer` takes raw ingestion data and substance information, processes it, and generates valuable insights, such
+as dosage classifications, predicted ingestion phases, and time-series intensity curves.
 
 **Features:**
 
-- **Dosage Classification:** Determine the `DosageClassification` (e.g., Light, Common, Strong, Heavy) for a given ingestion, based on:
+- **Dosage Classification:** Determine the `DosageClassification` (e.g., Light, Common, Strong, Heavy) for a given
+  ingestion, based on:
     - The ingested `Substance`.
     - The `RouteOfAdministration`.
     - The `dosage` amount.
     - Dosage ranges defined in the `substance` module.
 
 - **Ingestion Phase Analysis and Prediction:**
-    - Calculate and predict the timing and characteristics of ingestion phases (e.g., Onset, Comeup, Peak, Offset, Afterglow).
+    - Calculate and predict the timing and characteristics of ingestion phases (e.g., Onset, Comeup, Peak, Offset,
+      Afterglow).
     - This prediction utilizes:
         - Substance-specific pharmacokinetic properties (from the `substance` module).
         - Route of administration characteristics.
@@ -33,9 +39,12 @@ The `analyzer` module is a core component of the ingestion tracking system, resp
 
 ## Relation to Other Modules
 
-- **`substance`:** The *knowledge base* for substances. Defines properties, routes, dosages, and pharmacokinetic parameters. It's *passive*.
-- **`ingestion`:** The *record keeper* for ingestion events. Stores individual ingestion records. It's *primarily* about data storage and retrieval.
-- **`analyzer`:** The *interpreter* and *predictor*. It takes data from `substance` and `ingestion`, performs analysis, and generates insights. It's *active*.
+- **`substance`:** The *knowledge base* for substances. Defines properties, routes, dosages, and pharmacokinetic
+  parameters. It's *passive*.
+- **`ingestion`:** The *record keeper* for ingestion events. Stores individual ingestion records. It's *primarily* about
+  data storage and retrieval.
+- **`analyzer`:** The *interpreter* and *predictor*. It takes data from `substance` and `ingestion`, performs analysis,
+  and generates insights. It's *active*.
 
 ---
 
@@ -191,4 +200,7 @@ Using the available information, the `analyzer` can perform the following analys
 
 ## Conclusion
 
-With the current data available in the database, the `analyzer` module can perform comprehensive analyses of ingestion events. By leveraging detailed substance information and robust ingestion records, it can classify dosages, predict the progression of experiences, and generate insightful reports. This roadmap outlines the steps needed to fully realize these capabilities and provides a foundation for future enhancements.
+With the current data available in the database, the `analyzer` module can perform comprehensive analyses of ingestion
+events. By leveraging detailed substance information and robust ingestion records, it can classify dosages, predict the
+progression of experiences, and generate insightful reports. This roadmap outlines the steps needed to fully realize
+these capabilities and provides a foundation for future enhancements.

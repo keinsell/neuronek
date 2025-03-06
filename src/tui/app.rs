@@ -1,5 +1,5 @@
-use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::ingestion_phase;
+use crate::database::DATABASE_CONNECTION;
 use crate::ingestion::IngestionPhase;
 use chrono::DateTime;
 use chrono::Duration;
@@ -9,7 +9,6 @@ use crossterm::event::KeyCode;
 use crossterm::event::{self};
 use miette::IntoDiagnostic;
 use miette::Result;
-use rust_decimal::prelude::*;
 use sea_orm::ColumnTrait;
 use sea_orm::Condition;
 use sea_orm::EntityTrait;

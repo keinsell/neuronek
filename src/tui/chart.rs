@@ -7,7 +7,6 @@ use ratatui::widgets::Borders;
 use ratatui::widgets::Chart;
 use ratatui::widgets::Dataset;
 use ratatui::widgets::GraphType;
-use ratatui::widgets::Paragraph;
 
 pub mod theme
 {
@@ -104,21 +103,34 @@ pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
         })
         .collect();
 
-    // Create legend text
+    // Create legend text with current weights
     let legend = app
         .datasets
         .iter()
         .enumerate()
         .take(datasets.len() - 1) // Exclude the "Now" line from legend
-        .map(|(idx, (name, _))| {
+        .flat_map(|(idx, (name, data))| {
             let color = Theme::GRAPH_COLORS[idx % Theme::GRAPH_COLORS.len()];
+
+            // Find the current weight (at x=0.0, which is "now")
+            let current_weight = data
+                .iter()
+                .find(|(x, _)| x.abs() < 0.01) // Find point closest to x=0
+                .map(|(_, y)| *y)
+                .unwrap_or(0.0);
+
+            // Calculate the actual weight value (not percentage)
+            let actual_weight = (current_weight / 100.0) * app.max_weight;
+
             vec![
                 Span::styled("■ ", Style::default().fg(color)),
-                Span::styled(name, Style::default().fg(color)),
+                Span::styled(
+                    format!("{} (current: {:.1})", name, actual_weight),
+                    Style::default().fg(color)
+                ),
                 Span::raw("  "),
             ]
         })
-        .flatten()
         .collect::<Vec<_>>();
 
     // Create chart title with legend
