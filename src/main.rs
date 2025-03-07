@@ -5,20 +5,20 @@ use crate::cli::ApplicationCommands;
 use crate::cli::CommandLineInterface;
 use crate::cli::Displayable;
 use crate::cli::MessageFormat;
-use crate::database::migrate_database;
 use crate::database::DATABASE_CONNECTION;
+use crate::database::migrate_database;
 use crate::ingestion::IngestionActions;
 use crate::statistics::show_statistics;
+use r#abstract::CommandHandler;
 use chrono::DateTime;
 use chrono::Local;
 use chrono_english::Dialect;
 use clap::Parser;
 use error_handling::setup_diagnostics;
 use logging::setup_logger;
-use miette::miette;
 use miette::IntoDiagnostic;
 use miette::Result;
-use r#abstract::CommandHandler;
+use miette::miette;
 use ratatui::Terminal;
 use std::fmt::Display;
 use tracing_subscriber::util::SubscriberInitExt;
@@ -37,13 +37,13 @@ mod substance;
 mod theme;
 mod tui;
 
+use crossterm::ExecutableCommand;
 use crossterm::event::DisableMouseCapture;
 use crossterm::event::EnableMouseCapture;
-use crossterm::terminal::disable_raw_mode;
-use crossterm::terminal::enable_raw_mode;
 use crossterm::terminal::EnterAlternateScreen;
 use crossterm::terminal::LeaveAlternateScreen;
-use crossterm::ExecutableCommand;
+use crossterm::terminal::disable_raw_mode;
+use crossterm::terminal::enable_raw_mode;
 use std::io;
 
 pub trait ValueParser
@@ -105,42 +105,44 @@ async fn main() -> Result<()>
         | ApplicationCommands::Ingestion(cmd) => match &cmd.commands
         {
             | IngestionActions::Log(log_ingestion) =>
-                {
-                    let ingestion = crate::ingestion::service::log_ingestion(log_ingestion)
-                        .await
-                        .map_err(|e| miette!(e))?;
+            {
+                let ingestion = crate::ingestion::service::log_ingestion(log_ingestion)
+                    .await
+                    .map_err(|e| miette!(e))?;
 
-                    ingestion.display(context.stdout_format);
-                    Ok(())
-                }
+                ingestion.display(context.stdout_format);
+                Ok(())
+            }
             | IngestionActions::List(list_ingestions) => list_ingestions.handle(context).await,
             | IngestionActions::Delete(delete_ingestion) => delete_ingestion.handle(context).await,
             | IngestionActions::Update(update_ingestion) => update_ingestion.handle(context).await,
             | IngestionActions::View(view_ingestion) =>
-                {
-                    let ingestion =
-                        crate::ingestion::service::get_ingestion(view_ingestion.ingestion_id)
-                            .await
-                            .map_err(|e| miette!(e))?;
+            {
+                let ingestion =
+                    crate::ingestion::service::get_ingestion(view_ingestion.ingestion_id)
+                        .await
+                        .map_err(|e| miette!(e))?;
 
-                    if let Some(ingestion) = ingestion
-                    {
-                        ingestion.display(context.stdout_format);
-                        Ok(())
-                    } else {
-                        Err(miette!(
+                if let Some(ingestion) = ingestion
+                {
+                    ingestion.display(context.stdout_format);
+                    Ok(())
+                }
+                else
+                {
+                    Err(miette!(
                         "Ingestion with ID {} not found",
                         view_ingestion.ingestion_id
                     ))
-                    }
                 }
+            }
         },
         | ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
         | ApplicationCommands::Stats(cmd) =>
-            {
-                show_statistics(&cmd).await;
-                Ok(())
-            }
+        {
+            show_statistics(&cmd).await;
+            Ok(())
+        }
         | ApplicationCommands::Monitor => run_tui().await,
     }
 }

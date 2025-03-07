@@ -7,18 +7,18 @@ use clap::Subcommand;
 use ingestion::IngestionCommand;
 use miette::IntoDiagnostic;
 use minimo::Printable;
-use sea_orm::prelude::*;
 use sea_orm::ColumnTrait;
 use sea_orm::EntityTrait;
 use sea_orm::QueryFilter;
 use sea_orm::QueryOrder;
+use sea_orm::prelude::*;
 use serde::Serialize;
 use std::fmt::Debug;
 use std::fmt::Display;
 use substance::SubstanceCommand;
-use tabled::settings::Style;
 use tabled::Table;
 use tabled::Tabled;
+use tabled::settings::Style;
 use textplots::Plot;
 use tracing::log::Log;
 mod ingestion;
@@ -52,7 +52,9 @@ impl Default for MessageFormat
         if is_interactive()
         {
             MessageFormat::Pretty
-        } else {
+        }
+        else
+        {
             MessageFormat::Json
         }
     }
@@ -68,8 +70,7 @@ pub trait Displayable: Serialize + Sized + Debug
 {
     fn as_json(&self) -> String { serde_json::to_string(self).unwrap() }
     fn as_table(&self) -> String
-    where
-        Self: Tabled,
+    where Self: Tabled
     {
         let mut table = Table::new(vec![self]);
         table.with(Style::modern_rounded());

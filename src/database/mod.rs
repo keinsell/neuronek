@@ -128,7 +128,9 @@ pub async fn migrate_database(
         let s = indicatif::ProgressBar::new_spinner();
         s.enable_steady_tick(std::time::Duration::from_millis(10));
         Some(s)
-    } else {
+    }
+    else
+    {
         None
     };
 

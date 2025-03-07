@@ -100,7 +100,9 @@ mod color
         if no_color()
         {
             value.as_ref().to_string()
-        } else {
+        }
+        else
+        {
             value.as_ref().style(create_style(color)).to_string()
         }
     }
@@ -111,7 +113,9 @@ mod color
         if matches!(style, Style::File | Style::Path | Style::Shell)
         {
             paint(style.color() as u8, clean_path(value.as_ref()))
-        } else {
+        }
+        else
+        {
             paint(style.color() as u8, value)
         }
     }
@@ -189,7 +193,8 @@ mod color
                     tag_stack.pop();
                 }
                 // Open tag, preserve the current tag
-                else {
+                else
+                {
                     add_result(prev_text, tag_stack.last().cloned());
 
                     tag_stack.push(tag.to_owned());
@@ -197,7 +202,9 @@ mod color
                 }
 
                 text = text.get(close_index + 1..).unwrap();
-            } else {
+            }
+            else
+            {
                 add_result(text.get(..=open_index).unwrap(), None);
 
                 text = text.get(open_index + 1..).unwrap();
@@ -242,8 +249,8 @@ mod color
                 Style::Symbol,
                 Style::Url,
             ]
-                .into_iter()
-                .map(|style| (format!("{:?}", style).to_lowercase(), style)),
+            .into_iter()
+            .map(|style| (format!("{:?}", style).to_lowercase(), style)),
         )
     });
 
@@ -412,10 +419,12 @@ mod color
             if support.has_16m
             {
                 return 3;
-            } else if support.has_256
+            }
+            else if support.has_256
             {
                 return 2;
-            } else if support.has_basic
+            }
+            else if support.has_basic
             {
                 return 1;
             }
@@ -436,8 +445,8 @@ mod color
 
 pub mod stylize
 {
-    use super::color::paint_style;
     pub use super::color::Style;
+    use super::color::paint_style;
     use std::path::PathBuf;
 
 
@@ -521,10 +530,14 @@ pub mod theme
                         color::create_style(Color::Red as u8),
                     ],
                 };
-            } else {
+            }
+            else
+            {
                 theme.styles = ThemeStyles::ansi();
             }
-        } else {
+        }
+        else
+        {
             theme.styles = ThemeStyles::none();
         }
 

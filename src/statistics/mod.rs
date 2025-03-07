@@ -1,8 +1,8 @@
-use crate::database::entities::ingestion;
 use crate::database::DATABASE_CONNECTION;
+use crate::database::entities::ingestion;
 use crate::ingestion::Ingestion;
-use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::route_of_administration::dosage::Dosage;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::Duration;
@@ -176,7 +176,9 @@ fn show_substance_statistics(ingestions: &[Ingestion])
                 if count > 0.0
                 {
                     total_dosage_base_units / count
-                } else {
+                }
+                else
+                {
                     0.0
                 },
             );
@@ -207,7 +209,9 @@ fn show_substance_statistics(ingestions: &[Ingestion])
         let table = Table::new(sorted_stats).to_string();
         println!("Substance Statistics:\n");
         println!("{}", table);
-    } else {
+    }
+    else
+    {
         println!("No substance statistics available.");
     }
 }
@@ -265,14 +269,18 @@ fn show_general_statistics(ingestions: &[Ingestion])
     let ingestions_per_day = if days_active > 0
     {
         total_ingestions as f64 / days_active as f64
-    } else {
+    }
+    else
+    {
         total_ingestions as f64
     };
 
     let average_dosage = if total_ingestions > 0
     {
         Dosage::from_base_units(total_dosage_base_units / total_ingestions as f64).to_string()
-    } else {
+    }
+    else
+    {
         "N/A".to_string()
     };
 

@@ -55,13 +55,12 @@ use theme::CatppuccinMocha as Theme;
 
 pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
 {
-    // Create datasets for substances
     let mut datasets: Vec<Dataset> = app
         .datasets
         .iter()
         .enumerate()
         .map(|(idx, (name, data))| {
-            let dataset_name = format!("{} (max hourly sum: {:.1})", name, app.max_weight);
+            let dataset_name = format!("{}", name);
             Dataset::default()
                 .name(dataset_name)
                 .marker(symbols::Marker::Braille)
@@ -71,7 +70,6 @@ pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
         })
         .collect();
 
-    // Add vertical line for current time
     datasets.push(
         Dataset::default()
             .name("Now")
@@ -81,10 +79,9 @@ pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
             .data(&[(0.0, 0.0), (0.0, 100.0)]),
     );
 
-    // Calculate x-axis bounds and labels
     let x_min = -2.0;
     let x_max = 12.0;
-    let x_step = 2.0; // Show every 2 hours
+    let x_step = 2.0;
     let x_labels: Vec<String> = (-1..=6)
         .map(|i| {
             let hours = i as f64 * x_step;
@@ -103,40 +100,44 @@ pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
         })
         .collect();
 
-    // Create legend text with current weights
     let legend = app
         .datasets
         .iter()
         .enumerate()
-        .take(datasets.len() - 1) // Exclude the "Now" line from legend
+        .take(datasets.len() - 1)
         .flat_map(|(idx, (name, data))| {
             let color = Theme::GRAPH_COLORS[idx % Theme::GRAPH_COLORS.len()];
 
-            // Find the current weight (at x=0.0, which is "now")
-            let current_weight = data
+            let current_intensity = data
                 .iter()
-                .find(|(x, _)| x.abs() < 0.01) // Find point closest to x=0
+                .find(|(x, _)| x.abs() < 0.01)
                 .map(|(_, y)| *y)
                 .unwrap_or(0.0);
 
-            // Calculate the actual weight value (not percentage)
-            let actual_weight = (current_weight / 100.0) * app.max_weight;
+            let intensity_desc = match current_intensity as i32
+            {
+                | 0..=10 => "threshold",
+                | 11..=30 => "mild",
+                | 31..=50 => "moderate",
+                | 51..=70 => "strong",
+                | 71..=90 => "very strong",
+                | _ => "extreme",
+            };
 
             vec![
                 Span::styled("■ ", Style::default().fg(color)),
                 Span::styled(
-                    format!("{} (current: {:.1})", name, actual_weight),
-                    Style::default().fg(color)
+                    format!("{} ({}: {:.0}%)", name, intensity_desc, current_intensity),
+                    Style::default().fg(color),
                 ),
                 Span::raw("  "),
             ]
         })
         .collect::<Vec<_>>();
 
-    // Create chart title with legend
     let mut title_spans = vec![
         Span::styled(
-            "Subjective Intensity Monitor",
+            "Substance Intensity Profile (smoothed curves)",
             Style::default().fg(Theme::MAUVE).bold(),
         ),
         Span::raw(" | "),
@@ -162,7 +163,7 @@ pub fn render_chart(frame: &mut Frame, app: &super::App, area: Rect)
         .y_axis(
             Axis::default()
                 .title(Span::styled(
-                    "Intensity (%)",
+                    "Relative Intensity (%)",
                     Style::default().fg(Theme::SUBTEXT1),
                 ))
                 .style(Style::default().fg(Theme::SURFACE1))

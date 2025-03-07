@@ -1,6 +1,4 @@
-use chrono::DateTime;
 use chrono::Duration;
-use chrono::Local;
 use chrono::TimeZone;
 use std::range::Range;
 use std::str::FromStr;

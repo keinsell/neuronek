@@ -1,6 +1,6 @@
+use crate::Application;
 use crate::r#abstract::CommandHandler;
 use crate::substance::error::SubstanceError;
-use crate::Application;
 use async_trait::async_trait;
 use clap::Args;
 use clap::Parser;

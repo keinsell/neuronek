@@ -11,7 +11,6 @@ use clap::builder::TypedValueParser;
 use serde::Serialize;
 use std::fmt::Display;
 use std::range::Range;
-use std::str::FromStr;
 use tabled::Tabled;
 
 #[derive(Debug, Clone, Tabled, Serialize)]

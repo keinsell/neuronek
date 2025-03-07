@@ -1,6 +1,6 @@
-use crate::substance::route_of_administration::dosage::Dosage;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::ValueParser;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::route_of_administration::dosage::Dosage;
 use chrono::DateTime;
 use chrono::Local;
 use chrono_english::Dialect;

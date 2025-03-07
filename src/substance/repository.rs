@@ -1,20 +1,20 @@
+use crate::database::DATABASE_CONNECTION;
 use crate::database::entities;
 use crate::database::entities::substance;
-use crate::database::DATABASE_CONNECTION;
+use crate::substance::RoutesOfAdministration;
+use crate::substance::Substance;
+use crate::substance::route_of_administration::RouteOfAdministration;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::dosage::DosageRange;
 use crate::substance::route_of_administration::phase::DurationRange;
 use crate::substance::route_of_administration::phase::PhaseClassification;
-use crate::substance::route_of_administration::RouteOfAdministration;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
-use crate::substance::RoutesOfAdministration;
-use crate::substance::Substance;
-use futures::stream::FuturesUnordered;
 use futures::StreamExt;
+use futures::stream::FuturesUnordered;
 use iso8601_duration::Duration;
-use miette::miette;
 use miette::IntoDiagnostic;
+use miette::miette;
 use sea_orm::ColumnTrait;
 use sea_orm::EntityTrait;
 use sea_orm::ModelTrait;
@@ -134,11 +134,11 @@ pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
         match result
         {
             | Ok((classification, roa)) =>
-                {
-                    substance
-                        .routes_of_administration
-                        .insert(classification, roa);
-                }
+            {
+                substance
+                    .routes_of_administration
+                    .insert(classification, roa);
+            }
             | Err(e) => return Err(e),
         }
     }
