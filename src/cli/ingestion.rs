@@ -103,226 +103,305 @@ use tracing::info;
 use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
+use comfy_table::ContentArrangement;
+use comfy_table::Table as ComfyTable;
+use comfy_table::Width;
+use comfy_table::modifiers::UTF8_ROUND_CORNERS;
+use comfy_table::presets::UTF8_BORDERS_ONLY;
+use comfy_table::presets::UTF8_FULL;
+
 impl Displayable for crate::ingestion::Ingestion
 {
     fn as_pretty(&self) -> String
     {
         let mut output = String::new();
+        let mut sorted_phases = self.phases.0.clone();
+        sorted_phases.sort_by_key(|phase| phase.start_time.start);
 
-        output.push_str(&format!("\n# Ingestion #{} \n\n", self.id.unwrap()));
+        let mut dual_column_table = ComfyTable::new();
+        dual_column_table
+            .load_preset(UTF8_FULL)
+            .apply_modifier(UTF8_ROUND_CORNERS)
+            .set_content_arrangement(ContentArrangement::Dynamic)
+            .set_width(80);
 
-        // Create a clean text-based format instead of table with icons
-        let mut content = String::new();
+        let left_pane = {
+            let id_label = "ID:".to_owned();
+            let id_value = self.id.unwrap().to_string();
+            let ingestion = self.clone();
+            let substance_label = "Substance:".to_owned();
+            let substance_value = ingestion.substance_name.clone();
+            let dosage_label = "Dosage:".to_owned();
+            let dosage_value = ingestion.dosage.clone().to_string();
+            let route_label = "Route:".to_owned();
+            let route_value = ingestion.route.clone().to_string();
+            let ingested_label = "Ingested:".to_owned();
+            let ingested_value = ingestion
+                .ingestion_date
+                .format("%H:%M %d/%m/%y")
+                .to_string();
 
-        // Display each piece of information on its own line with clear labeling
-        content.push_str(&format!("**ID**: {}\n", self.id.unwrap()));
-        content.push_str(&format!("**Substance**: {}\n", self.substance_name));
 
-        // Format the dosage with appropriate unit
-        let dosage_display = format!("{}", self.dosage);
-        content.push_str(&format!("**Dosage**: {}\n", dosage_display));
+            let data = vec![
+                vec![id_label, id_value],
+                vec![substance_label, substance_value],
+                vec![dosage_label, dosage_value],
+                vec![route_label, route_value],
+                vec![ingested_label, ingested_value],
+            ];
 
-        // Display route without icon
-        content.push_str(&format!("**Route**: {}\n", self.route));
-
-        // Format timestamp with readable notation without clock icon
-        let timestamp = self.ingestion_date.format("%Y-%m-%d %H:%M:%S").to_string();
-        content.push_str(&format!("**Ingested At**: {}\n", timestamp));
-
-        // Render the content with the Catppuccin skin
-        output.push_str(&content.to_string());
-        output.push_str("\n");
-
-        // If there are phases, add the phase visualization
-        if !self.phases.0.is_empty()
-        {
-            output.push_str(&{
-                let ingestion = self;
-
-                let mut md_text = String::new();
-                md_text.push_str("## Timeline\n\n");
-                md_text.push_str(
-                    "Analysis of ingestion progression based on substance information in \
-                     database.\n",
-                );
-                md_text.push_str("*Note: Estimates may not be accurate.*\n\n");
-
-                // Sort phases by their order in the timeline
-                let mut sorted_phases = ingestion.phases.0.clone();
-                sorted_phases.sort_by_key(|phase| phase.start_time.start);
-
-                if sorted_phases.is_empty()
-                {
-                    return md_text + "No phases recorded for this ingestion.\n";
-                }
-
-                // More spacious table headers with icon in phase column and no weight column
-                md_text.push_str("| Phase | Start Time | End Time | Duration |\n");
-                md_text.push_str("|-------|------------|----------|----------|\n");
+            Table::from_iter(data)
+                .with(Style::empty())
+                .with(Modify::new(Rows::new(..)).with(Alignment::left()))
+                .with(Modify::new(Columns::new(..)).with(Alignment::left()))
+                .to_string()
+        };
+        let right_pane = {
+            if !sorted_phases.is_empty()
+            {
+                let mut phase_info = String::new();
 
                 for phase in &sorted_phases
                 {
-                    // Get the icon for this phase
                     let phase_icon = PhaseIcon::from(&phase.classification);
 
-                    // Format start time with more spacing
                     let start_time = format!(
-                        "{}  ±{}m",
+                        "{}±{}m",
                         phase.start_time.start.format("%H:%M"),
                         (phase.start_time.end - phase.start_time.start).num_minutes()
                     );
 
-                    // Format end time with more spacing
                     let end_time = format!(
-                        "{}  ±{}m",
+                        "{}±{}m",
                         phase.end_time.start.format("%H:%M"),
                         (phase.end_time.end - phase.end_time.start).num_minutes()
                     );
 
-                    // Convert duration to ± format with more spacing
                     let avg_duration_minutes =
                         (phase.duration.start.num_minutes() + phase.duration.end.num_minutes()) / 2;
-                    let duration_variance =
-                        (phase.duration.end.num_minutes() - phase.duration.start.num_minutes()) / 2;
 
                     let duration = if avg_duration_minutes >= 60
                     {
                         let hours = avg_duration_minutes / 60;
                         let minutes = avg_duration_minutes % 60;
-                        format!("{}h {}m  ±{}m", hours, minutes, duration_variance)
-                    }
-                    else
-                    {
-                        format!("{}m  ±{}m", avg_duration_minutes, duration_variance)
-                    };
-
-                    // Combine icon and phase name in the same column without styling
-                    let phase_with_icon = format!("{} {}", phase_icon.0, phase.classification);
-
-                    md_text.push_str(&format!(
-                        "| {} | {} | {} | {} |\n",
-                        phase_with_icon, start_time, end_time, duration
-                    ));
-                }
-
-                if let Some(total_duration) = self.phases.duration_range()
-                {
-                    md_text.push_str("\n### Timeline Visualization\n\n");
-                    let total_duration_minutes = total_duration.start.num_minutes();
-                    let projected_end_time =
-                        self.ingestion_date + Duration::minutes(total_duration_minutes);
-
-                    // Get current time to show progress
-                    let now = chrono::Local::now();
-
-                    // Calculate total duration in hours for display
-                    let total_hours = total_duration_minutes as f64 / 60.0;
-                    md_text.push_str(&format!("Total Duration: ~{:.1} hours\n", total_hours));
-
-                    // Calculate elapsed time and progress percentage
-                    let elapsed = now.signed_duration_since(self.ingestion_date);
-                    let elapsed_minutes = elapsed.num_minutes();
-
-                    // Cap progress at 100% if we're past the projected end time
-                    let progress_percent = if elapsed_minutes >= total_duration_minutes
-                    {
-                        100
-                    }
-                    else
-                    {
-                        (elapsed_minutes as f64 / total_duration_minutes as f64 * 100.0) as usize
-                    };
-
-                    // Create the progress bar
-                    let bar_width = 50; // Width of the progress bar
-                    let filled_width =
-                        (progress_percent as f64 / 100.0 * bar_width as f64) as usize;
-
-                    // Header showing start time, current time and end time
-                    md_text.push_str(&format!(
-                        "Start: {} | Current: {} | End: {}\n",
-                        self.ingestion_date.format("%H:%M"),
-                        now.format("%H:%M"),
-                        projected_end_time.format("%H:%M")
-                    ));
-
-                    // Create the progress bar with current progress
-                    let mut progress_bar = String::new();
-                    progress_bar.push('[');
-
-                    for i in 0..bar_width
-                    {
-                        if i < filled_width
+                        if minutes > 0
                         {
-                            progress_bar.push('=');
-                        }
-                        else if i == filled_width
-                        {
-                            progress_bar.push('>');
+                            format!("{}h{}m", hours, minutes)
                         }
                         else
                         {
-                            progress_bar.push(' ');
+                            format!("{}h", hours)
                         }
                     }
-
-                    progress_bar.push_str(&format!("] {}%", progress_percent));
-                    md_text.push_str(&progress_bar);
-                    md_text.push_str("\n");
-
-                    // Show phase markers on a timeline below the progress bar
-                    if !sorted_phases.is_empty()
+                    else
                     {
-                        let mut timeline = vec![' '; bar_width];
+                        format!("{}m", avg_duration_minutes)
+                    };
 
-                        // Place phase markers on the timeline
-                        for phase in &sorted_phases
-                        {
-                            let phase_start_minutes = phase
-                                .start_time
-                                .start
-                                .signed_duration_since(self.ingestion_date)
-                                .num_minutes();
-
-                            let marker_pos =
-                                ((phase_start_minutes as f64 / total_duration_minutes as f64)
-                                    * bar_width as f64) as usize;
-
-                            if marker_pos < bar_width
-                            {
-                                let phase_icon = PhaseIcon::from(&phase.classification);
-                                // Place the first character of the icon
-                                timeline[marker_pos] = phase_icon.0.chars().next().unwrap_or('?');
-                            }
-                        }
-
-                        // Create the timeline with phase markers
-                        let mut timeline_str = String::new();
-                        timeline_str.push('[');
-                        timeline_str.push_str(&timeline.iter().collect::<String>());
-                        timeline_str.push(']');
-                        md_text.push_str(&timeline_str);
-                        md_text.push_str("\n\n");
-
-                        // Add legend for the phase markers
-                        md_text.push_str("Legend: ");
-                        for phase_type in PHASE_ORDER.iter()
-                        {
-                            let icon = PhaseIcon::from(phase_type);
-                            md_text.push_str(&format!("{} = {}, ", icon.0, phase_type));
-                        }
-                        // Remove the last comma and space
-                        if md_text.ends_with(", ")
-                        {
-                            md_text.truncate(md_text.len() - 2);
-                        }
-                        md_text.push('\n');
-                    }
+                    phase_info.push_str(&format!(
+                        "{} {}: {} → {} ({})\n",
+                        phase_icon.0, phase.classification, start_time, end_time, duration
+                    ));
                 }
 
-                md_text
-            });
-        }
+                phase_info.trim_end().to_string()
+            }
+            else
+            {
+                "No phases recorded for this ingestion.".to_string()
+            }
+        };
+
+        dual_column_table.add_row(vec![left_pane, right_pane]);
+        output.push_str(&dual_column_table.to_string());
+
+        // Add a progress status row to the table if phases exist
+        // if let Some(total_duration) = self.phases.duration_range()
+        // {
+        //     let total_duration_minutes = total_duration.start.num_minutes();
+        //     let projected_end_time =
+        //         self.ingestion_date + Duration::minutes(total_duration_minutes);
+        //     let now = chrono::Local::now();
+        //     let total_hours = (total_duration_minutes / 60) as f64;
+        //     let total_minutes = total_duration_minutes % 60;
+        //     let elapsed = now.signed_duration_since(self.ingestion_date);
+        //     let elapsed_minutes = elapsed.num_minutes();
+        //     let progress_percent = if elapsed_minutes >= total_duration_minutes
+        //     {
+        //         100
+        //     }
+        //     else
+        //     {
+        //         (elapsed_minutes as f64 / total_duration_minutes as f64 * 100.0) as
+        // usize     };
+        //
+        //     // Find current phase - look for the phase that contains the current time
+        //     let current_phase = sorted_phases.iter().find(|&phase| {
+        //         let phase_start = phase.start_time.start;
+        //         let phase_end = phase.end_time.end;
+        //         now >= phase_start && now <= phase_end
+        //     });
+        //
+        //     // If no phase directly contains current time but ingestion is in
+        // progress,     // use the next upcoming phase or the most recently
+        // completed phase     let current_phase =
+        //         if current_phase.is_none() && now > self.ingestion_date &&
+        // progress_percent < 100         {
+        //             // Try to find the next phase
+        //             let next_phase = sorted_phases
+        //                 .iter()
+        //                 .find(|&phase| now < phase.start_time.start);
+        //
+        //             // If no next phase, find the most recent phase
+        //             if next_phase.is_none()
+        //             {
+        //                 sorted_phases
+        //                     .iter()
+        //                     .rev()
+        //                     .find(|&phase| now > phase.end_time.end)
+        //             }
+        //             else
+        //             {
+        //                 next_phase
+        //             }
+        //         }
+        //         else
+        //         {
+        //             current_phase
+        //         };
+        //
+        //     // Build progress bar
+        //     let progress_bar_width = 30;
+        //     let filled_chars =
+        //         (progress_percent as f64 * progress_bar_width as f64 / 100.0).round()
+        // as usize;     let empty_chars = progress_bar_width - filled_chars;
+        //
+        //     let progress_bar = format!("[{}{}]", "▓".repeat(filled_chars),
+        // "░".repeat(empty_chars));
+        //
+        //     // Calculate remaining time in current phase if available
+        //     let current_phase_text = if let Some(phase) = current_phase
+        //     {
+        //         let remaining = phase.end_time.start.signed_duration_since(now);
+        //         let remaining_hours = remaining.num_hours();
+        //         let remaining_minutes = remaining.num_minutes() % 60;
+        //
+        //         let remaining_text = if remaining_hours > 0
+        //         {
+        //             format!("{}h{}m", remaining_hours, remaining_minutes)
+        //         }
+        //         else if remaining_minutes >= 0
+        //         {
+        //             format!("{}m", remaining_minutes)
+        //         }
+        //         else
+        //         {
+        //             "finishing".to_string()
+        //         };
+        //
+        //         format!(
+        //             "{} {}\n({})",
+        //             PhaseIcon::from(&phase.classification).0,
+        //             phase.classification,
+        //             remaining_text + " remaining"
+        //         )
+        //     }
+        //     else if now < self.ingestion_date
+        //     {
+        //         // Calculate time until start
+        //         let until_start = self.ingestion_date.signed_duration_since(now);
+        //         let until_start_mins = until_start.num_minutes();
+        //
+        //         if until_start_mins < 60
+        //         {
+        //             format!("Scheduled (in {}m)", until_start_mins)
+        //         }
+        //         else
+        //         {
+        //             format!(
+        //                 "Scheduled (in {}h{}m)",
+        //                 until_start_mins / 60,
+        //                 until_start_mins % 60
+        //             )
+        //         }
+        //     }
+        //     else
+        //     {
+        //         "Complete".to_string()
+        //     };
+        //
+        //     // Format the total duration nicely
+        //     let total_duration_text = if total_hours >= 1.0
+        //     {
+        //         if total_minutes > 0
+        //         {
+        //             format!("~{}h{}m", total_hours as i64, total_minutes)
+        //         }
+        //         else
+        //         {
+        //             format!("~{}h", total_hours as i64)
+        //         }
+        //     }
+        //     else
+        //     {
+        //         format!("~{}m", total_duration_minutes)
+        //     };
+        //
+        //     // Create a progress info table
+        //     let mut progress_table = ComfyTable::new();
+        //     progress_table
+        //         .load_preset(UTF8_FULL)
+        //         .apply_modifier(UTF8_ROUND_CORNERS)
+        //         .set_content_arrangement(ContentArrangement::Dynamic)
+        //         .set_width(80);
+        //
+        //     if now < self.ingestion_date
+        //     {
+        //         // Show scheduled info
+        //         progress_table.add_row(vec![
+        //             format!("Status: {}", current_phase_text),
+        //             format!("Total Duration: {}", total_duration_text),
+        //             format!(
+        //                 "Scheduled Start: {}",
+        //                 self.ingestion_date.format("%H:%M %d/%m").to_string()
+        //             ),
+        //         ]);
+        //     }
+        //     else if progress_percent >= 100
+        //     {
+        //         // Show completed info
+        //         progress_table.add_row(vec![
+        //             "Status: Complete".to_string(),
+        //             format!("Total Duration: {}", total_duration_text),
+        //             format!(
+        //                 "Started: {}",
+        //                 self.ingestion_date.format("%H:%M %d/%m").to_string()
+        //             ),
+        //         ]);
+        //     }
+        //     else
+        //     {
+        //         // Show active progress
+        //         progress_table.add_row(vec![
+        //             format!("Progress: {} {}%", progress_bar, progress_percent),
+        //             format!("Current: {}", current_phase_text),
+        //         ]);
+        //         progress_table.add_row(vec![
+        //             format!("Total Duration: {}", total_duration_text),
+        //             format!(
+        //                 "Started: {}",
+        //                 self.ingestion_date.format("%H:%M").to_string()
+        //             ),
+        //             format!(
+        //                 "Est. End: {}",
+        //                 projected_end_time.format("%H:%M").to_string()
+        //             ),
+        //         ]);
+        //     }
+        //
+        //     output.push_str("\n\n");
+        //     output.push_str(&progress_table.to_string());
+        // }
 
         THEME.text(&output, None).to_string()
     }
@@ -343,10 +422,145 @@ impl Displayable for IngestionList
         }
 
         let mut output = String::new();
-        let mut table = Table::new(self.0.clone());
-        table.with(Style::modern_rounded());
-        output.push_str(&table.to_string());
-        output
+        output.push_str("# INGESTION LIST\n\n");
+
+        // Create a table with enhanced formatting
+        let mut builder = Builder::default();
+
+        // Add header row
+        builder.push_record(vec![
+            "ID",
+            "SUBSTANCE",
+            "DOSAGE",
+            "ROUTE",
+            "INGESTED AT",
+            "STATUS",
+        ]);
+
+        // Add data rows
+        for ingestion in &self.0
+        {
+            let now = chrono::Local::now();
+            let elapsed = now.signed_duration_since(ingestion.ingestion_date);
+
+            // Calculate status indicator
+            let mut status = String::from("Unknown");
+
+            if let Some(total_duration) = ingestion.phases.duration_range()
+            {
+                let total_duration_minutes = total_duration.start.num_minutes();
+                let progress_percent = if elapsed.num_minutes() >= total_duration_minutes
+                {
+                    100
+                }
+                else
+                {
+                    (elapsed.num_minutes() as f64 / total_duration_minutes as f64 * 100.0) as usize
+                };
+
+                // Find current phase
+                let mut sorted_phases = ingestion.phases.0.clone();
+                sorted_phases.sort_by_key(|phase| phase.start_time.start);
+
+                let current_phase = sorted_phases.iter().find(|&phase| {
+                    let phase_start = phase.start_time.start;
+                    let phase_end = phase.end_time.end;
+                    now >= phase_start && now <= phase_end
+                });
+
+                // If no phase directly contains current time but ingestion is in progress,
+                // use the next upcoming phase or the most recently completed phase
+                let current_phase = if current_phase.is_none()
+                    && now > ingestion.ingestion_date
+                    && progress_percent < 100
+                {
+                    // Try to find the next phase
+                    let next_phase = sorted_phases
+                        .iter()
+                        .find(|&phase| now < phase.start_time.start);
+
+                    // If no next phase, find the most recent phase
+                    if next_phase.is_none()
+                    {
+                        sorted_phases
+                            .iter()
+                            .rev()
+                            .find(|&phase| now > phase.end_time.end)
+                    }
+                    else
+                    {
+                        next_phase
+                    }
+                }
+                else
+                {
+                    current_phase
+                };
+
+                if now < ingestion.ingestion_date
+                {
+                    // Calculate time until start
+                    let until_start = ingestion.ingestion_date.signed_duration_since(now);
+                    let until_start_mins = until_start.num_minutes();
+
+                    if until_start_mins < 60
+                    {
+                        status = format!("Scheduled (in {}m)", until_start_mins);
+                    }
+                    else
+                    {
+                        status = format!(
+                            "Scheduled (in {}h{}m)",
+                            until_start_mins / 60,
+                            until_start_mins % 60
+                        );
+                    }
+                }
+                else if progress_percent >= 100
+                {
+                    status = "Complete".to_string();
+                }
+                else if let Some(phase) = current_phase
+                {
+                    let phase_icon = PhaseIcon::from(&phase.classification).0;
+
+                    // Add compact progress bar for active phases
+                    let bar_width = 5;
+                    let filled =
+                        (progress_percent as f64 * bar_width as f64 / 100.0).round() as usize;
+                    let empty = bar_width - filled;
+                    let progress_bar = format!("[{}{}]", "█".repeat(filled), "░".repeat(empty));
+
+                    status = format!(
+                        "{} {} {} {}%",
+                        phase_icon, phase.classification, progress_bar, progress_percent
+                    );
+                }
+            }
+
+            builder.push_record(vec![
+                &ingestion.id.unwrap().to_string(),
+                &ingestion.substance_name,
+                &ingestion.dosage.to_string(),
+                &ingestion.route.to_string(),
+                &ingestion
+                    .ingestion_date
+                    .format("%H:%M %d/%m/%y")
+                    .to_string(),
+                &status,
+            ]);
+        }
+
+        // Build table with styling
+        let table = builder
+            .build()
+            .with(Style::modern_rounded())
+            .with(Modify::new(Rows::first()).with(Alignment::center()))
+            .with(Padding::new(1, 1, 0, 0))
+            .to_string();
+
+        output.push_str(&table);
+        THEME.text(&output, None).to_string()
     }
 }
 

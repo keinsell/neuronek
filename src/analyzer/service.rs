@@ -41,9 +41,6 @@ pub async fn analyze_ingestion(
             .get(&analyze_request.roa)
             .ok_or_else(|| miette::miette!("Route of administration not found"))?;
 
-        let dosages = &route_of_administration.dosages;
-        let ingestion_dosage = dosage;
-
         let route_of_administration = substance
             .routes_of_administration
             .get(&analyze_request.roa)

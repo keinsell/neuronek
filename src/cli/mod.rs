@@ -23,6 +23,7 @@ use textplots::Plot;
 use tracing::log::Log;
 mod ingestion;
 pub mod substance;
+mod ui;
 
 fn is_interactive() -> bool { atty::is(Stream::Stdout) }
 

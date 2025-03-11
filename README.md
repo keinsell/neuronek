@@ -69,35 +69,14 @@ neuronek ingestion log -s caffeine -d 80mg
 <summary>---</summary>
 
 ```
-Ingestion #88 
+╭──────────────────────────────┬────────────────────────────────────────────╮
+│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
+│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
+│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
+│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
+│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+╰──────────────────────────────┴────────────────────────────────────────────╯
 
-ID: 88
-Substance: caffeine
-Dosage: 80.0 mg
-Route: Oral
-Ingested At: 2025-03-06 11:23:06
-
-Timeline
-
-Analysis of ingestion progression based on substance information in database.
-Note: Estimates may not be accurate.
-
-│   Phase   │ Start Time │  End Time  │  Duration  │
-├───────────┼────────────┼────────────┼────────────┤
-│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
-│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
-│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
-│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
-│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
-
-Timeline Visualization
-
-Total Duration: ~2.0 hours
-Start: 11:23 | Current: 11:23 | End: 13:23
-[>                                                 ] 0%
-[▲ △   ◆                  ▽                        ]
-
-Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
 ```
 
 </details>
@@ -107,7 +86,8 @@ Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
 *Displays detailed information about a specific ingestion identified by its ID.*
 
 > ![WARNING]
-> Ingestion viewing user interface is a subject to change to one that would be compact yet will contain most important information, please share your feedback and expectations in revelant github issues.
+> Ingestion viewing user interface is a subject to change to one that would be compact yet will contain most important
+> information, please share your feedback and expectations in revelant github issues.
 
 ```bash
 neuronek ingestion view <INGESTION_ID>
@@ -117,35 +97,13 @@ neuronek ingestion view <INGESTION_ID>
 <summary>---</summary>
 
 ```
-Ingestion #88 
-
-ID: 88
-Substance: caffeine
-Dosage: 80.0 mg
-Route: Oral
-Ingested At: 2025-03-06 11:23:06
-
-Timeline
-
-Analysis of ingestion progression based on substance information in database.
-Note: Estimates may not be accurate.
-
-│   Phase   │ Start Time │  End Time  │  Duration  │
-├───────────┼────────────┼────────────┼────────────┤
-│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
-│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
-│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
-│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
-│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
-
-Timeline Visualization
-
-Total Duration: ~2.0 hours
-Start: 11:23 | Current: 11:23 | End: 13:23
-[>                                                 ] 0%
-[▲ △   ◆                  ▽                        ]
-
-Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
+╭──────────────────────────────┬────────────────────────────────────────────╮
+│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
+│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
+│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
+│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
+│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+╰──────────────────────────────┴────────────────────────────────────────────╯
 ```
 
 </details>
@@ -202,35 +160,13 @@ neuronek ingestion update 14 -d 90mg
 <summary>---</summary>
 
 ```
-Ingestion #88 
-
-ID: 88
-Substance: caffeine
-Dosage: 80.0 mg
-Route: Oral
-Ingested At: 2025-03-06 11:23:06
-
-Timeline
-
-Analysis of ingestion progression based on substance information in database.
-Note: Estimates may not be accurate.
-
-│   Phase   │ Start Time │  End Time  │  Duration  │
-├───────────┼────────────┼────────────┼────────────┤
-│▲ Onset    │11:23  ±0m  │11:28  ±5m  │7m  ±2m     │
-│△ Comeup   │11:28  ±5m  │11:38  ±25m │20m  ±10m   │
-│◆ Peak     │11:38  ±25m │12:23  ±70m │1h 7m  ±22m │
-│▽ Comedown │12:23  ±70m │13:23  ±130m│1h 30m  ±30m│
-│○ Afterglow│13:23  ±130m│17:23  ±610m│8h 0m  ±240m│
-
-Timeline Visualization
-
-Total Duration: ~2.0 hours
-Start: 11:23 | Current: 11:23 | End: 13:23
-[>                                                 ] 0%
-[▲ △   ◆                  ▽                        ]
-
-Legend: ▲ = Onset, △ = Comeup, ◆ = Peak, ▽ = Comedown, ○ = Afterglow
+╭──────────────────────────────┬────────────────────────────────────────────╮
+│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
+│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
+│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
+│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
+│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+╰──────────────────────────────┴────────────────────────────────────────────╯
 ```
 
 </details>
@@ -409,7 +345,6 @@ neuronek substance get caffeine
 ### Statistics
 
 #### View Statistics
-
 
 ## Contributing
 

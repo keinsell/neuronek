@@ -36,7 +36,6 @@ impl From<Model> for Ingestion
 {
     fn from(value: Model) -> Self
     {
-        dbg!(&value);
         Ingestion {
             id: Some(value.id),
             substance_name: value.substance_name,
