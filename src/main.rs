@@ -36,6 +36,7 @@ mod statistics;
 mod substance;
 mod theme;
 mod tui;
+mod ui;
 
 use crossterm::ExecutableCommand;
 use crossterm::event::DisableMouseCapture;

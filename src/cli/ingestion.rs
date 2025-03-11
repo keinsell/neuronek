@@ -22,8 +22,8 @@ use crate::substance::route_of_administration::RouteOfAdministrationClassificati
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::PHASE_ORDER;
 use crate::substance::route_of_administration::phase::PhaseClassification;
-use crate::substance::route_of_administration::phase::PhaseIcon;
 use crate::theme::THEME;
+use crate::ui::PhaseIcon;
 use async_std::task;
 use async_trait::async_trait;
 use chrono::DateTime;

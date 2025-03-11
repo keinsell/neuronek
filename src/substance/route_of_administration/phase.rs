@@ -13,13 +13,31 @@ pub const PHASE_ORDER: [PhaseClassification; 5] = [
     PhaseClassification::Afterglow,
 ];
 
+/// https://psychonautwiki.org/wiki/Duration
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, PartialOrd, Ord)]
 pub enum PhaseClassification
 {
+    /// The onset phase can be defined as the period until the very first
+    /// changes in perception (i.e. "first alerts") are able to be detected.
     Onset,
+    /// The "come up" phase can be defined as the period between the first
+    /// noticeable changes in perception and the point of highest subjective
+    /// intensity. This is colloquially known as "coming up."
     Comeup,
+    /// The peak phase can be defined as period of time in which the intensity
+    /// of the substance's effects are at its height.
     Peak,
+    /// The offset phase can be defined as the amount of time in between the
+    /// conclusion of the peak and shifting into a sober state. This is
+    /// colloquially referred to as "coming down."
     Comedown,
+    /// The after effects can be defined as any residual effects which may
+    /// remain after the experience has reached its conclusion. After effects
+    /// depend on the substance and usage. This is colloquially known as a
+    /// "hangover" for negative after effects of substances, such as alcohol,
+    /// cocaine, and MDMA or an "afterglow" for describing a typically positive,
+    /// pleasant effect, typically found in substances such as cannabis, LSD in
+    /// low to high doses, and ketamine.
     Afterglow,
     Unknown,
 }
@@ -65,25 +83,3 @@ impl Default for PhaseClassification
 }
 
 pub type DurationRange = Range<Duration>;
-
-#[derive(Clone, Debug)]
-#[allow(dead_code)]
-pub struct PhaseIcon(pub String);
-
-impl From<&PhaseClassification> for PhaseIcon
-{
-    fn from(value: &PhaseClassification) -> Self
-    {
-        let icon = match value
-        {
-            | PhaseClassification::Comeup => "△".to_string(),
-            | PhaseClassification::Onset => "▲".to_string(),
-            | PhaseClassification::Peak => "◆".to_string(),
-            | PhaseClassification::Comedown => "▽".to_string(),
-            | PhaseClassification::Afterglow => "○".to_string(),
-            | _ => "".to_string(),
-        };
-
-        PhaseIcon(icon)
-    }
-}

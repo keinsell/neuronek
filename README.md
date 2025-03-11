@@ -70,11 +70,11 @@ neuronek ingestion log -s caffeine -d 80mg
 
 ```
 ╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
-│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
-│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
-│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
-│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
+│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
+│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
+│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
+│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
 ╰──────────────────────────────┴────────────────────────────────────────────╯
 
 ```
@@ -98,11 +98,11 @@ neuronek ingestion view <INGESTION_ID>
 
 ```
 ╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
-│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
-│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
-│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
-│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
+│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
+│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
+│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
+│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
 ╰──────────────────────────────┴────────────────────────────────────────────╯
 ```
 
@@ -161,11 +161,11 @@ neuronek ingestion update 14 -d 90mg
 
 ```
 ╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         1               ┆ ▲ Onset: 13:00±0m → 13:05±5m (7m)          │
-│  Substance:  caffeine        ┆ △ Comeup: 13:05±5m → 13:15±25m (20m)       │
-│  Dosage:     150 mg          ┆ ◆ Peak: 13:15±25m → 14:00±70m (1h7m)       │
-│  Route:      Oral            ┆ ▽ Comedown: 14:00±70m → 15:00±130m (1h30m) │
-│  Ingested:   13:00 11/03/25  ┆ ○ Afterglow: 15:00±130m → 19:00±610m (8h)  │
+│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
+│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
+│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
+│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
+│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
 ╰──────────────────────────────┴────────────────────────────────────────────╯
 ```
 
