@@ -2391,6 +2391,7 @@ dependencies = [
  "miette",
  "minimo",
  "nutype",
+ "o2o",
  "once_cell",
  "owo-colors",
  "plotlib",
@@ -2549,6 +2550,37 @@ dependencies = [
  "rustc_version",
  "syn 2.0.98",
  "urlencoding",
+]
+
+[[package]]
+name = "o2o"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecc535ef5587223a71c04ffb4054e8de8d842a9cfde0a8865d939c176496067f"
+dependencies = [
+ "o2o-impl",
+ "o2o-macros",
+]
+
+[[package]]
+name = "o2o-impl"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f0ab58ff0734d05b9f50944a08d7ef7df6e4726536bd001a0256a502c89c880"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "o2o-macros"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e358cd6b3b5a87a691ed55528323b9699f14667435ee181f5fd84c14126383dc"
+dependencies = [
+ "o2o-impl",
+ "syn 1.0.109",
 ]
 
 [[package]]

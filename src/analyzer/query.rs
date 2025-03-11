@@ -1,20 +1,16 @@
+use std::str::FromStr;
+
+use chrono::{DateTime, Local, TimeZone};
+use clap::{Parser, arg};
+use miette::IntoDiagnostic;
+use rust_decimal::prelude::FromPrimitive;
+use sea_orm::sea_query::ExprTrait;
+use sea_orm::{ActiveModelTrait, EntityTrait, QueryOrder, QuerySelect};
+use sea_orm_migration::IntoSchemaManagerConnection;
+
 use crate::ValueParser;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
-use chrono::DateTime;
-use chrono::Local;
-use chrono::TimeZone;
-use clap::Parser;
-use clap::arg;
-use miette::IntoDiagnostic;
-use rust_decimal::prelude::FromPrimitive;
-use sea_orm::ActiveModelTrait;
-use sea_orm::EntityTrait;
-use sea_orm::QueryOrder;
-use sea_orm::QuerySelect;
-use sea_orm::sea_query::ExprTrait;
-use sea_orm_migration::IntoSchemaManagerConnection;
-use std::str::FromStr;
 
 /// Analyzes ingestion information for additional insights.
 ///
@@ -40,42 +36,42 @@ use std::str::FromStr;
 /// route of administration.
 #[derive(Parser, Debug, bon::Builder)]
 #[command(
-    version,
-    about = "Generate insights about a given ingestion",
-    long_about = "Analyze ingestion entries either by referencing a unique identifier (ID) or by \
-                  specifying a substance and dosage."
+	version,
+	about = "Generate insights about a given ingestion",
+	long_about = "Analyze ingestion entries either by referencing a unique identifier (ID) or by \
+	              specifying a substance and dosage."
 )]
 pub struct AnalyzeIngestion
 {
-    #[arg(short, long, value_name = "INGESTION_ID")]
-    pub ingestion_id: Option<i32>,
+	#[arg(short, long, value_name = "INGESTION_ID")]
+	pub ingestion_id: Option<i32>,
 
-    /// Name of the substance involved in the ingestion (required if not
-    /// providing `ingestion_id`).
-    #[arg(short, long, value_name = "SUBSTANCE")]
-    pub substance: String,
+	/// Name of the substance involved in the ingestion (required if not
+	/// providing `ingestion_id`).
+	#[arg(short, long, value_name = "SUBSTANCE")]
+	pub substance: String,
 
-    /// Dosage of the substance involved in the ingestion (required if not
-    /// providing `ingestion_id`).
-    #[arg(
+	/// Dosage of the substance involved in the ingestion (required if not
+	/// providing `ingestion_id`).
+	#[arg(
         short,
         long,
         value_name = "DOSAGE",
         help = "Dosage of the substance in the appropriate unit (e.g., mg)",
         value_parser = Dosage::from_str,
     )]
-    pub dosage: Dosage,
+	pub dosage: Dosage,
 
-    /// Date of ingestion. Defaults to the current date if unspecified.
-    #[arg(
+	/// Date of ingestion. Defaults to the current date if unspecified.
+	#[arg(
         short = 't',
         long = "date",
         default_value = "now",
         value_parser =  DateTime::<Local>::parse_value
     )]
-    pub date: chrono::DateTime<Local>,
+	pub date: chrono::DateTime<Local>,
 
-    /// Route of administration for the substance, defaulting to `"oral"`.
-    #[arg(short = 'r', long = "roa", default_value = "oral", value_enum)]
-    pub roa: RouteOfAdministrationClassification,
+	/// Route of administration for the substance, defaulting to `"oral"`.
+	#[arg(short = 'r', long = "roa", default_value = "oral", value_enum)]
+	pub roa: RouteOfAdministrationClassification,
 }

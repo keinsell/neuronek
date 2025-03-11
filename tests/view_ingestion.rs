@@ -27,14 +27,14 @@ use predicates::prelude::*;
 #[test]
 fn test_show_nonexistent_ingestion() -> Result<(), Box<dyn std::error::Error>>
 {
-    let mut cmd = Command::cargo_bin("neuronek")?;
-    cmd.env("RUST_TEST", "1")
-        .arg("ingestion")
-        .arg("view")
-        .arg("999999");
-    cmd.assert()
-        .failure()
-        .stderr(predicate::str::contains("not found"));
+	let mut cmd = Command::cargo_bin("neuronek")?;
+	cmd.env("RUST_TEST", "1")
+		.arg("ingestion")
+		.arg("view")
+		.arg("999999");
+	cmd.assert()
+		.failure()
+		.stderr(predicate::str::contains("not found"));
 
-    Ok(())
+	Ok(())
 }

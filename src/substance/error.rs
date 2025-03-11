@@ -5,6 +5,6 @@ use thiserror::Error;
 
 pub enum SubstanceError
 {
-    #[error("substance not found")]
-    NotFound,
+	#[error("substance not found")]
+	NotFound,
 }

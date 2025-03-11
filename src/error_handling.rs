@@ -4,9 +4,9 @@
 /// built in release mode and panicked. */
 pub fn setup_diagnostics()
 {
-    miette::set_panic_hook();
-    #[cfg(not(debug_assertions))]
-    {
-        human_panic::setup_panic!();
-    }
+	miette::set_panic_hook();
+	#[cfg(not(debug_assertions))]
+	{
+		human_panic::setup_panic!();
+	}
 }

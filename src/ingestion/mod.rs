@@ -3,7 +3,6 @@ pub(super) mod model;
 pub(super) mod phase;
 pub(super) mod service;
 
-pub use action::Actions as IngestionActions;
-pub use action::LogIngestion;
+pub use action::{Actions as IngestionActions, LogIngestion};
 pub use model::Ingestion;
 pub use phase::IngestionPhase;

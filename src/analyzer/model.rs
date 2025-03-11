@@ -1,27 +1,26 @@
-use chrono::Duration;
-use chrono::TimeZone;
 use std::range::Range;
 use std::str::FromStr;
+
+use chrono::{Duration, TimeZone};
+use rust_decimal::prelude::*;
+use serde::{Deserialize, Serialize};
 use textplots::Plot;
 
 use crate::ingestion::model::IngestionPhases;
 use crate::substance::route_of_administration::dosage::DosageClassification;
-use rust_decimal::prelude::*;
-use serde::Deserialize;
-use serde::Serialize;
 
 
 #[derive(Debug, Clone)]
 pub struct Report
 {
-    pub ingestion_id: Option<u32>,
-    pub substance_name: String,
-    pub dosage_classification: DosageClassification,
-    pub phases: IngestionPhases,
-    /// Estimated duration of ingestion
-    pub duration: Range<Duration>,
-    /// Estimated duration of ingestion incl. aftereffects
-    pub total_duration: Range<Duration>,
+	pub ingestion_id: Option<u32>,
+	pub substance_name: String,
+	pub dosage_classification: DosageClassification,
+	pub phases: IngestionPhases,
+	/// Estimated duration of ingestion
+	pub duration: Range<Duration>,
+	/// Estimated duration of ingestion incl. aftereffects
+	pub total_duration: Range<Duration>,
 }
 
 
@@ -30,7 +29,7 @@ pub struct Report
 ///
 /// References: [#531](https://github.com/keinsell/neuronek/issues/531)
 #[nutype::nutype(
-    validate(greater_or_equal = 0.0, less_or_equal = 1.0),
-    derive(Debug, PartialEq, Clone)
+	validate(greater_or_equal = 0.0, less_or_equal = 1.0),
+	derive(Debug, PartialEq, Clone)
 )]
 pub struct IngestionProgress(f32);

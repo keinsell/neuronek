@@ -1,14 +1,12 @@
+use std::str::FromStr;
+
 use chrono::TimeZone;
 use clap::Parser;
 use miette::IntoDiagnostic;
 use rust_decimal::prelude::FromPrimitive;
-use sea_orm::ActiveModelTrait;
-use sea_orm::EntityTrait;
-use sea_orm::QueryOrder;
-use sea_orm::QuerySelect;
 use sea_orm::sea_query::ExprTrait;
+use sea_orm::{ActiveModelTrait, EntityTrait, QueryOrder, QuerySelect};
 use sea_orm_migration::IntoSchemaManagerConnection;
-use std::str::FromStr;
 
 pub mod model;
 pub mod query;
