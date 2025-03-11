@@ -130,7 +130,7 @@ impl Displayable for crate::ingestion::Ingestion
             let id_value = self.id.unwrap().to_string();
             let ingestion = self.clone();
             let substance_label = "Substance:".to_owned();
-            let substance_value = ingestion.substance_name.clone();
+            let substance_value = format!("{}", ingestion.substance_name);
             let dosage_label = "Dosage:".to_owned();
             let dosage_value = ingestion.dosage.clone().to_string();
             let route_label = "Route:".to_owned();
@@ -422,138 +422,8 @@ impl Displayable for IngestionList
         }
 
         let mut output = String::new();
-        output.push_str("# INGESTION LIST\n\n");
 
-        // Create a table with enhanced formatting
-        let mut builder = Builder::default();
-
-        // Add header row
-        builder.push_record(vec![
-            "ID",
-            "SUBSTANCE",
-            "DOSAGE",
-            "ROUTE",
-            "INGESTED AT",
-            "STATUS",
-        ]);
-
-        // Add data rows
-        for ingestion in &self.0
-        {
-            let now = chrono::Local::now();
-            let elapsed = now.signed_duration_since(ingestion.ingestion_date);
-
-            // Calculate status indicator
-            let mut status = String::from("Unknown");
-
-            if let Some(total_duration) = ingestion.phases.duration_range()
-            {
-                let total_duration_minutes = total_duration.start.num_minutes();
-                let progress_percent = if elapsed.num_minutes() >= total_duration_minutes
-                {
-                    100
-                }
-                else
-                {
-                    (elapsed.num_minutes() as f64 / total_duration_minutes as f64 * 100.0) as usize
-                };
-
-                // Find current phase
-                let mut sorted_phases = ingestion.phases.0.clone();
-                sorted_phases.sort_by_key(|phase| phase.start_time.start);
-
-                let current_phase = sorted_phases.iter().find(|&phase| {
-                    let phase_start = phase.start_time.start;
-                    let phase_end = phase.end_time.end;
-                    now >= phase_start && now <= phase_end
-                });
-
-                // If no phase directly contains current time but ingestion is in progress,
-                // use the next upcoming phase or the most recently completed phase
-                let current_phase = if current_phase.is_none()
-                    && now > ingestion.ingestion_date
-                    && progress_percent < 100
-                {
-                    // Try to find the next phase
-                    let next_phase = sorted_phases
-                        .iter()
-                        .find(|&phase| now < phase.start_time.start);
-
-                    // If no next phase, find the most recent phase
-                    if next_phase.is_none()
-                    {
-                        sorted_phases
-                            .iter()
-                            .rev()
-                            .find(|&phase| now > phase.end_time.end)
-                    }
-                    else
-                    {
-                        next_phase
-                    }
-                }
-                else
-                {
-                    current_phase
-                };
-
-                if now < ingestion.ingestion_date
-                {
-                    // Calculate time until start
-                    let until_start = ingestion.ingestion_date.signed_duration_since(now);
-                    let until_start_mins = until_start.num_minutes();
-
-                    if until_start_mins < 60
-                    {
-                        status = format!("Scheduled (in {}m)", until_start_mins);
-                    }
-                    else
-                    {
-                        status = format!(
-                            "Scheduled (in {}h{}m)",
-                            until_start_mins / 60,
-                            until_start_mins % 60
-                        );
-                    }
-                }
-                else if progress_percent >= 100
-                {
-                    status = "Complete".to_string();
-                }
-                else if let Some(phase) = current_phase
-                {
-                    let phase_icon = PhaseIcon::from(&phase.classification).0;
-
-                    // Add compact progress bar for active phases
-                    let bar_width = 5;
-                    let filled =
-                        (progress_percent as f64 * bar_width as f64 / 100.0).round() as usize;
-                    let empty = bar_width - filled;
-                    let progress_bar = format!("[{}{}]", "█".repeat(filled), "░".repeat(empty));
-
-                    status = format!(
-                        "{} {} {} {}%",
-                        phase_icon, phase.classification, progress_bar, progress_percent
-                    );
-                }
-            }
-
-            builder.push_record(vec![
-                &ingestion.id.unwrap().to_string(),
-                &ingestion.substance_name,
-                &ingestion.dosage.to_string(),
-                &ingestion.route.to_string(),
-                &ingestion
-                    .ingestion_date
-                    .format("%H:%M %d/%m/%y")
-                    .to_string(),
-                &status,
-            ]);
-        }
-
-        // Build table with styling
-        let table = builder
-            .build()
+        let table = tabled::Table::new(&self.0)
             .with(Style::modern_rounded())
             .with(Modify::new(Rows::first()).with(Alignment::center()))
             .with(Padding::new(1, 1, 0, 0))

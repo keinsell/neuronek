@@ -8,10 +8,40 @@ use chrono::Duration;
 use chrono::Local;
 use chrono::TimeZone;
 use clap::builder::TypedValueParser;
+use nutype::nutype;
 use serde::Serialize;
+use std::fmt;
 use std::fmt::Display;
+use std::fmt::Formatter;
 use std::range::Range;
 use tabled::Tabled;
+
+#[nutype(
+    sanitize(trim, lowercase),
+    validate(not_empty),
+    derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq)
+)]
+pub struct SubstanceName(String);
+
+impl fmt::Display for SubstanceName
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result
+    {
+        let s = &self.clone().into_inner();
+        let mut chars = s.chars();
+
+        if let Some(first) = chars.next()
+        {
+            let first_cap: String = first.to_uppercase().collect();
+            let rest: String = chars.collect();
+            write!(f, "{}{}", first_cap, rest)
+        }
+        else
+        {
+            write!(f, "")
+        }
+    }
+}
 
 #[derive(Debug, Clone, Tabled, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,7 +51,7 @@ pub struct Ingestion
     #[tabled(rename = "ID")]
     pub id: Option<i32>,
     #[tabled(rename = "Substance")]
-    pub substance_name: String,
+    pub substance_name: SubstanceName,
     #[tabled(rename = "Dosage")]
     pub dosage: Dosage,
     #[tabled(rename = "Route")]
@@ -38,7 +68,7 @@ impl From<Model> for Ingestion
     {
         Ingestion {
             id: Some(value.id),
-            substance_name: value.substance_name,
+            substance_name: value.substance_name.try_into().unwrap(),
             dosage: Dosage::from_base_units(value.dosage as f64),
             ingestion_date: Local.from_utc_datetime(&value.ingested_at),
             route: value

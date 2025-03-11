@@ -167,6 +167,6 @@ mod tests
             .unwrap()
             .unwrap();
 
-        assert_eq!(db_entry.route_of_administration, "Sublingual");
+        assert_eq!(db_entry.route_of_administration, "sublingual");
     }
 }

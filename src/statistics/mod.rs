@@ -114,7 +114,7 @@ fn show_substance_statistics(ingestions: &[Ingestion])
     let substance_map = ingestions.iter().fold(
         HashMap::<String, Vec<&Ingestion>>::new(),
         |mut acc, ingestion| {
-            acc.entry(ingestion.substance_name.clone())
+            acc.entry(ingestion.substance_name.clone().into_inner())
                 .or_default()
                 .push(ingestion);
             acc
