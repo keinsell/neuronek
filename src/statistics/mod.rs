@@ -1,3 +1,5 @@
+pub mod substance_prominence;
+
 use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::ingestion;
 use crate::ingestion::Ingestion;

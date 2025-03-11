@@ -144,6 +144,10 @@ async fn main() -> Result<()>
             show_statistics(&cmd).await;
             Ok(())
         }
+        | ApplicationCommands::Prominence(cmd) =>
+        {
+            cli::prominence::handle_prominence_command(&cmd).await
+        }
         | ApplicationCommands::Monitor => run_tui().await,
     }
 }

@@ -22,6 +22,7 @@ use tabled::settings::Style;
 use textplots::Plot;
 use tracing::log::Log;
 mod ingestion;
+pub mod prominence;
 pub mod substance;
 
 fn is_interactive() -> bool { atty::is(Stream::Stdout) }
@@ -99,7 +100,10 @@ pub(crate) enum ApplicationCommands
     Ingestion(IngestionCommand),
     #[command(hide = true)]
     Substance(SubstanceCommand),
+    /// Show general statistics about ingestions
     Stats(crate::statistics::ShowStatistics),
+    /// Show substance prominence over time
+    Prominence(prominence::ProminenceCommand),
     /// Launch the TUI monitor for ingestion intensity
     Monitor,
 }

@@ -98,6 +98,7 @@ impl App
         let mut all_substance_points = Vec::new();
         let mut combined_points = vec![0.0; TOTAL_POINTS];
 
+
         // Process each substance individually
         for (substance_name, phases) in substances
         {
