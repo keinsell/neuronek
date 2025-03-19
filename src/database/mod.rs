@@ -7,25 +7,29 @@ use async_std::task::block_on;
 use atty::Stream;
 pub use entities::prelude::*;
 pub use migrator::Migrator;
-use sea_orm::{Database, DatabaseConnection};
+use sea_orm::Database;
 use sea_orm_migration::{IntoSchemaManagerConnection, MigratorTrait};
 use tracing::{debug, error, info, instrument, warn};
 
 use crate::config::CONFIG;
+pub type DatabaseConnection = sea_orm::DatabaseConnection;
 
 lazy_static::lazy_static! {
 	#[derive(Clone, Debug)]
 	pub static ref DATABASE_CONNECTION: DatabaseConnection = {
-		let sqlite_path = format!(
+		let sqlite_path: &str = CONFIG.sqlite_path.to_str().unwrap().clone();
+
+
+		let mut sqlite_uri = format!(
 			"sqlite://{}",
-			CONFIG.sqlite_path
-				.to_str()
-				.expect("Invalid UTF-8 in path"),
+			sqlite_path
 		);
 
-		debug!("Opening database connection to {}", sqlite_path);
+		if cfg!(test) {sqlite_uri = "sqlite::memory:".parse().unwrap() }
 
-		let connection = match block_on(async { Database::connect(&sqlite_path).await }) {
+		debug!("Opening database connection to {}", sqlite_uri);
+
+		let connection = match block_on(async { Database::connect(&sqlite_uri).await }) {
 			Ok(connection) => {
 				debug!("Database connection established successfully!");
 				connection
@@ -35,20 +39,20 @@ lazy_static::lazy_static! {
 					warn!(
 						"Database file not found or inaccessible at {}, \
 						attempting to initialize...",
-						sqlite_path
+						sqlite_uri
 					);
 
-					if let Err(init_error) = initialize_sqlite_by_path(&CONFIG.sqlite_path) {
+					if let Err(init_error) = initialize_database_file(&CONFIG.sqlite_path) {
 						error!("Failed to initialize the database: {}", init_error);
 						panic!(
 							"Critical: Unable to initialize the database file at {}. \
 							Error: {}",
-							sqlite_path,
+							sqlite_uri,
 							init_error
 						);
 					}
 
-					match block_on(async { Database::connect(&sqlite_path).await }) {
+					match block_on(async { Database::connect(&sqlite_uri).await }) {
 						Ok(retry_connection) => {
 							debug!(
 								"Database connection established successfully \
@@ -65,7 +69,7 @@ lazy_static::lazy_static! {
 							panic!(
 								"Critical: Unable to establish database connection at {}. \
 								Error: {}",
-								sqlite_path,
+								sqlite_uri,
 								retry_error
 							);
 						}
@@ -86,7 +90,7 @@ lazy_static::lazy_static! {
 			panic!(
 				"Critical: Unable to complete database migrations at {}. \
 				Error: {}",
-				sqlite_path,
+				sqlite_uri,
 				migration_err
 			);
 		}
@@ -95,7 +99,7 @@ lazy_static::lazy_static! {
 	};
 }
 
-fn initialize_sqlite_by_path(path: &PathBuf) -> std::result::Result<(), String>
+fn initialize_database_file(path: &PathBuf) -> std::result::Result<(), String>
 {
 	if let Some(parent_dir) = path.parent() {
 		if !parent_dir.exists() {

@@ -70,8 +70,8 @@ use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
-use crate::theme::THEME;
 use crate::ui::PhaseIcon;
+use crate::ui::theme::THEME;
 use crate::{Application, database};
 
 impl Displayable for crate::ingestion::Ingestion

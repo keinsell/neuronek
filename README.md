@@ -141,7 +141,7 @@ neuronek ingestion list
 │ 26 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:10:23.044092301 +01:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
 │ 25 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:09:47.632702987 +01:00 │
-├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
+├────┼───────────┼─────────┼───────��──────────────────────────────────────┤
 │ 24 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:08:58.809500208 +01:00 │
 ╰────┴───────────┴─────────┴───────┴──────────────────────────────────────╯
 ```
@@ -187,14 +187,6 @@ Ingestion #14 has been successfully deleted.
 ```
 
 </details>
-
-### Monitor Command
-
-*Launch an interactive Terminal User Interface (TUI) to visualize and monitor substance effects in real-time.*
-
-```bash
-neuronek monitor
-```
 
 ### Substances
 

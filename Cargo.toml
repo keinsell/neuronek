@@ -77,7 +77,6 @@ textplots = "0.8.6"
 valuable = { version = "0.1.1", features = ["derive"] }
 derive = "1.0.0"
 crossterm = "0.28.1"
-ratatui = "0.29.0"
 tuirealm = { version = "2.1.0", features = ["derive", "crossterm"] }
 bon = "3.3.2"
 termimad = "0.31.2"
@@ -96,7 +95,11 @@ derive-new = "0.7.0"
 strum_macros = "0.27.1"
 json_to_table = "0.10.0"
 o2o = { version = "0.5.3", features = ["o2o-macros", "o2o-impl"] }
-
+clap_complete = "4.5.46"
+tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
+tempfile = "3.16.0"
+tui-realm-stdlib = "2.0.1"
+ratatui = "0.29.0"
 
 [features]
 default = []

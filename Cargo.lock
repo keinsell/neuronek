@@ -792,6 +792,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "clap_complete"
+version = "4.5.46"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f5c5508ea23c5366f77e53f5a0070e5a84e51687ec3ef9e0464c86dc8d13ce98"
+dependencies = [
+ "clap",
+]
+
+[[package]]
 name = "clap_derive"
 version = "4.5.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2368,6 +2377,7 @@ dependencies = [
  "chrono-humanize",
  "clap",
  "clap-verbosity-flag",
+ "clap_complete",
  "comfy-table",
  "crossterm 0.28.1",
  "date_time_parser",
@@ -2410,14 +2420,17 @@ dependencies = [
  "strum_macros 0.27.1",
  "supports-color",
  "tabled",
+ "tempfile",
  "termimad",
  "textplots",
  "thiserror 2.0.11",
  "time_series_generator",
+ "tokio",
  "tracing",
  "tracing-appender",
  "tracing-indicatif",
  "tracing-subscriber",
+ "tui-realm-stdlib",
  "tuirealm",
  "uuid",
  "valuable",
@@ -3810,6 +3823,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "smawk"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b7c388c1b5e93756d0c740965c41e8822f866621d41acbdf6336a6a168f8840c"
+
+[[package]]
 name = "socket2"
 version = "0.4.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4316,6 +4335,7 @@ version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23d434d3f8967a09480fb04132ebe0a3e088c173e6d0ee7897abbdf4eab0f8b9"
 dependencies = [
+ "smawk",
  "unicode-linebreak",
  "unicode-width 0.1.14",
 ]
@@ -4577,6 +4597,17 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
+]
+
+[[package]]
+name = "tui-realm-stdlib"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "78a24d06b8403c57b32a3d3fdac795adf4ef8610e5f9650a3629efc8a9d6c0bb"
+dependencies = [
+ "textwrap",
+ "tuirealm",
+ "unicode-width 0.2.0",
 ]
 
 [[package]]

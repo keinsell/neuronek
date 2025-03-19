@@ -45,7 +45,7 @@ impl Default for Config
 	{
 		let mut journal_path = DATA_DIR.join("journal.db").clone();
 
-		if cfg!(test) || cfg!(debug_assertions) {
+		if cfg!(debug_assertions) {
 			journal_path = temp_dir().join("neuronek.sqlite");
 		}
 

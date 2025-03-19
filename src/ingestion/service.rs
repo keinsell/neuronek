@@ -13,19 +13,20 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-use crate::analyzer::{analyze_ingestion, AnalyzeIngestion};
+pub(crate) use super::analyzer::analyze_ingestion;
 use crate::database::entities::{ingestion, ingestion_phase};
-use crate::database::DATABASE_CONNECTION;
+use crate::database::{DATABASE_CONNECTION, DatabaseConnection};
 use crate::ingestion::action::ListIngestion;
-use crate::ingestion::model::IngestionPhases;
+use crate::ingestion::model::{AnalyzeIngestion, IngestionPhases};
 use crate::ingestion::phase::IngestionPhase;
 use crate::ingestion::{Ingestion, LogIngestion};
-use crate::substance::route_of_administration::dosage::Dosage;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 
-pub async fn log_ingestion(command: &LogIngestion) -> miette::Result<Ingestion>
+#[tracing::instrument]
+pub async fn log_ingestion(
+	command: &LogIngestion, database_connection: &DatabaseConnection,
+) -> miette::Result<Ingestion>
 {
-	let analysis_report = analyze_ingestion(&AnalyzeIngestion {
+	let ingestion = analyze_ingestion(&AnalyzeIngestion {
 		ingestion_id: None,
 		substance: command.substance_name.clone(),
 		dosage: command.dosage,
@@ -34,11 +35,11 @@ pub async fn log_ingestion(command: &LogIngestion) -> miette::Result<Ingestion>
 	})
 	.await?;
 
-	let ingestion_model = ingestion::ActiveModel {
+	let mut model: Ingestion = ingestion::ActiveModel {
 		id: ActiveValue::NotSet,
-		substance_name: ActiveValue::Set(command.substance_name.clone().to_lowercase()),
+		substance_name: ActiveValue::Set(ingestion.substance_name.into()),
 		route_of_administration: ActiveValue::Set(
-			serde_json::to_value(&command.route_of_administration)
+			serde_json::to_value(ingestion.route)
 				.unwrap()
 				.as_str()
 				.unwrap()
@@ -48,19 +49,22 @@ pub async fn log_ingestion(command: &LogIngestion) -> miette::Result<Ingestion>
 		ingested_at: ActiveValue::Set(command.ingestion_date.naive_utc()),
 		updated_at: ActiveValue::Set(Local::now().naive_utc()),
 		created_at: ActiveValue::Set(Local::now().naive_utc()),
-	};
+	}
+	.insert(database_connection)
+	.await
+	.into_diagnostic()?
+	.into();
 
-	let ingestion_model = ingestion_model
-		.insert(DATABASE_CONNECTION.deref())
-		.await
-		.into_diagnostic()?;
+	if !ingestion.phases.0.is_empty() {
+		let ingestion_phases = ingestion.phases;
+		use sea_orm::ActiveValue;
 
-	if let Some(analysis_report) = analysis_report {
-		let mut phases = vec![];
-		for phase in analysis_report.phases.0 {
-			let phase_model = ingestion_phase::ActiveModel {
+		let mut phases: Vec<IngestionPhase> = Vec::new();
+
+		for phase in &ingestion_phases.0 {
+			let phase: IngestionPhase = ingestion_phase::ActiveModel {
 				id: ActiveValue::Set(Uuid::new_v4().to_string()),
-				ingestion_id: ActiveValue::Set(ingestion_model.id),
+				ingestion_id: ActiveValue::Set(model.id.unwrap_or(0)),
 				substance_name: ActiveValue::Set(phase.substance_name.clone()),
 				classification: ActiveValue::Set(phase.classification.to_string()),
 				start_date_min: ActiveValue::Set(phase.start_time.start.naive_utc()),
@@ -72,26 +76,22 @@ pub async fn log_ingestion(command: &LogIngestion) -> miette::Result<Ingestion>
 				weight: ActiveValue::Set(phase.weight.0),
 				created_at: ActiveValue::Set(Local::now().to_rfc3339()),
 				updated_at: ActiveValue::Set(Local::now().to_rfc3339()),
-			};
+			}
+			.insert(database_connection)
+			.await
+			.into_diagnostic()?
+			.into();
 
-			let saved_phase = phase_model
-				.insert(DATABASE_CONNECTION.deref())
-				.await
-				.into_diagnostic()?;
-
-			let phase = IngestionPhase::from(saved_phase);
 			phases.push(phase);
 		}
 
-		let mut ingestion = Ingestion::from(ingestion_model);
-		ingestion.phases = IngestionPhases(phases);
-
-		Ok(ingestion)
-	} else {
-		Ok(Ingestion::from(ingestion_model))
+		model.phases = IngestionPhases::from(phases);
 	}
+
+	Ok(model)
 }
 
+#[tracing::instrument]
 pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find_by_id(ingestion_id)
@@ -117,7 +117,8 @@ pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion
 	}
 }
 
-pub async fn list_ingestions(query: ListIngestion) -> miette::Result<Vec<Ingestion>>
+#[tracing::instrument]
+pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find()
 		.order_by_desc(ingestion::Column::IngestedAt)
@@ -131,21 +132,28 @@ pub async fn list_ingestions(query: ListIngestion) -> miette::Result<Vec<Ingesti
 	Ok(ingestions)
 }
 
+
 #[cfg(test)]
 mod tests
 {
+	use std::ops::Deref;
 	use std::str::FromStr;
 
 	use chrono::Local;
+	use sea_orm::EntityTrait;
 
-	use super::*;
+	use crate::database::DATABASE_CONNECTION;
 	use crate::database::entities::ingestion;
-	use crate::substance::route_of_administration::dosage::Dosage;
+	use crate::ingestion::LogIngestion;
+	use crate::ingestion::service::log_ingestion;
 	use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+	use crate::substance::route_of_administration::dosage::Dosage;
 
 	#[async_std::test]
-	async fn log_ingestion_should_store_ingestion()
+	async fn should_log_ingestion()
 	{
+		let db = &DATABASE_CONNECTION;
+
 		let cmd = LogIngestion {
 			substance_name: "TestSubstance".to_string(),
 			dosage: Dosage::from_str("100 mg").unwrap(),
@@ -153,9 +161,8 @@ mod tests
 			route_of_administration: RouteOfAdministrationClassification::Sublingual,
 		};
 
-		let result = log_ingestion(&cmd).await.unwrap();
+		let result = log_ingestion(&cmd, db).await.unwrap();
 
-		// Verify database storage
 		let db_entry = ingestion::Entity::find_by_id(result.id.unwrap())
 			.one(DATABASE_CONNECTION.deref())
 			.await
@@ -163,5 +170,7 @@ mod tests
 			.unwrap();
 
 		assert_eq!(db_entry.route_of_administration, "sublingual");
+		assert_eq!(db_entry.id, 1);
+		assert_eq!(db_entry.substance_name, "testsubstance");
 	}
 }

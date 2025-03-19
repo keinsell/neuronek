@@ -6,9 +6,9 @@ use clap::{Parser, Subcommand};
 use miette::IntoDiagnostic;
 use serde::{Deserialize, Serialize};
 
-use crate::substance::route_of_administration::dosage::Dosage;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::ValueParser;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::substance::route_of_administration::dosage::Dosage;
 
 /**
 # Log Ingestion

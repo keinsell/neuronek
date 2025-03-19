@@ -1,7 +1,10 @@
+pub mod theme;
+
+use derive_more::Display;
+
 use crate::substance::route_of_administration::phase::PhaseClassification;
 
-#[derive(Clone, Debug)]
-#[allow(dead_code)]
+#[derive(Clone, Debug, Display)]
 pub struct PhaseIcon(pub String);
 
 impl From<&PhaseClassification> for PhaseIcon

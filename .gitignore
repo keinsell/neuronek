@@ -214,3 +214,5 @@ devenv.local.nix
 # Enable persistance of database defs
 !.idea/dataSources.xml
 /debug.log
+
+.qodo

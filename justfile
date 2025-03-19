@@ -46,7 +46,3 @@ watch:
 release:
     cargo release alpha --execute --no-publish --no-push
     #    cargo smart-release --execute --update-crates-index -h
-
-# Install application on current machine
-install:
-    cargo install --path=.

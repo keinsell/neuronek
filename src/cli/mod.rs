@@ -2,20 +2,18 @@ use std::fmt::{Debug, Display};
 
 use atty::Stream;
 use clap::{ColorChoice, CommandFactory, Parser, Subcommand};
-use ingestion::IngestionCommand;
 use miette::IntoDiagnostic;
 use minimo::Printable;
 use sea_orm::prelude::*;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder};
 use serde::Serialize;
-use substance::SubstanceCommand;
 use tabled::settings::Style;
 use tabled::{Table, Tabled};
 use textplots::Plot;
 use tracing::log::Log;
 
 use crate::config::VERSION;
-mod ingestion;
+pub mod ingestion;
 pub mod prominence;
 pub mod substance;
 
@@ -84,18 +82,24 @@ pub trait Displayable: Serialize + Sized + Debug
 }
 
 #[derive(Subcommand)]
-pub(crate) enum ApplicationCommands
+pub enum ApplicationCommands
 {
 	/// Manage ingestion entries
-	Ingestion(IngestionCommand),
+	Ingestion(ingestion::IngestionCommand),
 	#[command(hide = true)]
-	Substance(SubstanceCommand),
+	Substance(substance::SubstanceCommand),
 	/// Show general statistics about ingestions
 	Stats(crate::statistics::ShowStatistics),
 	/// Show substance prominence over time
 	Prominence(prominence::ProminenceCommand),
-	/// Launch the TUI monitor for ingestion intensity
-	Monitor,
+	/// Generate shell completion scripts
+	#[command(hide = true)]
+	Completion
+	{
+		/// The shell to generate completions for
+		#[arg(value_enum)]
+		shell: clap_complete::Shell,
+	},
 }
 
 #[derive(Parser)]
@@ -109,7 +113,7 @@ pub(crate) enum ApplicationCommands
 pub struct CommandLineInterface
 {
 	#[command(subcommand)]
-	pub(crate) command: ApplicationCommands,
+	pub command: ApplicationCommands,
 
 	/// Pretty-print or return raw version of data in JSON
 	#[arg(short, long = "format", value_enum, default_value_t = MessageFormat::default())]

@@ -411,8 +411,8 @@ pub mod stylize
 {
 	use std::path::PathBuf;
 
-	use super::color::paint_style;
 	pub use super::color::Style;
+	use super::color::paint_style;
 
 
 	pub trait Stylize
@@ -463,47 +463,6 @@ pub mod stylize
 	extend_integer!(isize);
 }
 
-pub mod theme
-{
-	use miette::{GraphicalTheme, ThemeStyles};
-
-	use crate::theme::color;
-	use crate::theme::color::Color;
-
-	/// Create a graphical theme for use in `miette`.
-	pub fn create_graphical_theme() -> GraphicalTheme
-	{
-		let mut theme = GraphicalTheme::unicode();
-
-		if let Some(supports) = supports_color::on(supports_color::Stream::Stderr) {
-			if supports.has_256 || supports.has_16m {
-				theme.styles = ThemeStyles {
-					error: color::create_style(Color::Red as u8),
-					warning: color::create_style(Color::Yellow as u8),
-					advice: color::create_style(Color::Teal as u8),
-					help: color::create_style(Color::Purple as u8),
-					link: color::create_style(Color::Blue as u8),
-					linum: color::create_style(Color::GrayLight as u8),
-					highlights: vec![
-						color::create_style(Color::Green as u8),
-						color::create_style(Color::Teal as u8),
-						color::create_style(Color::Blue as u8),
-						color::create_style(Color::Purple as u8),
-						color::create_style(Color::Pink as u8),
-						color::create_style(Color::Red as u8),
-					],
-				};
-			} else {
-				theme.styles = ThemeStyles::ansi();
-			}
-		} else {
-			theme.styles = ThemeStyles::none();
-		}
-
-		theme
-	}
-}
-
 
 pub use stylize::*;
 
@@ -533,35 +492,9 @@ lazy_static! {
 		let mantle = Color::AnsiValue(235);     // #181825
 		let crust = Color::AnsiValue(236);      // #11111b
 
-		// Text styles
-		// TODO: Implement text styles
-
-		// Headers
 		skin.headers[0].compound_style = CompoundStyle::new(Some(mauve), None, Default::default());
 		skin.headers[1].compound_style = CompoundStyle::new(Some(blue), None, Default::default());
 		skin.headers[2].compound_style = CompoundStyle::new(Some(green), None, Default::default());
-
-		// Tables
-		// skin.table = CompoundStyle::new(Some(peach), Some(base), CompoundStyle::with_attr(termimad::Attribute::Bold));
-
-		// // Quotes
-		// skin.quote_block.quote = CompoundStyle::new(Some(sky), None, Default::default());
-		// skin.quote_block.mark = CompoundStyle::new(Some(sapphire), None, CompoundStyle::with_attr(termimad::Attribute::Bold));
-
-		// // Code blocks
-		// skin.code_block = CompoundStyle::new(Some(text), Some(mantle), Default::default());
-		// skin.code_block.left_margin = 2;
-
-		// // Links
-		// skin.paragraph = CompoundStyle::new(Some(pink), None, CompoundStyle::with_attr(termimad::Attribute::Underlined));
-
-		// // Scrollbar
-		// skin.scrollbar.thumb = CompoundStyle::new(Some(surface2), None, Default::default());
-		// skin.scrollbar.track = CompoundStyle::new(Some(base), None, Default::default());
-
-		// // Set background
-		// skin.set_headers_fg(mauve);
-		// skin.set_bg(base);
 
 		skin
 	};
