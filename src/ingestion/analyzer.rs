@@ -139,8 +139,8 @@ pub async fn analyze_ingestion(analyze_ingestion: &AnalyzeIngestion) -> miette::
 		dosage,
 		route: analyze_ingestion.roa,
 		ingestion_date: date,
-		phases: IngestionPhases(vec![]),
-		duration: None,
+		phases: IngestionPhases(phases_map),
+		duration: Some((duration_max - duration_min) / 2),
 		dosage_classification,
 	};
 

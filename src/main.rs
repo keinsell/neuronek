@@ -94,14 +94,11 @@ async fn main() -> Result<()>
 				ingestion::service::get_ingestion(view_ingestion.ingestion_id)
 					.await
 					.map_err(|e| miette!(e))
-					.map(|ingestion| {
-						ingestion
+					.and_then(|maybe_ingestion| {
+						maybe_ingestion
 							.map(|ingestion| ingestion.display(context.stdout_format))
-							.unwrap()
-					})
-					.unwrap_or_else(|_| {
-						miette!("Error");
-					});
+							.ok_or_else(|| miette!("Ingestion not found"))
+					})?;
 				Ok(())
 			}
 			| IngestionActions::Analyze(analyze_ingestion) => {

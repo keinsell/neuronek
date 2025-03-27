@@ -11,6 +11,8 @@ use sea_orm::{
 	QueryOrder,
 	QuerySelect,
 };
+use tracing::info;
+use tracing::log::log;
 use uuid::Uuid;
 
 pub(crate) use super::analyzer::analyze_ingestion;
@@ -55,9 +57,39 @@ pub async fn log_ingestion(
 	.into_diagnostic()?
 	.into();
 
+	info!("Ingestion logged");
 
 	if !ingestion.phases.0.is_empty() {
-		model.phases = insert_ingestion_phases(ingestion.phases, database_connection).await?;
+		let ingestion_phases = ingestion.phases;
+		use sea_orm::ActiveValue;
+
+		let mut phases: Vec<IngestionPhase> = Vec::new();
+
+		for phase in &ingestion_phases.0 {
+			let phase: IngestionPhase = ingestion_phase::ActiveModel {
+				id: ActiveValue::Set(Uuid::new_v4().to_string()),
+				ingestion_id: ActiveValue::Set(model.id.unwrap()),
+				substance_name: ActiveValue::Set(phase.substance_name.clone()),
+				classification: ActiveValue::Set(phase.classification.to_string()),
+				start_date_min: ActiveValue::Set(phase.start_time.start.naive_utc()),
+				start_date_max: ActiveValue::Set(phase.start_time.end.naive_utc()),
+				end_date_min: ActiveValue::Set(phase.end_time.start.naive_utc()),
+				end_date_max: ActiveValue::Set(phase.end_time.end.naive_utc()),
+				duration_min: ActiveValue::Set(phase.duration.start.to_string()),
+				duration_max: ActiveValue::Set(phase.duration.end.to_string()),
+				weight: ActiveValue::Set(phase.weight.0),
+				created_at: ActiveValue::Set(Local::now().to_rfc3339()),
+				updated_at: ActiveValue::Set(Local::now().to_rfc3339()),
+			}
+			.insert(database_connection)
+			.await
+			.into_diagnostic()?
+			.into();
+
+			phases.push(phase);
+		}
+
+		model.phases = IngestionPhases::from(phases);
 	}
 
 	Ok(model)
@@ -102,42 +134,6 @@ pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestio
 	let ingestions: Vec<Ingestion> = ingestion.into_iter().map(Ingestion::from).collect();
 
 	Ok(ingestions)
-}
-
-#[tracing::instrument]
-async fn insert_ingestion_phases(
-	ingestion_phases: IngestionPhases, database_connection: &DatabaseConnection,
-) -> miette::Result<IngestionPhases>
-{
-	use sea_orm::ActiveValue;
-
-	let mut phases: Vec<IngestionPhase> = Vec::new();
-
-	for phase in &ingestion_phases.0 {
-		let mut phase: IngestionPhase = ingestion_phase::ActiveModel {
-			id: ActiveValue::Set(Uuid::new_v4().to_string()),
-			ingestion_id: ActiveValue::Set(phase.ingestion_id.unwrap()),
-			substance_name: ActiveValue::Set(phase.substance_name.clone()),
-			classification: ActiveValue::Set(phase.classification.to_string()),
-			start_date_min: ActiveValue::Set(phase.start_time.start.naive_utc()),
-			start_date_max: ActiveValue::Set(phase.start_time.end.naive_utc()),
-			end_date_min: ActiveValue::Set(phase.end_time.start.naive_utc()),
-			end_date_max: ActiveValue::Set(phase.end_time.end.naive_utc()),
-			duration_min: ActiveValue::Set(phase.duration.start.to_string()),
-			duration_max: ActiveValue::Set(phase.duration.end.to_string()),
-			weight: ActiveValue::Set(phase.weight.0),
-			created_at: ActiveValue::Set(Local::now().to_rfc3339()),
-			updated_at: ActiveValue::Set(Local::now().to_rfc3339()),
-		}
-		.insert(database_connection)
-		.await
-		.into_diagnostic()?
-		.into();
-
-		phases.push(IngestionPhase::from(phase));
-	}
-
-	Ok(IngestionPhases::from(phases))
 }
 
 
