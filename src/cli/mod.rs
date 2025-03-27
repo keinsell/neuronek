@@ -1,7 +1,7 @@
 use std::fmt::{Debug, Display};
 
 use atty::Stream;
-use clap::{ColorChoice, CommandFactory, Parser, Subcommand};
+use clap::{ColorChoice, CommandFactory, Parser, Subcommand, arg, command};
 use miette::IntoDiagnostic;
 use minimo::Printable;
 use sea_orm::prelude::*;
@@ -16,6 +16,8 @@ use crate::config::VERSION;
 pub mod ingestion;
 pub mod prominence;
 pub mod substance;
+
+use crate::r#abstract::CommandHandler;
 
 fn is_interactive() -> bool { atty::is(Stream::Stdout) }
 
@@ -81,7 +83,7 @@ pub trait Displayable: Serialize + Sized + Debug
 	}
 }
 
-#[derive(Subcommand)]
+#[derive(clap::Subcommand)]
 pub enum ApplicationCommands
 {
 	/// Manage ingestion entries

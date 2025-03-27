@@ -1,4 +1,5 @@
 pub(super) mod action;
+pub mod analyzer;
 pub(super) mod model;
 pub(super) mod phase;
 pub(super) mod service;

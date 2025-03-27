@@ -43,11 +43,15 @@ impl Default for Config
 {
 	fn default() -> Self
 	{
-		let mut journal_path = DATA_DIR.join("journal.db").clone();
-
-		if cfg!(debug_assertions) {
-			journal_path = temp_dir().join("neuronek.sqlite");
-		}
+		let journal_path = if cfg!(test) || env::var("NEURONEK_TEST").is_ok() {
+			// Using a special value that will be recognized
+			// by the database module as in-memory database
+			PathBuf::from(":memory:")
+		} else if cfg!(debug_assertions) {
+			temp_dir().join("neuronek.sqlite")
+		} else {
+			DATA_DIR.join("journal.db").clone()
+		};
 
 		Config {
 			sqlite_path: journal_path,

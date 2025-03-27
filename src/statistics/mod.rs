@@ -3,6 +3,7 @@ pub mod prominence;
 use std::collections::BTreeMap;
 use std::ops::Deref;
 
+use async_trait::async_trait;
 use chrono::{DateTime, Datelike, Duration, Local, NaiveDate, Timelike, Utc};
 use clap::Parser;
 use hashbrown::HashMap;
@@ -10,6 +11,8 @@ use miette::IntoDiagnostic;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder};
 use tabled::{Table, Tabled};
 
+use crate::Application;
+use crate::r#abstract::CommandHandler;
 use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::ingestion;
 use crate::ingestion::Ingestion;
@@ -23,6 +26,15 @@ pub struct ShowStatistics
 	/// Limit analysis to last N days (0 means no limit)
 	#[clap(long, short, default_value_t = 0)]
 	pub days: u32,
+}
+
+#[async_trait]
+impl CommandHandler for ShowStatistics
+{
+	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
+	{
+		show_statistics(self).await
+	}
 }
 
 #[derive(Debug, Tabled)]
@@ -46,8 +58,8 @@ struct SubstanceStatistics
 	last_ingestion_date: String,
 	#[tabled(rename = "Days Since First")]
 	days_since_first: u32,
-	#[tabled(rename = "Total Ingestions")]
-	total_ingestions: usize,
+	#[tabled(rename = "Total Ingestion")]
+	total_ingestion: usize,
 }
 
 #[derive(Debug, Tabled)]
@@ -62,7 +74,7 @@ struct GeneralStatistics
 /// Displays comprehensive statistics for recorded ingestions
 pub async fn show_statistics(cmd: &ShowStatistics) -> miette::Result<()>
 {
-	let ingestions = fetch_ingestions(cmd.days).await?;
+	let ingestions = fetch_ingestion(cmd.days).await?;
 
 	if ingestions.is_empty() {
 		println!("No ingestions recorded in the specified time period.");
@@ -78,7 +90,7 @@ pub async fn show_statistics(cmd: &ShowStatistics) -> miette::Result<()>
 }
 
 /// Fetches ingestion data from the database, optionally filtering by date range
-async fn fetch_ingestions(days_limit: u32) -> miette::Result<Vec<Ingestion>>
+async fn fetch_ingestion(days_limit: u32) -> miette::Result<Vec<Ingestion>>
 {
 	let mut query = ingestion::Entity::find().order_by_desc(ingestion::Column::IngestedAt);
 
@@ -183,7 +195,7 @@ fn show_substance_statistics(ingestions: &[Ingestion])
 				first_ingestion_date: first_date_str,
 				last_ingestion_date: last_date_str,
 				days_since_first,
-				total_ingestions: substance_ingestions.len(),
+				total_ingestion: substance_ingestions.len(),
 			}
 		})
 		.collect::<Vec<_>>();

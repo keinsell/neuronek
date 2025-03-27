@@ -46,7 +46,6 @@ use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
 use crate::r#abstract::CommandHandler;
-use crate::analyzer::{AnalyzeIngestion, IngestionReport};
 use crate::cli::{Displayable, MessageFormat};
 use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::ingestion::{
@@ -66,6 +65,7 @@ use crate::ingestion::action::{
 	UpdateIngestion,
 	ViewIngestion,
 };
+use crate::ingestion::model::AnalyzeIngestion;
 use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;

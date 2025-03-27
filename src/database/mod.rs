@@ -19,13 +19,11 @@ lazy_static::lazy_static! {
 	pub static ref DATABASE_CONNECTION: DatabaseConnection = {
 		let sqlite_path: &str = CONFIG.sqlite_path.to_str().unwrap().clone();
 
-
-		let mut sqlite_uri = format!(
-			"sqlite://{}",
-			sqlite_path
-		);
-
-		if cfg!(test) {sqlite_uri = "sqlite::memory:".parse().unwrap() }
+		let sqlite_uri = if sqlite_path == ":memory:" || cfg!(test) {
+			"sqlite::memory:".to_string()
+		} else {
+			format!("sqlite://{}", sqlite_path)
+		};
 
 		debug!("Opening database connection to {}", sqlite_uri);
 
@@ -35,42 +33,30 @@ lazy_static::lazy_static! {
 				connection
 			}
 			Err(error) => {
-				if error.to_string().contains("unable to open database file") {
+				if !sqlite_uri.contains("::memory:") && error.to_string().contains("unable to open database file") {
 					warn!(
-						"Database file not found or inaccessible at {}, \
-						attempting to initialize...",
+						"Database file not found or inaccessible at {}, attempting to initialize...",
 						sqlite_uri
 					);
 
 					if let Err(init_error) = initialize_database_file(&CONFIG.sqlite_path) {
 						error!("Failed to initialize the database: {}", init_error);
 						panic!(
-							"Critical: Unable to initialize the database file at {}. \
-							Error: {}",
-							sqlite_uri,
-							init_error
+							"Critical: Unable to initialize the database file at {}. Error: {}",
+							sqlite_uri, init_error
 						);
 					}
 
 					match block_on(async { Database::connect(&sqlite_uri).await }) {
 						Ok(retry_connection) => {
-							debug!(
-								"Database connection established successfully \
-								after initialization!"
-							);
+							debug!("Database connection established successfully after initialization!");
 							retry_connection
 						},
 						Err(retry_error) => {
-							error!(
-								"Failed to connect to the database even after \
-								initialization: {}",
-								retry_error
-							);
+							error!("Failed to connect to the database even after initialization: {}", retry_error);
 							panic!(
-								"Critical: Unable to establish database connection at {}. \
-								Error: {}",
-								sqlite_uri,
-								retry_error
+								"Critical: Unable to establish database connection at {}. Error: {}",
+								sqlite_uri, retry_error
 							);
 						}
 					}
@@ -88,10 +74,8 @@ lazy_static::lazy_static! {
 		if let Err(migration_err) = block_on(migrate_database(&connection)) {
 			error!("Failed to run database migrations: {}", migration_err);
 			panic!(
-				"Critical: Unable to complete database migrations at {}. \
-				Error: {}",
-				sqlite_uri,
-				migration_err
+				"Critical: Unable to complete database migrations at {}. Error: {}",
+				sqlite_uri, migration_err
 			);
 		}
 

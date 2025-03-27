@@ -1,4 +1,4 @@
-cargo-features = ["edition2024"]
+cargo-features = ["edition2024", "codegen-backend"]
 
 [package]
 name = "neuronek"
@@ -27,15 +27,26 @@ strip = true
 opt-level = 3
 panic = "abort"
 
+[features]
+default = ["command_line"]
+command_line = []
+terminal = []
+#web = ["dioxus/web"]
+#desktop = ["dioxus/desktop"]
+#mobile = ["dioxus/mobile"]
+#server = ["dioxus/server"]
+
+
 [dependencies]
+#dioxus = { version = "0.6.0", features = ["router", "fullstack", "launch"] }
 comfy-table = "7.1.4"
 async-std = { version = "1.12.0", features = ["attributes", "async-global-executor", "async-process"] }
-assert_cmd = "2.0.16"
 atty = "0.2.14"
 chrono = { version = "0.4", features = ["serde"] }
 chrono-english = "0.1.7"
 clap = { version = "4.5.23", features = ["derive", "wrap_help", "suggestions", "std", "cargo"] }
 clap-verbosity-flag = "3.0.1"
+crossterm = "0.27.0"
 date_time_parser = "0.2.0"
 delegate = "0.13.1"
 derivative = "2.2.0"
@@ -48,6 +59,7 @@ lazy_static = "1.5.0"
 measurements = { version = "0.11.0", features = ["std", "serde", "from_str", "regex"] }
 miette = { version = "7.4.0", features = ["fancy", "serde", "syntect-highlighter", "derive"] }
 pubchem = "0.1.1"
+ratatui = "0.26.1"
 rust-embed = "8.2.0"
 sea-orm = { version = "1.1.2", features = ["sqlx-sqlite", "runtime-async-std-rustls", "serde_json", "with-chrono"] }
 serde = { version = "1.0.216", features = ["derive", "std", "unstable", "rc", "serde_derive"] }
@@ -64,7 +76,6 @@ indicatif = "0.17.9"
 tracing-subscriber = "0.3.18"
 tracing-indicatif = "0.3.8"
 tracing = "0.1.40"
-predicates = "3.1.3"
 thiserror = "2.0.11"
 cached = { version = "0.54.0", features = ["disk_store", "async"] }
 derive_more = { version = "2.0.1", features = ["full"] }
@@ -76,7 +87,6 @@ tracing-appender = "0.2.3"
 textplots = "0.8.6"
 valuable = { version = "0.1.1", features = ["derive"] }
 derive = "1.0.0"
-crossterm = "0.28.1"
 tuirealm = { version = "2.1.0", features = ["derive", "crossterm"] }
 bon = "3.3.2"
 termimad = "0.31.2"
@@ -84,10 +94,6 @@ humantime = "2.1.0"
 nutype = { version = "0.6.1", features = ["arbitrary", "new_unchecked", "serde"] }
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
-plotlib = "0.5.1"
-time_series_generator = "0.2.0"
-anyhow = "1.0.96"
-rgb = "0.8.50"
 once_cell = "1.20.3"
 minimo = "0.1.0"
 supports-color = "3.0.2"
@@ -98,66 +104,22 @@ o2o = { version = "0.5.3", features = ["o2o-macros", "o2o-impl"] }
 clap_complete = "4.5.46"
 tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
 tempfile = "3.16.0"
-tui-realm-stdlib = "2.0.1"
-ratatui = "0.29.0"
+assert_cmd = "2.0.16"
 
-[features]
-default = []
-tui = []
+[profile]
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
 
 [profile.dist]
 inherits = "release"
 lto = "fat"
-
-[package.metadata.generate-rpm]
-assets = [
-    { source = "target/release/neuronek", dest = "/usr/bin/neuronek", mode = "755" },
-    { source = "LICENSE-MIT", dest = "/usr/share/doc/neuronek/LICENSE", mode = "644" },
-    { source = "README.md", dest = "/usr/share/doc/neuronek/README.md", mode = "644" },
-    { source = "man/neuronek.1", dest = "/usr/share/man/man1/neuronek.1", mode = "644", doc = true },
-    { source = "completions/neuronek.bash", dest = "/usr/share/bash-completion/completions/neuronek", mode = "644" },
-    { source = "completions/neuronek.fish", dest = "/usr/share/fish/vendor_completions.d/neuronek.fish", mode = "644" },
-    { source = "completions/_neuronek", dest = "/usr/share/zsh/vendor-completions/", mode = "644" },
-]
-
-[package.metadata.deb]
-assets = [
-    [
-        "target/release/neuronek",
-        "usr/bin/",
-        "755",
-    ],
-    [
-        "LICENSE",
-        "/usr/share/doc/neuronek/LICENSE",
-        "644",
-    ],
-    [
-        "/README.md",
-        "usr/share/doc/neuronek/README",
-        "644",
-    ],
-    [
-        "../man/neuronek.1",
-        "/usr/share/man/man1/neuronek.1",
-        "644",
-    ],
-    [
-        "../completions/neuronek.bash",
-        "/usr/share/bash-completion/completions/neuronek",
-        "644",
-    ],
-    [
-        "../completions/neuronek.fish",
-        "/usr/share/fish/vendor_completions.d/neuronek.fish",
-        "644",
-    ],
-    [
-        "../completions/_neuronek",
-        "/usr/share/zsh/vendor-completions/",
-        "644",
-    ],
-]
 
 [dev-dependencies]
 predicates = "3.1.3"

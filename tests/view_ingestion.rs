@@ -28,6 +28,7 @@ use predicates::prelude::*;
 fn test_show_nonexistent_ingestion() -> Result<(), Box<dyn std::error::Error>>
 {
 	let mut cmd = Command::cargo_bin("neuronek")?;
+	cmd.env("NEURONEK_TEST", "1");
 	cmd.env("RUST_TEST", "1")
 		.arg("ingestion")
 		.arg("view")

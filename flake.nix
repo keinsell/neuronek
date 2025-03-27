@@ -3,137 +3,119 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flakelight.url = "github:nix-community/flakelight";
     rust-overlay.url = "github:oxalica/rust-overlay";
-    flake-utils.url = "github:numtide/flake-utils";
-    crane = {
-      url = "github:ipetkov/crane";
-    };
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    rust-overlay,
-    flake-utils,
-    crane,
-    treefmt-nix,
-    ...
-  }:
-    flake-utils.lib.eachDefaultSystem (
-      system: let
-        overlays = [(import rust-overlay)];
-        pkgs = import nixpkgs {
-          inherit system overlays;
-        };
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flakelight,
+      rust-overlay,
+      ...
+    }:
+    let
+      projectName = "neuronek";
+      projectVersion = "0.0.1-alpha.6";
+      rustToolchainVersion = "nightly";
+    in
+    flakelight ./. {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      withOverlays = [ rust-overlay.overlays.default ];
 
-        rustToolchain = pkgs.rust-bin.nightly.latest.default.override {
-          extensions = [
-            "rust-src"
-            "llvm-tools-preview"
-            "miri"
-          ];
-        };
+      devShell.packages =
+        pkgs:
+        let
+          darwinExtras =
+            if pkgs.stdenv.isDarwin then
+              [
+                pkgs.libiconv
+                pkgs.darwin.apple_sdk.frameworks.Cocoa
+              ]
+            else
+              [ ];
+          linuxExtras = if pkgs.stdenv.isLinux then [
+              #  pkgs.pkg-config
+              #  pkgs.llvmPackages.bintools
+              #  pkgs.glib
+              #  pkgs.gtk3
+              #  pkgs.libsoup_3
+              #  pkgs.webkitgtk_4_1
+              #  pkgs.xdotool
+             ] else [];
+        in
+        with pkgs;
+        [
+          (rust-bin.${rustToolchainVersion}.latest.default.override {
+            extensions = [ "rust-src"];
+              targets = [];
+          })
 
-        craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
+          cargo-edit
+          cargo-watch
+          bacon
 
-        buildInputs = with pkgs;
-          [
-            openssl
-            pkg-config
-          ]
-          ++ lib.optionals stdenv.isDarwin [
-            darwin.apple_sdk.frameworks.Security
-          ];
+          nixd
+          nil
+          alejandra
+          statix
+          deadnix
+          nix-index
+          nix-tree
+          manix
+          onefetch
+          dioxus-cli
+        ]
+        ++ linuxExtras
+        ++ darwinExtras;
 
-        commonArgs = {
-          src = craneLib.cleanCargoSource (craneLib.path ./.);
-          buildInputs = buildInputs;
-          nativeBuildInputs = with pkgs; [pkg-config];
-        };
+      devShell.env = pkgs: {
+        # Removed unnecessary RUSTFLAGS
+        # Removed explicit RUST_SRC_PATH as rust-src is included in toolchain
+      };
 
-        cargoArtifacts = craneLib.buildDepsOnly commonArgs;
+      devShell.shellHook = ''
+        echo "Entering development shell for ${projectName}..."
+        root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+        export PATH="$root/target/debug:$root/target/release:$PATH"
+        onefetch
+      '';
 
-        treefmtEval = treefmt-nix.lib.evalModule pkgs {
-          projectRootFile = "flake.nix";
-          programs.nixfmt-rfc-style.enable = true;
-          programs.deadnix.enable = true;
-          programs.statix.enable = true;
-        };
-      in {
-        devShells.default = pkgs.mkShell {
-          inputsFrom = [];
-
-          packages = with pkgs;
-            [
-              rustToolchain
-              cargo-edit
-              cargo-watch
-              rust-analyzer
-              bacon
-              nixd
-              nixfmt-rfc-style
-              nil
-              statix
-              deadnix
-              nix-index
-              nix-info
-              treefmt
-              alejandra
-              nix-tree
-              manix
-            ]
-            ++ buildInputs;
-
-          shellHook = ''
-            export RUST_BACKTRACE=1
-            export RUST_SRC_PATH="${rustToolchain}/lib/rustlib/src/rust/library"
-
-            echo "Using Rust nightly: $(rustc --version)"
-            root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-            export PATH=$PATH:$root/target/debug:$root/target/release
-          '';
-        };
-
-        formatter = treefmtEval.config.build.wrapper;
-
-        packages = {
-          default = craneLib.buildPackage (commonArgs
-            // {
-              inherit cargoArtifacts;
-              pname = "neuronek";
-              version = "0.0.1-alpha.3";
-
-              doCheck = false;
-
-              preBuild = ''
-                export CARGO_INCREMENTAL=0
-              '';
-
-              postInstall = ''
-                ${pkgs.file}/bin/file $out/bin/*
-              '';
-            });
-
-          check = craneLib.cargoNextest (commonArgs
-            // {
-              inherit cargoArtifacts;
-              cargoNextestExtraArgs = "--workspace";
-            });
-        };
-
-        checks = {
-          clippy = craneLib.cargoClippy (commonArgs
-            // {
-              inherit cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets";
-              # cargoClippyExtraArgs = "--all-targets -- --deny warnings";
-            });
-
-          fmt = craneLib.cargoFmt {
+      perSystem =
+        { pkgs, system, ... }:
+        {
+          packages.default = pkgs.rustPlatform.buildRustPackage {
+            pname = projectName;
+            version = projectVersion;
             src = ./.;
+
+            cargoLock.lockFile = ./Cargo.lock;
+
+            nativeBuildInputs =
+              with pkgs;
+              [
+                rustPlatform.cargoSetupHook
+                (rust-bin.${rustToolchainVersion}.latest.default)
+                pkg-config
+              ]
+              ++ pkgs.lib.optional pkgs.stdenv.isLinux mold;
+
+            buildInputs = with pkgs; [ openssl ];
+            doCheck = false;
           };
+
+          formatter = pkgs.alejandra;
         };
-      }
-    );
+
+      formatters = {
+        "*.nix" = "alejandra";
+      };
+    };
 }

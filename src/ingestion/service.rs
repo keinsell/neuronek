@@ -13,7 +13,7 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-pub(crate) use super::analyzer::analyze_ingestion;
+use super::analyzer::analyze_ingestion;
 use crate::database::entities::{ingestion, ingestion_phase};
 use crate::database::{DATABASE_CONNECTION, DatabaseConnection};
 use crate::ingestion::action::ListIngestion;
@@ -21,7 +21,6 @@ use crate::ingestion::model::{AnalyzeIngestion, IngestionPhases};
 use crate::ingestion::phase::IngestionPhase;
 use crate::ingestion::{Ingestion, LogIngestion};
 
-#[tracing::instrument]
 pub async fn log_ingestion(
 	command: &LogIngestion, database_connection: &DatabaseConnection,
 ) -> miette::Result<Ingestion>
@@ -55,43 +54,14 @@ pub async fn log_ingestion(
 	.into_diagnostic()?
 	.into();
 
+
 	if !ingestion.phases.0.is_empty() {
-		let ingestion_phases = ingestion.phases;
-		use sea_orm::ActiveValue;
-
-		let mut phases: Vec<IngestionPhase> = Vec::new();
-
-		for phase in &ingestion_phases.0 {
-			let phase: IngestionPhase = ingestion_phase::ActiveModel {
-				id: ActiveValue::Set(Uuid::new_v4().to_string()),
-				ingestion_id: ActiveValue::Set(model.id.unwrap_or(0)),
-				substance_name: ActiveValue::Set(phase.substance_name.clone()),
-				classification: ActiveValue::Set(phase.classification.to_string()),
-				start_date_min: ActiveValue::Set(phase.start_time.start.naive_utc()),
-				start_date_max: ActiveValue::Set(phase.start_time.end.naive_utc()),
-				end_date_min: ActiveValue::Set(phase.end_time.start.naive_utc()),
-				end_date_max: ActiveValue::Set(phase.end_time.end.naive_utc()),
-				duration_min: ActiveValue::Set(phase.duration.start.to_string()),
-				duration_max: ActiveValue::Set(phase.duration.end.to_string()),
-				weight: ActiveValue::Set(phase.weight.0),
-				created_at: ActiveValue::Set(Local::now().to_rfc3339()),
-				updated_at: ActiveValue::Set(Local::now().to_rfc3339()),
-			}
-			.insert(database_connection)
-			.await
-			.into_diagnostic()?
-			.into();
-
-			phases.push(phase);
-		}
-
-		model.phases = IngestionPhases::from(phases);
+		model.phases = insert_ingestion_phases(ingestion.phases, database_connection).await?;
 	}
 
 	Ok(model)
 }
 
-#[tracing::instrument]
 pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find_by_id(ingestion_id)
@@ -117,7 +87,6 @@ pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion
 	}
 }
 
-#[tracing::instrument]
 pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find()
@@ -130,6 +99,71 @@ pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestio
 	let ingestions: Vec<Ingestion> = ingestion.into_iter().map(Ingestion::from).collect();
 
 	Ok(ingestions)
+}
+
+async fn insert_ingestion(
+	command: &LogIngestion, database_connection: &DatabaseConnection,
+	current_time_fn: fn() -> chrono::NaiveDateTime,
+) -> miette::Result<ingestion::Model>
+{
+	use sea_orm::ActiveValue;
+
+	let ingestion_model = ingestion::ActiveModel {
+		id: ActiveValue::NotSet,
+		substance_name: ActiveValue::Set(command.substance_name.clone().to_lowercase()),
+		route_of_administration: ActiveValue::Set(
+			serde_json::to_value(command.route_of_administration)
+				.into_diagnostic()?
+				.as_str()
+				.unwrap()
+				.to_string(),
+		),
+		dosage: ActiveValue::Set(command.dosage.as_base_units() as f32),
+		ingested_at: ActiveValue::Set(command.ingestion_date.naive_utc()),
+		updated_at: ActiveValue::Set(current_time_fn()),
+		created_at: ActiveValue::Set(current_time_fn()),
+	};
+
+	ingestion_model
+		.insert(database_connection)
+		.await
+		.into_diagnostic()
+}
+
+
+async fn insert_ingestion_phases(
+	ingestion_phases: IngestionPhases, database_connection: &DatabaseConnection,
+) -> miette::Result<IngestionPhases>
+{
+	use sea_orm::ActiveValue;
+
+	let mut phases: Vec<IngestionPhase> = Vec::new();
+
+	for phase in &ingestion_phases.0 {
+		let mut phase: IngestionPhase = ingestion_phase::ActiveModel {
+			id: ActiveValue::Set(Uuid::new_v4().to_string()),
+			ingestion_id: ActiveValue::Set(phase.ingestion_id.unwrap()),
+			substance_name: ActiveValue::Set(phase.substance_name.clone()),
+			classification: ActiveValue::Set(phase.classification.to_string()),
+			start_date_min: ActiveValue::Set(phase.start_time.start.naive_utc()),
+			start_date_max: ActiveValue::Set(phase.start_time.end.naive_utc()),
+			end_date_min: ActiveValue::Set(phase.end_time.start.naive_utc()),
+			end_date_max: ActiveValue::Set(phase.end_time.end.naive_utc()),
+			duration_min: ActiveValue::Set(phase.duration.start.to_string()),
+			duration_max: ActiveValue::Set(phase.duration.end.to_string()),
+			weight: ActiveValue::Set(phase.weight.0),
+			created_at: ActiveValue::Set(Local::now().to_rfc3339()),
+			updated_at: ActiveValue::Set(Local::now().to_rfc3339()),
+		}
+		.insert(database_connection)
+		.await
+		.into_diagnostic()?
+		.into();
+
+		phases.push(IngestionPhase::from(phase));
+	}
+
+	Ok(IngestionPhases::from(phases))
 }
 
 

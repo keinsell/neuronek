@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use chrono::{DateTime, Duration, Local};
 use clap::Parser;
 use miette::Result;
@@ -5,6 +6,8 @@ use serde::Serialize;
 use tabled::settings::Style;
 use tabled::{Table, Tabled};
 
+use crate::Application;
+use crate::r#abstract::CommandHandler;
 use crate::statistics::prominence::{
 	generate_prominence_summary,
 	get_most_prominent_substance,
@@ -32,6 +35,14 @@ pub struct ProminenceCommand
 	pub current: bool,
 }
 
+#[async_trait]
+impl CommandHandler for ProminenceCommand
+{
+	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
+	{
+		handle_prominence_command(self).await
+	}
+}
 
 #[derive(Debug, Serialize, Tabled)]
 struct ProminenceSummary

@@ -1,6 +1,6 @@
 use crossterm::style::Color;
 use lazy_static::lazy_static;
-use termimad::{CompoundStyle, MadSkin};
+use termimad::MadSkin;
 
 mod color
 {
@@ -491,10 +491,6 @@ lazy_static! {
 		let base = Color::AnsiValue(234);       // #1e1e2e
 		let mantle = Color::AnsiValue(235);     // #181825
 		let crust = Color::AnsiValue(236);      // #11111b
-
-		skin.headers[0].compound_style = CompoundStyle::new(Some(mauve), None, Default::default());
-		skin.headers[1].compound_style = CompoundStyle::new(Some(blue), None, Default::default());
-		skin.headers[2].compound_style = CompoundStyle::new(Some(green), None, Default::default());
 
 		skin
 	};

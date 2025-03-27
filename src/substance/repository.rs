@@ -8,7 +8,7 @@ use miette::{IntoDiagnostic, miette};
 use sea_orm::{ColumnTrait, EntityTrait, ModelTrait, QueryFilter};
 
 use crate::database::entities::substance;
-use crate::database::{DATABASE_CONNECTION, entities};
+use crate::database::{DatabaseConnection, entities};
 use crate::substance::route_of_administration::dosage::{
 	Dosage,
 	DosageClassification,
@@ -22,7 +22,9 @@ use crate::substance::route_of_administration::{
 use crate::substance::{RoutesOfAdministration, Substance};
 
 
-pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
+pub async fn get_substance(
+	name: &str, database_connection: &DatabaseConnection,
+) -> miette::Result<Option<Substance>>
 {
 	let substance_name = pubchem::Compound::with_name(name)
 		.title()
@@ -35,7 +37,7 @@ pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
 				.eq(substance_name.to_lowercase())
 				.or(substance::Column::CommonNames.contains(name.to_lowercase())),
 		)
-		.one(DATABASE_CONNECTION.deref())
+		.one(database_connection.deref())
 		.await
 		.into_diagnostic()?;
 
@@ -46,7 +48,7 @@ pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
 
 	let routes_of_administration = db_substance
 		.find_related(entities::substance_route_of_administration::Entity)
-		.all(DATABASE_CONNECTION.deref())
+		.all(database_connection.deref())
 		.await
 		.into_diagnostic()?;
 
@@ -69,7 +71,7 @@ pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
 
 			let dosages = route
 				.find_related(entities::substance_route_of_administration_dosage::Entity)
-				.all(DATABASE_CONNECTION.deref())
+				.all(database_connection.deref())
 				.await
 				.into_diagnostic()?;
 
@@ -101,7 +103,7 @@ pub async fn get_substance(name: &str) -> miette::Result<Option<Substance>>
 
 			let phases = route
 				.find_related(entities::substance_route_of_administration_phase::Entity)
-				.all(DATABASE_CONNECTION.deref())
+				.all(database_connection.deref())
 				.await
 				.into_diagnostic()?;
 

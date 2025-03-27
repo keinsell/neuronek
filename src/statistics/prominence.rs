@@ -394,9 +394,13 @@ pub fn get_most_prominent_substance(prominence_data: &Prominence) -> Option<Stri
 #[cfg(test)]
 mod tests
 {
-	use chrono::Duration;
+	use chrono::{Duration, Local};
 
-	use super::*;
+	use crate::statistics::prominence::{
+		generate_prominence_summary,
+		get_most_prominent_substance,
+		get_substance_prominence,
+	};
 
 	#[async_std::test]
 	async fn test_substance_prominence_time_range()
@@ -405,7 +409,6 @@ mod tests
 		let start_time = now - Duration::hours(24);
 		let end_time = now + Duration::hours(24);
 
-		// Test with default resolution
 		let result = get_substance_prominence(start_time, end_time, None).await;
 		assert!(
 			result.is_ok(),

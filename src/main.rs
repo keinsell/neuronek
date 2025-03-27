@@ -18,18 +18,15 @@ use crate::ingestion::IngestionActions;
 use crate::statistics::show_statistics;
 
 mod r#abstract;
-mod analyzer;
 mod cli;
 pub mod config;
 mod database;
 pub(crate) mod error_handling;
 mod ingestion;
 pub(crate) mod logging;
-mod prelude;
 mod statistics;
 mod substance;
 mod ui;
-
 use crossterm::ExecutableCommand;
 
 pub trait ValueParser
@@ -54,6 +51,7 @@ pub struct Application<'a>
 }
 
 use clap::Subcommand;
+
 
 #[async_std::main]
 async fn main() -> Result<()>

@@ -3,10 +3,10 @@
         "giga-ai.giga-ai",
         "ms-vscode.vscode-diagnostic-tools",
         "ms-vscode.vscode-websearchforcopilot",
-        "rust-lang.rust-analyzer",
         "jnoortheen.nix-ide",
         "bbenoist.nix",
-        "arrterian.nix-env-selector",
-        "mkhl.direnv"
+        "mkhl.direnv",
+        "github.vscode-github-actions",
+        "ms-vscode.makefile-tools"
     ]
 }
