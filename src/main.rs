@@ -52,12 +52,16 @@ pub struct Application<'a>
 
 use clap::Subcommand;
 
-
 #[async_std::main]
 async fn main() -> Result<()>
 {
-	setup_diagnostics();
-	let _guard = setup_logger().unwrap();
+	let _sentry = sentry::init((
+		"https://b21e1528a3974724b2f9790b19f39143@o1122681.ingest.us.sentry.io/6380718",
+		sentry::ClientOptions {
+			release: sentry::release_name!(),
+			..sentry::ClientOptions::default()
+		},
+	));
 
 	migrate_database(&DATABASE_CONNECTION)
 		.await
@@ -87,20 +91,25 @@ async fn main() -> Result<()>
 			| IngestionActions::Delete(delete_ingestion) => delete_ingestion.handle(context).await,
 			| IngestionActions::Update(update_ingestion) => update_ingestion.handle(context).await,
 			| IngestionActions::View(view_ingestion) => {
-				let ingestion =
-					crate::ingestion::service::get_ingestion(view_ingestion.ingestion_id)
-						.await
-						.map_err(|e| miette!(e))?;
-
-				if let Some(ingestion) = ingestion {
-					ingestion.display(context.stdout_format);
-					Ok(())
-				} else {
-					Err(miette!(
-						"Ingestion with ID {} not found",
-						view_ingestion.ingestion_id
-					))
-				}
+				ingestion::service::get_ingestion(view_ingestion.ingestion_id)
+					.await
+					.map_err(|e| miette!(e))
+					.map(|ingestion| {
+						ingestion
+							.map(|ingestion| ingestion.display(context.stdout_format))
+							.unwrap()
+					})
+					.unwrap_or_else(|_| {
+						miette!("Error");
+					});
+				Ok(())
+			}
+			| IngestionActions::Analyze(analyze_ingestion) => {
+				ingestion::service::analyze_ingestion(analyze_ingestion)
+					.await
+					.map_err(|e| miette!(e))
+					.map(|ingestion| ingestion.display(context.stdout_format))?;
+				Ok(())
 			}
 		},
 		| ApplicationCommands::Substance(cmd) => cmd.handle(context).await,

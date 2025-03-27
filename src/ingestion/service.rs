@@ -13,7 +13,7 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-use super::analyzer::analyze_ingestion;
+pub(crate) use super::analyzer::analyze_ingestion;
 use crate::database::entities::{ingestion, ingestion_phase};
 use crate::database::{DATABASE_CONNECTION, DatabaseConnection};
 use crate::ingestion::action::ListIngestion;
@@ -21,6 +21,7 @@ use crate::ingestion::model::{AnalyzeIngestion, IngestionPhases};
 use crate::ingestion::phase::IngestionPhase;
 use crate::ingestion::{Ingestion, LogIngestion};
 
+#[tracing::instrument]
 pub async fn log_ingestion(
 	command: &LogIngestion, database_connection: &DatabaseConnection,
 ) -> miette::Result<Ingestion>
@@ -62,6 +63,7 @@ pub async fn log_ingestion(
 	Ok(model)
 }
 
+#[tracing::instrument]
 pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find_by_id(ingestion_id)
@@ -87,6 +89,7 @@ pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion
 	}
 }
 
+#[tracing::instrument]
 pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestion>>
 {
 	let ingestion = ingestion::Entity::find()
@@ -101,36 +104,7 @@ pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestio
 	Ok(ingestions)
 }
 
-async fn insert_ingestion(
-	command: &LogIngestion, database_connection: &DatabaseConnection,
-	current_time_fn: fn() -> chrono::NaiveDateTime,
-) -> miette::Result<ingestion::Model>
-{
-	use sea_orm::ActiveValue;
-
-	let ingestion_model = ingestion::ActiveModel {
-		id: ActiveValue::NotSet,
-		substance_name: ActiveValue::Set(command.substance_name.clone().to_lowercase()),
-		route_of_administration: ActiveValue::Set(
-			serde_json::to_value(command.route_of_administration)
-				.into_diagnostic()?
-				.as_str()
-				.unwrap()
-				.to_string(),
-		),
-		dosage: ActiveValue::Set(command.dosage.as_base_units() as f32),
-		ingested_at: ActiveValue::Set(command.ingestion_date.naive_utc()),
-		updated_at: ActiveValue::Set(current_time_fn()),
-		created_at: ActiveValue::Set(current_time_fn()),
-	};
-
-	ingestion_model
-		.insert(database_connection)
-		.await
-		.into_diagnostic()
-}
-
-
+#[tracing::instrument]
 async fn insert_ingestion_phases(
 	ingestion_phases: IngestionPhases, database_connection: &DatabaseConnection,
 ) -> miette::Result<IngestionPhases>

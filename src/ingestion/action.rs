@@ -7,6 +7,7 @@ use miette::IntoDiagnostic;
 use serde::{Deserialize, Serialize};
 
 use crate::ValueParser;
+use crate::ingestion::model::AnalyzeIngestion;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 
@@ -148,6 +149,7 @@ pub enum Actions
 	Delete(DeleteIngestion),
 	/// Update an existing ingestion
 	Update(UpdateIngestion),
+	Analyze(AnalyzeIngestion),
 	/// View details of a specific ingestion
 	View(ViewIngestion),
 }
