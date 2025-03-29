@@ -5,29 +5,14 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "ingestion_phase")]
+#[sea_orm(table_name = "ingestion_group_ingestion")]
 pub struct Model
 {
-	#[sea_orm(primary_key, auto_increment = false, column_type = "Text", unique)]
+	#[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
 	pub id: String,
+	#[sea_orm(column_type = "Text")]
+	pub group_id: String,
 	pub ingestion_id: i32,
-	#[sea_orm(column_type = "Text")]
-	pub classification: String,
-	pub start_date_min: DateTime,
-	pub start_date_max: DateTime,
-	pub end_date_min: DateTime,
-	pub end_date_max: DateTime,
-	pub weight: Decimal,
-	#[sea_orm(column_type = "Text")]
-	pub duration_min: String,
-	#[sea_orm(column_type = "Text")]
-	pub duration_max: String,
-	#[sea_orm(column_type = "Text")]
-	pub substance_name: String,
-	#[sea_orm(column_type = "Text")]
-	pub created_at: String,
-	#[sea_orm(column_type = "Text")]
-	pub updated_at: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -41,11 +26,24 @@ pub enum Relation
 		on_delete = "Cascade"
 	)]
 	Ingestion,
+	#[sea_orm(
+		belongs_to = "super::ingestion_group::Entity",
+		from = "Column::GroupId",
+		to = "super::ingestion_group::Column::Id",
+		on_update = "Cascade",
+		on_delete = "Cascade"
+	)]
+	IngestionGroup,
 }
 
 impl Related<super::ingestion::Entity> for Entity
 {
 	fn to() -> RelationDef { Relation::Ingestion.def() }
+}
+
+impl Related<super::ingestion_group::Entity> for Entity
+{
+	fn to() -> RelationDef { Relation::IngestionGroup.def() }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

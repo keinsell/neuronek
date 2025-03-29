@@ -3,6 +3,8 @@
 pub mod prelude;
 
 pub mod ingestion;
+pub mod ingestion_group;
+pub mod ingestion_group_ingestion;
 pub mod ingestion_phase;
 pub mod substance;
 pub mod substance_route_of_administration;
