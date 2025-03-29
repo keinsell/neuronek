@@ -29,7 +29,7 @@ pub enum PhaseClassification
 	/// noticeable changes in perception and the point of highest subjective
 	/// intensity. This is colloquially known as "coming up."
 	Comeup,
-	/// The peak phase can be defined as period of time in which the intensity
+	/// The peak phase can be defined as a period of time in which the intensity
 	/// of the substance's effects are at its height.
 	Peak,
 	/// The offset phase can be defined as the amount of time in between the
