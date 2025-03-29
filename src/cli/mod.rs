@@ -13,6 +13,8 @@ use textplots::Plot;
 use tracing::log::Log;
 
 use crate::config::VERSION;
+use crate::formulation;
+
 pub mod ingestion;
 pub mod prominence;
 pub mod substance;
@@ -90,7 +92,9 @@ pub enum ApplicationCommands
 	Ingestion(ingestion::IngestionCommand),
 	#[command(hide = true)]
 	Substance(substance::SubstanceCommand),
-	/// Show general statistics about ingestions
+	#[command(subcommand)]
+	Formula(formulation::Command),
+	/// Show general statistics about ingestion
 	Stats(crate::statistics::ShowStatistics),
 	/// Show substance prominence over time
 	Prominence(prominence::ProminenceCommand),

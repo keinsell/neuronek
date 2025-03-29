@@ -45,7 +45,7 @@ impl Default for Config
 	{
 		let journal_path = if cfg!(test) || env::var("NEURONEK_TEST").is_ok() {
 			// Using a special value that will be recognized
-			// by the database module as in-memory database
+			// by the database module as an in-memory database
 			PathBuf::from(":memory:")
 		} else if cfg!(debug_assertions) {
 			temp_dir().join("neuronek.sqlite")

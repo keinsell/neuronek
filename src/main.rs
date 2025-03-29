@@ -29,6 +29,8 @@ mod substance;
 mod ui;
 use crossterm::ExecutableCommand;
 
+mod formulation;
+
 pub trait ValueParser
 {
 	type Output;
@@ -51,6 +53,7 @@ pub struct Application<'a>
 }
 
 use clap::Subcommand;
+use crate::formulation::{create_formulation, Command};
 
 #[async_std::main]
 async fn main() -> Result<()>
@@ -113,7 +116,18 @@ async fn main() -> Result<()>
 		| ApplicationCommands::Stats(cmd) => {
 			show_statistics(&cmd).await?;
 			Ok(())
-		}
+		},
+		| ApplicationCommands::Formula(cmd) => {
+			match &cmd {
+				Command::Create(cmd) => {
+					create_formulation(cmd);
+					Ok(())
+				},
+				_ => {
+					todo!()
+				}
+			}
+		},
 		| ApplicationCommands::Prominence(cmd) => {
 			cli::prominence::handle_prominence_command(&cmd).await
 		}
