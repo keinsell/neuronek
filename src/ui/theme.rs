@@ -469,29 +469,6 @@ pub use stylize::*;
 lazy_static! {
 	pub static ref THEME: MadSkin = {
 		let mut skin = MadSkin::default();
-
-		// Catppuccin Mocha color palette
-		let rosewater = Color::AnsiValue(245);  // #f5e0dc
-		let flamingo = Color::AnsiValue(224);   // #f2cdcd
-		let pink = Color::AnsiValue(212);       // #f5c2e7
-		let mauve = Color::AnsiValue(176);      // #cba6f7
-		let red = Color::AnsiValue(167);        // #f38ba8
-		let maroon = Color::AnsiValue(203);     // #eba0ac
-		let peach = Color::AnsiValue(223);      // #fab387
-		let yellow = Color::AnsiValue(227);     // #f9e2af
-		let green = Color::AnsiValue(114);      // #a6e3a1
-		let teal = Color::AnsiValue(84);        // #94e2d5
-		let sky = Color::AnsiValue(117);        // #89dceb
-		let sapphire = Color::AnsiValue(74);    // #74c7ec
-		let blue = Color::AnsiValue(111);       // #89b4fa
-		let lavender = Color::AnsiValue(183);   // #b4befe
-		let text = Color::AnsiValue(250);       // #cdd6f4
-		let overlay2 = Color::AnsiValue(245);   // #9399b2
-		let surface2 = Color::AnsiValue(239);   // #585b70
-		let base = Color::AnsiValue(234);       // #1e1e2e
-		let mantle = Color::AnsiValue(235);     // #181825
-		let crust = Color::AnsiValue(236);      // #11111b
-
 		skin
 	};
 }

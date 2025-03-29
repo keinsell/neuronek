@@ -9,13 +9,14 @@ use clap::builder::TypedValueParser;
 use nutype::nutype;
 use serde::Serialize;
 use tabled::Tabled;
-
+use valuable::Valuable;
 use crate::ValueParser;
 use crate::database::entities::ingestion::Model;
 use crate::ingestion::IngestionPhase;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::{Dosage, DosageClassification};
 use crate::substance::route_of_administration::phase::PhaseClassification;
+
 
 #[nutype(
 	sanitize(trim, lowercase),

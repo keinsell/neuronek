@@ -108,6 +108,8 @@ tempfile = "3.16.0"
 assert_cmd = "2.0.16"
 sentry = "0.36.0"
 sentry-tracing = "0.36.0"
+promkit = "0.8.0"
+dialoguer = "0.11.0"
 
 [profile]
 [profile.wasm-dev]

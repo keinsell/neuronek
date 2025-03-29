@@ -19,7 +19,7 @@ use crossterm::style::Color::{AnsiValue, Magenta, Rgb, Yellow};
 use crossterm::style::Stylize;
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
 use miette::{IntoDiagnostic, miette};
-use minimo::{header, success};
+use minimo::{header, success, Printable};
 use owo_colors::{OwoColorize, style};
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
@@ -44,10 +44,11 @@ use thiserror::__private::AsDisplay;
 use tracing::{Level, event, info};
 use tuirealm::props::TextSpan;
 use uuid::Uuid;
+use crate::ui::theme::THEME;
 
 use crate::r#abstract::CommandHandler;
 use crate::cli::{Displayable, MessageFormat};
-use crate::database::DATABASE_CONNECTION;
+use crate::database::{Ingestion, DATABASE_CONNECTION};
 use crate::database::entities::ingestion::{
 	Entity as IngestionEntity,
 	Model as IngestionModel,
@@ -71,8 +72,8 @@ use crate::substance::route_of_administration::RouteOfAdministrationClassificati
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
 use crate::ui::PhaseIcon;
-use crate::ui::theme::THEME;
-use crate::{Application, database};
+use crate::{Application, database, Exception};
+use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
 
 impl Displayable for crate::ingestion::Ingestion
 {
@@ -273,20 +274,40 @@ impl CommandHandler for DeleteIngestion
 {
 	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
 	{
-		let delete_ingestion = IngestionEntity::delete_by_id(self.ingestion_id)
-			.exec(ctx.database_connection)
-			.await;
+		let mut is_confirmed = self.confirmation.unwrap_or(false);
+		let ingestion = IngestionEntity::find_by_id(self.ingestion_id).one(ctx.database_connection).await.into_diagnostic()?;
 
-		if delete_ingestion.is_err() {
-			return Err(miette!(
-				"Failed to delete ingestion: {}",
-				&delete_ingestion.unwrap_err()
-			));
+		if (ingestion.is_none()) {
+			Err(miette!(EntityNotFound))?
 		}
 
+		if !is_confirmed && self.interactive {
+			use dialoguer::Confirm;
+
+			is_confirmed = Confirm::new()
+				.with_prompt("Operation will be irreversible, are you sure?")
+				.default(false)
+				.interact()
+				.map_err(|e| miette!("Failed to get confirmation: {}", e))?;
+		}
+
+		if !is_confirmed {
+			return Err(miette!(Exception::DestructiveOperationNotConfirmed));
+		}
+
+		IngestionEntity::delete_by_id(self.ingestion_id)
+			.exec(ctx.database_connection)
+			.await
+			.map_err(|err| {
+				eprintln!("{}", err.to_string());
+				err
+			}).into_diagnostic()?;
+
+		println!("Ingestion deleted");
+
 		info!(
-			"Successfully deleted ingestion with ID {}.",
-			self.ingestion_id
+			ingestion_id=ingestion.unwrap().id,
+			"Ingestion Deleted"
 		);
 
 		Ok(())

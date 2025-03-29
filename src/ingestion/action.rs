@@ -7,6 +7,7 @@ use miette::IntoDiagnostic;
 use serde::{Deserialize, Serialize};
 
 use crate::ValueParser;
+use crate::cli::is_interactive;
 use crate::ingestion::model::AnalyzeIngestion;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
@@ -105,7 +106,12 @@ pub struct DeleteIngestion
 		help = "ID of the ingestion to delete"
 	)]
 	pub ingestion_id: i32,
+	#[clap(short, long, default_value_t=is_interactive())]
+	pub interactive: bool,
+	#[clap(short = 'y', long = "no-confirm")]
+	pub confirmation: Option<bool>,
 }
+
 
 #[derive(Parser, Debug)]
 #[command(

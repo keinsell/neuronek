@@ -19,7 +19,7 @@ pub mod substance;
 
 use crate::r#abstract::CommandHandler;
 
-fn is_interactive() -> bool { atty::is(Stream::Stdout) }
+pub fn is_interactive() -> bool { atty::is(Stream::Stdout) }
 
 // TODO: Markdown?
 // TODO: TUI?
