@@ -2674,6 +2674,7 @@ dependencies = [
  "sentry-tracing",
  "serde",
  "serde_json",
+ "static_table",
  "strum 0.27.1",
  "strum_macros 0.27.1",
  "supports-color",
@@ -4660,6 +4661,19 @@ name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+
+[[package]]
+name = "static_table"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2acf09b21a14f2c25db29b237dccc0f423b061e2887a5f18b11e2d8e69617e4"
+dependencies = [
+ "proc-macro-error2",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+ "tabled",
+]
 
 [[package]]
 name = "strict"

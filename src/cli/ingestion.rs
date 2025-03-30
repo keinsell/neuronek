@@ -1,11 +1,3 @@
-use std::borrow::Cow;
-use std::cmp::Ordering;
-use std::collections::{BTreeMap, HashMap};
-use std::fmt::{Debug, Display, Formatter};
-use std::ops::Deref;
-use std::range::Range;
-use std::str::FromStr;
-
 use async_std::task;
 use async_trait::async_trait;
 use chrono::naive::serde::ts_microseconds::serialize;
@@ -18,9 +10,9 @@ use comfy_table::{ContentArrangement, Table as ComfyTable, Width};
 use crossterm::style::Color::{AnsiValue, Magenta, Rgb, Yellow};
 use crossterm::style::Stylize;
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
-use miette::{IntoDiagnostic, miette};
-use minimo::{Printable, header, success};
-use owo_colors::{OwoColorize, style};
+use miette::{miette, IntoDiagnostic};
+use minimo::{header, success, Printable};
+use owo_colors::{style, OwoColorize};
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
 use sea_orm::{
@@ -34,19 +26,24 @@ use sea_orm::{
 };
 use sea_orm_migration::IntoSchemaManagerConnection;
 use serde::{Deserialize, Serialize};
+use std::borrow::Cow;
+use std::cmp::Ordering;
+use std::collections::{BTreeMap, HashMap};
+use std::fmt::{Debug, Display, Formatter};
+use std::ops::Deref;
+use std::range::Range;
+use std::str::FromStr;
 use tabled::builder::Builder;
 use tabled::settings::object::{Columns, Rows, Segment};
 use tabled::settings::{Alignment, Format, Modify, Padding, Style};
-use tabled::{Table, Tabled};
-use termimad::{LineStyle, MadSkin, ROUNDED_TABLE_BORDER_CHARS, gray, rgb};
+use tabled::{col, row, Table, Tabled};
+use termimad::{gray, rgb, LineStyle, MadSkin, ROUNDED_TABLE_BORDER_CHARS};
 use textplots::{Chart, Plot, Shape};
 use thiserror::__private::AsDisplay;
-use tracing::{Level, event, info};
+use tracing::{event, info, Level};
 use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
-use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
-use crate::r#abstract::CommandHandler;
 use crate::cli::{Displayable, MessageFormat};
 use crate::database::entities::ingestion::{
 	Entity as IngestionEntity,
@@ -57,8 +54,7 @@ use crate::database::entities::ingestion_phase::{
 	Entity as IngestionPhaseEntity,
 	{self},
 };
-use crate::database::{DATABASE_CONNECTION, Ingestion};
-use crate::ingestion::IngestionActions;
+use crate::database::{Ingestion, DATABASE_CONNECTION};
 use crate::ingestion::action::{
 	DeleteIngestion,
 	ListIngestion,
@@ -67,13 +63,17 @@ use crate::ingestion::action::{
 	ViewIngestion,
 };
 use crate::ingestion::model::AnalyzeIngestion;
+use crate::ingestion::IngestionActions;
+use crate::r#abstract::CommandHandler;
 use crate::substance::repository::get_substance;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
-use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
-use crate::ui::PhaseIcon;
+use crate::substance::route_of_administration::phase::{PhaseClassification, PHASE_ORDER};
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::ui::theme::THEME;
-use crate::{Application, Exception, database};
+use crate::ui::PhaseIcon;
+use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
+use crate::{database, Application, Exception};
+
 
 impl Displayable for crate::ingestion::Ingestion
 {
@@ -102,34 +102,26 @@ impl Displayable for crate::ingestion::Ingestion
 				.iter()
 				.map(|phase| {
 					let icon = PhaseIcon::from(&phase.classification).0;
+
+					let start_uncertainty_duration = phase.start_time.end - phase.start_time.start;
+					let end_uncertainty_duration = phase.end_time.end - phase.end_time.start;
+
 					let start = format!(
-						"{}±{}m",
+						"{}{}",
 						phase.start_time.start.format("%H:%M"),
-						(phase.start_time.end - phase.start_time.start).num_minutes()
+						display_duration_as_uncertainty(start_uncertainty_duration)
 					);
 					let end = format!(
-						"{}±{}m",
+						"{}{}",
 						phase.end_time.start.format("%H:%M"),
-						(phase.end_time.end - phase.end_time.start).num_minutes()
+						display_duration_as_uncertainty(end_uncertainty_duration)
 					);
-					let avg =
-						(phase.duration.start.num_minutes() + phase.duration.end.num_minutes()) / 2;
-					let duration = if avg >= 60 {
-						let hours = avg / 60;
-						let minutes = avg % 60;
-						if minutes > 0 {
-							format!("{}h{}m", hours, minutes)
-						} else {
-							format!("{}h", hours)
-						}
-					} else {
-						format!("{}m", avg)
-					};
+
 					vec![
 						format!("{} {}", icon, phase.classification),
 						start,
+						"→".to_owned(),
 						end,
-						duration,
 					]
 				})
 				.collect();
@@ -148,6 +140,8 @@ impl Displayable for crate::ingestion::Ingestion
 			"No phases recorded for this ingestion.".to_string()
 		};
 
+		let mut out: String = String::new();
+
 		let mut table = ComfyTable::new();
 		table
 			.load_preset(UTF8_FULL)
@@ -156,14 +150,31 @@ impl Displayable for crate::ingestion::Ingestion
 			.set_width(80)
 			.add_row(vec![left_pane, right_pane]);
 
-		THEME.text(&table.to_string(), None).to_string()
+		out.push_str("\n");
+		out.push_str(&table.to_string());
+
+		THEME.text(&out.to_string(), None).to_string()
+	}
+}
+
+fn display_duration_as_uncertainty(duration: Duration) -> String
+{
+	let total_minutes = duration.num_minutes();
+
+	if total_minutes == 0 {
+		// Return empty string when there's no uncertainty
+		String::new()
+	} else if total_minutes < 60 {
+		// For durations less than an hour, show minutes
+		format!("±{}m", total_minutes)
+	} else {
+		// For durations of an hour or more, show decimal hours
+		format!("±{:.1}h", total_minutes as f64 / 60.0)
 	}
 }
 
 #[derive(Debug, Serialize)]
 pub struct IngestionList(pub Vec<crate::ingestion::Ingestion>);
-
-impl IngestionList {}
 
 impl Displayable for IngestionList
 {
@@ -185,6 +196,7 @@ impl Displayable for IngestionList
 		THEME.text(&output, None).to_string()
 	}
 }
+
 
 #[async_trait]
 impl CommandHandler for UpdateIngestion
