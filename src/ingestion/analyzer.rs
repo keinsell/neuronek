@@ -12,7 +12,8 @@ use crate::substance::route_of_administration::phase::PhaseClassification;
 
 pub async fn analyze_ingestion(analyze_ingestion: &AnalyzeIngestion) -> miette::Result<Ingestion>
 {
-	let substance = get_substance(&analyze_ingestion.substance, DATABASE_CONNECTION.deref())
+	let db_connection = DATABASE_CONNECTION.deref();
+	let substance = get_substance(&analyze_ingestion.substance, db_connection)
 		.await
 		.map_err(|e| miette::miette!("Failed to get substance: {}", e))?;
 

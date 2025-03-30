@@ -8,8 +8,8 @@ use tabled::Tabled;
 
 use crate::Application;
 use crate::r#abstract::CommandHandler;
-use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::substance::{Column, Entity as SubstanceEntity};
+use crate::database::{ConnectionTrait, DATABASE_CONNECTION, DatabaseConnection};
 use crate::substance::error::SubstanceError;
 
 #[derive(Debug, Serialize, Tabled)]
@@ -125,11 +125,12 @@ fn possible_substances(partial: &str) -> Result<String, String>
 /// Get a list of all available substance names
 pub async fn get_substance_names() -> Vec<String>
 {
+	let db_connection = DATABASE_CONNECTION.deref();
 	SubstanceEntity::find()
 		.select_only()
 		.column(Column::Name)
 		.into_tuple::<String>()
-		.all(DATABASE_CONNECTION.deref())
+		.all(db_connection)
 		.await
 		.unwrap_or_default()
 }

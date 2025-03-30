@@ -110,6 +110,7 @@ sentry = "0.36.0"
 sentry-tracing = "0.36.0"
 promkit = "0.8.0"
 dialoguer = "0.11.0"
+ctor = "0.4.1"
 
 [profile]
 [profile.wasm-dev]

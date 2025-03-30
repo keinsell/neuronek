@@ -31,7 +31,7 @@ pub struct ShowStatistics
 #[async_trait]
 impl CommandHandler for ShowStatistics
 {
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
+	async fn handle<'a>(&self, _ctx: Application<'a>) -> miette::Result<()>
 	{
 		show_statistics(self).await
 	}

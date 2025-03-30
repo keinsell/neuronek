@@ -19,7 +19,7 @@ use crossterm::style::Color::{AnsiValue, Magenta, Rgb, Yellow};
 use crossterm::style::Stylize;
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
 use miette::{IntoDiagnostic, miette};
-use minimo::{header, success, Printable};
+use minimo::{Printable, header, success};
 use owo_colors::{OwoColorize, style};
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
@@ -44,11 +44,10 @@ use thiserror::__private::AsDisplay;
 use tracing::{Level, event, info};
 use tuirealm::props::TextSpan;
 use uuid::Uuid;
-use crate::ui::theme::THEME;
 
+use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
 use crate::r#abstract::CommandHandler;
 use crate::cli::{Displayable, MessageFormat};
-use crate::database::{Ingestion, DATABASE_CONNECTION};
 use crate::database::entities::ingestion::{
 	Entity as IngestionEntity,
 	Model as IngestionModel,
@@ -58,6 +57,7 @@ use crate::database::entities::ingestion_phase::{
 	Entity as IngestionPhaseEntity,
 	{self},
 };
+use crate::database::{DATABASE_CONNECTION, Ingestion};
 use crate::ingestion::IngestionActions;
 use crate::ingestion::action::{
 	DeleteIngestion,
@@ -72,8 +72,8 @@ use crate::substance::route_of_administration::RouteOfAdministrationClassificati
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
 use crate::ui::PhaseIcon;
-use crate::{Application, database, Exception};
-use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
+use crate::ui::theme::THEME;
+use crate::{Application, Exception, database};
 
 impl Displayable for crate::ingestion::Ingestion
 {
@@ -275,9 +275,12 @@ impl CommandHandler for DeleteIngestion
 	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
 	{
 		let mut is_confirmed = self.confirmation.unwrap_or(false);
-		let ingestion = IngestionEntity::find_by_id(self.ingestion_id).one(ctx.database_connection).await.into_diagnostic()?;
+		let ingestion = IngestionEntity::find_by_id(self.ingestion_id)
+			.one(ctx.database_connection)
+			.await
+			.into_diagnostic()?;
 
-		if (ingestion.is_none()) {
+		if ingestion.is_none() {
 			Err(miette!(EntityNotFound))?
 		}
 
@@ -301,14 +304,12 @@ impl CommandHandler for DeleteIngestion
 			.map_err(|err| {
 				eprintln!("{}", err.to_string());
 				err
-			}).into_diagnostic()?;
+			})
+			.into_diagnostic()?;
 
 		println!("Ingestion deleted");
 
-		info!(
-			ingestion_id=ingestion.unwrap().id,
-			"Ingestion Deleted"
-		);
+		info!(ingestion_id = ingestion.unwrap().id, "Ingestion Deleted");
 
 		Ok(())
 	}

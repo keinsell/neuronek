@@ -156,7 +156,7 @@ mod tests
 	#[async_std::test]
 	async fn should_log_ingestion()
 	{
-		let db = &DATABASE_CONNECTION;
+		let db = DATABASE_CONNECTION.deref();
 
 		let cmd = LogIngestion {
 			substance_name: "TestSubstance".to_string(),
@@ -168,7 +168,7 @@ mod tests
 		let result = log_ingestion(&cmd, db).await.unwrap();
 
 		let db_entry = ingestion::Entity::find_by_id(result.id.unwrap())
-			.one(DATABASE_CONNECTION.deref())
+			.one(db)
 			.await
 			.unwrap()
 			.unwrap();

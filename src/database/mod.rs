@@ -2,87 +2,97 @@ pub mod entities;
 pub mod migrator;
 
 use std::path::PathBuf;
+use std::sync::{LazyLock, OnceLock};
 
 use async_std::task::block_on;
 use atty::Stream;
+use derive_more::with_trait;
 pub use entities::prelude::*;
+use lazy_static::lazy_static;
 pub use migrator::Migrator;
+pub use sea_orm::ConnectionTrait;
 use sea_orm::Database;
 use sea_orm_migration::{IntoSchemaManagerConnection, MigratorTrait};
 use tracing::{debug, error, info, instrument, warn};
 
 use crate::config::CONFIG;
-pub type DatabaseConnection = sea_orm::DatabaseConnection;
+pub type DatabaseConnection = sea_orm::DbConn;
 
-lazy_static::lazy_static! {
-	#[derive(Clone, Debug)]
-	pub static ref DATABASE_CONNECTION: DatabaseConnection = {
-		let sqlite_path: &str = CONFIG.sqlite_path.to_str().unwrap().clone();
+pub static DATABASE_CONNECTION: LazyLock<DatabaseConnection> =
+	std::sync::LazyLock::new(|| create_database_connection());
+pub fn create_database_connection() -> DatabaseConnection
+{
+	let sqlite_path: &str = CONFIG.sqlite_path.to_str().unwrap();
 
-		let sqlite_uri = if sqlite_path == ":memory:" || cfg!(test) {
-			"sqlite::memory:".to_string()
-		} else {
-			format!("sqlite://{}", sqlite_path)
-		};
+	let sqlite_uri = if sqlite_path == ":memory:" || cfg!(test) {
+		"sqlite::memory:".to_string()
+	} else {
+		format!("sqlite://{}", sqlite_path)
+	};
 
-		debug!("Opening database connection to {}", sqlite_uri);
+	debug!("Opening database connection to {}", sqlite_uri);
 
-		let connection = match block_on(async { Database::connect(&sqlite_uri).await }) {
-			Ok(connection) => {
-				debug!("Database connection established successfully!");
-				connection
-			}
-			Err(error) => {
-				if !sqlite_uri.contains("::memory:") && error.to_string().contains("unable to open database file") {
-					warn!(
-						"Database file not found or inaccessible at {}, attempting to initialize...",
-						sqlite_uri
-					);
+	let connection = match block_on(async { Database::connect(&sqlite_uri).await }) {
+		| Ok(connection) => {
+			debug!("Database connection established successfully!");
+			connection
+		}
+		| Err(error) => {
+			if !sqlite_uri.contains("::memory:")
+				&& error.to_string().contains("unable to open database file")
+			{
+				warn!(
+					"Database file not found or inaccessible at {}, attempting to initialize...",
+					sqlite_uri
+				);
 
-					if let Err(init_error) = initialize_database_file(&CONFIG.sqlite_path) {
-						error!("Failed to initialize the database: {}", init_error);
-						panic!(
-							"Critical: Unable to initialize the database file at {}. Error: {}",
-							sqlite_uri, init_error
-						);
-					}
-
-					match block_on(async { Database::connect(&sqlite_uri).await }) {
-						Ok(retry_connection) => {
-							debug!("Database connection established successfully after initialization!");
-							retry_connection
-						},
-						Err(retry_error) => {
-							error!("Failed to connect to the database even after initialization: {}", retry_error);
-							panic!(
-								"Critical: Unable to establish database connection at {}. Error: {}",
-								sqlite_uri, retry_error
-							);
-						}
-					}
-				} else {
-					error!("Unexpected database connection error: {}", error);
+				if let Err(init_error) = initialize_database_file(&CONFIG.sqlite_path) {
+					error!("Failed to initialize the database: {}", init_error);
 					panic!(
-						"Critical: Unable to establish database connection. Error: {}",
-						error
+						"Critical: Unable to initialize the database file at {}. Error: {}",
+						sqlite_uri, init_error
 					);
 				}
+
+				match block_on(async { Database::connect(&sqlite_uri).await }) {
+					| Ok(retry_connection) => {
+						debug!(
+							"Database connection established successfully after initialization!"
+						);
+						retry_connection
+					}
+					| Err(retry_error) => {
+						error!(
+							"Failed to connect to the database even after initialization: {}",
+							retry_error
+						);
+						panic!(
+							"Critical: Unable to establish database connection at {}. Error: {}",
+							sqlite_uri, retry_error
+						);
+					}
+				}
+			} else {
+				error!("Unexpected database connection error: {}", error);
+				panic!(
+					"Critical: Unable to establish database connection. Error: {}",
+					error
+				);
 			}
-		};
-
-		// Migrate the database right after establishing a connection:
-		if let Err(migration_err) = block_on(migrate_database(&connection)) {
-			error!("Failed to run database migrations: {}", migration_err);
-			panic!(
-				"Critical: Unable to complete database migrations at {}. Error: {}",
-				sqlite_uri, migration_err
-			);
 		}
-
-		connection
 	};
-}
 
+	// Migrate the database right after establishing a connection:
+	if let Err(migration_err) = block_on(migrate_database(&connection)) {
+		error!("Failed to run database migrations: {}", migration_err);
+		panic!(
+			"Critical: Unable to complete database migrations at {}. Error: {}",
+			sqlite_uri, migration_err
+		);
+	}
+
+	connection
+}
 fn initialize_database_file(path: &PathBuf) -> std::result::Result<(), String>
 {
 	if let Some(parent_dir) = path.parent() {

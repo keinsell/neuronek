@@ -9,7 +9,7 @@ use chrono_english::Dialect;
 use clap::{CommandFactory, Parser};
 use error_handling::setup_diagnostics;
 use logging::setup_logger;
-use miette::{IntoDiagnostic, Result, miette, Diagnostic};
+use miette::{Diagnostic, IntoDiagnostic, Result, miette};
 use tracing_subscriber::util::SubscriberInitExt;
 
 use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
@@ -45,13 +45,14 @@ impl ValueParser for DateTime<Local>
 }
 
 #[derive(Debug, thiserror::Error, Diagnostic)]
-pub enum Exception {
+pub enum Exception
+{
 	#[error("Destructive operation must be acknowledged")]
 	DestructiveOperationNotConfirmed,
 	#[error("Entity not found")]
-	#[diagnostic(
-		help("Did you have requested entity by ID to which you have access and exists in database?")
-	)]
+	#[diagnostic(help(
+		"Did you have requested entity by ID to which you have access and exists in database?"
+	))]
 	EntityNotFound,
 }
 

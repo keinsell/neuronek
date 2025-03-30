@@ -10,6 +10,7 @@ use nutype::nutype;
 use serde::Serialize;
 use tabled::Tabled;
 use valuable::Valuable;
+
 use crate::ValueParser;
 use crate::database::entities::ingestion::Model;
 use crate::ingestion::IngestionPhase;

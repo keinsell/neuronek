@@ -10,6 +10,8 @@ use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
+use crate::database::{DATABASE_CONNECTION, DatabaseConnection};
+use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::{
 	RouteOfAdministration,
 	RouteOfAdministrationClassification,

@@ -468,7 +468,7 @@ pub use stylize::*;
 
 lazy_static! {
 	pub static ref THEME: MadSkin = {
-		let mut skin = MadSkin::default();
+		let skin = MadSkin::default();
 		skin
 	};
 }

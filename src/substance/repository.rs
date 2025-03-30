@@ -8,7 +8,7 @@ use miette::{IntoDiagnostic, miette};
 use sea_orm::{ColumnTrait, EntityTrait, ModelTrait, QueryFilter};
 
 use crate::database::entities::substance;
-use crate::database::{DatabaseConnection, entities};
+use crate::database::{DATABASE_CONNECTION, DatabaseConnection, entities};
 use crate::substance::route_of_administration::dosage::{
 	Dosage,
 	DosageClassification,
@@ -37,7 +37,7 @@ pub async fn get_substance(
 				.eq(substance_name.to_lowercase())
 				.or(substance::Column::CommonNames.contains(name.to_lowercase())),
 		)
-		.one(database_connection.deref())
+		.one(database_connection)
 		.await
 		.into_diagnostic()?;
 
@@ -48,7 +48,7 @@ pub async fn get_substance(
 
 	let routes_of_administration = db_substance
 		.find_related(entities::substance_route_of_administration::Entity)
-		.all(database_connection.deref())
+		.all(database_connection)
 		.await
 		.into_diagnostic()?;
 
@@ -71,7 +71,7 @@ pub async fn get_substance(
 
 			let dosages = route
 				.find_related(entities::substance_route_of_administration_dosage::Entity)
-				.all(database_connection.deref())
+				.all(database_connection)
 				.await
 				.into_diagnostic()?;
 
@@ -103,7 +103,7 @@ pub async fn get_substance(
 
 			let phases = route
 				.find_related(entities::substance_route_of_administration_phase::Entity)
-				.all(database_connection.deref())
+				.all(database_connection)
 				.await
 				.into_diagnostic()?;
 
