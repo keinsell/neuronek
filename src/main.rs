@@ -1,21 +1,27 @@
 #![feature(new_range_api)]
 #![allow(unused_imports)]
+#![feature(trivial_bounds)]
+#![feature(type_alias_impl_trait)]
+#![feature(impl_trait_in_bindings)]
+#![feature(min_specialization)]
+#![feature(negative_impls)]
+#![feature(trait_alias)]
+#![feature(extern_types)]
 
 use std::fmt::Display;
 
-use r#abstract::CommandHandler;
+use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
+use crate::database::{migrate_database, DATABASE_CONNECTION};
+use crate::ingestion::IngestionActions;
+use crate::statistics::show_statistics;
 use chrono::{DateTime, Local};
 use chrono_english::Dialect;
 use clap::{CommandFactory, Parser};
 use error_handling::setup_diagnostics;
 use logging::setup_logger;
-use miette::{Diagnostic, IntoDiagnostic, Result, miette};
+use miette::{miette, Diagnostic, IntoDiagnostic, Result};
+use r#abstract::CommandHandler;
 use tracing_subscriber::util::SubscriberInitExt;
-
-use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
-use crate::database::{DATABASE_CONNECTION, migrate_database};
-use crate::ingestion::IngestionActions;
-use crate::statistics::show_statistics;
 
 mod r#abstract;
 mod cli;

@@ -873,6 +873,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "compiler_builtins"
+version = "0.1.152"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2153cf213eb259361567720ce55f6446f17acd0ccca87fb6dc05360578228a58"
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1162,16 +1168,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "date_time_parser"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0521d96e513670773ac503e5f5239178c3aef16cffda1e77a3cdbdbe993fb5a"
-dependencies = [
- "chrono",
- "regex",
-]
-
-[[package]]
 name = "debugid"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1452,6 +1448,12 @@ name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
+
+[[package]]
+name = "figlet-rs"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4742a071cd9694fc86f9fa1a08fa3e53d40cc899d7ee532295da2d085639fbc5"
 
 [[package]]
 name = "filedescriptor"
@@ -1785,6 +1787,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
 dependencies = [
  "allocator-api2",
+ "compiler_builtins",
  "equivalent",
  "foldhash",
  "serde",
@@ -2265,7 +2268,9 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a26adff60a5d3ca10dc271ad37a34ff376595d2a1e5f21d02564929ca888c511"
 dependencies = [
+ "chrono",
  "nom",
+ "serde",
 ]
 
 [[package]]
@@ -2636,7 +2641,6 @@ dependencies = [
  "comfy-table",
  "crossterm 0.27.0",
  "ctor",
- "date_time_parser",
  "delegate",
  "derivative",
  "derive",
@@ -2645,6 +2649,7 @@ dependencies = [
  "dialoguer",
  "directories",
  "etcetera",
+ "figlet-rs",
  "float-pretty-print",
  "futures",
  "hashbrown 0.15.2",
@@ -2652,6 +2657,7 @@ dependencies = [
  "humantime",
  "indicatif",
  "iso8601-duration",
+ "itertools 0.12.1",
  "json_to_table",
  "lazy_static",
  "measurements",
@@ -2668,6 +2674,7 @@ dependencies = [
  "rust-embed",
  "rust_decimal",
  "rust_decimal_macros",
+ "ryu",
  "sea-orm",
  "sea-orm-migration",
  "sentry",

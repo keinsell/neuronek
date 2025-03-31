@@ -1,6 +1,5 @@
-use lazy_static::lazy_static;
+use owo_colors::OwoColorize;
 use termimad::MadSkin;
-use termimad::coolor::Color;
 
 mod color
 {
@@ -407,8 +406,8 @@ pub mod stylize
 {
 	use std::path::PathBuf;
 
-	pub use super::color::Style;
 	use super::color::paint_style;
+	pub use super::color::Style;
 
 
 	pub trait Stylize
@@ -464,7 +463,8 @@ pub use stylize::*;
 
 pub static MAD_SKIN: std::sync::LazyLock<MadSkin> = {
 	std::sync::LazyLock::new(|| {
-		let skin = MadSkin::default();
+		let mut skin = MadSkin::no_style();
+		skin.headers[0].align = termimad::Alignment::Left;
 		skin
 	})
 };

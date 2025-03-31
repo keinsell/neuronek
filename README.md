@@ -63,18 +63,14 @@ neuronek ingestion log -s caffeine -d 80mg
 ```
 
 ```present cargo run -- -f pretty ingestion log -s caffeine -d 80mg
-
 ╭──────────────────────────────┬───────────────────────────────────────────╮
-│  ID:         6               ┆  — Onset      08:25       →  08:30±5m     │
-│  Substance:  Caffeine        ┆  ↑ Comeup     08:30±5m    →  08:40±25m    │
-│  Dosage:     80.0 mg         ┆  ≡ Peak       08:40±25m   →  09:25±1.2h   │
-│  Route:      Oral            ┆  ↓ Comedown   09:25±1.2h  →  10:25±2.2h   │
-│  Ingested:   08:25 31/03/25  ┆  ≈ Afterglow  10:25±2.2h  →  14:25±10.2h  │
+│  ID:         5               ┆  — Onset      23:37       →  23:42±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     23:42±5m    →  23:52±25m    │
+│  Dosage:     80.0 mg         ┆  ≡ Peak       23:52±25m   →  00:37±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   00:37±1.2h  →  01:37±2.2h   │
+│  Ingested:   23:37 01/04/25  ┆  ≈ Afterglow  01:37±2.2h  →  05:37±10.2h  │
 ╰──────────────────────────────┴───────────────────────────────────────────╯
-
 ```
-
-</details>
 
 #### View Ingestion
 
@@ -89,15 +85,13 @@ neuronek ingestion view <INGESTION_ID>
 ```
 
 ```present cargo run -- -f pretty ingestion view 1
-
 ╭──────────────────────────────┬───────────────────────────────────────────╮
-│  ID:         1               ┆  — Onset      08:24       →  08:29±5m     │
-│  Substance:  Caffeine        ┆  ↑ Comeup     08:29±5m    →  08:39±25m    │
-│  Dosage:     90.0 mg         ┆  ≡ Peak       08:39±25m   →  09:24±1.2h   │
-│  Route:      Oral            ┆  ↓ Comedown   09:24±1.2h  →  10:24±2.2h   │
-│  Ingested:   08:24 31/03/25  ┆  ≈ Afterglow  10:24±2.2h  →  14:24±10.2h  │
+│  ID:         1               ┆  — Onset      23:31       →  23:36±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     23:36±5m    →  23:46±25m    │
+│  Dosage:     90.0 mg         ┆  ≡ Peak       23:46±25m   →  00:31±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   00:31±1.2h  →  01:31±2.2h   │
+│  Ingested:   23:31 01/04/25  ┆  ≈ Afterglow  01:31±2.2h  →  05:31±10.2h  │
 ╰──────────────────────────────┴───────────────────────────────────────────╯
-
 ```
 
 #### List Ingestions
@@ -113,19 +107,16 @@ neuronek ingestion list
 ╭────┬───────────┬─────────┬───────┬──────────────────────────────────────╮
 │ ID │ Substance │ Dosage  │ Route │             Ingested At              │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 6  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:59.720793355 +02:00 │
+│ 5  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:37:25.784650159 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 5  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:40.652991085 +02:00 │
+│ 4  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:37:16.643817564 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 4  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:39.344601911 +02:00 │
+│ 3  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:34:23.206667961 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 3  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:28.860212134 +02:00 │
+│ 2  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:31:32.943824675 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 2  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:28.027645413 +02:00 │
-├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 1  │ Caffeine  │ 90.0 mg │ Oral  │ 2025-03-31 08:24:54.055982344 +02:00 │
+│ 1  │ Caffeine  │ 90.0 mg │ Oral  │ 2025-04-01 23:31:17.733842540 +02:00 │
 ╰────┴───────────┴─────────┴───────┴──────────────────────────────────────╯
-
 ```
 
 #### Update Ingestion
@@ -137,15 +128,13 @@ neuronek ingestion update 1 -d 90mg
 ```
 
 ```present cargo run -- -f pretty ingestion update 1 -d 90mg
-
 ╭──────────────────────────────┬────────────────────────────────────────╮
 │  ID:         1               ┆ No phases recorded for this ingestion. │
 │  Substance:  Caffeine        ┆                                        │
 │  Dosage:     90.0 mg         ┆                                        │
 │  Route:      Oral            ┆                                        │
-│  Ingested:   08:24 31/03/25  ┆                                        │
+│  Ingested:   23:31 01/04/25  ┆                                        │
 ╰──────────────────────────────┴────────────────────────────────────────╯
-
 ```
 
 #### Delete Ingestion
@@ -182,134 +171,25 @@ to this application by its nature is questionable.
 neuronek substance get caffeine
 ```
 
-<details>
-<summary>---</summary>
-
-```json
-{
-  "name": "Caffeine",
-  "common_names": "",
-  "routes_of_administration": [
-    {
-      "name": "Insufflated",
-      "dosages": [
-        {
-          "classification": "Heavy",
-          "dosage_min": "80.0 mg",
-          "dosage_max": "N/A"
-        },
-        {
-          "classification": "Strong",
-          "dosage_min": "40.0 mg",
-          "dosage_max": "80.0 mg"
-        },
-        {
-          "classification": "Light",
-          "dosage_min": "10.0 mg",
-          "dosage_max": "25.0 mg"
-        },
-        {
-          "classification": "Threshold",
-          "dosage_min": "N/A",
-          "dosage_max": "2.50 mg"
-        },
-        {
-          "classification": "Medium",
-          "dosage_min": "25.0 mg",
-          "dosage_max": "40.0 mg"
-        }
-      ],
-      "phases": [
-        {
-          "name": "Onset",
-          "duration_min": "PT30S",
-          "duration_max": "PT2M"
-        },
-        {
-          "name": "Afterglow",
-          "duration_min": "PT6H",
-          "duration_max": "P1D"
-        },
-        {
-          "name": "Comeup",
-          "duration_min": "PT30S",
-          "duration_max": "PT2M"
-        },
-        {
-          "name": "Comedown",
-          "duration_min": "PT6H",
-          "duration_max": "PT10H"
-        },
-        {
-          "name": "Peak",
-          "duration_min": "PT30M",
-          "duration_max": "PT1H"
-        }
-      ]
-    },
-    {
-      "name": "Oral",
-      "dosages": [
-        {
-          "classification": "Medium",
-          "dosage_min": "50.0 mg",
-          "dosage_max": "150 mg"
-        },
-        {
-          "classification": "Heavy",
-          "dosage_min": "500 mg",
-          "dosage_max": "N/A"
-        },
-        {
-          "classification": "Threshold",
-          "dosage_min": "N/A",
-          "dosage_max": "10.0 mg"
-        },
-        {
-          "classification": "Strong",
-          "dosage_min": "150 mg",
-          "dosage_max": "500 mg"
-        },
-        {
-          "classification": "Light",
-          "dosage_min": "20.0 mg",
-          "dosage_max": "50.0 mg"
-        }
-      ],
-      "phases": [
-        {
-          "name": "Comeup",
-          "duration_min": "PT10M",
-          "duration_max": "PT30M"
-        },
-        {
-          "name": "Comedown",
-          "duration_min": "PT1H",
-          "duration_max": "PT2H"
-        },
-        {
-          "name": "Afterglow",
-          "duration_min": "PT4H",
-          "duration_max": "PT12H"
-        },
-        {
-          "name": "Peak",
-          "duration_min": "PT45M",
-          "duration_max": "PT1H30M"
-        },
-        {
-          "name": "Onset",
-          "duration_min": "PT5M",
-          "duration_max": "PT10M"
-        }
-      ]
-    }
-  ]
-}
-
+```present cargo run -- -f pretty substance get caffeine
+╭─────────────┬──────────────────────────────────┬────────────────────────╮
+│ Caffeine                                                                │
+├─────────────┼──────────────────────────────────┼────────────────────────┤
+│ Route       │ Dosage                           │ Phases                 │
+├─────────────┼──────────────────────────────────┼────────────────────────┤
+│ Insufflated │  (±) Threshold  ≤2.50 mg         │  — Onset      30s-2m   │
+│             │  (+) Light      10.0 mg-25.0 mg  │  ↑ Comeup     30s-2m   │
+│             │  (++) Common    25.0 mg-40.0 mg  │  ≡ Peak       30m-1h   │
+│             │  (+++) Strong   40.0 mg-80.0 mg  │  ↓ Comedown   6h-10h   │
+│             │  (++++) Heavy   ≥80.0 mg         │  ≈ Afterglow  6h-1d    │
+├─────────────┼──────────────────────────────────┼────────────────────────┤
+│ Oral        │  (±) Threshold  ≤10.0 mg         │  — Onset      5m-10m   │
+│             │  (+) Light      20.0 mg-50.0 mg  │  ↑ Comeup     10m-30m  │
+│             │  (++) Common    50.0 mg-150 mg   │  ≡ Peak       45m-1h   │
+│             │  (+++) Strong   150 mg-500 mg    │  ↓ Comedown   1h-2h    │
+│             │  (++++) Heavy   ≥500 mg          │  ≈ Afterglow  4h-12h   │
+╰─────────────┴──────────────────────────────────┴────────────────────────╯
 ```
-
-</details>
 
 ### Statistics
 

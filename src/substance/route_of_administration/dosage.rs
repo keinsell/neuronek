@@ -6,6 +6,7 @@ use derivative::Derivative;
 use float_pretty_print::PrettyPrintFloat;
 use measurements::{Mass, Measurement};
 use serde::{Deserialize, Serialize};
+use tabled::Tabled;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Derivative, Eq, PartialOrd, Copy)]
 pub struct Dosage(Mass);

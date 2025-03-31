@@ -22,7 +22,7 @@ pub(super) struct SystematicName(pub String);
 pub type RoutesOfAdministration =
 	HashMap<RouteOfAdministrationClassification, RouteOfAdministration>;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Substance
 {
 	pub name: String,

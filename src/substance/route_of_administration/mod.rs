@@ -2,16 +2,28 @@ pub mod dosage;
 pub mod phase;
 
 use std::fmt;
+use std::fmt::Display;
 use std::str::FromStr;
-
-use hashbrown::HashMap;
-use serde::{Deserialize, Serialize};
 
 use crate::substance::route_of_administration::dosage::{DosageClassification, DosageRange};
 use crate::substance::route_of_administration::phase::{DurationRange, PhaseClassification};
+use hashbrown::HashMap;
+use serde::{Deserialize, Serialize};
+use tabled::Tabled;
 
 #[derive(
-	clap::ValueEnum, Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize, Eq, Hash,
+	clap::ValueEnum,
+	Debug,
+	Clone,
+	Copy,
+	Default,
+	PartialEq,
+	Serialize,
+	Deserialize,
+	Eq,
+	Hash,
+	Ord,
+	PartialOrd
 )]
 #[serde(rename_all = "snake_case")]
 pub enum RouteOfAdministrationClassification
@@ -78,12 +90,13 @@ impl FromStr for RouteOfAdministrationClassification
 	}
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Tabled)]
 pub struct RouteOfAdministration
 {
-	#[allow(dead_code)] // This field is part of the public API
 	pub classification: RouteOfAdministrationClassification,
+	#[tabled(skip)]
 	pub dosages: Dosages,
+	#[tabled(skip)]
 	pub phases: Phases,
 }
 

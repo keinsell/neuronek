@@ -52,11 +52,6 @@ impl Default for MessageFormat
 	}
 }
 
-trait PrettyPrintable: Printable
-{
-	fn print(&self) {}
-}
-
 /// TODO: Display in alternative screen vs direct
 pub trait Displayable: Serialize + Sized + Debug
 {
@@ -79,7 +74,7 @@ pub trait Displayable: Serialize + Sized + Debug
 			| MessageFormat::Json => self.as_json(),
 		};
 
-		println!("{}", formatted_output);
+		println!("{}", formatted_output.trim());
 	}
 }
 

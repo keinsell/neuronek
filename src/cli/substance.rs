@@ -1,97 +1,175 @@
 use std::ops::Deref;
+use std::str::FromStr;
 
 use async_trait::async_trait;
 use clap::{Args, Parser, Subcommand};
+use crossterm::style::Stylize;
+use minimo::Printable;
+use owo_colors::OwoColorize;
 use sea_orm::{ColumnTrait, EntityTrait, QuerySelect};
 use serde::{Deserialize, Serialize};
-use tabled::Tabled;
+use tabled::settings::{Panel, Remove, Style};
+use tabled::{Table, Tabled};
+use tuirealm::ratatui::text::ToText;
 
 use crate::Application;
 use crate::r#abstract::CommandHandler;
+use crate::cli::Displayable;
 use crate::database::entities::substance::{Column, Entity as SubstanceEntity};
-use crate::database::{ConnectionTrait, DATABASE_CONNECTION, DatabaseConnection};
+use crate::database::{ConnectionTrait, DATABASE_CONNECTION};
+use crate::substance::Substance;
 use crate::substance::error::SubstanceError;
+use crate::substance::route_of_administration::Dosages;
 
-#[derive(Debug, Serialize, Tabled)]
-struct SubstanceRouteOfAdministrationDosage
+impl Displayable for Dosages
 {
-	pub classification: String,
-	pub dosage_min: String,
-	pub dosage_max: String,
-}
-
-#[derive(Debug, Serialize, Tabled)]
-struct SubstanceRouteOfAdministrationPhase
-{
-	pub name: String,
-	pub duration_min: String,
-	pub duration_max: String,
-}
-
-#[derive(Debug, Serialize)]
-struct SubstanceRouteOfAdministration
-{
-	pub name: String,
-	pub dosages: Vec<SubstanceRouteOfAdministrationDosage>,
-	pub phases: Vec<SubstanceRouteOfAdministrationPhase>,
-}
-
-#[derive(Debug, Serialize)]
-struct Substance
-{
-	pub name: String,
-	pub common_names: String,
-	pub routes_of_administration: Vec<SubstanceRouteOfAdministration>,
-}
-
-impl From<crate::substance::Substance> for Substance
-{
-	fn from(model: crate::substance::Substance) -> Self
+	fn as_table(&self) -> String
+	where Self: Tabled
 	{
-		Substance {
-			name: model.name,
-			common_names: "".to_string(),
-			routes_of_administration: model
-				.routes_of_administration
-				.iter()
-				.map(|route| SubstanceRouteOfAdministration {
-					name: route.0.to_string(),
-					dosages: route
-						.1
-						.dosages
-						.iter()
-						.map(|dosage| SubstanceRouteOfAdministrationDosage {
-							classification: dosage.0.to_string(),
-							dosage_min: dosage
-								.1
-								.clone()
-								.start
-								.map(|d| d.to_string())
-								.unwrap_or("N/A".parse().unwrap()),
-							dosage_max: dosage
-								.1
-								.clone()
-								.end
-								.map(|d| d.to_string())
-								.unwrap_or("N/A".parse().unwrap()),
-						})
-						.collect(),
-					phases: route
-						.1
-						.phases
-						.iter()
-						.map(|phase| SubstanceRouteOfAdministrationPhase {
-							name: phase.0.to_string(),
-							duration_min: phase.1.start.to_string(),
-							duration_max: phase.1.end.to_string(),
-						})
-						.collect(),
-				})
-				.collect(),
-		}
+		todo!()
 	}
 }
 
+use itertools::Itertools;
+use tabled::settings::Alignment;
+use tabled::settings::object::Rows;
+
+use crate::ui::theme::MAD_SKIN;
+use crate::ui::{DosageIcon, PhaseIcon};
+
+impl Displayable for Substance
+{
+	fn as_pretty(&self) -> String
+	{
+		let mut output = String::new();
+
+		if let Some(table) = self.build_routes_table() {
+			output.push_str(&table);
+		} else {
+			output.push_str(&"No route information available.".dimmed().to_string());
+		}
+
+		MAD_SKIN.term_text(&output).to_string()
+	}
+
+	fn as_table(&self) -> String
+	where Self: Tabled
+	{
+		Table::new(vec![self]).with(Style::psql()).to_string()
+	}
+}
+
+impl Substance
+{
+	fn build_routes_table(&self) -> Option<String>
+	{
+		use itertools::Itertools;
+
+		#[derive(Tabled)]
+		struct RouteRow
+		{
+			#[tabled(rename = "Route")]
+			route: String,
+			#[tabled(rename = "Dosage")]
+			dosage: String,
+			#[tabled(rename = "Phases")]
+			phases: String,
+		}
+
+		let fmt_dur = |secs: u64| {
+			if secs >= 86_400 {
+				format!("{}d", secs / 86_400)
+			} else if secs >= 3_600 {
+				format!("{}h", secs / 3_600)
+			} else if secs >= 60 {
+				format!("{}m", secs / 60)
+			} else {
+				format!("{}s", secs)
+			}
+		};
+
+		let mut rows = Vec::new();
+		let mut routes: Vec<_> = self.routes_of_administration.values().collect();
+		routes.sort_by_key(|r| &r.classification);
+
+		for route in routes {
+			let dosage_rows: Vec<_> = route
+				.dosages
+				.iter()
+				.sorted_by_key(|(class, _)| *class)
+				.map(|(class, range)| {
+					#[derive(Tabled)]
+					struct DosageRow
+					{
+						#[tabled(rename = "Classification")]
+						classification: String,
+						#[tabled(rename = "Range")]
+						range: String,
+					}
+					let range_str = match (range.start.as_ref(), range.end.as_ref()) {
+						| (Some(start), Some(end)) => format!("{}-{}", start, end),
+						| (Some(start), None) => format!("≥{}", start),
+						| (None, Some(end)) => format!("≤{}", end),
+						| _ => "N/A".into(),
+					};
+					DosageRow {
+						classification: format!(
+							"{} {}",
+							DosageIcon::from(class),
+							class.to_string()
+						),
+						range: range_str,
+					}
+				})
+				.collect();
+
+			let phase_rows: Vec<_> = route
+				.phases
+				.iter()
+				.sorted_by_key(|(phase, _)| *phase)
+				.map(|(phase, duration)| {
+					#[derive(Tabled)]
+					struct PhaseRow
+					{
+						#[tabled(rename = "Phase")]
+						phase: String,
+						#[tabled(rename = "Duration")]
+						duration: String,
+					}
+					let start = duration.start.to_std().unwrap().as_secs();
+					let end = duration.end.to_std().unwrap().as_secs();
+					let duration_str = format!("{}-{}", fmt_dur(start), fmt_dur(end));
+					PhaseRow {
+						phase: format!("{} {}", PhaseIcon::from(phase), phase),
+						duration: duration_str,
+					}
+				})
+				.collect();
+
+			rows.push(RouteRow {
+				route: route.classification.to_string(),
+				dosage: Table::new(dosage_rows)
+					.with(Style::empty())
+					.with(Alignment::left())
+					.with(Remove::row(Rows::first()))
+					.to_string(),
+				phases: Table::new(phase_rows)
+					.with(Style::empty())
+					.with(Alignment::left())
+					.with(Remove::row(Rows::first()))
+					.to_string(),
+			});
+		}
+
+		(!rows.is_empty()).then(|| {
+			Table::new(rows)
+				.with(Style::modern_rounded())
+				.with(Alignment::left())
+				.with(Panel::header(self.name.to_string()))
+				.to_string()
+		})
+	}
+}
 #[derive(Debug, Args)]
 pub struct GetSubstance
 {
@@ -136,19 +214,18 @@ pub async fn get_substance_names() -> Vec<String>
 }
 
 #[async_trait]
-impl CommandHandler<Substance> for GetSubstance
+impl CommandHandler<()> for GetSubstance
 {
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<Substance>
+	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
 	{
 		let substance: Substance =
 			crate::substance::repository::get_substance(&self.name, ctx.database_connection)
 				.await?
-				.unwrap_or_else(|| panic!("{}", SubstanceError::NotFound))
-				.into();
+				.unwrap_or_else(|| panic!("{}", SubstanceError::NotFound));
 
-		println!("{}", serde_json::to_string_pretty(&substance).unwrap());
+		substance.display(ctx.stdout_format);
 
-		Ok(substance)
+		Ok(())
 	}
 }
 
