@@ -6,11 +6,11 @@ use clap::{Parser, Subcommand};
 use miette::IntoDiagnostic;
 use serde::{Deserialize, Serialize};
 
-use crate::ValueParser;
 use crate::cli::is_interactive;
 use crate::ingestion::model::AnalyzeIngestion;
-use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
+use crate::substance::route_of_administration::RouteOfAdministrationClassification;
+use crate::ValueParser;
 
 /**
 # Log Ingestion
@@ -149,7 +149,7 @@ pub enum Actions
 {
 	/// Create a new ingestion record
 	Log(LogIngestion),
-	/// List all ingestions
+	/// List all ingestion
 	List(ListIngestion),
 	/// Delete an ingestion
 	Delete(DeleteIngestion),

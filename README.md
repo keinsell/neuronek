@@ -52,10 +52,7 @@ it may be less stable than the pre-built binaries.
 
 ### Ingestion Journaling
 
-Ingestions are a fundamental area of application, they represent human interaction with the chemical compound of choice.
-Ingestion explains what compound was ingested, how it was ingested and when it was ingested. Applications expose a
-simple,
-scriptable interface which allows for storage and retrieval of structured data.
+Ingestions are the cornerstone of the Neuronek tracking system, representing each instance when a user consumes a chemical compound. Each ingestion record captures critical pharmacological data: the specific substance consumed, the route of administration, precise dosage, and timestamp of consumption. The application provides a comprehensive yet intuitive command-line interface that enables users to create, retrieve, update, and delete these records with minimal friction. This structured approach to substance tracking allows for detailed analysis of consumption patterns, pharmacokinetics, and subjective effects over time, facilitating improved understanding of how various compounds affect individual physiology and psychology.
 
 #### Log Ingestion
 
@@ -65,17 +62,15 @@ scriptable interface which allows for storage and retrieval of structured data.
 neuronek ingestion log -s caffeine -d 80mg
 ```
 
-<details>
-<summary>---</summary>
+```present cargo run -- -f pretty ingestion log -s caffeine -d 80mg
 
-```
-╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
-│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
-│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
-│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
-│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
-╰──────────────────────────────┴────────────────────────────────────────────╯
+╭──────────────────────────────┬───────────────────────────────────────────╮
+│  ID:         6               ┆  — Onset      08:25       →  08:30±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     08:30±5m    →  08:40±25m    │
+│  Dosage:     80.0 mg         ┆  ≡ Peak       08:40±25m   →  09:25±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   09:25±1.2h  →  10:25±2.2h   │
+│  Ingested:   08:25 31/03/25  ┆  ≈ Afterglow  10:25±2.2h  →  14:25±10.2h  │
+╰──────────────────────────────┴───────────────────────────────────────────╯
 
 ```
 
@@ -93,20 +88,17 @@ neuronek ingestion log -s caffeine -d 80mg
 neuronek ingestion view <INGESTION_ID>
 ```
 
-<details>
-<summary>---</summary>
+```present cargo run -- -f pretty ingestion view 1
+
+╭──────────────────────────────┬───────────────────────────────────────────╮
+│  ID:         1               ┆  — Onset      08:24       →  08:29±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     08:29±5m    →  08:39±25m    │
+│  Dosage:     90.0 mg         ┆  ≡ Peak       08:39±25m   →  09:24±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   09:24±1.2h  →  10:24±2.2h   │
+│  Ingested:   08:24 31/03/25  ┆  ≈ Afterglow  10:24±2.2h  →  14:24±10.2h  │
+╰──────────────────────────────┴───────────────────────────────────────────╯
 
 ```
-╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
-│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
-│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
-│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
-│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
-╰──────────────────────────────┴────────────────────────────────────────────╯
-```
-
-</details>
 
 #### List Ingestions
 
@@ -117,59 +109,44 @@ ingestion date.*
 neuronek ingestion list
 ```
 
-<details>
-<summary>---</summary>
-
-```
+```present cargo run -- -f pretty ingestion ls
 ╭────┬───────────┬─────────┬───────┬──────────────────────────────────────╮
-│ ID │ Substance │ Dosage  │ Route │ Ingested At                          │
+│ ID │ Substance │ Dosage  │ Route │             Ingested At              │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 33 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:40:04.705901008 +01:00 │
+│ 6  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:59.720793355 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 32 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:30:43.702279077 +01:00 │
+│ 5  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:40.652991085 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 31 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:29:44.948833745 +01:00 │
+│ 4  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:39.344601911 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 30 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:29:38.685091465 +01:00 │
+│ 3  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:28.860212134 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 29 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:24:43.550999449 +01:00 │
+│ 2  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-03-31 08:25:28.027645413 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 28 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:17:41.020152562 +01:00 │
-├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 27 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:15:57.546015179 +01:00 │
-├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 26 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:10:23.044092301 +01:00 │
-├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 25 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:09:47.632702987 +01:00 │
-├────┼───────────┼─────────┼───────��──────────────────────────────────────┤
-│ 24 │ caffeine  │ 80.0 mg │ Oral  │ 2025-03-06 06:08:58.809500208 +01:00 │
+│ 1  │ Caffeine  │ 90.0 mg │ Oral  │ 2025-03-31 08:24:54.055982344 +02:00 │
 ╰────┴───────────┴─────────┴───────┴──────────────────────────────────────╯
-```
 
-</details>
+```
 
 #### Update Ingestion
 
 *Updates the dosage of a specific ingestion identified by its ID.*
 
 ```bash
-neuronek ingestion update 14 -d 90mg
+neuronek ingestion update 1 -d 90mg
 ```
 
-<details>
-<summary>---</summary>
+```present cargo run -- -f pretty ingestion update 1 -d 90mg
+
+╭──────────────────────────────┬────────────────────────────────────────╮
+│  ID:         1               ┆ No phases recorded for this ingestion. │
+│  Substance:  Caffeine        ┆                                        │
+│  Dosage:     90.0 mg         ┆                                        │
+│  Route:      Oral            ┆                                        │
+│  Ingested:   08:24 31/03/25  ┆                                        │
+╰──────────────────────────────┴────────────────────────────────────────╯
 
 ```
-╭──────────────────────────────┬────────────────────────────────────────────╮
-│  ID:         4               ┆ — Onset: 15:42±0m → 15:47±5m (7m)          │
-│  Substance:  caffeine        ┆ ↑ Comeup: 15:47±5m → 15:57±25m (20m)       │
-│  Dosage:     100 mg          ┆ ≡ Peak: 15:57±25m → 16:42±70m (1h7m)       │
-│  Route:      Oral            ┆ ↓ Comedown: 16:42±70m → 17:42±130m (1h30m) │
-│  Ingested:   15:42 11/03/25  ┆ ≈ Afterglow: 17:42±130m → 21:42±610m (8h)  │
-╰──────────────────────────────┴────────────────────────────────────────────╯
-```
-
-</details>
 
 #### Delete Ingestion
 

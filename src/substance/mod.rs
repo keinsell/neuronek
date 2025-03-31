@@ -1,23 +1,21 @@
 pub mod route_of_administration;
 
-
 use clap::{Parser, Subcommand};
+use std::collections::HashMap;
+use std::hash::Hash;
 pub mod error;
 pub mod repository;
 use std::str::FromStr;
 
-use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
-use crate::database::{DATABASE_CONNECTION, DatabaseConnection};
-use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::{
 	RouteOfAdministration,
 	RouteOfAdministrationClassification,
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize)]
 #[allow(dead_code)]
 pub(super) struct SystematicName(pub String);
 

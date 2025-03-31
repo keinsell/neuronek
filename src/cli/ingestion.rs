@@ -1,3 +1,11 @@
+use std::borrow::Cow;
+use std::cmp::Ordering;
+use std::collections::{BTreeMap, HashMap};
+use std::fmt::{Debug, Display, Formatter};
+use std::ops::Deref;
+use std::range::Range;
+use std::str::FromStr;
+
 use async_std::task;
 use async_trait::async_trait;
 use chrono::naive::serde::ts_microseconds::serialize;
@@ -10,9 +18,9 @@ use comfy_table::{ContentArrangement, Table as ComfyTable, Width};
 use crossterm::style::Color::{AnsiValue, Magenta, Rgb, Yellow};
 use crossterm::style::Stylize;
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
-use miette::{miette, IntoDiagnostic};
-use minimo::{header, success, Printable};
-use owo_colors::{style, OwoColorize};
+use miette::{IntoDiagnostic, miette};
+use minimo::{Printable, header, success};
+use owo_colors::{OwoColorize, style};
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
 use sea_orm::{
@@ -26,24 +34,19 @@ use sea_orm::{
 };
 use sea_orm_migration::IntoSchemaManagerConnection;
 use serde::{Deserialize, Serialize};
-use std::borrow::Cow;
-use std::cmp::Ordering;
-use std::collections::{BTreeMap, HashMap};
-use std::fmt::{Debug, Display, Formatter};
-use std::ops::Deref;
-use std::range::Range;
-use std::str::FromStr;
 use tabled::builder::Builder;
 use tabled::settings::object::{Columns, Rows, Segment};
 use tabled::settings::{Alignment, Format, Modify, Padding, Style};
-use tabled::{col, row, Table, Tabled};
-use termimad::{gray, rgb, LineStyle, MadSkin, ROUNDED_TABLE_BORDER_CHARS};
+use tabled::{Table, Tabled, col, row};
+use termimad::{LineStyle, MadSkin, ROUNDED_TABLE_BORDER_CHARS, gray, rgb};
 use textplots::{Chart, Plot, Shape};
 use thiserror::__private::AsDisplay;
-use tracing::{event, info, Level};
+use tracing::{Level, event, info};
 use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
+use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
+use crate::r#abstract::CommandHandler;
 use crate::cli::{Displayable, MessageFormat};
 use crate::database::entities::ingestion::{
 	Entity as IngestionEntity,
@@ -54,7 +57,8 @@ use crate::database::entities::ingestion_phase::{
 	Entity as IngestionPhaseEntity,
 	{self},
 };
-use crate::database::{Ingestion, DATABASE_CONNECTION};
+use crate::database::{DATABASE_CONNECTION, Ingestion};
+use crate::ingestion::IngestionActions;
 use crate::ingestion::action::{
 	DeleteIngestion,
 	ListIngestion,
@@ -63,16 +67,13 @@ use crate::ingestion::action::{
 	ViewIngestion,
 };
 use crate::ingestion::model::AnalyzeIngestion;
-use crate::ingestion::IngestionActions;
-use crate::r#abstract::CommandHandler;
 use crate::substance::repository::get_substance;
-use crate::substance::route_of_administration::dosage::Dosage;
-use crate::substance::route_of_administration::phase::{PhaseClassification, PHASE_ORDER};
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
-use crate::ui::theme::THEME;
+use crate::substance::route_of_administration::dosage::Dosage;
+use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
 use crate::ui::PhaseIcon;
-use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
-use crate::{database, Application, Exception};
+use crate::ui::theme::MAD_SKIN;
+use crate::{Application, Exception, database};
 
 
 impl Displayable for crate::ingestion::Ingestion
@@ -153,7 +154,7 @@ impl Displayable for crate::ingestion::Ingestion
 		out.push_str("\n");
 		out.push_str(&table.to_string());
 
-		THEME.text(&out.to_string(), None).to_string()
+		MAD_SKIN.text(&out.to_string(), None).to_string()
 	}
 }
 
@@ -193,7 +194,7 @@ impl Displayable for IngestionList
 			.to_string();
 
 		output.push_str(&table);
-		THEME.text(&output, None).to_string()
+		MAD_SKIN.text(&output, None).to_string()
 	}
 }
 

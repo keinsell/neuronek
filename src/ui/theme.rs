@@ -1,6 +1,6 @@
-use crossterm::style::Color;
 use lazy_static::lazy_static;
 use termimad::MadSkin;
+use termimad::coolor::Color;
 
 mod color
 {
@@ -39,25 +39,21 @@ mod color
 	pub enum Style
 	{
 		Tag(String),
-
-		// States
 		Caution,
 		Failure,
 		Invalid,
 		Muted,
 		MutedLight,
 		Success,
-
-		// Types
-		File,     // rel file paths, file names/exts
-		Hash,     // hashes, shas, commits
-		Id,       // ids, names
-		Label,    // titles, strings
-		Path,     // abs file paths
-		Property, // properties, keys, fields, settings
-		Shell,    // shell, cli, commands
-		Symbol,   // symbols, chars
-		Url,      // urls
+		File,
+		Hash,
+		Id,
+		Label,
+		Path,
+		Property,
+		Shell,
+		Symbol,
+		Url,
 	}
 
 	impl Style
@@ -466,9 +462,9 @@ pub mod stylize
 
 pub use stylize::*;
 
-lazy_static! {
-	pub static ref THEME: MadSkin = {
+pub static MAD_SKIN: std::sync::LazyLock<MadSkin> = {
+	std::sync::LazyLock::new(|| {
 		let skin = MadSkin::default();
 		skin
-	};
-}
+	})
+};
