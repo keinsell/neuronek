@@ -145,27 +145,17 @@ neuronek ingestion update 1 -d 90mg
 neuronek ingestion delete 14
 ```
 
-<details>
-<summary>Output</summary>
-
 ```
 Ingestion #14 has been successfully deleted.
 ```
-
-</details>
 
 ### Substances
 
 Application comes with a pre-bundled database of psychoactive substances built on top
 of [PsychonautWiki](https://psychonautwiki.org), such information is easily queryable through CLI and is foundation
-for further analysis of user's ingestions to provide insight on harm-reduction and predicting subjective effects.
+for further analysis of user's ingestion to provide insight on harm-reduction and predicting subjective effects.
 
-#### Get Substance [Under Development]
-
-Application can preview information about compounds from initially provided dataset, however, due to the highly nested
-nature
-of information the clean and human-friendly interface is needed to be designed and developed and implementation of such
-to this application by its nature is questionable.
+#### Get Substance
 
 ```bash
 neuronek substance get caffeine
