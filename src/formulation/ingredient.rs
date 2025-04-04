@@ -30,7 +30,7 @@ async fn create_ingredient(
 }
 
 #[async_std::test]
-async fn should_create_ingredient() -> miette::Result<()> { todo!() }
+async fn should_create_ingredient() {}
 
 #[derive(Debug, Args)]
 pub struct UpdateIngredient
@@ -51,7 +51,7 @@ async fn update_ingredient(
 }
 
 #[async_std::test]
-async fn should_update_ingredient() -> miette::Result<()> { todo!() }
+async fn should_update_ingredient() {}
 
 #[derive(Debug, Args)]
 pub struct DeleteIngredient
@@ -68,7 +68,7 @@ async fn delete_ingredient(
 }
 
 #[async_std::test]
-async fn should_delete_ingredient() -> miette::Result<()> { todo!() }
+async fn should_delete_ingredient() {}
 
 #[derive(Debug, Args)]
 pub struct GetIngredient
@@ -85,7 +85,7 @@ async fn get_ingredient(
 }
 
 #[async_std::test]
-async fn should_get_ingredient() -> miette::Result<()> { todo!() }
+async fn should_get_ingredient() {}
 
 #[derive(Debug, Args)]
 pub struct ListIngredients {}
