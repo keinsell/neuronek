@@ -181,24 +181,64 @@ async fn list_formulations(
 async fn should_list_formulations() {}
 
 #[derive(Debug, Clone, Args)]
-
-pub struct GetFormulation
-{
-	#[arg(index = 1, value_name = "FORMULATION_ID")]
-	id: i32,
+pub struct GetFormulation {
+    #[arg(index = 1, value_name = "FORMULATION_ID")]
+    id: i32,
 }
 
+pub async fn get_formulation(
+    get_formulation: &crate::formulation::GetFormulation,
+    transaction: &DatabaseTransaction,
+) -> miette::Result<Formulation> {
+    use sea_orm::{EntityTrait, ColumnTrait, QueryFilter};
 
-async fn get_formulation(
-	get_formulation: &crate::formulation::GetFormulation, transaction: &DatabaseTransaction,
-) -> miette::Result<Formulation>
-{
-	todo!()
+    let formulation = Entity::find()
+        .filter(crate::database::entities::formulation::Column::Id.eq(get_formulation.id))
+        .one(transaction)
+        .await.into_diagnostic()?
+        .ok_or_else(|| miette::miette!("Formulation not found"))?;
+
+	Ok(Formulation {
+		id: Some(formulation.id),
+	    name: FormulationName::try_from(formulation.name).into_diagnostic()?,
+		description: formulation.summary,
+		ingredients: HashSet::new(),
+	})
 }
-
 
 #[async_std::test]
-async fn should_get_formulation() {}
+async fn should_get_formulation() {
+    use sea_orm::EntityTrait;
+
+    use super::*;
+    let db_connection = &DATABASE_CONNECTION;
+    let tx = db_connection.begin().await.unwrap();
+	
+    let created_formulation = create_formulation(
+        &CreateFormulation {
+            name: "test formulation".into(),
+            description: Some("Test description".into()),
+        },
+        &tx,
+    )
+    .await
+    .unwrap();
+	
+    let result = get_formulation(
+        &GetFormulation {
+            id: created_formulation.id.unwrap(),
+        },
+        &tx,
+    )
+    .await
+    .unwrap();
+
+    tx.commit().await.unwrap();
+	
+    assert_eq!(result.id, created_formulation.id);
+    assert_eq!(result.name.to_string(), "test formulation");
+    assert_eq!(result.description, Some("Test description".into()));
+}
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum Command
