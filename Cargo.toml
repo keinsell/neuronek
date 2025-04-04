@@ -29,6 +29,7 @@ panic = "abort"
 
 [features]
 default = ["command_line", "telemetry"]
+test = ["sea-orm/mock"]
 command_line = []
 terminal = []
 telemetry = ["sentry-tracing/default"]

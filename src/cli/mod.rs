@@ -13,9 +13,13 @@ use textplots::Plot;
 use tracing::log::Log;
 
 use crate::config::VERSION;
+use crate::formulation::Command;
+
+pub mod formulation;
 pub mod ingestion;
 pub mod prominence;
 pub mod substance;
+
 
 use crate::r#abstract::CommandHandler;
 
@@ -78,6 +82,31 @@ pub trait Displayable: Serialize + Sized + Debug
 	}
 }
 
+/// TODO: Default should be taking formulation_id
+/// if formulation id is provided and there is no subcommand should view
+/// formulation if formulation id is not provided and there is no subcommand
+/// should view all fomrmulations if formulation id is not provided and
+/// subcommand is provided should handle command formulation id and subcommand
+/// cannot be used altogether / only interigent commands can be used
+#[derive(Debug, Parser, Default, Clone)]
+#[command(
+	name = "formulation",
+	alias = "form",
+	subcommand_precedence_over_arg = true
+)]
+pub struct FormulationCommand
+{
+	#[arg(
+		index = 1,
+		value_name = "FORMULATION_ID",
+		help = "identification of formulation for operation",
+		required = false
+	)]
+	pub(crate) id: Option<u64>,
+	#[command(subcommand)]
+	pub command: Option<Command>,
+}
+
 #[derive(clap::Subcommand)]
 pub enum ApplicationCommands
 {
@@ -89,6 +118,7 @@ pub enum ApplicationCommands
 	Stats(crate::statistics::ShowStatistics),
 	/// Show substance prominence over time
 	Prominence(prominence::ProminenceCommand),
+	Formulation(FormulationCommand),
 	/// Generate shell completion scripts
 	#[command(hide = true)]
 	Completion

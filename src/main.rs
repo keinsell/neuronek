@@ -7,32 +7,38 @@
 #![feature(negative_impls)]
 #![feature(trait_alias)]
 #![feature(extern_types)]
+#![feature(ascii_char)]
+#![feature(ascii_char_variants)]
 
 use std::fmt::Display;
+
+use chrono::{DateTime, Local};
+use chrono_english::Dialect;
+use clap::{CommandFactory, Parser};
+use error_handling::setup_diagnostics;
+use formulation::list_formulations;
+use logging::setup_logger;
+use miette::{miette, Diagnostic, IntoDiagnostic, Result};
+use r#abstract::CommandHandler;
+use tracing_subscriber::util::SubscriberInitExt;
 
 use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
 use crate::database::{migrate_database, DATABASE_CONNECTION};
 use crate::ingestion::IngestionActions;
 use crate::statistics::show_statistics;
-use chrono::{DateTime, Local};
-use chrono_english::Dialect;
-use clap::{CommandFactory, Parser};
-use error_handling::setup_diagnostics;
-use logging::setup_logger;
-use miette::{miette, Diagnostic, IntoDiagnostic, Result};
-use r#abstract::CommandHandler;
-use tracing_subscriber::util::SubscriberInitExt;
 
 mod r#abstract;
 mod cli;
 pub mod config;
 mod database;
 pub(crate) mod error_handling;
+mod formulation;
 mod ingestion;
 pub(crate) mod logging;
 mod statistics;
 mod substance;
 mod ui;
+
 use crossterm::ExecutableCommand;
 
 pub trait ValueParser
@@ -69,6 +75,10 @@ pub struct Application<'a>
 }
 
 use clap::Subcommand;
+use dialoguer::Confirm;
+use owo_colors::OwoColorize;
+
+use crate::formulation::{create_formulation, create_formulation_ingredient, delete_formulation, get_formulation, update_formulation, Command, GetFormulation};
 
 #[async_std::main]
 async fn main() -> Result<()>
@@ -136,6 +146,79 @@ async fn main() -> Result<()>
 		}
 		| ApplicationCommands::Prominence(cmd) => {
 			cli::prominence::handle_prominence_command(&cmd).await
+		}
+		| ApplicationCommands::Formulation(cmd) => {
+			let id = cmd.id.clone();
+			let command = &cmd.command.clone();
+
+			// If id is provided and no command is provided,
+			// application should default into providing default id for create command
+
+			if (id.is_some() && command.is_none()) {
+				let id = id.unwrap();
+				let command = GetFormulation {
+					id: Some(id as u32),
+				};
+				let formulation = get_formulation(&command, context.database_connection);
+				formulation.map(|f| f.display(context.stdout_format));
+				return Ok(());
+			}
+
+			if (id.is_none() && command.is_none()) {
+				let formulations = list_formulations(
+					&formulation::ListFormulation::default(),
+					context.database_connection,
+				);
+				let formulations = crate::cli::formulation::FormulationList::from(formulations);
+				formulations.display(context.stdout_format);
+				return Ok(());
+			}
+
+			if (command.is_some()) {
+				match command.clone().unwrap() {
+					| Command::Create(cmd) => {
+						let formulation = create_formulation(&cmd, &context.database_connection);
+						formulation.display(context.stdout_format);
+					}
+					| Command::Update(cmd) => {
+						let formulation = update_formulation(&cmd, &context.database_connection);
+						formulation?.display(context.stdout_format);
+					}
+					| Command::Delete(cmd) => {
+						if (cmd.confirmation.is_none()) {
+							if (cli::is_interactive()) {
+								let is_confirmed = Confirm::new()
+									.with_prompt("Operation will be irreversible, are you sure?")
+									.default(false)
+									.interact()
+									.map_err(|e| miette!("Failed to get confirmation: {}", e))?;
+
+								if (!is_confirmed) {
+									miette!("Failed to confirm");
+								};
+							}
+						} else if (cmd.confirmation.is_some() && cmd.confirmation.unwrap() == false)
+						{
+							miette!("Failed to confirm");
+						};
+
+						delete_formulation(&cmd, &context.database_connection)?;
+						println!("Formulation deleted successfully!");
+					}
+					| Command::View(_) => {}
+					| Command::List(_) => {},
+					| Command::Igr(cmd) => {
+						match cmd.command {
+							formulation::ingredient::Command::Create(cmd) => {
+								let fi = create_formulation_ingredient(cmd, &context.database_connection).await?;
+								fi.display(context.stdout_format);
+							},
+						}
+					}
+				}
+			}
+
+			Ok(())
 		}
 		| ApplicationCommands::Completion { .. } => unreachable!(),
 	}

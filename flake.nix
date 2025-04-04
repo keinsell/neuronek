@@ -59,7 +59,7 @@
             cargo-edit
             cargo-watch
             bacon
-
+            atlas
             nixd
             nil
             alejandra
