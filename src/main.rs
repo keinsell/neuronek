@@ -10,29 +10,32 @@
 
 use std::fmt::Display;
 
-use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
-use crate::database::{migrate_database, DATABASE_CONNECTION};
-use crate::ingestion::IngestionActions;
-use crate::statistics::show_statistics;
+use r#abstract::CommandHandler;
 use chrono::{DateTime, Local};
 use chrono_english::Dialect;
 use clap::{CommandFactory, Parser};
 use error_handling::setup_diagnostics;
 use logging::setup_logger;
-use miette::{miette, Diagnostic, IntoDiagnostic, Result};
-use r#abstract::CommandHandler;
+use miette::{Diagnostic, IntoDiagnostic, Result, miette};
 use tracing_subscriber::util::SubscriberInitExt;
+
+use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
+use crate::database::{DATABASE_CONNECTION, migrate_database};
+use crate::ingestion::IngestionActions;
+use crate::statistics::show_statistics;
 
 mod r#abstract;
 mod cli;
 pub mod config;
 mod database;
 pub(crate) mod error_handling;
+mod formulation;
 mod ingestion;
 pub(crate) mod logging;
 mod statistics;
 mod substance;
 mod ui;
+
 use crossterm::ExecutableCommand;
 
 pub trait ValueParser
