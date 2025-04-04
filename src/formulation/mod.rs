@@ -1,10 +1,11 @@
+use sea_orm::{QueryOrder, QuerySelect};
 pub mod ingredient;
 
 use clap::{Args, Subcommand};
 use hashbrown::HashSet;
 use miette::{IntoDiagnostic, Result};
 use nutype::nutype;
-use sea_orm::{DatabaseTransaction, EntityTrait, TransactionTrait};
+use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, Order, TransactionTrait};
 use serde::Serialize;
 use tabled::Tabled;
 use tracing::info;
@@ -170,15 +171,113 @@ pub struct ListFormulations
 	pub limit: u32,
 }
 
-async fn list_formulations(
-	dto: &ListFormulations, transaction: &DatabaseTransaction,
-) -> Result<Vec<Formulation>>
-{
-	todo!()
+pub async fn list_formulations(
+	list_formulations: &crate::formulation::ListFormulations,
+	transaction: &sea_orm::DatabaseTransaction,
+) -> Result<Vec<crate::formulation::Formulation>> {
+	use crate::database::entities::formulation::{Column, Entity};
+	use sea_orm::QueryFilter;
+
+	let mut query = Entity::find();
+
+	if let Some(ref name_filter) = list_formulations.name {
+		query = query.filter(Column::Name.contains(name_filter));
+	}
+
+	// Ingredient filtering is not implemented yet.
+	if let Some(ref ingredient_ids) = list_formulations.with_ingredient_ids {
+		tracing::warn!(
+			"Ignoring ingredient filtering (not implemented) for IDs: {:?}",
+			ingredient_ids
+		);
+	}
+
+	query = query.order_by(Column::Id, Order::Asc).limit(list_formulations.limit as u64);
+
+	let models = query.all(transaction).await.into_diagnostic()?;
+
+	let formulations = models
+		.into_iter()
+		.map(|model| crate::formulation::Formulation {
+			id: Some(model.id),
+			name: crate::formulation::FormulationName::try_from(model.name)
+				.expect("Invalid formulation name"),
+			description: model.summary,
+			ingredients: HashSet::new(),
+		})
+		.collect();
+
+	Ok(formulations)
 }
 
+
 #[async_std::test]
-async fn should_list_formulations() {}
+async fn should_list_formulations() {
+	use sea_orm::EntityTrait;
+
+	use super::*;
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+	
+	create_formulation(
+		&CreateFormulation {
+			name: "test formulation 1".into(),
+			description: Some("Test description 1".into()),
+		},
+		&tx,
+	)
+		.await
+		.unwrap();
+
+	create_formulation(
+		&CreateFormulation {
+			name: "test formulation 2".into(),
+			description: Some("Test description 2".into()),
+		},
+		&tx,
+	)
+		.await
+		.unwrap();
+
+
+	let result = list_formulations(&ListFormulations {
+		name: None,
+		with_ingredient_ids: None,
+		limit: 50,
+	}, &tx).await.unwrap();
+
+	tx.commit().await.unwrap();
+
+	assert_eq!(result.len(), 2);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+	assert_eq!(result[1].name.to_string(), "test formulation 2");
+	
+	let tx = db_connection.begin().await.unwrap();
+
+
+	let result = list_formulations(&ListFormulations {
+		name: Some("test formulation 1".into()),
+		with_ingredient_ids: None,
+		limit: 50,
+	}, &tx).await.unwrap();
+
+	assert_eq!(result.len(), 1);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+
+
+	// List formulations with limit.
+	let result = list_formulations(&ListFormulations {
+		name: None,
+		with_ingredient_ids: None,
+		limit: 1,
+	}, &tx).await.unwrap();
+	
+	
+
+	assert_eq!(result.len(), 1);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct GetFormulation {
