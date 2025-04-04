@@ -24,6 +24,27 @@ CREATE TABLE `substance_route_of_administration_dosage` (`id` text NOT NULL, `in
 CREATE UNIQUE INDEX `route_of_administration_dosage_intensivity_routeOfAdministrationId_key` ON `substance_route_of_administration_dosage` (`intensity`, `routeOfAdministrationId`);
 -- Create "ingestion" table
 CREATE TABLE `ingestion` (`id` integer NOT NULL PRIMARY KEY AUTOINCREMENT, `substance_name` varchar NOT NULL, `route_of_administration` varchar NOT NULL, `dosage` float NOT NULL, `ingested_at` datetime_text NOT NULL, `updated_at` datetime_text NOT NULL, `created_at` datetime_text NOT NULL);
+-- Create "ingestion_group" table
+CREATE TABLE `ingestion_group`
+(
+    `id`         text NOT NULL,
+    `name`       text NOT NULL,
+    `created_at` text NOT NULL,
+    `updated_at` text NOT NULL,
+    PRIMARY KEY (`id`)
+);
+-- Create index "ingestion_group_id_key" to table: "ingestion_group"
+CREATE UNIQUE INDEX `ingestion_group_id_key` ON `ingestion_group` (`id`);
+-- Create "ingestion_group_ingestion" table
+CREATE TABLE `ingestion_group_ingestion`
+(
+    `id`           text    NOT NULL,
+    `group_id`     text    NOT NULL,
+    `ingestion_id` integer NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `ingestion_group_ingestion_ingestion_id_fkey` FOREIGN KEY (`ingestion_id`) REFERENCES `ingestion` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `ingestion_group_ingestion_group_id_fkey` FOREIGN KEY (`group_id`) REFERENCES `ingestion_group` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);
 -- Create "ingestion_phase" table
 CREATE TABLE `ingestion_phase` (`id` text NOT NULL, `ingestion_id` integer NOT NULL, `classification` text NOT NULL, `start_date_min` datetime_text NOT NULL, `start_date_max` datetime_text NOT NULL, `end_date_min` datetime_text NOT NULL, `end_date_max` datetime_text NOT NULL, `weight` real NOT NULL DEFAULT 1, `duration_min` text NOT NULL, `duration_max` text NOT NULL, `substance_name` text NOT NULL, `created_at` text NOT NULL, `updated_at` text NOT NULL, PRIMARY KEY (`id`), CONSTRAINT `ingestion_phase_ingestion_id_fkey` FOREIGN KEY (`ingestion_id`) REFERENCES `ingestion` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, CHECK (classification IN ('Onset', 'Comeup', 'Peak', 'Comedown', 'Afterglow', 'Unknown')), CHECK (
         start_date_min <= start_date_max
@@ -37,9 +58,36 @@ CREATE UNIQUE INDEX `ingestion_phase_id_key` ON `ingestion_phase` (`id`);
 CREATE INDEX `ingestion_phase_ingestion_id_idx` ON `ingestion_phase` (`ingestion_id`);
 -- Create index "ingestion_phase_classification_idx" to table: "ingestion_phase"
 CREATE INDEX `ingestion_phase_classification_idx` ON `ingestion_phase` (`classification`);
--- Create "ingestion_group" table
-CREATE TABLE `ingestion_group` (`id` text NOT NULL, `name` text NOT NULL, `created_at` text NOT NULL, `updated_at` text NOT NULL, PRIMARY KEY (`id`));
--- Create index "ingestion_group_id_key" to table: "ingestion_group"
-CREATE UNIQUE INDEX `ingestion_group_id_key` ON `ingestion_group` (`id`);
--- Create "ingestion_group_ingestion" table
-CREATE TABLE `ingestion_group_ingestion` (`id` text NOT NULL, `group_id` text NOT NULL, `ingestion_id` integer NOT NULL, PRIMARY KEY (`id`), CONSTRAINT `ingestion_group_ingestion_ingestion_id_fkey` FOREIGN KEY (`ingestion_id`) REFERENCES `ingestion` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, CONSTRAINT `ingestion_group_ingestion_group_id_fkey` FOREIGN KEY (`group_id`) REFERENCES `ingestion_group` (`id`) ON UPDATE CASCADE ON DELETE CASCADE);
+-- Create "formulation" table
+CREATE TABLE `formulation`
+(
+    `id`       integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `name`     text    NOT NULL,
+    `summary`  text    NULL,
+    `labeller` text    NULL,
+    `form`     text    NULL,
+    `route`    text    NOT NULL,
+    CHECK (
+        route IN (
+                  'buccal',
+                  'inhaled',
+                  'insufflated',
+                  'intramuscular',
+                  'intravenous',
+                  'oral',
+                  'rectal',
+                  'smoked',
+                  'sublingual',
+                  'transdermal'
+            )
+        )
+);
+-- Create "formulation_ingredient" table
+CREATE TABLE `formulation_ingredient`
+(
+    `id`             integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `formulation_id` integer NOT NULL,
+    `substance_name` text    NOT NULL,
+    `dosage`         real    NOT NULL,
+    CONSTRAINT `0` FOREIGN KEY (`formulation_id`) REFERENCES `formulation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);

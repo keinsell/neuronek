@@ -2,6 +2,8 @@
 
 pub mod prelude;
 
+pub mod formulation;
+pub mod formulation_ingredient;
 pub mod ingestion;
 pub mod ingestion_group;
 pub mod ingestion_group_ingestion;

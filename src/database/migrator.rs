@@ -115,6 +115,11 @@ impl MigratorTrait for Migrator
 				"20250303072935_remove_dosage_classification_from_ingestion",
 				"20250303072935_remove_dosage_classification_from_ingestion"
 			),
+			import_migration!(
+				M20250402003039AddFormulation,
+				"20250402003039_add_formulation",
+				"20250402003039_add_formulation"
+			),
 		]
 	}
 }
