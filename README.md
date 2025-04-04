@@ -254,6 +254,14 @@ Modifies an existing formulation. You can update its name, description, or ingre
 
 Removes a formulation from the system.
 
+```
+neuronek formulation delete <FORMULATION_ID>
+```
+
+```present cargo run -- --format pretty formulation delete 1 --no-confirm
+Formulation deleted successfully
+```
+
 ##### Formulation Ingredients
 
 This section describes commands related to managing ingredients within a specific formulation.
