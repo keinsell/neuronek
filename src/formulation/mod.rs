@@ -9,9 +9,9 @@ use sea_orm::DatabaseTransaction;
 use crate::formulation::ingredient::Ingredient;
 
 #[nutype(
-	sanitize(trim, lowercase),
-	validate(not_empty),
-	derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq)
+    sanitize(trim, lowercase),
+    validate(not_empty),
+    derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq)
 )]
 pub struct FormulationName(String);
 
@@ -30,16 +30,16 @@ pub type FormulationIngredients = HashSet<Ingredient>;
 #[derive(Debug, Clone)]
 pub struct Formulation
 {
-	/// Unique identifier for the formulation, only present for persisted
-	/// formulations
-	pub id: Option<i32>,
-	/// Name of the formulation
-	pub name: FormulationName,
-	/// Optional descriptive text about the formulation
-	pub description: Option<String>,
-	/// List of substances that make up this formulation, each with their own
-	/// dosage
-	pub ingredients: FormulationIngredients,
+    /// Unique identifier for the formulation, only present for persisted
+    /// formulations
+    pub id: Option<i32>,
+    /// Name of the formulation
+    pub name: FormulationName,
+    /// Optional descriptive text about the formulation
+    pub description: Option<String>,
+    /// List of substances that make up this formulation, each with their own
+    /// dosage
+    pub ingredients: FormulationIngredients,
 }
 
 #[derive(Debug, Args)]
@@ -83,15 +83,15 @@ async fn should_update_formulation() { todo!() }
 #[derive(Debug, Args)]
 pub struct DeleteFormulation
 {
-	#[arg(index = 1, value_name = "FORMULATION_ID")]
-	id: i32,
+    #[arg(index = 1, value_name = "FORMULATION_ID")]
+    id: i32,
 }
 
 async fn delete_formulation(
-	delete_formulation: &crate::formulation::DeleteFormulation, transaction: &DatabaseTransaction,
+    delete_formulation: &crate::formulation::DeleteFormulation, transaction: &DatabaseTransaction,
 ) -> miette::Result<()>
 {
-	todo!()
+    todo!()
 }
 #[async_std::test]
 async fn should_delete_formulation() { todo!() }
