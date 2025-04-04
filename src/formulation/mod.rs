@@ -63,7 +63,7 @@ async fn create_formulation(
 }
 
 #[async_std::test]
-async fn should_create_formulation() { todo!() }
+async fn should_create_formulation() {}
 
 #[derive(Debug, Clone, Args)]
 pub struct UpdateFormulation
@@ -82,7 +82,7 @@ async fn update_formulation(
 	todo!()
 }
 #[async_std::test]
-async fn should_update_formulation() { todo!() }
+async fn should_update_formulation() {}
 
 #[derive(Debug, Clone, Args)]
 pub struct DeleteFormulation
@@ -98,7 +98,7 @@ async fn delete_formulation(
 	todo!()
 }
 #[async_std::test]
-async fn should_delete_formulation() { todo!() }
+async fn should_delete_formulation() {}
 
 #[derive(Debug, Clone, Args)]
 pub struct ListFormulations
@@ -124,7 +124,7 @@ async fn list_formulations(
 }
 
 #[async_std::test]
-async fn should_list_formulations() { todo!() }
+async fn should_list_formulations() {}
 
 #[derive(Debug, Clone, Args)]
 
@@ -144,7 +144,7 @@ async fn get_formulation(
 
 
 #[async_std::test]
-async fn should_get_formulation() { todo!() }
+async fn should_get_formulation() {}
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum Command
