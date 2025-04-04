@@ -22,7 +22,6 @@ use tracing_subscriber::util::SubscriberInitExt;
 use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
 use crate::database::{DATABASE_CONNECTION, migrate_database};
 use crate::ingestion::IngestionActions;
-use crate::statistics::show_statistics;
 
 mod r#abstract;
 mod cli;
@@ -136,13 +135,6 @@ async fn main() -> Result<()>
 		| ApplicationCommands::Formulation(cmd) => {
 			cli::formulation::handle(cmd, &context);
 			Ok(())
-		}
-		| ApplicationCommands::Stats(cmd) => {
-			show_statistics(&cmd).await?;
-			Ok(())
-		}
-		| ApplicationCommands::Prominence(cmd) => {
-			cmd.handle(context).await
 		}
 		| ApplicationCommands::Completion { .. } => unreachable!(),
 	}
