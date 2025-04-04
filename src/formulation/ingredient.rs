@@ -5,13 +5,8 @@ use sea_orm::DatabaseTransaction;
 use crate::ingestion::model::SubstanceName;
 use crate::substance::route_of_administration::dosage::Dosage;
 
-#[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Eq, Hash))]
+#[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, PartialEq, Eq, Hash))]
 pub struct Ingredient(SubstanceName, Dosage);
-
-impl PartialEq<Self> for Ingredient
-{
-	fn eq(&self, other: &Self) -> bool { self.clone().into_inner() == other.clone().into_inner() }
-}
 
 #[derive(Debug, Args)]
 pub struct CreateIngredient
