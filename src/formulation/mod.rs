@@ -2,13 +2,19 @@ pub mod ingredient;
 
 use clap::{Args, Subcommand};
 use hashbrown::HashSet;
-use miette::Result;
+use miette::{IntoDiagnostic, Result};
 use nutype::nutype;
-use sea_orm::DatabaseTransaction;
+use sea_orm::{DatabaseTransaction, EntityTrait, TransactionTrait};
 use serde::Serialize;
 use tabled::Tabled;
+use tracing::info;
 
+use crate::database::DATABASE_CONNECTION;
 use crate::formulation::ingredient::Ingredient;
+
+type ActiveModel = crate::database::entities::formulation::ActiveModel;
+type Entity = crate::database::entities::formulation::Entity;
+type Model = crate::database::entities::formulation::Model;
 
 #[nutype(
 	sanitize(trim, lowercase),
@@ -55,15 +61,63 @@ pub struct CreateFormulation
 	description: Option<String>,
 }
 
-async fn create_formulation(
+pub async fn create_formulation(
 	create_formulation: &CreateFormulation, database_transaction: &DatabaseTransaction,
 ) -> miette::Result<Formulation>
 {
-	todo!()
+	let model = {
+		let active_model = ActiveModel {
+			id: sea_orm::ActiveValue::NotSet,
+			name: sea_orm::ActiveValue::Set(create_formulation.name.clone().into()),
+			summary: sea_orm::ActiveValue::Set(create_formulation.description.clone()),
+			labeller: sea_orm::ActiveValue::NotSet,
+			form: sea_orm::ActiveValue::NotSet,
+			route: sea_orm::ActiveValue::Set("oral".into()),
+		};
+
+		Entity::insert(active_model)
+			.exec_with_returning(database_transaction)
+			.await
+			.into_diagnostic()
+	}?;
+
+	let formulation = Formulation {
+		id: Some(model.id),
+		description: model.summary,
+		ingredients: HashSet::new(),
+		name: FormulationName::try_from(model.name).into_diagnostic()?,
+	};
+
+	info!("Formulation Created");
+
+	Ok(formulation)
 }
 
 #[async_std::test]
-async fn should_create_formulation() { todo!() }
+async fn should_create_formulation()
+{
+	use sea_orm::EntityTrait;
+
+	use super::*;
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+
+	let result = create_formulation(
+		&CreateFormulation {
+			name: "test formulation".into(),
+			description: Some("Test description".into()),
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	tx.commit().await.unwrap();
+
+	assert_eq!(result.id, Some(1));
+	assert_eq!(result.name.to_string(), "test formulation");
+	assert_eq!(result.description, Some("Test description".into()));
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct UpdateFormulation

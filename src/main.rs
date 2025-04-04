@@ -134,7 +134,7 @@ async fn main() -> Result<()>
 		},
 		| ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
 		| ApplicationCommands::Formulation(cmd) => {
-			cli::formulation::handle(cmd);
+			cli::formulation::handle(cmd, &context);
 			Ok(())
 		}
 		| ApplicationCommands::Stats(cmd) => {
