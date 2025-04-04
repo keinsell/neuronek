@@ -122,21 +122,109 @@ async fn should_create_formulation()
 #[derive(Debug, Clone, Args)]
 pub struct UpdateFormulation
 {
+	#[arg(index = 1, value_name = "FORMULATION_ID")]
+	id: i32,
 	#[arg(short, long)]
 	name: Option<String>,
 	#[arg(short, long)]
 	description: Option<String>,
 }
 
-async fn update_formulation(
+pub async fn update_formulation(
 	update_formulation: &crate::formulation::UpdateFormulation,
 	database_transaction: &DatabaseTransaction,
 ) -> miette::Result<Formulation>
 {
-	todo!()
+	use sea_orm::{EntityTrait, ColumnTrait, QueryFilter, Set, ActiveValue};
+
+	// First, check if the formulation exists
+	let formulation = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
+		.one(database_transaction)
+		.await.into_diagnostic()?
+		.ok_or_else(|| miette::miette!("Formulation not found"))?;
+
+	// Create an active model for updating
+	let mut active_model = ActiveModel {
+		id: ActiveValue::Set(formulation.id),
+		..Default::default()
+	};
+
+	// Set fields that need to be updated
+	if let Some(name) = &update_formulation.name {
+		active_model.name = Set(name.clone());
+	}
+
+	if let Some(description) = &update_formulation.description {
+		active_model.summary = Set(Some(description.clone()));
+	}
+
+	// Update the formulation in the database
+	// First update the model
+	Entity::update(active_model)
+		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
+		.exec(database_transaction)
+		.await
+		.into_diagnostic()?;
+
+	// Then fetch the updated model
+	let updated_model = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
+		.one(database_transaction)
+		.await
+		.into_diagnostic()?
+		.ok_or_else(|| miette::miette!("Formulation not found after update"))?;
+
+	// Create and return the updated formulation
+	let updated_formulation = Formulation {
+		id: Some(updated_model.id),
+		name: FormulationName::try_from(updated_model.name).into_diagnostic()?,
+		description: updated_model.summary,
+		ingredients: HashSet::new(), // Note: We're not updating ingredients here
+	};
+
+	info!("Formulation Updated");
+
+	Ok(updated_formulation)
 }
 #[async_std::test]
-async fn should_update_formulation() {}
+async fn should_update_formulation() {
+	use sea_orm::EntityTrait;
+
+	use super::*;
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+
+	// First create a formulation
+	let created_formulation = create_formulation(
+		&CreateFormulation {
+			name: "test formulation".into(),
+			description: Some("Test description".into()),
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	// Then update it
+	let updated_formulation = update_formulation(
+		&UpdateFormulation {
+			id: created_formulation.id.unwrap(),
+			name: Some("updated formulation".into()),
+			description: Some("Updated description".into()),
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	tx.commit().await.unwrap();
+
+	// Verify the update was successful
+	assert_eq!(updated_formulation.id, created_formulation.id);
+	assert_eq!(updated_formulation.name.to_string(), "updated formulation");
+	assert_eq!(updated_formulation.description, Some("Updated description".into()));
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct DeleteFormulation
@@ -213,7 +301,7 @@ async fn should_get_formulation() {
     use super::*;
     let db_connection = &DATABASE_CONNECTION;
     let tx = db_connection.begin().await.unwrap();
-	
+
     let created_formulation = create_formulation(
         &CreateFormulation {
             name: "test formulation".into(),
@@ -223,7 +311,7 @@ async fn should_get_formulation() {
     )
     .await
     .unwrap();
-	
+
     let result = get_formulation(
         &GetFormulation {
             id: created_formulation.id.unwrap(),
@@ -234,7 +322,7 @@ async fn should_get_formulation() {
     .unwrap();
 
     tx.commit().await.unwrap();
-	
+
     assert_eq!(result.id, created_formulation.id);
     assert_eq!(result.name.to_string(), "test formulation");
     assert_eq!(result.description, Some("Test description".into()));

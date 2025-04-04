@@ -8,7 +8,7 @@ use serde::Serialize;
 use crate::Application;
 use crate::cli::Displayable;
 use crate::formulation::ingredient::Ingredient;
-use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, get_formulation};
+use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, get_formulation, update_formulation};
 
 impl Displayable for Formulation
 {
@@ -46,7 +46,10 @@ pub fn handle(command: Command, application: &Application)
 				let formulation = create_formulation(&cmd, &transaction).await.unwrap();
 				formulation.display(application.stdout_format.clone());
 			}
-			| FormulationCommand::Update(_) => {}
+			| FormulationCommand::Update(cmd) => {
+				let formulation = update_formulation(&cmd, &transaction).await.unwrap();
+				formulation.display(application.stdout_format.clone());
+			}
 			| FormulationCommand::Delete(_) => {}
 			| FormulationCommand::List(_) => {}
 			| FormulationCommand::Get(cmd) => {
