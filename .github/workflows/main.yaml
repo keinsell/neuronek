@@ -1,4 +1,4 @@
-name: main
+name: CI
 
 on:
   pull_request:
@@ -37,10 +37,18 @@ jobs:
           toolchain: nightly
           target: x86_64-unknown-linux-gnu
           override: true
+          components: rustfmt, clippy
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+        continue-on-error: true
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+        continue-on-error: true
 
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
         include:
@@ -58,8 +66,26 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - name: Run test
-        run: cargo test
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/ # Cache the build target directory
+          key: ${{ runner.os }}-cargo-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-${{ matrix.target }}-
+
+      - name: Cargo test
+        run: cargo nextest run --workspace --all-targets --all-features --no-tests=pass
 
       - name: Build application
         run: cargo build --release --target ${{ matrix.target }}
@@ -71,6 +97,7 @@ jobs:
           path: |
             target/${{ matrix.target }}/release/neuronek
             target/${{ matrix.target }}/release/neuronek.exe
+          if-no-files-found: error
 
   nix_build:
     runs-on: ubuntu-latest
