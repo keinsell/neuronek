@@ -142,7 +142,7 @@ async fn main() -> Result<()>
 			Ok(())
 		}
 		| ApplicationCommands::Prominence(cmd) => {
-			cli::prominence::handle_prominence_command(&cmd).await
+			cmd.handle(context).await
 		}
 		| ApplicationCommands::Completion { .. } => unreachable!(),
 	}
