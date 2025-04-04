@@ -133,6 +133,10 @@ async fn main() -> Result<()>
 			}
 		},
 		| ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
+		| ApplicationCommands::Formulation(cmd) => {
+			cli::formulation::handle(cmd);
+			Ok(())
+		}
 		| ApplicationCommands::Stats(cmd) => {
 			show_statistics(&cmd).await?;
 			Ok(())

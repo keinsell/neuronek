@@ -64,11 +64,11 @@ neuronek ingestion log -s caffeine -d 80mg
 
 ```present cargo run -- -f pretty ingestion log -s caffeine -d 80mg
 ╭──────────────────────────────┬───────────────────────────────────────────╮
-│  ID:         5               ┆  — Onset      23:37       →  23:42±5m     │
-│  Substance:  Caffeine        ┆  ↑ Comeup     23:42±5m    →  23:52±25m    │
-│  Dosage:     80.0 mg         ┆  ≡ Peak       23:52±25m   →  00:37±1.2h   │
-│  Route:      Oral            ┆  ↓ Comedown   00:37±1.2h  →  01:37±2.2h   │
-│  Ingested:   23:37 01/04/25  ┆  ≈ Afterglow  01:37±2.2h  →  05:37±10.2h  │
+│  ID:         5               ┆  — Onset      18:35       →  18:40±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     18:40±5m    →  18:50±25m    │
+│  Dosage:     80.0 mg         ┆  ≡ Peak       18:50±25m   →  19:35±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   19:35±1.2h  →  20:35±2.2h   │
+│  Ingested:   18:35 02/04/25  ┆  ≈ Afterglow  20:35±2.2h  →  00:35±10.2h  │
 ╰──────────────────────────────┴───────────────────────────────────────────╯
 ```
 
@@ -86,11 +86,11 @@ neuronek ingestion view <INGESTION_ID>
 
 ```present cargo run -- -f pretty ingestion view 1
 ╭──────────────────────────────┬───────────────────────────────────────────╮
-│  ID:         1               ┆  — Onset      23:31       →  23:36±5m     │
-│  Substance:  Caffeine        ┆  ↑ Comeup     23:36±5m    →  23:46±25m    │
-│  Dosage:     90.0 mg         ┆  ≡ Peak       23:46±25m   →  00:31±1.2h   │
-│  Route:      Oral            ┆  ↓ Comedown   00:31±1.2h  →  01:31±2.2h   │
-│  Ingested:   23:31 01/04/25  ┆  ≈ Afterglow  01:31±2.2h  →  05:31±10.2h  │
+│  ID:         1               ┆  — Onset      13:56       →  14:01±5m     │
+│  Substance:  Caffeine        ┆  ↑ Comeup     14:01±5m    →  14:11±25m    │
+│  Dosage:     90.0 mg         ┆  ≡ Peak       14:11±25m   →  14:56±1.2h   │
+│  Route:      Oral            ┆  ↓ Comedown   14:56±1.2h  →  15:56±2.2h   │
+│  Ingested:   13:56 02/04/25  ┆  ≈ Afterglow  15:56±2.2h  →  19:56±10.2h  │
 ╰──────────────────────────────┴───────────────────────────────────────────╯
 ```
 
@@ -107,15 +107,15 @@ neuronek ingestion list
 ╭────┬───────────┬─────────┬───────┬──────────────────────────────────────╮
 │ ID │ Substance │ Dosage  │ Route │             Ingested At              │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 5  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:37:25.784650159 +02:00 │
+│ 5  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-02 18:35:30.639316161 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 4  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:37:16.643817564 +02:00 │
+│ 4  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-02 13:58:03.226040214 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 3  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:34:23.206667961 +02:00 │
+│ 3  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-02 13:57:42.340561472 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 2  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-01 23:31:32.943824675 +02:00 │
+│ 2  │ Caffeine  │ 80.0 mg │ Oral  │ 2025-04-02 13:57:18.600975188 +02:00 │
 ├────┼───────────┼─────────┼───────┼──────────────────────────────────────┤
-│ 1  │ Caffeine  │ 90.0 mg │ Oral  │ 2025-04-01 23:31:17.733842540 +02:00 │
+│ 1  │ Caffeine  │ 90.0 mg │ Oral  │ 2025-04-02 13:56:50.436598779 +02:00 │
 ╰────┴───────────┴─────────┴───────┴──────────────────────────────────────╯
 ```
 
@@ -133,7 +133,7 @@ neuronek ingestion update 1 -d 90mg
 │  Substance:  Caffeine        ┆                                        │
 │  Dosage:     90.0 mg         ┆                                        │
 │  Route:      Oral            ┆                                        │
-│  Ingested:   23:31 01/04/25  ┆                                        │
+│  Ingested:   13:56 02/04/25  ┆                                        │
 ╰──────────────────────────────┴────────────────────────────────────────╯
 ```
 
@@ -181,9 +181,101 @@ neuronek substance get caffeine
 ╰─────────────┴──────────────────────────────────┴────────────────────────╯
 ```
 
-### Statistics
+### Formulation
 
-#### View Statistics
+**Formulation** is a combination of ingredients that are used to create a specific effect. The formulation of a drug can
+vary depending on the desired effect and the route of administration. Such compositions can be manually created for
+representation of reccuring ingestion templates.
+
+#### Create Formulation
+
+This command allows you to create a new formulation. You can specify the name, description, and ingredients. Ingredients
+are added by associating them with specific quantities. This ensures consistent and accurate preparation of the
+formulation.
+
+```bash
+neuronek formulation create --name <FORMULATION_NAME>  
+```
+
+#### Get Formulation
+
+Retrieves details about a specific formulation, including its name, description, and list of ingredients with their
+respective quantities.
+
+```bash
+neuronek formulation <FORMULATION_ID> # OR neuronek formulation get <FORMULATION_ID>
+```
+
+```present cargo run -- --format pretty formulation 1
+╭────┬──────┬─────────────┬─────────────╮
+│ id │ name │ description │ ingredients │
+├────┼──────┼─────────────┼─────────────┤
+│ 1  │ xd   │ ---         │ {}          │
+╰────┴──────┴─────────────┴─────────────╯
+```
+
+#### List Formulations
+
+Lists all available formulations along with their IDs, names, and descriptions.
+
+```bash
+neuronek formulation list # OR neuronek formulation ls
+```
+
+```present cargo run -- --format pretty formulation list
+```
+
+#### Update Formulation
+
+Modifies an existing formulation. You can update its name, description, or ingredients.
+
+#### Delete Formulation
+
+Removes a formulation from the system.
+
+##### Formulation Ingredients
+
+This section describes commands related to managing ingredients within a specific formulation.
+
+###### Get Formulation Ingredient
+
+Retrieves details about a specific ingredient within a given formulation, including its quantity.
+
+```bash
+neuronek formulation ingredient rm <INGREDIENT_ID>
+```
+
+###### List Formulation Ingredients
+
+Lists all ingredients and their quantities associated with a specific formulation.
+
+```bash
+neuronek formulation ingredient ls
+```
+
+###### Add Formulation Ingredient
+
+Adds a new ingredient to a formulation with a specified quantity.
+
+```bash
+neuronek formulation ingredient rm <INGREDIENT_ID>
+```
+
+###### Update Formulation Ingredient
+
+Modifies the quantity of an existing ingredient within a formulation.
+
+```bash
+neuronek formulation ingredient rm <INGREDIENT_ID>
+```
+
+###### Remove Formulation Ingredient
+
+Removes an ingredient from a formulation.
+
+```bash
+neuronek formulation ingredient rm <INGREDIENT_ID>
+```
 
 ## Contributing
 

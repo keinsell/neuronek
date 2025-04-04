@@ -42,7 +42,7 @@ pub struct Formulation
     pub ingredients: FormulationIngredients,
 }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct CreateFormulation
 {
     #[arg(short, long)]
@@ -61,7 +61,7 @@ async fn create_formulation(
 #[async_std::test]
 async fn should_create_formulation() { todo!() }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct UpdateFormulation
 {
     #[arg(short, long)]
@@ -80,7 +80,7 @@ async fn update_formulation(
 #[async_std::test]
 async fn should_update_formulation() { todo!() }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct DeleteFormulation
 {
     #[arg(index = 1, value_name = "FORMULATION_ID")]
@@ -96,7 +96,7 @@ async fn delete_formulation(
 #[async_std::test]
 async fn should_delete_formulation() { todo!() }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct ListFormulations
 {
     /// Filter formulations by name (contains search)
@@ -122,7 +122,8 @@ async fn list_formulations(
 #[async_std::test]
 async fn should_list_formulations() { todo!() }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
+
 pub struct GetFormulation
 {
     #[arg(index = 1, value_name = "FORMULATION_ID")]
@@ -141,7 +142,7 @@ async fn get_formulation(
 #[async_std::test]
 async fn should_get_formulation() { todo!() }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, Subcommand, Clone)]
 pub enum Command
 {
     /// Create a new formulation
