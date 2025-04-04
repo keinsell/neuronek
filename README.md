@@ -197,21 +197,29 @@ formulation.
 neuronek formulation create --name <FORMULATION_NAME>  
 ```
 
+```present cargo run -- --format pretty formulation create --name "Quilla Mind"
+╭────┬─────────────┬─────────────┬─────────────╮
+│ id │ name        │ description │ ingredients │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 2  │ quilla mind │ ---         │ {}          │
+╰────┴─────────────┴─────────────┴─────────────╯
+```
+
 #### Get Formulation
 
 Retrieves details about a specific formulation, including its name, description, and list of ingredients with their
 respective quantities.
 
 ```bash
-neuronek formulation <FORMULATION_ID> # OR neuronek formulation get <FORMULATION_ID>
+neuronek formulation get <FORMULATION_ID>
 ```
 
-```present cargo run -- --format pretty formulation 1
-╭────┬──────┬─────────────┬─────────────╮
-│ id │ name │ description │ ingredients │
-├────┼──────┼─────────────┼─────────────┤
-│ 1  │ xd   │ ---         │ {}          │
-╰────┴──────┴─────────────┴─────────────╯
+```present cargo run -- --format pretty formulation get 1
+╭────┬─────────────┬─────────────┬─────────────╮
+│ id │ name        │ description │ ingredients │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 1  │ quilla mind │ ---         │ {}          │
+╰────┴─────────────┴─────────────┴─────────────╯
 ```
 
 #### List Formulations

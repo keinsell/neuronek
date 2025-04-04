@@ -5,10 +5,10 @@ use futures::prelude::*;
 use sea_orm::TransactionTrait;
 use serde::Serialize;
 
+use crate::Application;
 use crate::cli::Displayable;
 use crate::formulation::ingredient::Ingredient;
-use crate::formulation::{create_formulation, Command as FormulationCommand, Formulation};
-use crate::Application;
+use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, get_formulation};
 
 impl Displayable for Formulation
 {
@@ -49,7 +49,10 @@ pub fn handle(command: Command, application: &Application)
 			| FormulationCommand::Update(_) => {}
 			| FormulationCommand::Delete(_) => {}
 			| FormulationCommand::List(_) => {}
-			| FormulationCommand::Get(_) => {}
+			| FormulationCommand::Get(cmd) => {
+				let formulation = get_formulation(&cmd, &transaction).await.unwrap();
+				formulation.display(application.stdout_format.clone());
+			}
 		};
 
 		transaction.commit().await.unwrap()
