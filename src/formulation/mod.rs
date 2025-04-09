@@ -161,11 +161,6 @@ pub struct ListFormulations
 	/// Filter formulations by name (contains search)
 	#[arg(long)]
 	pub name: Option<String>,
-
-	/// Filter formulations that contain specific ingredient IDs
-	#[arg(long, value_delimiter = ',')]
-	pub with_ingredient_ids: Option<Vec<i32>>,
-
 	/// Limit the number of results
 	#[arg(long, default_value = "50")]
 	pub limit: u32,
@@ -182,14 +177,6 @@ pub async fn list_formulations(
 
 	if let Some(ref name_filter) = list_formulations.name {
 		query = query.filter(Column::Name.contains(name_filter));
-	}
-
-	// Ingredient filtering is not implemented yet.
-	if let Some(ref ingredient_ids) = list_formulations.with_ingredient_ids {
-		tracing::warn!(
-			"Ignoring ingredient filtering (not implemented) for IDs: {:?}",
-			ingredient_ids
-		);
 	}
 
 	query = query.order_by(Column::Id, Order::Asc).limit(list_formulations.limit as u64);
@@ -242,7 +229,6 @@ async fn should_list_formulations() {
 
 	let result = list_formulations(&ListFormulations {
 		name: None,
-		with_ingredient_ids: None,
 		limit: 50,
 	}, &tx).await.unwrap();
 
@@ -257,7 +243,6 @@ async fn should_list_formulations() {
 
 	let result = list_formulations(&ListFormulations {
 		name: Some("test formulation 1".into()),
-		with_ingredient_ids: None,
 		limit: 50,
 	}, &tx).await.unwrap();
 
@@ -268,12 +253,9 @@ async fn should_list_formulations() {
 	// List formulations with limit.
 	let result = list_formulations(&ListFormulations {
 		name: None,
-		with_ingredient_ids: None,
 		limit: 1,
 	}, &tx).await.unwrap();
 	
-	
-
 	assert_eq!(result.len(), 1);
 	assert_eq!(result[0].name.to_string(), "test formulation 1");
 
