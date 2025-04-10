@@ -145,7 +145,7 @@ pub struct DeleteFormulation
 	id: i32,
 
 	/// Skip confirmation prompt
-	#[arg(long="no-confirm")]
+	#[arg(short='y', long="no-confirm")]
 	pub confirmation: bool,
 
 	/// Whether to prompt for confirmation
@@ -170,7 +170,6 @@ pub async fn delete_formulation(
 		return Err(miette::miette!("Formulation not found"));
 	}
 	
-	dbg!(delete_formulation);
 
 	let is_confirmed = if !delete_formulation.confirmation && delete_formulation.interactive {
 		use dialoguer::Confirm;
