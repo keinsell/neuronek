@@ -227,10 +227,23 @@ neuronek formulation get <FORMULATION_ID>
 Lists all available formulations along with their IDs, names, and descriptions.
 
 ```bash
-neuronek formulation list # OR neuronek formulation ls
+neuronek formulation list
 ```
 
 ```present cargo run -- --format pretty formulation list
+╭────┬─────────────┬─────────────┬─────────────╮
+│ id │ name        │ description │ ingredients │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 1  │ quilla mind │ ---         │ {}          │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 2  │ quilla mind │ ---         │ {}          │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 3  │ quilla mind │ ---         │ {}          │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 4  │ quilla mind │ ---         │ {}          │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 5  │ quilla mind │ ---         │ {}          │
+╰────┴─────────────┴─────────────┴─────────────╯
 ```
 
 #### Update Formulation
@@ -239,7 +252,15 @@ Modifies an existing formulation. You can update its name, description, or ingre
 
 #### Delete Formulation
 
-Removes a formulation from the system.
+Removes a formulation from the system. Operation itself is destructive and require additional confirmation from user in interactive shell or `-y`/`--no-confirm` in non-interactive mode to omit protection against destructive operation.
+
+```
+neuronek formulation delete <FORMULATION_ID>
+```
+
+```present cargo run -- --format pretty formulation delete 1 --no-confirm
+Formulation deleted successfully
+```
 
 ##### Formulation Ingredients
 

@@ -5,11 +5,32 @@ use delegate::delegate;
 use derivative::Derivative;
 use float_pretty_print::PrettyPrintFloat;
 use measurements::{Mass, Measurement};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tabled::Tabled;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Derivative, Eq, PartialOrd, Copy)]
+#[derive(Debug, Clone, PartialEq, Derivative, Eq, PartialOrd, Copy)]
 pub struct Dosage(Mass);
+
+impl Serialize for Dosage {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: Serializer,
+	{
+		serializer.serialize_str(&self.to_string())
+	}
+}
+
+
+impl<'de> Deserialize<'de> for Dosage {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: Deserializer<'de>,
+	{
+		let s = String::deserialize(deserializer)?;
+		Dosage::from_str(&s).map_err(serde::de::Error::custom)
+	}
+}
+
 
 impl std::str::FromStr for Dosage
 {

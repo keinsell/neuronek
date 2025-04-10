@@ -4,7 +4,7 @@ use clap::{Args, Subcommand};
 use hashbrown::HashSet;
 use miette::{IntoDiagnostic, Result};
 use nutype::nutype;
-use sea_orm::{DatabaseTransaction, EntityTrait, TransactionTrait};
+use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, Order, QueryOrder, QuerySelect, TransactionTrait};
 use serde::Serialize;
 use tabled::Tabled;
 use tracing::info;
@@ -231,16 +231,93 @@ pub struct DeleteFormulation
 {
 	#[arg(index = 1, value_name = "FORMULATION_ID")]
 	id: i32,
+
+	/// Skip confirmation prompt
+	#[arg(short='y', long="no-confirm")]
+	pub confirmation: bool,
+
+	/// Whether to prompt for confirmation
+	#[arg(short='i',long, default_value_t=crate::cli::is_interactive())]
+	pub interactive: bool,
 }
 
-async fn delete_formulation(
+pub async fn delete_formulation(
 	delete_formulation: &crate::formulation::DeleteFormulation, transaction: &DatabaseTransaction,
 ) -> miette::Result<()>
 {
-	todo!()
+	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+	use crate::Exception;
+	
+	let formulation = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(delete_formulation.id))
+		.one(transaction)
+		.await
+		.into_diagnostic()?;
+	
+	if formulation.is_none() {
+		return Err(miette::miette!("Formulation not found"));
+	}
+	
+
+	let is_confirmed = if !delete_formulation.confirmation && delete_formulation.interactive {
+		use dialoguer::Confirm;
+		Confirm::new()
+			.with_prompt("Operation will be irreversible, are you sure?")
+			.default(false)
+			.interact()
+			.into_diagnostic()?
+	} else {
+		delete_formulation.confirmation
+	};
+
+	if !is_confirmed {
+		return Err(Exception::DestructiveOperationNotConfirmed.into());
+	}
+
+	Entity::delete_by_id(delete_formulation.id)
+		.exec(transaction)
+		.await
+		.into_diagnostic()?;
+
+	info!("Formulation Deleted");
+
+	Ok(())
 }
+
 #[async_std::test]
-async fn should_delete_formulation() {}
+async fn should_delete_formulation()
+{
+	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+	
+	let created_formulation = create_formulation(
+		&CreateFormulation {
+			name: "test formulation".into(),
+			description: Some("Test description".into()),
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	let formulation_id = created_formulation.id.unwrap();
+	
+	delete_formulation(&DeleteFormulation { id: formulation_id, confirmation: true, interactive: false }, &tx)
+		.await
+		.unwrap();
+
+	let result = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(formulation_id))
+		.one(&tx)
+		.await
+		.unwrap();
+	
+	assert!(result.is_none());
+
+	tx.commit().await.unwrap();
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct ListFormulations
@@ -248,25 +325,105 @@ pub struct ListFormulations
 	/// Filter formulations by name (contains search)
 	#[arg(long)]
 	pub name: Option<String>,
-
-	/// Filter formulations that contain specific ingredient IDs
-	#[arg(long, value_delimiter = ',')]
-	pub with_ingredient_ids: Option<Vec<i32>>,
-
 	/// Limit the number of results
 	#[arg(long, default_value = "50")]
 	pub limit: u32,
 }
 
-async fn list_formulations(
-	dto: &ListFormulations, transaction: &DatabaseTransaction,
-) -> Result<Vec<Formulation>>
-{
-	todo!()
+pub async fn list_formulations(
+	list_formulations: &crate::formulation::ListFormulations,
+	transaction: &sea_orm::DatabaseTransaction,
+) -> Result<Vec<crate::formulation::Formulation>> {
+	use crate::database::entities::formulation::{Column, Entity};
+	use sea_orm::QueryFilter;
+
+	let mut query = Entity::find();
+
+	if let Some(ref name_filter) = list_formulations.name {
+		query = query.filter(Column::Name.contains(name_filter));
+	}
+
+	query = query.order_by(Column::Id, Order::Asc).limit(list_formulations.limit as u64);
+
+	let models = query.all(transaction).await.into_diagnostic()?;
+
+	let formulations = models
+		.into_iter()
+		.map(|model| crate::formulation::Formulation {
+			id: Some(model.id),
+			name: crate::formulation::FormulationName::try_from(model.name)
+				.expect("Invalid formulation name"),
+			description: model.summary,
+			ingredients: HashSet::new(),
+		})
+		.collect();
+
+	Ok(formulations)
 }
 
+
 #[async_std::test]
-async fn should_list_formulations() {}
+async fn should_list_formulations() {
+	use sea_orm::EntityTrait;
+
+	use super::*;
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+
+	create_formulation(
+		&CreateFormulation {
+			name: "test formulation 1".into(),
+			description: Some("Test description 1".into()),
+		},
+		&tx,
+	)
+		.await
+		.unwrap();
+
+	create_formulation(
+		&CreateFormulation {
+			name: "test formulation 2".into(),
+			description: Some("Test description 2".into()),
+		},
+		&tx,
+	)
+		.await
+		.unwrap();
+
+
+	let result = list_formulations(&ListFormulations {
+		name: None,
+		limit: 50,
+	}, &tx).await.unwrap();
+
+	tx.commit().await.unwrap();
+
+	assert_eq!(result.len(), 2);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+	assert_eq!(result[1].name.to_string(), "test formulation 2");
+
+	let tx = db_connection.begin().await.unwrap();
+
+
+	let result = list_formulations(&ListFormulations {
+		name: Some("test formulation 1".into()),
+		limit: 50,
+	}, &tx).await.unwrap();
+
+	assert_eq!(result.len(), 1);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+
+
+	// List formulations with limit.
+	let result = list_formulations(&ListFormulations {
+		name: None,
+		limit: 1,
+	}, &tx).await.unwrap();
+
+	assert_eq!(result.len(), 1);
+	assert_eq!(result[0].name.to_string(), "test formulation 1");
+
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct GetFormulation {
