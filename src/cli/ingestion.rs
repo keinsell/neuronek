@@ -74,71 +74,106 @@ use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassif
 use crate::ui::PhaseIcon;
 use crate::ui::theme::MAD_SKIN;
 use crate::{Application, Exception, database};
-
+use crate::ingestion::service::list_ingestion;
 
 impl Displayable for crate::ingestion::Ingestion
 {
+	/**
+	╭──────────────────────────────┬───────────────────────────────────────────╮
+	│  ID:         1               ┆  — Onset      12:56       →  13:01±5m     │
+	│  Substance:  Caffeine        ┆  ↑ Comeup     13:01±5m    →  13:11±25m    │
+	│  Dosage:     80.0 mg         ┆  ≡ Peak       13:11±25m   →  13:56±1.2h   │
+	│  Route:      Oral            ┆  ↓ Comedown   13:56±1.2h  →  14:56±2.2h   │
+    │  Ingested:   12:56 10/04/25  ┆  ≈ Afterglow  14:56±2.2h  →  18:56±10.2h  │
+	╰──────────────────────────────┴───────────────────────────────────────────╯
+	*/
 	fn as_pretty(&self) -> String
 	{
 		let mut sorted_phases = self.phases.0.clone();
 		sorted_phases.sort_by_key(|p| p.start_time.start);
 
-		let left_pane = Table::from_iter(vec![
-			vec!["ID:", &*self.id.unwrap().to_string()],
-			vec!["Substance:", &*self.substance_name.to_string()],
-			vec!["Dosage:", &*self.dosage.to_string()],
-			vec!["Route:", &*self.route.to_string()],
-			vec![
-				"Ingested:",
-				&*self.ingestion_date.format("%H:%M %d/%m/%y").to_string(),
-			],
-		])
-		.with(Style::empty())
-		.with(Modify::new(Rows::new(..)).with(Alignment::left()))
-		.with(Modify::new(Columns::new(..)).with(Alignment::left()))
-		.to_string();
-
-		let right_pane = if !sorted_phases.is_empty() {
-			let phase_data: Vec<Vec<_>> = sorted_phases
-				.iter()
-				.map(|phase| {
-					let icon = PhaseIcon::from(&phase.classification).0;
-
-					let start_uncertainty_duration = phase.start_time.end - phase.start_time.start;
-					let end_uncertainty_duration = phase.end_time.end - phase.end_time.start;
-
-					let start = format!(
-						"{}{}",
-						phase.start_time.start.format("%H:%M"),
-						display_duration_as_uncertainty(start_uncertainty_duration)
-					);
-					let end = format!(
-						"{}{}",
-						phase.end_time.start.format("%H:%M"),
-						display_duration_as_uncertainty(end_uncertainty_duration)
-					);
-
-					vec![
-						format!("{} {}", icon, phase.classification),
-						start,
-						"→".to_owned(),
-						end,
-					]
-				})
-				.collect();
-
-			let mut builder = Builder::default();
-			phase_data
-				.into_iter()
-				.for_each(|row| builder.push_record(row));
-			builder
-				.build()
+		/**
+		╭──────────────────────────────╮
+		│  ID:         1               ┆
+		│  Substance:  Caffeine        ┆
+		│  Dosage:     80.0 mg         ┆
+		│  Route:      Oral            ┆
+		│  Ingested:   12:56 10/04/25  ┆
+		╰──────────────────────────────╯
+		*/
+		let ingestion_information_pane_content = {
+			// Ingestion #1
+			// 25/04/10 12:56
+			// 80mg Oral Caffeine
+			// ...
+			Table::from_iter(vec![
+				vec!["ID:", &*self.id.unwrap().to_string()],
+				vec!["Substance:", &*self.substance_name.to_string()],
+				vec!["Dosage:", &*self.dosage.to_string()],
+				vec!["Route:", &*self.route.to_string()],
+				vec![
+					"Ingested:",
+					&*self.ingestion_date.format("%H:%M %d/%m/%y").to_string(),
+				],
+			])
 				.with(Style::empty())
 				.with(Modify::new(Rows::new(..)).with(Alignment::left()))
 				.with(Modify::new(Columns::new(..)).with(Alignment::left()))
 				.to_string()
-		} else {
-			"No phases recorded for this ingestion.".to_string()
+		};
+
+		/**
+		╭─────────────────────────────────────────────╮
+		│    — Onset      12:56       →  13:01±5m     │
+		│    ↑ Comeup     13:01±5m    →  13:11±25m    │
+		│    ≡ Peak       13:11±25m   →  13:56±1.2h   │
+		│    ↓ Comedown   13:56±1.2h  →  14:56±2.2h   │
+		│    ≈ Afterglow  14:56±2.2h  →  18:56±10.2h  │
+		╰─────────────────────────────────────────────╯
+		*/
+		let phase_information_pane_content = {
+			if !sorted_phases.is_empty() {
+				let phase_data: Vec<Vec<_>> = sorted_phases
+					.iter()
+					.map(|phase| {
+						let icon = PhaseIcon::from(&phase.classification).0;
+
+						let start_uncertainty_duration = phase.start_time.end - phase.start_time.start;
+						let end_uncertainty_duration = phase.end_time.end - phase.end_time.start;
+
+						let start = format!(
+							"{}{}",
+							phase.start_time.start.format("%H:%M"),
+							display_duration_as_uncertainty(start_uncertainty_duration)
+						);
+						let end = format!(
+							"{}{}",
+							phase.end_time.start.format("%H:%M"),
+							display_duration_as_uncertainty(end_uncertainty_duration)
+						);
+
+						vec![
+							format!("{} {}", icon, phase.classification),
+							start,
+							"→".to_owned(),
+							end,
+						]
+					})
+					.collect();
+
+				let mut builder = Builder::default();
+				phase_data
+					.into_iter()
+					.for_each(|row| builder.push_record(row));
+				builder
+					.build()
+					.with(Style::empty())
+					.with(Modify::new(Rows::new(..)).with(Alignment::left()))
+					.with(Modify::new(Columns::new(..)).with(Alignment::left()))
+					.to_string()
+			} else {
+				"PHASE INFORMATION UNAVAILABLE".to_string()
+			}
 		};
 
 		let mut out: String = String::new();
@@ -149,7 +184,7 @@ impl Displayable for crate::ingestion::Ingestion
 			.apply_modifier(UTF8_ROUND_CORNERS)
 			.set_content_arrangement(ContentArrangement::Dynamic)
 			.set_width(80)
-			.add_row(vec![left_pane, right_pane]);
+			.add_row(vec![ingestion_information_pane_content, phase_information_pane_content]);
 
 		out.push_str("\n");
 		out.push_str(&table.to_string());
@@ -265,18 +300,8 @@ impl CommandHandler for ListIngestion
 {
 	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
 	{
-		let ingestions = IngestionEntity::find()
-			.order_by_desc(ingestion::Column::IngestedAt)
-			.limit(Some(self.limit))
-			.all(ctx.database_connection)
-			.await
-			.into_diagnostic()?
-			.iter()
-			.map(|i| crate::ingestion::Ingestion::from(i.clone()))
-			.collect();
-
+		let ingestions = list_ingestion(self).await.unwrap();
 		IngestionList(ingestions).display(ctx.stdout_format);
-
 		Ok(())
 	}
 }

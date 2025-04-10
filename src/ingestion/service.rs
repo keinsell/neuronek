@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
 use chrono::Local;
+use itertools::Itertools;
 use miette::IntoDiagnostic;
 use sea_orm::{
 	ActiveModelTrait,
@@ -122,16 +123,22 @@ pub async fn get_ingestion(ingestion_id: i32) -> miette::Result<Option<Ingestion
 }
 
 #[tracing::instrument]
-pub async fn list_ingestion(query: ListIngestion) -> miette::Result<Vec<Ingestion>>
+pub async fn list_ingestion(query: &ListIngestion) -> miette::Result<Vec<Ingestion>>
 {
-	let ingestion = ingestion::Entity::find()
+	let ingestions_with_phases = ingestion::Entity::find()
 		.order_by_desc(ingestion::Column::IngestedAt)
 		.limit(query.limit)
+		.find_with_related(crate::database::entities::ingestion_phase::Entity)
 		.all(DATABASE_CONNECTION.deref())
 		.await
 		.into_diagnostic()?;
 
-	let ingestions: Vec<Ingestion> = ingestion.into_iter().map(Ingestion::from).collect();
+	let ingestions: Vec<Ingestion> = ingestions_with_phases.into_iter().map(|iwp| {
+		let phases: Vec<IngestionPhase> = iwp.1.iter().map(|ip| {IngestionPhase::from(ip.clone())}).collect();
+		let mut ingestion = Ingestion::from(iwp.0);
+		ingestion.phases = IngestionPhases::from(phases);
+		ingestion
+	}).collect();
 
 	Ok(ingestions)
 }
