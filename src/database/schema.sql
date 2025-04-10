@@ -62,7 +62,7 @@ CREATE INDEX `ingestion_phase_classification_idx` ON `ingestion_phase` (`classif
 CREATE TABLE `formulation`
 (
     `id`       integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `name`     text    NOT NULL,
+    `name`     text    NOT NULL UNIQUE,
     `summary`  text    NULL,
     `labeller` text    NULL,
     `form`     text    NULL,
@@ -86,8 +86,8 @@ CREATE TABLE `formulation`
 CREATE TABLE `formulation_ingredient`
 (
     `id`             integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `formulation_id` integer NOT NULL,
+    `formulation_name` integer NOT NULL,
     `substance_name` text    NOT NULL,
     `dosage`         real    NOT NULL,
-    CONSTRAINT `0` FOREIGN KEY (`formulation_id`) REFERENCES `formulation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT `0` FOREIGN KEY (`formulation_name`) REFERENCES `formulation` (`name`) ON UPDATE CASCADE ON DELETE CASCADE
 );

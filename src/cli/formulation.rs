@@ -4,7 +4,7 @@ use futures::executor::block_on;
 use futures::prelude::*;
 use sea_orm::TransactionTrait;
 use serde::Serialize;
-use tabled::settings::Style;
+use tabled::settings::{Style, Width};
 use tabled::Table;
 use crate::Application;
 use crate::cli::Displayable;
