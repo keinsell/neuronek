@@ -4,7 +4,7 @@ use clap::{Args, Subcommand};
 use hashbrown::HashSet;
 use miette::{IntoDiagnostic, Result};
 use nutype::nutype;
-use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, Order, QueryOrder, QuerySelect, TransactionTrait};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseTransaction, EntityTrait, Order, QueryOrder, QuerySelect, TransactionTrait};
 use serde::Serialize;
 use tabled::Tabled;
 use tracing::info;
@@ -133,59 +133,40 @@ pub struct UpdateFormulation
 pub async fn update_formulation(
 	update_formulation: &crate::formulation::UpdateFormulation,
 	database_transaction: &DatabaseTransaction,
-) -> miette::Result<Formulation>
-{
-	use sea_orm::{EntityTrait, ColumnTrait, QueryFilter, Set, ActiveValue};
+) -> miette::Result<Formulation> {
+	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 
-	// First, check if the formulation exists
-	let formulation = Entity::find()
-		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
-		.one(database_transaction)
-		.await.into_diagnostic()?
-		.ok_or_else(|| miette::miette!("Formulation not found"))?;
-
-	// Create an active model for updating
-	let mut active_model = ActiveModel {
-		id: ActiveValue::Set(formulation.id),
-		..Default::default()
-	};
-
-	// Set fields that need to be updated
-	if let Some(name) = &update_formulation.name {
-		active_model.name = Set(name.clone());
-	}
-
-	if let Some(description) = &update_formulation.description {
-		active_model.summary = Set(Some(description.clone()));
-	}
-
-	// Update the formulation in the database
-	// First update the model
-	Entity::update(active_model)
-		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
-		.exec(database_transaction)
-		.await
-		.into_diagnostic()?;
-
-	// Then fetch the updated model
-	let updated_model = Entity::find()
-		.filter(crate::database::entities::formulation::Column::Id.eq(update_formulation.id))
+	let original = Entity::find_by_id(update_formulation.id)
 		.one(database_transaction)
 		.await
 		.into_diagnostic()?
-		.ok_or_else(|| miette::miette!("Formulation not found after update"))?;
+		.ok_or_else(|| miette::miette!("Formulation not found"))?;
 
-	// Create and return the updated formulation
-	let updated_formulation = Formulation {
+	let mut active_model: ActiveModel = original.clone().into();
+
+	if let Some(name) = &update_formulation.name {
+		active_model.name = Set(name.to_owned());
+	}
+
+	if let Some(description) = &update_formulation.description {
+		active_model.summary = Set(Some(description.to_owned()));
+	}
+
+	let updated_model = active_model
+		.update(database_transaction)
+		.await
+		.into_diagnostic()?;
+
+	let formulation = Formulation {
 		id: Some(updated_model.id),
 		name: FormulationName::try_from(updated_model.name).into_diagnostic()?,
 		description: updated_model.summary,
-		ingredients: HashSet::new(), // Note: We're not updating ingredients here
+		ingredients: HashSet::new(),
 	};
 
 	info!("Formulation Updated");
 
-	Ok(updated_formulation)
+	Ok(formulation)
 }
 #[async_std::test]
 async fn should_update_formulation() {
@@ -195,7 +176,6 @@ async fn should_update_formulation() {
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
-	// First create a formulation
 	let created_formulation = create_formulation(
 		&CreateFormulation {
 			name: "test formulation".into(),
@@ -206,7 +186,6 @@ async fn should_update_formulation() {
 	.await
 	.unwrap();
 
-	// Then update it
 	let updated_formulation = update_formulation(
 		&UpdateFormulation {
 			id: created_formulation.id.unwrap(),
@@ -220,7 +199,6 @@ async fn should_update_formulation() {
 
 	tx.commit().await.unwrap();
 
-	// Verify the update was successful
 	assert_eq!(updated_formulation.id, created_formulation.id);
 	assert_eq!(updated_formulation.name.to_string(), "updated formulation");
 	assert_eq!(updated_formulation.description, Some("Updated description".into()));
