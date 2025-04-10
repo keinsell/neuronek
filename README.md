@@ -252,7 +252,15 @@ Modifies an existing formulation. You can update its name, description, or ingre
 
 #### Delete Formulation
 
-Removes a formulation from the system.
+Removes a formulation from the system. Operation itself is destructive and require additional confirmation from user in interactive shell or `-y`/`--no-confirm` in non-interactive mode to omit protection against destructive operation.
+
+```
+neuronek formulation delete <FORMULATION_ID>
+```
+
+```present cargo run -- --format pretty formulation delete 1 --no-confirm
+Formulation deleted successfully
+```
 
 ##### Formulation Ingredients
 

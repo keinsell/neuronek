@@ -2,7 +2,6 @@ use clap::Parser;
 use derive_more::From;
 use futures::executor::block_on;
 use futures::prelude::*;
-use minimo::Printable;
 use sea_orm::TransactionTrait;
 use serde::Serialize;
 use tabled::settings::Style;
@@ -10,7 +9,7 @@ use tabled::Table;
 use crate::Application;
 use crate::cli::Displayable;
 use crate::formulation::ingredient::Ingredient;
-use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, get_formulation, list_formulations};
+use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, delete_formulation, get_formulation, list_formulations};
 
 impl Displayable for Formulation
 {
@@ -52,7 +51,13 @@ pub fn handle(command: Command, application: &Application)
 			| FormulationCommand::Update(_) => {
 
 			}
-			| FormulationCommand::Delete(_) => {}
+			| FormulationCommand::Delete(cmd) => {
+				if let Err(err) = delete_formulation(&cmd, &transaction).await {
+					eprintln!("Error deleting formulation: {}", err);
+					std::process::exit(1);
+				}
+				println!("Formulation deleted successfully");
+			}
 			| FormulationCommand::List(cmd) => {
 				let formulation = list_formulations(&cmd, &transaction).await.unwrap();
 				let formulation_list = FormulationList::from(formulation);

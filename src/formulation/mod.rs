@@ -1,11 +1,10 @@
-use sea_orm::{QueryOrder, QuerySelect};
 pub mod ingredient;
 
 use clap::{Args, Subcommand};
 use hashbrown::HashSet;
 use miette::{IntoDiagnostic, Result};
 use nutype::nutype;
-use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, Order, TransactionTrait};
+use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, Order, QueryOrder, QuerySelect, TransactionTrait};
 use serde::Serialize;
 use tabled::Tabled;
 use tracing::info;
@@ -144,16 +143,93 @@ pub struct DeleteFormulation
 {
 	#[arg(index = 1, value_name = "FORMULATION_ID")]
 	id: i32,
+
+	/// Skip confirmation prompt
+	#[arg(short='y', long="no-confirm")]
+	pub confirmation: bool,
+
+	/// Whether to prompt for confirmation
+	#[arg(short='i',long, default_value_t=crate::cli::is_interactive())]
+	pub interactive: bool,
 }
 
-async fn delete_formulation(
+pub async fn delete_formulation(
 	delete_formulation: &crate::formulation::DeleteFormulation, transaction: &DatabaseTransaction,
 ) -> miette::Result<()>
 {
-	todo!()
+	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+	use crate::Exception;
+	
+	let formulation = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(delete_formulation.id))
+		.one(transaction)
+		.await
+		.into_diagnostic()?;
+	
+	if formulation.is_none() {
+		return Err(miette::miette!("Formulation not found"));
+	}
+	
+
+	let is_confirmed = if !delete_formulation.confirmation && delete_formulation.interactive {
+		use dialoguer::Confirm;
+		Confirm::new()
+			.with_prompt("Operation will be irreversible, are you sure?")
+			.default(false)
+			.interact()
+			.into_diagnostic()?
+	} else {
+		delete_formulation.confirmation
+	};
+
+	if !is_confirmed {
+		return Err(Exception::DestructiveOperationNotConfirmed.into());
+	}
+
+	Entity::delete_by_id(delete_formulation.id)
+		.exec(transaction)
+		.await
+		.into_diagnostic()?;
+
+	info!("Formulation Deleted");
+
+	Ok(())
 }
+
 #[async_std::test]
-async fn should_delete_formulation() {}
+async fn should_delete_formulation()
+{
+	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+
+	let db_connection = &DATABASE_CONNECTION;
+	let tx = db_connection.begin().await.unwrap();
+	
+	let created_formulation = create_formulation(
+		&CreateFormulation {
+			name: "test formulation".into(),
+			description: Some("Test description".into()),
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	let formulation_id = created_formulation.id.unwrap();
+	
+	delete_formulation(&DeleteFormulation { id: formulation_id, confirmation: true, interactive: false }, &tx)
+		.await
+		.unwrap();
+
+	let result = Entity::find()
+		.filter(crate::database::entities::formulation::Column::Id.eq(formulation_id))
+		.one(&tx)
+		.await
+		.unwrap();
+	
+	assert!(result.is_none());
+
+	tx.commit().await.unwrap();
+}
 
 #[derive(Debug, Clone, Args)]
 pub struct ListFormulations
@@ -205,7 +281,7 @@ async fn should_list_formulations() {
 	use super::*;
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
-	
+
 	create_formulation(
 		&CreateFormulation {
 			name: "test formulation 1".into(),
@@ -237,7 +313,7 @@ async fn should_list_formulations() {
 	assert_eq!(result.len(), 2);
 	assert_eq!(result[0].name.to_string(), "test formulation 1");
 	assert_eq!(result[1].name.to_string(), "test formulation 2");
-	
+
 	let tx = db_connection.begin().await.unwrap();
 
 
@@ -255,7 +331,7 @@ async fn should_list_formulations() {
 		name: None,
 		limit: 1,
 	}, &tx).await.unwrap();
-	
+
 	assert_eq!(result.len(), 1);
 	assert_eq!(result[0].name.to_string(), "test formulation 1");
 
@@ -294,7 +370,7 @@ async fn should_get_formulation() {
     use super::*;
     let db_connection = &DATABASE_CONNECTION;
     let tx = db_connection.begin().await.unwrap();
-	
+
     let created_formulation = create_formulation(
         &CreateFormulation {
             name: "test formulation".into(),
@@ -304,7 +380,7 @@ async fn should_get_formulation() {
     )
     .await
     .unwrap();
-	
+
     let result = get_formulation(
         &GetFormulation {
             id: created_formulation.id.unwrap(),
@@ -315,7 +391,7 @@ async fn should_get_formulation() {
     .unwrap();
 
     tx.commit().await.unwrap();
-	
+
     assert_eq!(result.id, created_formulation.id);
     assert_eq!(result.name.to_string(), "test formulation");
     assert_eq!(result.description, Some("Test description".into()));
