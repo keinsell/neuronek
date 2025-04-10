@@ -9,8 +9,7 @@ use tabled::Table;
 use crate::Application;
 use crate::cli::Displayable;
 use crate::formulation::ingredient::Ingredient;
-use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, delete_formulation, get_formulation, list_formulations};
-
+use crate::formulation::{Command as FormulationCommand, Formulation, create_formulation, delete_formulation, get_formulation, list_formulations, update_formulation};
 impl Displayable for Formulation
 {
 	fn as_pretty(&self) -> String { self.as_table() }
@@ -48,8 +47,9 @@ pub fn handle(command: Command, application: &Application)
 				let formulation = create_formulation(&cmd, &transaction).await.unwrap();
 				formulation.display(application.stdout_format.clone());
 			}
-			| FormulationCommand::Update(_) => {
-
+			| FormulationCommand::Update(cmd) => {
+				let formulation = update_formulation(&cmd, &transaction).await.unwrap();
+				formulation.display(application.stdout_format.clone());
 			}
 			| FormulationCommand::Delete(cmd) => {
 				if let Err(err) = delete_formulation(&cmd, &transaction).await {

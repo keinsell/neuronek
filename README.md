@@ -250,6 +250,19 @@ neuronek formulation list
 
 Modifies an existing formulation. You can update its name, description, or ingredients.
 
+```bash
+neuronek formulation update 1 --name <FORMULATION_NAME>
+```
+
+```present cargo run -- --format pretty formulation update 1 --name "Quilla Mind"
+╭────┬─────────────┬─────────────┬─────────────╮
+│ id │ name        │ description │ ingredients │
+├────┼─────────────┼─────────────┼─────────────┤
+│ 1  │ quilla mind │ ---         │ {}          │
+╰────┴─────────────┴─────────────┴─────────────╯
+```
+
+
 #### Delete Formulation
 
 Removes a formulation from the system. Operation itself is destructive and require additional confirmation from user in interactive shell or `-y`/`--no-confirm` in non-interactive mode to omit protection against destructive operation.
