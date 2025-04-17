@@ -97,14 +97,18 @@ pub async fn create_formulation(
 async fn should_create_formulation()
 {
 	use sea_orm::EntityTrait;
-
 	use super::*;
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
+	// Clean up table for isolation
+	Entity::delete_many().exec(&tx).await.unwrap();
+
+	// Use a unique name for this test
+	let test_name = format!("test formulation should_create_formulation");
 	let result = create_formulation(
 		&CreateFormulation {
-			name: "test formulation".into(),
+			name: test_name.clone(),
 			description: Some("Test description".into()),
 		},
 		&tx,
@@ -112,10 +116,11 @@ async fn should_create_formulation()
 	.await
 	.unwrap();
 
-	tx.commit().await.unwrap();
+	// Rollback to keep DB clean
+	tx.rollback().await.unwrap();
 
-	assert_eq!(result.id, Some(1));
-	assert_eq!(result.name.to_string(), "test formulation");
+	assert!(result.id.is_some());
+	assert_eq!(result.name.to_string(), test_name);
 	assert_eq!(result.description, Some("Test description".into()));
 }
 
@@ -171,14 +176,18 @@ pub async fn update_formulation(
 #[async_std::test]
 async fn should_update_formulation() {
 	use sea_orm::EntityTrait;
-
 	use super::*;
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
+	// Clean up table for isolation
+	Entity::delete_many().exec(&tx).await.unwrap();
+
+	// Use a unique name for this test
+	let test_name = format!("test formulation should_update_formulation");
 	let created_formulation = create_formulation(
 		&CreateFormulation {
-			name: "test formulation".into(),
+			name: test_name.clone(),
 			description: Some("Test description".into()),
 		},
 		&tx,
@@ -186,10 +195,11 @@ async fn should_update_formulation() {
 	.await
 	.unwrap();
 
+	let updated_name = format!("updated formulation should_update_formulation");
 	let updated_formulation = update_formulation(
 		&UpdateFormulation {
 			id: created_formulation.id.unwrap(),
-			name: Some("updated formulation".into()),
+			name: Some(updated_name.clone()),
 			description: Some("Updated description".into()),
 		},
 		&tx,
@@ -197,10 +207,11 @@ async fn should_update_formulation() {
 	.await
 	.unwrap();
 
-	tx.commit().await.unwrap();
+	// Rollback to keep DB clean
+	tx.rollback().await.unwrap();
 
 	assert_eq!(updated_formulation.id, created_formulation.id);
-	assert_eq!(updated_formulation.name.to_string(), "updated formulation");
+	assert_eq!(updated_formulation.name.to_string(), updated_name);
 	assert_eq!(updated_formulation.description, Some("Updated description".into()));
 }
 
@@ -266,13 +277,17 @@ pub async fn delete_formulation(
 async fn should_delete_formulation()
 {
 	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
-
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
-	
+
+	// Clean up table for isolation
+	Entity::delete_many().exec(&tx).await.unwrap();
+
+	// Use a unique name for this test
+	let test_name = format!("test formulation should_delete_formulation");
 	let created_formulation = create_formulation(
 		&CreateFormulation {
-			name: "test formulation".into(),
+			name: test_name.clone(),
 			description: Some("Test description".into()),
 		},
 		&tx,
@@ -281,7 +296,7 @@ async fn should_delete_formulation()
 	.unwrap();
 
 	let formulation_id = created_formulation.id.unwrap();
-	
+
 	delete_formulation(&DeleteFormulation { id: formulation_id, confirmation: true, interactive: false }, &tx)
 		.await
 		.unwrap();
@@ -291,10 +306,11 @@ async fn should_delete_formulation()
 		.one(&tx)
 		.await
 		.unwrap();
-	
+
 	assert!(result.is_none());
 
-	tx.commit().await.unwrap();
+	// Rollback to keep DB clean
+	tx.rollback().await.unwrap();
 }
 
 #[derive(Debug, Clone, Args)]
@@ -343,14 +359,20 @@ pub async fn list_formulations(
 #[async_std::test]
 async fn should_list_formulations() {
 	use sea_orm::EntityTrait;
-
 	use super::*;
 	let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
+	// Clean up table for isolation
+	Entity::delete_many().exec(&tx).await.unwrap();
+
+	// Use unique names for this test
+	let name1 = format!("test formulation 1 should_list_formulations");
+	let name2 = format!("test formulation 2 should_list_formulations");
+
 	create_formulation(
 		&CreateFormulation {
-			name: "test formulation 1".into(),
+			name: name1.clone(),
 			description: Some("Test description 1".into()),
 		},
 		&tx,
@@ -360,7 +382,7 @@ async fn should_list_formulations() {
 
 	create_formulation(
 		&CreateFormulation {
-			name: "test formulation 2".into(),
+			name: name2.clone(),
 			description: Some("Test description 2".into()),
 		},
 		&tx,
@@ -368,29 +390,22 @@ async fn should_list_formulations() {
 		.await
 		.unwrap();
 
-
 	let result = list_formulations(&ListFormulations {
 		name: None,
 		limit: 50,
 	}, &tx).await.unwrap();
 
-	tx.commit().await.unwrap();
-
 	assert_eq!(result.len(), 2);
-	assert_eq!(result[0].name.to_string(), "test formulation 1");
-	assert_eq!(result[1].name.to_string(), "test formulation 2");
-
-	let tx = db_connection.begin().await.unwrap();
-
+	assert_eq!(result[0].name.to_string(), name1);
+	assert_eq!(result[1].name.to_string(), name2);
 
 	let result = list_formulations(&ListFormulations {
-		name: Some("test formulation 1".into()),
+		name: Some(name1.clone()),
 		limit: 50,
 	}, &tx).await.unwrap();
 
 	assert_eq!(result.len(), 1);
-	assert_eq!(result[0].name.to_string(), "test formulation 1");
-
+	assert_eq!(result[0].name.to_string(), name1);
 
 	// List formulations with limit.
 	let result = list_formulations(&ListFormulations {
@@ -399,8 +414,10 @@ async fn should_list_formulations() {
 	}, &tx).await.unwrap();
 
 	assert_eq!(result.len(), 1);
-	assert_eq!(result[0].name.to_string(), "test formulation 1");
+	assert_eq!(result[0].name.to_string(), name1);
 
+	// Rollback to keep DB clean
+	tx.rollback().await.unwrap();
 }
 
 #[derive(Debug, Clone, Args)]
@@ -432,14 +449,18 @@ pub async fn get_formulation(
 #[async_std::test]
 async fn should_get_formulation() {
     use sea_orm::EntityTrait;
-
     use super::*;
     let db_connection = &DATABASE_CONNECTION;
     let tx = db_connection.begin().await.unwrap();
 
+    // Clean up table for isolation
+    Entity::delete_many().exec(&tx).await.unwrap();
+
+    // Use a unique name for this test
+    let test_name = format!("test formulation should_get_formulation");
     let created_formulation = create_formulation(
         &CreateFormulation {
-            name: "test formulation".into(),
+            name: test_name.clone(),
             description: Some("Test description".into()),
         },
         &tx,
@@ -456,10 +477,11 @@ async fn should_get_formulation() {
     .await
     .unwrap();
 
-    tx.commit().await.unwrap();
+    // Rollback to keep DB clean
+    tx.rollback().await.unwrap();
 
     assert_eq!(result.id, created_formulation.id);
-    assert_eq!(result.name.to_string(), "test formulation");
+    assert_eq!(result.name.to_string(), test_name);
     assert_eq!(result.description, Some("Test description".into()));
 }
 

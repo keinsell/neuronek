@@ -83,10 +83,10 @@ CREATE TABLE `formulation`
 CREATE TABLE `formulation_ingredient`
 (
     `id`             integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `formulation_id` integer NOT NULL,
+    `formulation_name` text    NOT NULL,
     `substance_name` text    NOT NULL,
     `dosage`         real    NOT NULL,
-    CONSTRAINT `0` FOREIGN KEY (`formulation_id`) REFERENCES `formulation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT `0` FOREIGN KEY (`formulation_name`) REFERENCES `formulation` (`name`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- Enable back the enforcement of foreign-keys constraints
 PRAGMA foreign_keys = on;
