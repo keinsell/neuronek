@@ -1,7 +1,10 @@
+use std::hash::Hash;
+
 use clap::{Args, Subcommand};
 use derive_more::Into;
 use miette::IntoDiagnostic;
 use rust_decimal::Decimal;
+use rust_decimal::prelude::ToPrimitive;
 // use nutype::nutype; // Temporarily commented out
 use sea_orm::{DatabaseTransaction, EntityTrait, IntoActiveValue};
 use serde::{Deserialize, Serialize};
@@ -11,8 +14,14 @@ use crate::substance::route_of_administration::dosage::Dosage;
 // Temporarily remove nutype to unblock implementation
 // #[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Hash, Eq, PartialEq))]
 // TODO: Re-add nutype validation for Ingredient once construction pattern is clear
-#[derive(Debug, Clone, Serialize, Deserialize, Into)]
+#[derive(Debug, Clone, Serialize, Deserialize, Into, PartialEq, Eq)]
 pub struct Ingredient(pub SubstanceName, pub Dosage);
+
+impl Hash for Ingredient {
+	fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+		self.0.hash(state);
+	}
+}
 
 #[derive(Debug, Args, Clone)]
 pub struct CreateIngredient
@@ -39,8 +48,11 @@ async fn create_ingredient(
 			dosage: Decimal::from_f64_retain(ingredient.1.as_base_units()).unwrap().into_active_value(),
 		}
 	).exec_with_returning(database_transaction).await.into_diagnostic()?;
-	let ingredient = Ingredient::new()
 	
+	let ingredient = Ingredient(
+		SubstanceName::try_from(ingredient.substance_name).into_diagnostic()?,
+		Dosage::from_base_units(ingredient.dosage.to_f64().unwrap()),
+	);
 
 	Ok(ingredient)
 }

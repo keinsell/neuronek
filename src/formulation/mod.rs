@@ -35,11 +35,11 @@ pub type FormulationIngredients = HashSet<Ingredient>;
 /// bioavailability, stability, or administration.
 ///
 /// See: https://en.wikipedia.org/wiki/Pharmaceutical_formulation
-#[derive(Debug, Clone, Tabled, Serialize)]
+#[derive(Debug, Clone, Tabled)]
 #[tabled(display(Option, "tabled::derive::display::option", "---"))]
 pub struct Formulation
 {
-	/// Unique identifier for the formulation, only present for persisted
+    /// Unique identifier for the formulation, only present for persisted
 	/// formulations
 	pub id: Option<i32>,
 	/// Name of the formulation
