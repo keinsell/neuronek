@@ -22,7 +22,7 @@ use crate::substance::route_of_administration::phase::PhaseClassification;
 #[nutype(
 	sanitize(trim, lowercase),
 	validate(not_empty),
-	derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq)
+	derive(Debug, Clone, Serialize, Deserialize, TryFrom, Into, Hash, PartialEq, Eq)
 )]
 pub struct SubstanceName(String);
 

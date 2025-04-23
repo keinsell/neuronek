@@ -1,16 +1,24 @@
 use clap::{Args, Subcommand};
-use nutype::nutype;
-use sea_orm::DatabaseTransaction;
-
+use derive_more::Into;
+use miette::IntoDiagnostic;
+use rust_decimal::Decimal;
+// use nutype::nutype; // Temporarily commented out
+use sea_orm::{DatabaseTransaction, EntityTrait, IntoActiveValue};
+use serde::{Deserialize, Serialize};
 use crate::ingestion::model::SubstanceName;
 use crate::substance::route_of_administration::dosage::Dosage;
 
-#[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Hash, Eq, PartialEq))]
-pub struct Ingredient(SubstanceName, Dosage);
+// Temporarily remove nutype to unblock implementation
+// #[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Hash, Eq, PartialEq))]
+// TODO: Re-add nutype validation for Ingredient once construction pattern is clear
+#[derive(Debug, Clone, Serialize, Deserialize, Into)]
+pub struct Ingredient(pub SubstanceName, pub Dosage);
 
-#[derive(Debug, Args)]
+#[derive(Debug, Args, Clone)]
 pub struct CreateIngredient
 {
+	#[arg()]
+	pub formulation_name: String,
 	#[arg()]
 	pub substance_name: String,
 	#[arg()]
@@ -21,13 +29,28 @@ async fn create_ingredient(
 	create_ingredient: &CreateIngredient, database_transaction: &DatabaseTransaction,
 ) -> miette::Result<Ingredient>
 {
-	todo!()
+	let substance_name = SubstanceName::try_new(create_ingredient.substance_name.clone()).into_diagnostic()?;
+	let ingredient = Ingredient(substance_name, create_ingredient.dosage.clone());
+	let ingredient = crate::database::entities::formulation_ingredient::Entity::insert(
+		crate::database::entities::formulation_ingredient::ActiveModel {
+			id: Default::default(),
+			formulation_name: create_ingredient.formulation_name.clone().into_active_value(),
+			substance_name: ingredient.0.into_inner().into_active_value(),
+			dosage: Decimal::from_f64_retain(ingredient.1.as_base_units()).unwrap().into_active_value(),
+		}
+	).exec_with_returning(database_transaction).await.into_diagnostic()?;
+	let ingredient = Ingredient::new()
+	
+
+	Ok(ingredient)
 }
 
 #[async_std::test]
-async fn should_create_ingredient() {}
+async fn should_create_ingredient() {
+todo!()
+}
 
-#[derive(Debug, Args)]
+#[derive(Debug, Args, Clone)]
 pub struct UpdateIngredient
 {
 	#[arg()]
@@ -48,7 +71,7 @@ async fn update_ingredient(
 #[async_std::test]
 async fn should_update_ingredient() {}
 
-#[derive(Debug, Args)]
+#[derive(Debug, Args, Copy, Clone)]
 pub struct DeleteIngredient
 {
 	#[arg(index = 1, value_name = "INGREDIENT_ID")]
@@ -65,7 +88,7 @@ async fn delete_ingredient(
 #[async_std::test]
 async fn should_delete_ingredient() {}
 
-#[derive(Debug, Args)]
+#[derive(Debug, Args, Copy, Clone)]
 pub struct GetIngredient
 {
 	#[arg(index = 1, value_name = "INGREDIENT_ID")]
@@ -82,7 +105,7 @@ async fn get_ingredient(
 #[async_std::test]
 async fn should_get_ingredient() {}
 
-#[derive(Debug, Args)]
+#[derive(Debug, Args, Copy, Clone)]
 pub struct ListIngredients {}
 
 async fn list_ingredients(
@@ -92,7 +115,7 @@ async fn list_ingredients(
 	todo!()
 }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, Subcommand, Clone)]
 pub enum Command
 {
 	Create(CreateIngredient),
@@ -100,4 +123,11 @@ pub enum Command
 	Delete(DeleteIngredient),
 	Get(GetIngredient),
 	List(ListIngredients),
+}
+
+#[deprecated(note = "Should be moved into CLI module")]
+#[derive(Debug, Args, Clone)]
+pub struct Entrypoint {
+	#[command(subcommand)]
+	command: Command,
 }

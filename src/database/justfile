@@ -50,7 +50,7 @@ baseline connection_uri=DEFAULT_DATABASE_CONNECTION_URI:
       --to "{{ connection_uri }}" \
 
 generate:
-    sea-orm-cli generate entity \
+    , sea-orm-cli generate entity \
         --compact-format \
         --ignore-tables=seaql_migrations,atlas_schema_revisions \
         --output-dir="./entities" \

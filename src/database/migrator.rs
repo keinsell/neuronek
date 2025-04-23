@@ -120,11 +120,6 @@ impl MigratorTrait for Migrator
 				"20250402003039_add_formulation",
 				"20250402003039_add_formulation"
 			),
-			import_migration!(
-				M20250410102112FormulationUseNameInsteadId,
-				"20250410102112_formulation_use_name_instead_id",
-				"20250410102112_formulation_use_name_instead_id"
-			)
 		]
 	}
 }
