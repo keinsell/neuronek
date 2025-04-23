@@ -11,11 +11,7 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/formulation/ingredient.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/ingredient.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/formulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/mod.rs" afterDir="false" />
-    </list>
+    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="Refactor ingredient struct and enhance formulation logic&#10;&#10;Replaced tuple-based `Ingredient` with a struct for clarity and extensibility. Introduced `FormulationName` and adjusted dosage handling to improve consistency and facilitate validation. Updated database interactions and test cases to align with these changes." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +57,7 @@
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "settings.editor.selected.configurable": "language.rust.cargo.check",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "ts.external.directory.path": "/home/keinsell/.local/share/JetBrains/Toolbox/apps/rustrover/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "typescript.add.unambiguous.imports.on.the.fly": "true",
     "vue.rearranger.settings.migration": "true"
@@ -79,7 +75,7 @@
       <updated>1745428033822</updated>
       <workItem from="1745428034962" duration="1265000" />
       <workItem from="1745437976159" duration="1408000" />
-      <workItem from="1745450204908" duration="544000" />
+      <workItem from="1745450204908" duration="1348000" />
     </task>
     <task id="LOCAL-00001" summary="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure.">
       <option name="closed" value="true" />
@@ -89,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745434862611</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactor ingredient struct and enhance formulation logic&#10;&#10;Replaced tuple-based `Ingredient` with a struct for clarity and extensibility. Introduced `FormulationName` and adjusted dosage handling to improve consistency and facilitate validation. Updated database interactions and test cases to align with these changes.">
+      <option name="closed" value="true" />
+      <created>1745450782157</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1745450782157</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,7 +113,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="." />
     <MESSAGE value="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure." />
+    <MESSAGE value="Refactor ingredient struct and enhance formulation logic&#10;&#10;Replaced tuple-based `Ingredient` with a struct for clarity and extensibility. Introduced `FormulationName` and adjusted dosage handling to improve consistency and facilitate validation. Updated database interactions and test cases to align with these changes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor ingredient struct and enhance formulation logic&#10;&#10;Replaced tuple-based `Ingredient` with a struct for clarity and extensibility. Introduced `FormulationName` and adjusted dosage handling to improve consistency and facilitate validation. Updated database interactions and test cases to align with these changes." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
