@@ -14,6 +14,9 @@ use crate::ingestion::model::SubstanceName;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::formulation_ingredient;
+use crate::formulation::create_formulation;
+use crate::formulation::CreateFormulation;
+use crate::database::entities::formulation;
 
 // Temporarily remove nutype to unblock implementation
 // #[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Hash, Eq, PartialEq))]
@@ -42,16 +45,25 @@ pub async fn create_ingredient(
 	create_ingredient: &CreateIngredient, database_transaction: &DatabaseTransaction,
 ) -> miette::Result<Ingredient>
 {
+	// First, ensure the formulation exists
+	let formulation = formulation::Entity::find()
+		.filter(formulation::Column::Name.eq(&create_ingredient.formulation_name))
+		.one(database_transaction)
+		.await
+		.map_err(|e| miette::miette!("Database error while finding formulation: {}", e))?
+		.ok_or_else(|| miette::miette!("Formulation '{}' not found", &create_ingredient.formulation_name))?;
+	
 	let substance_name = SubstanceName::try_new(create_ingredient.substance_name.clone()).into_diagnostic()?;
 	let ingredient = Ingredient(substance_name, create_ingredient.dosage.clone());
 	let ingredient = crate::database::entities::formulation_ingredient::Entity::insert(
 		crate::database::entities::formulation_ingredient::ActiveModel {
 			id: Default::default(),
-			formulation_name: create_ingredient.formulation_name.clone().into_active_value(),
+			formulation_id: sea_orm::ActiveValue::Set(formulation.id),
 			substance_name: ingredient.0.into_inner().into_active_value(),
 			dosage: Decimal::from_f64_retain(ingredient.1.as_base_units()).unwrap().into_active_value(),
+			..Default::default()
 		}
-	).exec_with_returning(database_transaction).await.into_diagnostic()?;
+	).exec_with_returning(database_transaction).await.map_err(|e| miette::miette!("Database error while creating ingredient: {}", e))?;
 	
 	let ingredient = Ingredient(
 		SubstanceName::try_from(ingredient.substance_name).into_diagnostic()?,
@@ -66,6 +78,18 @@ async fn should_create_ingredient() {
 	let db_connection = DATABASE_CONNECTION.deref();
 	let tx = db_connection.begin().await.unwrap();
 
+	// First, create the formulation this ingredient will belong to
+	let formulation = create_formulation(
+		&CreateFormulation {
+			name: "test formulation".into(),
+			description: None,
+		},
+		&tx,
+	)
+	.await
+	.unwrap();
+
+	// Now create the ingredient
 	let create = CreateIngredient {
 		formulation_name: "test formulation".to_string(),
 		substance_name: "Caffeine".to_string(),
@@ -76,14 +100,14 @@ async fn should_create_ingredient() {
 
 	// Query the DB to check it was persisted
 	let db_ingredient = formulation_ingredient::Entity::find()
-		.filter(formulation_ingredient::Column::FormulationName.eq("test formulation"))
+		.filter(formulation_ingredient::Column::FormulationId.eq(formulation.id.unwrap()))
 		.filter(formulation_ingredient::Column::SubstanceName.eq("caffeine"))
 		.one(&tx)
 		.await
 		.unwrap()
 		.unwrap();
 
-	assert_eq!(db_ingredient.formulation_name, "test formulation");
+	assert_eq!(db_ingredient.formulation_id, formulation.id.unwrap());
 	assert_eq!(db_ingredient.substance_name, "caffeine");
 	assert_eq!(db_ingredient.dosage.to_f64().unwrap(), 100.0);
 	assert_eq!(ingredient.0.to_string(), "Caffeine");

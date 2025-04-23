@@ -10,8 +10,7 @@ pub struct Model
 {
 	#[sea_orm(primary_key)]
 	pub id: i32,
-	#[sea_orm(column_type = "Text")]
-	pub formulation_name: String,
+	pub formulation_id: i32,
 	#[sea_orm(column_type = "Text")]
 	pub substance_name: String,
 	pub dosage: Decimal,
@@ -22,8 +21,8 @@ pub enum Relation
 {
 	#[sea_orm(
 		belongs_to = "super::formulation::Entity",
-		from = "Column::FormulationName",
-		to = "super::formulation::Column::Name",
+		from = "Column::FormulationId",
+		to = "super::formulation::Column::Id",
 		on_update = "Cascade",
 		on_delete = "Cascade"
 	)]
