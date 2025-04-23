@@ -11,7 +11,8 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure.">
+    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/ingredient.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/ingredient.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/mod.rs" afterDir="false" />
     </list>
@@ -49,7 +50,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "trunk",
+    "git-widget-placeholder": "feat/formulation/ingredient/create",
     "javascript.nodejs.core.library.configured.version": "23.1.0",
     "javascript.nodejs.core.library.typings.version": "22.14.1",
     "last_opened_file_path": "/home/keinsell/Documents/neuronek",
@@ -60,8 +61,9 @@
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "settings.editor.selected.configurable": "configurable.group.database.main",
+    "settings.editor.selected.configurable": "language.rust.cargo.check",
     "ts.external.directory.path": "/home/keinsell/.local/share/JetBrains/Toolbox/apps/rustrover/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "typescript.add.unambiguous.imports.on.the.fly": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -77,6 +79,7 @@
       <updated>1745428033822</updated>
       <workItem from="1745428034962" duration="1265000" />
       <workItem from="1745437976159" duration="1408000" />
+      <workItem from="1745450204908" duration="544000" />
     </task>
     <task id="LOCAL-00001" summary="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure.">
       <option name="closed" value="true" />

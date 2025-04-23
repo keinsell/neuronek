@@ -23,7 +23,7 @@ type Model = crate::database::entities::formulation::Model;
 #[nutype(
 	sanitize(trim, lowercase),
 	validate(not_empty),
-	derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq, Display)
+	derive(Debug, Clone, Serialize, Deserialize, TryFrom, Into, Hash, PartialEq, Eq, Display)
 )]
 pub struct FormulationName(String);
 
