@@ -12,7 +12,6 @@ use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, IntoActiveValue, Qu
 use serde::{Deserialize, Serialize};
 use crate::ingestion::model::SubstanceName;
 use crate::substance::route_of_administration::dosage::Dosage;
-use crate::database::DATABASE_CONNECTION;
 use crate::database::entities::formulation_ingredient;
 use crate::formulation::create_formulation;
 use crate::formulation::CreateFormulation;
@@ -55,28 +54,40 @@ pub async fn create_ingredient(
 	
 	let substance_name = SubstanceName::try_new(create_ingredient.substance_name.clone()).into_diagnostic()?;
 	let ingredient = Ingredient(substance_name, create_ingredient.dosage.clone());
-	let ingredient = crate::database::entities::formulation_ingredient::Entity::insert(
-		crate::database::entities::formulation_ingredient::ActiveModel {
-			id: Default::default(),
-			formulation_id: sea_orm::ActiveValue::Set(formulation.id),
-			substance_name: ingredient.0.into_inner().into_active_value(),
-			dosage: Decimal::from_f64_retain(ingredient.1.as_base_units()).unwrap().into_active_value(),
-			..Default::default()
-		}
-	).exec_with_returning(database_transaction).await.map_err(|e| miette::miette!("Database error while creating ingredient: {}", e))?;
+    // Insert the ingredient, storing dosage in milligrams for consistency
+    let db_model = crate::database::entities::formulation_ingredient::Entity::insert(
+        crate::database::entities::formulation_ingredient::ActiveModel {
+            id: Default::default(),
+            formulation_id: sea_orm::ActiveValue::Set(formulation.id),
+            substance_name: ingredient.0.into_inner().into_active_value(),
+            dosage: Decimal::from_f64_retain(ingredient.1.as_base_units() * 1_000_000.0)
+                .unwrap()
+                .into_active_value(),
+            ..Default::default()
+        }
+    )
+    .exec_with_returning(database_transaction)
+    .await
+    .map_err(|e| miette::miette!("Database error while creating ingredient: {}", e))?;
 	
-	let ingredient = Ingredient(
-		SubstanceName::try_from(ingredient.substance_name).into_diagnostic()?,
-		Dosage::from_base_units(ingredient.dosage.to_f64().unwrap()),
-	);
+    // Reconstruct the Ingredient, interpreting stored dosage as milligrams
+    let ingredient = Ingredient(
+        SubstanceName::try_from(db_model.substance_name).into_diagnostic()?,
+        Dosage::from_milligrams(db_model.dosage.to_f64().unwrap()),
+    );
 
 	Ok(ingredient)
 }
 
 #[async_std::test]
 async fn should_create_ingredient() {
-	let db_connection = DATABASE_CONNECTION.deref();
-	let tx = db_connection.begin().await.unwrap();
+    use sea_orm::Database;
+    use crate::database::migrator::{Migrator, MigratorTrait};
+
+    // Use a fresh in-memory database for isolation
+    let db_connection = Database::connect("sqlite::memory:").await.unwrap();
+    Migrator::up(&db_connection, None).await.unwrap();
+    let tx = db_connection.begin().await.unwrap();
 
 	// First, create the formulation this ingredient will belong to
 	let formulation = create_formulation(

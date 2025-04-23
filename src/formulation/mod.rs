@@ -177,10 +177,13 @@ pub async fn update_formulation(
 
 #[async_std::test]
 async fn should_update_formulation() {
-	use sea_orm::EntityTrait;
+	use sea_orm::{Database, EntityTrait};
+	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	let db_connection = &DATABASE_CONNECTION;
+	// Use a fresh in-memory database for isolation
+	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
+	Migrator::up(&db_connection, None).await.unwrap();
 	let tx = db_connection.begin().await.unwrap();
 
 	let created_formulation = create_formulation(
@@ -352,10 +355,13 @@ pub async fn list_formulations(
 
 #[async_std::test]
 async fn should_list_formulations() {
-	use sea_orm::EntityTrait;
+	use sea_orm::{Database, EntityTrait};
+	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	let db_connection = &DATABASE_CONNECTION;
+	// Use a fresh in-memory database for isolation
+	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
+	Migrator::up(&db_connection, None).await.unwrap();
 	let tx = db_connection.begin().await.unwrap();
 
 	create_formulation(
@@ -441,10 +447,13 @@ pub async fn get_formulation(
 
 #[async_std::test]
 async fn should_get_formulation() {
-    use sea_orm::EntityTrait;
+    use sea_orm::{Database, EntityTrait};
+    use crate::database::migrator::{Migrator, MigratorTrait};
 
     use super::*;
-    let db_connection = &DATABASE_CONNECTION;
+    // Use a fresh in-memory database for isolation
+    let db_connection = Database::connect("sqlite::memory:").await.unwrap();
+    Migrator::up(&db_connection, None).await.unwrap();
     let tx = db_connection.begin().await.unwrap();
 
     let created_formulation = create_formulation(

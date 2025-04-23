@@ -12,7 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/ingredient.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/ingredient.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/mod.rs" afterDir="false" />
     </list>
@@ -77,7 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1745428033822</updated>
       <workItem from="1745428034962" duration="1265000" />
-      <workItem from="1745437976159" duration="795000" />
+      <workItem from="1745437976159" duration="1408000" />
     </task>
     <task id="LOCAL-00001" summary="Add ingredient management commands to CLI and adjust formulation models&#10;&#10;Introduced CLI commands for creating, updating, and managing ingredients within formulations. Enhanced ingredient logic with database integration and accompanying tests. Updated formulation models to align with the new changes, including serialization and improved command structure.">
       <option name="closed" value="true" />
