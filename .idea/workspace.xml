@@ -11,7 +11,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment="">
+    <list default="true" id="07e7aa57-529c-4d6a-bfae-ea5a57ee53a4" name="Changes" comment=".">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/formulation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/formulation.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/ingredient.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/ingredient.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/formulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/formulation/mod.rs" afterDir="false" />
     </list>
@@ -25,14 +27,19 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="gitbutler/workspace" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="QTIGS3wE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2w8fHRRC9CC23GhpzvY7mlcxcVx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -44,7 +51,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "gitbutler/workspace",
+    "git-widget-placeholder": "trunk",
     "javascript.nodejs.core.library.configured.version": "23.1.0",
     "javascript.nodejs.core.library.typings.version": "22.14.1",
     "last_opened_file_path": "/home/keinsell/Documents/neuronek",
@@ -86,6 +93,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

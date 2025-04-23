@@ -1,4 +1,6 @@
 use std::hash::Hash;
+use std::str::FromStr;
+use std::ops::Deref;
 
 use clap::{Args, Subcommand};
 use derive_more::Into;
@@ -6,10 +8,12 @@ use miette::IntoDiagnostic;
 use rust_decimal::Decimal;
 use rust_decimal::prelude::ToPrimitive;
 // use nutype::nutype; // Temporarily commented out
-use sea_orm::{DatabaseTransaction, EntityTrait, IntoActiveValue};
+use sea_orm::{ColumnTrait, DatabaseTransaction, EntityTrait, IntoActiveValue, QueryFilter, TransactionTrait};
 use serde::{Deserialize, Serialize};
 use crate::ingestion::model::SubstanceName;
 use crate::substance::route_of_administration::dosage::Dosage;
+use crate::database::DATABASE_CONNECTION;
+use crate::database::entities::formulation_ingredient;
 
 // Temporarily remove nutype to unblock implementation
 // #[nutype(derive(Debug, Clone, Serialize, TryFrom, Into, Hash, Eq, PartialEq))]
@@ -34,7 +38,7 @@ pub struct CreateIngredient
 	pub dosage: Dosage,
 }
 
-async fn create_ingredient(
+pub async fn create_ingredient(
 	create_ingredient: &CreateIngredient, database_transaction: &DatabaseTransaction,
 ) -> miette::Result<Ingredient>
 {
@@ -59,7 +63,33 @@ async fn create_ingredient(
 
 #[async_std::test]
 async fn should_create_ingredient() {
-todo!()
+	let db_connection = DATABASE_CONNECTION.deref();
+	let tx = db_connection.begin().await.unwrap();
+
+	let create = CreateIngredient {
+		formulation_name: "test formulation".to_string(),
+		substance_name: "Caffeine".to_string(),
+		dosage: Dosage::from_str("100 mg").unwrap(),
+	};
+
+	let ingredient = create_ingredient(&create, &tx).await.unwrap();
+
+	// Query the DB to check it was persisted
+	let db_ingredient = formulation_ingredient::Entity::find()
+		.filter(formulation_ingredient::Column::FormulationName.eq("test formulation"))
+		.filter(formulation_ingredient::Column::SubstanceName.eq("caffeine"))
+		.one(&tx)
+		.await
+		.unwrap()
+		.unwrap();
+
+	assert_eq!(db_ingredient.formulation_name, "test formulation");
+	assert_eq!(db_ingredient.substance_name, "caffeine");
+	assert_eq!(db_ingredient.dosage.to_f64().unwrap(), 100.0);
+	assert_eq!(ingredient.0.to_string(), "Caffeine");
+	assert_eq!(ingredient.1, Dosage::from_str("100 mg").unwrap());
+
+	tx.rollback().await.unwrap();
 }
 
 #[derive(Debug, Args, Clone)]
@@ -73,7 +103,7 @@ pub struct UpdateIngredient
 	pub dosage: Option<Dosage>,
 }
 
-async fn update_ingredient(
+pub(crate) async fn update_ingredient(
 	update_ingredient: &UpdateIngredient, transaction: &DatabaseTransaction,
 ) -> miette::Result<()>
 {
@@ -137,9 +167,8 @@ pub enum Command
 	List(ListIngredients),
 }
 
-#[deprecated(note = "Should be moved into CLI module")]
 #[derive(Debug, Args, Clone)]
 pub struct Entrypoint {
 	#[command(subcommand)]
-	command: Command,
+	pub command: Command,
 }

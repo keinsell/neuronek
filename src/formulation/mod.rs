@@ -35,7 +35,7 @@ pub type FormulationIngredients = HashSet<Ingredient>;
 /// bioavailability, stability, or administration.
 ///
 /// See: https://en.wikipedia.org/wiki/Pharmaceutical_formulation
-#[derive(Debug, Clone, Tabled)]
+#[derive(Debug, Clone, Tabled, Serialize)]
 #[tabled(display(Option, "tabled::derive::display::option", "---"))]
 pub struct Formulation
 {
@@ -48,7 +48,8 @@ pub struct Formulation
 	pub description: Option<String>,
 	/// List of substances that make up this formulation, each with their own
 	/// dosage
-	#[tabled(format = "{:#?}")]
+	#[tabled(skip)]
+	#[serde(skip)]
 	pub ingredients: FormulationIngredients,
 }
 
