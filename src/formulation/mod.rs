@@ -480,4 +480,7 @@ pub enum Command
 
 	/// Get a specific formulation by ID
 	Get(GetFormulation),
+
+	/// Manage ingredients for a formulation
+	Ingredient(ingredient::Entrypoint)
 }
