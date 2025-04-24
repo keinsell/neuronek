@@ -1,1 +1,1 @@
-present README.md --in-place
+rm /tmp/neuronek.sqlite && $HOME/.cargo/bin/present README.md --in-place
