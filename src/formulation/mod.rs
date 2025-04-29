@@ -205,11 +205,11 @@ let db_connection = &DATABASE_CONNECTION;
 	.await
 	.unwrap();
 
-	tx.commit().await.unwrap();
-
 	assert_eq!(updated_formulation.id, created_formulation.id);
 	assert_eq!(updated_formulation.name.to_string(), "updated formulation");
 	assert_eq!(updated_formulation.description, Some("Updated description".into()));
+
+	tx.rollback().await.unwrap();
 }
 
 #[derive(Debug, Clone, Args)]

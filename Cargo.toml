@@ -28,18 +28,12 @@ opt-level = 3
 panic = "abort"
 
 [features]
-default = ["command_line", "telemetry"]
+default = ["command_line"]
 command_line = []
 terminal = []
-telemetry = ["sentry-tracing/default"]
-#web = ["dioxus/web"]
-#desktop = ["dioxus/desktop"]
-#mobile = ["dioxus/mobile"]
-#server = ["dioxus/server"]
 
 
 [dependencies]
-#dioxus = { version = "0.6.0", features = ["router", "fullstack", "launch"] }
 comfy-table = "7.1.4"
 async-std = { version = "1.12.0", features = ["attributes", "async-global-executor", "async-process"] }
 atty = "0.2.14"
@@ -105,8 +99,6 @@ clap_complete = "4.5.46"
 tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
 tempfile = "3.16.0"
 assert_cmd = "2.0.16"
-sentry = "0.36.0"
-sentry-tracing = "0.36.0"
 promkit = "0.8.0"
 dialoguer = "0.11.0"
 ctor = "0.4.1"

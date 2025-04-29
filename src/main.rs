@@ -76,13 +76,6 @@ use clap::Subcommand;
 #[async_std::main]
 async fn main() -> Result<()>
 {
-	let _sentry = sentry::init((
-		"https://b21e1528a3974724b2f9790b19f39143@o1122681.ingest.us.sentry.io/6380718",
-		sentry::ClientOptions {
-			release: sentry::release_name!(),
-			..sentry::ClientOptions::default()
-		},
-	));
 	let _logger = setup_logger();
 	let _diagnostics = setup_diagnostics();
 
