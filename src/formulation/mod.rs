@@ -181,9 +181,7 @@ async fn should_update_formulation() {
 	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	// Use a fresh in-memory database for isolation
-	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
-	Migrator::up(&db_connection, None).await.unwrap();
+let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
 	let created_formulation = create_formulation(
@@ -279,9 +277,7 @@ async fn should_delete_formulation()
 	use crate::database::migrator::{Migrator, MigratorTrait};
 	use crate::formulation::create_formulation;
 
-	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
-
-	Migrator::up(&db_connection, None).await.unwrap();
+let db_connection = &DATABASE_CONNECTION;
 
 	let tx = db_connection.begin().await.unwrap();
 	
@@ -359,9 +355,7 @@ async fn should_list_formulations() {
 	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	// Use a fresh in-memory database for isolation
-	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
-	Migrator::up(&db_connection, None).await.unwrap();
+let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
 	create_formulation(
@@ -451,9 +445,7 @@ async fn should_get_formulation() {
     use crate::database::migrator::{Migrator, MigratorTrait};
 
     use super::*;
-    // Use a fresh in-memory database for isolation
-    let db_connection = Database::connect("sqlite::memory:").await.unwrap();
-    Migrator::up(&db_connection, None).await.unwrap();
+let db_connection = &DATABASE_CONNECTION;
     let tx = db_connection.begin().await.unwrap();
 
     let created_formulation = create_formulation(
