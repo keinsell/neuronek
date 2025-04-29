@@ -24,7 +24,7 @@ pub fn is_interactive() -> bool { atty::is(Stream::Stdout) }
 // TODO: Markdown?
 // TODO: TUI?
 // TODO: CSV?
-#[derive(clap::ValueEnum, Clone, Debug)]
+#[derive(clap::ValueEnum, Clone, Debug, Copy)]
 /// The output format specifies how application data is presented:
 ///
 /// - `Pretty`: Used in interactive shells to display data in a visually

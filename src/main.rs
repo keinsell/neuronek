@@ -81,6 +81,19 @@ async fn main() -> Result<()>
 		.await
 		.expect("Database migration failed");
 
+	// ── Interactive shortcut ────────────────────────────────────────────────
+	// If the binary was executed with no extra CLI arguments, open the
+	// dialoguer-based TUI instead of the classical sub-command parser.
+	if std::env::args_os().len() == 1 {
+		let context = Application {
+			database_connection: &DATABASE_CONNECTION,
+			// fall back to a sensible default format when running interactively
+			stdout_format: MessageFormat::Pretty,
+		};
+		return ui::interactive::interactive_root_menu(&context).await.map_err(|e| miette!(e));
+	}
+
+	// Otherwise continue with the normal clap-powered CLI.
 	let cli = CommandLineInterface::parse();
 
 	let context = Application {

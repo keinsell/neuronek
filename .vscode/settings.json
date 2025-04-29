@@ -58,5 +58,6 @@
     "rust-analyzer.semanticHighlighting.punctuation.separate.macro.bang": true,
     "rust-analyzer.semanticHighlighting.punctuation.specialization.enable": true,
     "rust-analyzer.files.watcher": "server",
-    "rust-analyzer.hover.actions.references.enable": true
+    "rust-analyzer.hover.actions.references.enable": true,
+    "codium.codeCompletion.enable": true
 }
