@@ -97,8 +97,10 @@ pub fn handle(command: Command, application: &Application)
 					}
 					| ingredient::Entrypoint { command: ingredient::Command::Delete(_) } => 
 						unimplemented!("Delete ingredient command not implemented yet"),
-					| ingredient::Entrypoint { command: ingredient::Command::Get(_) } => 
-						unimplemented!("Get ingredient command not implemented yet"),
+					| ingredient::Entrypoint { command: ingredient::Command::Get(get_cmd) } => {
+						let ingredient = ingredient::get_ingredient(&get_cmd, &transaction).await.unwrap();
+						ingredient.display(application.stdout_format.clone());
+					}
 					| ingredient::Entrypoint { command: ingredient::Command::List(list_cmd) } => {
 						let ingredients = ingredient::list_ingredients(&list_cmd, &transaction).await.unwrap();
 						let ingredient_list = IngredientList::from(ingredients);

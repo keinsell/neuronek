@@ -197,15 +197,67 @@ pub struct GetIngredient
 	id: i32,
 }
 
-async fn get_ingredient(
-	get_ingredient: &GetIngredient, transaction: &DatabaseTransaction,
-) -> miette::Result<Ingredient>
-{
-	todo!()
+pub async fn get_ingredient(
+	get_ingredient: &GetIngredient,
+	transaction: &DatabaseTransaction,
+) -> miette::Result<Ingredient> {
+	use sea_orm::{EntityTrait, QueryFilter, ColumnTrait};
+	use crate::database::entities::formulation_ingredient;
+	use crate::database::entities::formulation;
+
+	// Fetch the ingredient by ID
+	let db_model = formulation_ingredient::Entity::find_by_id(get_ingredient.id)
+		.one(transaction)
+		.await
+		.map_err(|e| miette::miette!("Database error while fetching ingredient: {}", e))?
+		.ok_or_else(|| miette::miette!("Ingredient with ID {} not found", get_ingredient.id))?;
+
+	// Fetch the formulation name
+	let formulation_model = formulation::Entity::find_by_id(db_model.formulation_id)
+		.one(transaction)
+		.await
+		.map_err(|e| miette::miette!("Database error while fetching formulation: {}", e))?
+		.ok_or_else(|| miette::miette!("Formulation with ID {} not found", db_model.formulation_id))?;
+
+	let ingredient = Ingredient {
+		id: db_model.id,
+		substance_name: SubstanceName::try_new(db_model.substance_name.clone()).into_diagnostic()?,
+		formulation_name: FormulationName::try_new(formulation_model.name).into_diagnostic()?,
+		dosage: Dosage::from_base_units(db_model.dosage.to_f64().unwrap()),
+	};
+	Ok(ingredient)
 }
 
 #[async_std::test]
-async fn should_get_ingredient() {}
+async fn should_get_ingredient() {
+	let db_connection = DATABASE_CONNECTION.deref();
+	let tx = db_connection.begin().await.unwrap();
+
+	// Setup: Create a test formulation and ingredient
+	let create_formulation_cmd = CreateFormulation {
+		name: "test formulation for get".into(),
+		description: None,
+	};
+	let formulation = create_formulation(&create_formulation_cmd, &tx).await.unwrap();
+
+	let create_cmd = CreateIngredient {
+		formulation_name: formulation.name.to_string(),
+		substance_name: "Caffeine".to_string(),
+		dosage: Dosage::from_str("100 mg").unwrap(),
+	};
+	let created_ingredient = create_ingredient(&create_cmd, &tx).await.unwrap();
+
+	// Test: Retrieve the ingredient by ID
+	let get_cmd = GetIngredient { id: created_ingredient.id };
+	let fetched_ingredient = get_ingredient(&get_cmd, &tx).await.unwrap();
+
+	assert_eq!(fetched_ingredient.id, created_ingredient.id);
+	assert_eq!(fetched_ingredient.substance_name.to_string(), "Caffeine");
+	assert_eq!(fetched_ingredient.dosage, Dosage::from_str("100 mg").unwrap());
+	assert_eq!(fetched_ingredient.formulation_name, FormulationName::try_new(formulation.name).unwrap());
+
+	tx.rollback().await.unwrap();
+}
 
 #[derive(Debug, Args, Copy, Clone)]
 pub struct ListIngredients {}

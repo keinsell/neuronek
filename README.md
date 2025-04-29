@@ -265,22 +265,6 @@ Formulation deleted successfully
 
 This section describes commands related to managing ingredients within a specific formulation.
 
-###### Get Formulation Ingredient
-
-Retrieves details about a specific ingredient within a given formulation, including its quantity.
-
-```bash
-neuronek formulation ingredient rm <INGREDIENT_ID>
-```
-
-###### List Formulation Ingredients
-
-Lists all ingredients and their quantities associated with a specific formulation.
-
-```bash
-neuronek formulation ingredient ls
-```
-
 ###### Add Formulation Ingredient
 
 Adds a new ingredient to a formulation with a specified quantity.
@@ -289,12 +273,36 @@ Adds a new ingredient to a formulation with a specified quantity.
 neuronek formulation ingredient create -f <FORMULATION_NAME> -s <SUBSTANCE_NAME> -d <DOSAGE>
 ```
 
-```present cargo run -- --format pretty formulation ingredient create -f "quilla-mind" -s caffeine -d 200mg
+```present cargo run -- --format pretty formulation ingredient create -f "Quilla Mind" -s caffeine -d 200mg
 ╭───┬───────────┬────────┬─────────────╮
 │ # │ Substance │ Dosage │ Formulation │
 ├───┼───────────┼────────┼─────────────┤
-│ 1 │ Caffeine  │ 200 mg │ quilla-mind │
+│ 1 │ Caffeine  │ 200 mg │ quilla mind │
 ╰───┴───────────┴────────┴─────────────╯
+```
+
+###### Get Formulation Ingredient
+
+Retrieves details about a specific ingredient by its ID, including substance, dosage, and formulation association.
+
+```bash
+neuronek formulation ingredient get <INGREDIENT_ID>
+```
+
+```present cargo run -- --format pretty formulation ingredient get 1
+╭───┬───────────┬────────┬─────────────╮
+│ # │ Substance │ Dosage │ Formulation │
+├───┼───────────┼────────┼─────────────┤
+│ 1 │ Caffeine  │ 200 mg │ quilla mind │
+╰───┴───────────┴────────┴─────────────╯
+```
+
+###### List Formulation Ingredients
+
+Lists all ingredients and their quantities associated with a specific formulation.
+
+```bash
+neuronek formulation ingredient ls
 ```
 
 ###### Update Formulation Ingredient
