@@ -5,6 +5,7 @@ use derive_more::Display;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::phase::PhaseClassification;
 pub mod interactive;
+pub mod tui;
 
 
 #[derive(Clone, Debug, Display)]

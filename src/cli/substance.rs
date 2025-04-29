@@ -10,8 +10,6 @@ use sea_orm::{ColumnTrait, EntityTrait, QuerySelect};
 use serde::{Deserialize, Serialize};
 use tabled::settings::{Panel, Remove, Style};
 use tabled::{Table, Tabled};
-use tuirealm::ratatui::text::ToText;
-
 use crate::Application;
 use crate::r#abstract::CommandHandler;
 use crate::cli::Displayable;
@@ -170,6 +168,7 @@ impl Substance
 		})
 	}
 }
+
 #[derive(Debug, Args)]
 pub struct GetSubstance
 {

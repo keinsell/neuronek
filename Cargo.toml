@@ -41,7 +41,7 @@ chrono = { version = "0.4", features = ["serde", "std"] }
 chrono-english = "0.1.7"
 clap = { version = "4.5.23", features = ["derive", "wrap_help", "suggestions", "std", "cargo"] }
 clap-verbosity-flag = "3.0.1"
-crossterm = "0.27.0"
+crossterm = "0.27"
 delegate = "0.13.1"
 derivative = "2.2.0"
 directories = { version = "5.0.1" }
@@ -53,8 +53,8 @@ lazy_static = "1.5.0"
 measurements = { version = "0.11.0", features = ["std", "serde", "from_str", "regex"] }
 miette = { version = "7.4.0", features = ["fancy", "serde", "syntect-highlighter", "derive"] }
 pubchem = "0.1.1"
-ratatui = "0.26.1"
-rust-embed = "8.2.0"
+ratatui = "0.26"
+color-eyre = "0.6"
 sea-orm = { version = "1.1.2", features = ["sqlx-sqlite", "runtime-async-std-rustls", "serde_json", "with-chrono"] }
 serde = { version = "1.0.216", features = ["derive", "std", "unstable", "rc", "serde_derive"] }
 tabled = { version = "0.18", features = ["std", "macros", "ansi", "derive", "tabled_derive"] }
@@ -81,7 +81,6 @@ tracing-appender = "0.2.3"
 textplots = "0.8.6"
 valuable = { version = "0.1.1", features = ["derive"] }
 derive = "1.0.0"
-tuirealm = { version = "2.1.0", features = ["derive", "crossterm"] }
 bon = "3.3.2"
 termimad = "0.31.2"
 humantime = "2.1.0"
@@ -106,6 +105,7 @@ static_table = "0.6.0"
 figlet-rs = "0.1.5"
 itertools = "0.12.1"
 ryu = "1.0.20"
+rust-embed = "8.2.0"
 
 [profile]
 [profile.wasm-dev]

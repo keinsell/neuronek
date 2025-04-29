@@ -1,11 +1,6 @@
 use rust_embed::Embed;
 pub use sea_orm_migration::prelude::*;
 
-#[derive(Embed)]
-#[folder = "src/database/migrations"]
-pub struct Migrations;
-
-
 macro_rules! sql_migration {
 	($name:ident, $migration_name:expr, $filename:expr) => {
 		pub struct $name;
@@ -46,6 +41,10 @@ macro_rules! import_migration {
 		Box::new($name)
 	}};
 }
+
+#[derive(Embed)]
+#[folder = "src/database/migrations"]
+pub struct Migrations;
 
 pub struct Migrator;
 

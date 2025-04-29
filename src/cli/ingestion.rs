@@ -42,7 +42,6 @@ use termimad::{LineStyle, MadSkin, ROUNDED_TABLE_BORDER_CHARS, gray, rgb};
 use textplots::{Chart, Plot, Shape};
 use thiserror::__private::AsDisplay;
 use tracing::{Level, event, info};
-use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
 use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};

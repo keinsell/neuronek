@@ -83,14 +83,11 @@ async fn main() -> Result<()>
 
 	// ── Interactive shortcut ────────────────────────────────────────────────
 	// If the binary was executed with no extra CLI arguments, open the
-	// dialoguer-based TUI instead of the classical sub-command parser.
+	// Ratatui-based TUI instead of the dialoguer-based interface.
 	if std::env::args_os().len() == 1 {
-		let context = Application {
-			database_connection: &DATABASE_CONNECTION,
-			// fall back to a sensible default format when running interactively
-			stdout_format: MessageFormat::Pretty,
-		};
-		return ui::interactive::interactive_root_menu(&context).await.map_err(|e| miette!(e));
+		// new: run the ratatui-based tui
+		return ui::tui::run_tui()
+			.map_err(|e| miette!(format!("TUI error: {}", e)));
 	}
 
 	// Otherwise continue with the normal clap-powered CLI.
