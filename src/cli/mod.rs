@@ -15,7 +15,6 @@ use tracing::log::Log;
 use crate::config::VERSION;
 pub mod formulation;
 pub mod ingestion;
-pub mod prominence;
 pub mod substance;
 
 use crate::r#abstract::CommandHandler;
@@ -86,10 +85,6 @@ pub enum ApplicationCommands
 	Ingestion(ingestion::IngestionCommand),
 	#[command(hide = true)]
 	Substance(substance::SubstanceCommand),
-	/// Show general statistics about ingestions
-	Stats(crate::statistics::ShowStatistics),
-	/// Show substance prominence over time
-	Prominence(prominence::ProminenceCommand),
 	Formulation(formulation::Command),
 	/// Generate shell completion scripts
 	#[command(hide = true)]
