@@ -5,6 +5,7 @@ use derive_more::Display;
 use crate::substance::route_of_administration::dosage::DosageClassification;
 use crate::substance::route_of_administration::phase::PhaseClassification;
 
+
 #[derive(Clone, Debug, Display)]
 pub struct PhaseIcon(pub String);
 

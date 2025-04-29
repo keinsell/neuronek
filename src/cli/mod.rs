@@ -16,6 +16,7 @@ use crate::config::VERSION;
 pub mod formulation;
 pub mod ingestion;
 pub mod substance;
+pub mod analysis;
 
 use crate::r#abstract::CommandHandler;
 
@@ -86,6 +87,8 @@ pub enum ApplicationCommands
 	#[command(hide = true)]
 	Substance(substance::SubstanceCommand),
 	Formulation(formulation::Command),
+	/// Perform data analysis
+	Analysis(analysis::AnalysisCommand),
 	/// Generate shell completion scripts
 	#[command(hide = true)]
 	Completion

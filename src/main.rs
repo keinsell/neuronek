@@ -22,6 +22,7 @@ use tracing_subscriber::util::SubscriberInitExt;
 use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
 use crate::database::{DATABASE_CONNECTION, migrate_database};
 use crate::ingestion::IngestionActions;
+use crate::cli::analysis::AnalysisSubcommand;
 
 mod r#abstract;
 mod cli;
@@ -33,6 +34,7 @@ mod ingestion;
 pub(crate) mod logging;
 mod substance;
 mod ui;
+mod analysis;
 
 use crossterm::ExecutableCommand;
 
@@ -129,5 +131,10 @@ async fn main() -> Result<()>
 			Ok(())
 		}
 		| ApplicationCommands::Completion { .. } => unreachable!(),
+		| ApplicationCommands::Analysis(cmd) => match cmd.command {
+			AnalysisSubcommand::Promienience(args) => {
+				cli::analysis::handle(args, context).await
+			}
+		},
 	}
 }
