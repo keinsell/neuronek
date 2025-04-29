@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="neuronek.sqlite" single-connection="true" uuid="6a6767b1-8cfd-4c8a-81e8-8d24fd70c346">
+    <data-source source="LOCAL" name="Local Production" single-connection="true" uuid="6a6767b1-8cfd-4c8a-81e8-8d24fd70c346">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:/tmp/neuronek.sqlite</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$USER_HOME$/.local/share/neuronek/journal.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="auto-refresh-interval" value="1" />
       </jdbc-additional-properties>

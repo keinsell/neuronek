@@ -216,3 +216,4 @@ devenv.local.nix
 /debug.log
 
 .qodo
+/analysis/.ipynb_checkpoints/

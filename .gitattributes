@@ -3,3 +3,4 @@ src/database/migrations/*.sql linguist-detectable linguist-language=sql
 src/database/migrations/20250101000002_import_substance.sql binary linguist-vendored
 src/database/entities/*.rs linguist-generated=true
 docs/*.md linguist-detectable
+analysis/*.ipynb binary linguist-vendored
