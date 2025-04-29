@@ -8,9 +8,13 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseTransaction, EntityTrait, O
 use serde::Serialize;
 use tabled::Tabled;
 use tracing::info;
+use sea_orm::sea_query::Expr;
+use sea_orm::{Database, DbErr};
+use crate::database::migrator::{Migrator, MigratorTrait};
 
 use crate::database::DATABASE_CONNECTION;
 use crate::formulation::ingredient::Ingredient;
+use crate::database::entities::formulation_ingredient;
 
 type ActiveModel = crate::database::entities::formulation::ActiveModel;
 type Entity = crate::database::entities::formulation::Entity;
@@ -19,7 +23,7 @@ type Model = crate::database::entities::formulation::Model;
 #[nutype(
 	sanitize(trim, lowercase),
 	validate(not_empty),
-	derive(Debug, Clone, Serialize, TryFrom, Into, Hash, PartialEq, Eq, Display)
+	derive(Debug, Clone, Serialize, Deserialize, TryFrom, Into, Hash, PartialEq, Eq, Display)
 )]
 pub struct FormulationName(String);
 
@@ -39,7 +43,7 @@ pub type FormulationIngredients = HashSet<Ingredient>;
 #[tabled(display(Option, "tabled::derive::display::option", "---"))]
 pub struct Formulation
 {
-	/// Unique identifier for the formulation, only present for persisted
+    /// Unique identifier for the formulation, only present for persisted
 	/// formulations
 	pub id: Option<i32>,
 	/// Name of the formulation
@@ -48,7 +52,8 @@ pub struct Formulation
 	pub description: Option<String>,
 	/// List of substances that make up this formulation, each with their own
 	/// dosage
-	#[tabled(format = "{:#?}")]
+	#[tabled(skip)]
+	#[serde(skip)]
 	pub ingredients: FormulationIngredients,
 }
 
@@ -96,10 +101,13 @@ pub async fn create_formulation(
 #[async_std::test]
 async fn should_create_formulation()
 {
-	use sea_orm::EntityTrait;
+	use sea_orm::{Database, DbErr, EntityTrait};
+	use crate::database::migrator::{Migrator, MigratorTrait};
 
-	use super::*;
-	let db_connection = &DATABASE_CONNECTION;
+	let db_connection = Database::connect("sqlite::memory:").await.unwrap();
+
+	Migrator::up(&db_connection, None).await.unwrap();
+
 	let tx = db_connection.begin().await.unwrap();
 
 	let result = create_formulation(
@@ -111,8 +119,6 @@ async fn should_create_formulation()
 	)
 	.await
 	.unwrap();
-
-	tx.commit().await.unwrap();
 
 	assert_eq!(result.id, Some(1));
 	assert_eq!(result.name.to_string(), "test formulation");
@@ -136,13 +142,13 @@ pub async fn update_formulation(
 ) -> miette::Result<Formulation> {
 	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 
-	let original = Entity::find_by_id(update_formulation.id)
+	let original_model = Entity::find_by_id(update_formulation.id)
 		.one(database_transaction)
 		.await
 		.into_diagnostic()?
 		.ok_or_else(|| miette::miette!("Formulation not found"))?;
 
-	let mut active_model: ActiveModel = original.clone().into();
+	let mut active_model: ActiveModel = original_model.clone().into();
 
 	if let Some(name) = &update_formulation.name {
 		active_model.name = Set(name.to_owned());
@@ -168,12 +174,14 @@ pub async fn update_formulation(
 
 	Ok(formulation)
 }
+
 #[async_std::test]
 async fn should_update_formulation() {
-	use sea_orm::EntityTrait;
+	use sea_orm::{Database, EntityTrait};
+	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	let db_connection = &DATABASE_CONNECTION;
+let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
 	let created_formulation = create_formulation(
@@ -197,11 +205,11 @@ async fn should_update_formulation() {
 	.await
 	.unwrap();
 
-	tx.commit().await.unwrap();
-
 	assert_eq!(updated_formulation.id, created_formulation.id);
 	assert_eq!(updated_formulation.name.to_string(), "updated formulation");
 	assert_eq!(updated_formulation.description, Some("Updated description".into()));
+
+	tx.rollback().await.unwrap();
 }
 
 #[derive(Debug, Clone, Args)]
@@ -236,7 +244,6 @@ pub async fn delete_formulation(
 		return Err(miette::miette!("Formulation not found"));
 	}
 	
-
 	let is_confirmed = if !delete_formulation.confirmation && delete_formulation.interactive {
 		use dialoguer::Confirm;
 		Confirm::new()
@@ -247,27 +254,31 @@ pub async fn delete_formulation(
 	} else {
 		delete_formulation.confirmation
 	};
-
+	
 	if !is_confirmed {
 		return Err(Exception::DestructiveOperationNotConfirmed.into());
 	}
-
+	
+	// No need to manually delete ingredients - they will be deleted via ON DELETE CASCADE
 	Entity::delete_by_id(delete_formulation.id)
 		.exec(transaction)
 		.await
 		.into_diagnostic()?;
-
+	
 	info!("Formulation Deleted");
-
+	
 	Ok(())
 }
 
 #[async_std::test]
 async fn should_delete_formulation()
 {
-	use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+	use sea_orm::{Database, DbErr, EntityTrait, ColumnTrait, QueryFilter};
+	use crate::database::migrator::{Migrator, MigratorTrait};
+	use crate::formulation::create_formulation;
 
-	let db_connection = &DATABASE_CONNECTION;
+let db_connection = &DATABASE_CONNECTION;
+
 	let tx = db_connection.begin().await.unwrap();
 	
 	let created_formulation = create_formulation(
@@ -293,8 +304,6 @@ async fn should_delete_formulation()
 		.unwrap();
 	
 	assert!(result.is_none());
-
-	tx.commit().await.unwrap();
 }
 
 #[derive(Debug, Clone, Args)]
@@ -342,10 +351,11 @@ pub async fn list_formulations(
 
 #[async_std::test]
 async fn should_list_formulations() {
-	use sea_orm::EntityTrait;
+	use sea_orm::{Database, EntityTrait};
+	use crate::database::migrator::{Migrator, MigratorTrait};
 
 	use super::*;
-	let db_connection = &DATABASE_CONNECTION;
+let db_connection = &DATABASE_CONNECTION;
 	let tx = db_connection.begin().await.unwrap();
 
 	create_formulation(
@@ -431,10 +441,11 @@ pub async fn get_formulation(
 
 #[async_std::test]
 async fn should_get_formulation() {
-    use sea_orm::EntityTrait;
+    use sea_orm::{Database, EntityTrait};
+    use crate::database::migrator::{Migrator, MigratorTrait};
 
     use super::*;
-    let db_connection = &DATABASE_CONNECTION;
+let db_connection = &DATABASE_CONNECTION;
     let tx = db_connection.begin().await.unwrap();
 
     let created_formulation = create_formulation(
@@ -480,4 +491,7 @@ pub enum Command
 
 	/// Get a specific formulation by ID
 	Get(GetFormulation),
+
+	/// Manage ingredients for a formulation
+	Ingredient(ingredient::Entrypoint)
 }

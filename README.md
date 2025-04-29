@@ -255,7 +255,9 @@ Removes a formulation from the system. Operation itself is destructive and requi
 neuronek formulation delete <FORMULATION_ID>
 ```
 
-```present cargo run -- --format pretty formulation delete 1 --no-confirm
+[//]: # (present cargo run -- --format pretty formulation delete 1 --no-confirm)
+
+```
 Formulation deleted successfully
 ```
 
@@ -284,7 +286,15 @@ neuronek formulation ingredient ls
 Adds a new ingredient to a formulation with a specified quantity.
 
 ```bash
-neuronek formulation ingredient rm <INGREDIENT_ID>
+neuronek formulation ingredient create -f <FORMULATION_NAME> -s <SUBSTANCE_NAME> -d <DOSAGE>
+```
+
+```present cargo run -- --format pretty formulation ingredient create -f "quilla-mind" -s caffeine -d 200mg
+╭───┬───────────┬────────┬─────────────╮
+│ # │ Substance │ Dosage │ Formulation │
+├───┼───────────┼────────┼─────────────┤
+│ 1 │ Caffeine  │ 200 mg │ quilla-mind │
+╰───┴───────────┴────────┴─────────────╯
 ```
 
 ###### Update Formulation Ingredient

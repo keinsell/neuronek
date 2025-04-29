@@ -59,7 +59,7 @@ CREATE INDEX `ingestion_phase_classification_idx` ON `ingestion_phase` (`classif
 CREATE TABLE `formulation`
 (
     `id`       integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `name`     text    NOT NULL,
+    `name`     text    NOT NULL UNIQUE,
     `summary`  text    NULL,
     `labeller` text    NULL,
     `form`     text    NULL,
@@ -79,14 +79,14 @@ CREATE TABLE `formulation`
             )
         )
 );
--- Create index "formulation_id" to table: "formulation"
+-- Create table "formulation_ingredient"
 CREATE TABLE `formulation_ingredient`
 (
     `id`             integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     `formulation_id` integer NOT NULL,
     `substance_name` text    NOT NULL,
     `dosage`         real    NOT NULL,
-    CONSTRAINT `0` FOREIGN KEY (`formulation_id`) REFERENCES `formulation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT `formulation_ingredient_formulation_id_fkey` FOREIGN KEY (`formulation_id`) REFERENCES `formulation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- Enable back the enforcement of foreign-keys constraints
 PRAGMA foreign_keys = on;
