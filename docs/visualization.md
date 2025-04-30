@@ -37,3 +37,5 @@ Ingestion progression should be something like progress bar showing total time o
 - https://crates.io/crates/pinax
 - https://crates.io/crates/pandrs
 - https://lib.rs/crates/asciibar
+- https://github.com/orhanbalci/rasciigraph
+- https://github.com/RyanBluth/term-table-rs
