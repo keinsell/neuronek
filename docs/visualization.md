@@ -26,3 +26,12 @@ Ingestion should contain base information such as: ID, substane name, humanized 
 ## Ingestion Progression
 
 Ingestion progression should be something like progress bar showing total time of activeness of substance.
+
+## Developer Notes
+
+- [`termplot`](https://github.com/xavierhamel/termplot)
+- [`barchart`](https://github.com/jake-low/barchart)
+- https://crates.io/crates/lowcharts
+- https://crates.io/crates/textcanvas
+
+- https://crates.io/crates/pandrs
