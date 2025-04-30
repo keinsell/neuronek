@@ -60,8 +60,10 @@ struct PromieniencePointDisplay {
 #[derive(Debug, Serialize)]
 struct PromienienceOutput(PromienienceResult);
 
-impl Displayable for PromienienceOutput {
-    fn as_pretty(&self) -> String {
+impl Displayable for PromienienceOutput
+{
+	fn as_pretty(&self) -> String
+	{
         if self.0.is_empty() {
             return "No promienience data to display.".to_string();
         }
@@ -72,6 +74,7 @@ impl Displayable for PromienienceOutput {
             if points.is_empty() {
                 continue;
             }
+<<<<<<< Updated upstream
 
             let display_points: Vec<PromieniencePointDisplay> = points.iter()
                 .map(|p| PromieniencePointDisplay {
@@ -84,11 +87,62 @@ impl Displayable for PromienienceOutput {
                 .with(Style::modern_rounded())
                 .to_string();
 
+=======
+>>>>>>> Stashed changes
             combined_output.push_str(&format!("\n--- Substance: {} ---\n", substance));
-            combined_output.push_str(&table);
             combined_output.push_str("\n");
         }
 
+<<<<<<< Updated upstream
+=======
+		// Combined ASCII chart for all substances using a shared timeline
+		// Use the timeline from the first non-empty substance as the global x axis
+		let mut timeline: Vec<DateTime<Utc>> = Vec::new();
+		for points in self.0.values() {
+            if !points.is_empty() {
+                timeline = points.iter().map(|p| p.time).collect();
+                break;
+            }
+        }
+		let n_points = timeline.len();
+		if n_points > 1 {
+			let symbols = [b'*', b'o', b'+', b'x', b'#', b'@', b'%', b'&', b'$', b'='];
+			let mut all_chart_data: Vec<(Vec<(f32, f32)>, u8, &str)> = Vec::new();
+			for ((substance, points), &symbol) in self.0.iter().zip(symbols.iter().cycle()) {
+                if points.len() == n_points {
+                    // Use index as normalized x
+                    let chart_data: Vec<(f32, f32)> = points.iter().enumerate().map(|(i, p)| {
+                        let x = i as f32 / (n_points as f32 - 1.0);
+                        (x, p.intensity as f32)
+                    }).collect();
+                    all_chart_data.push((chart_data, symbol, substance.as_str()));
+                }
+            }
+            if !all_chart_data.is_empty() {
+                combined_output.push_str("\nCombined Text Chart (shared timeline, normalized):\n");
+                let width = 60;
+                let height = 15;
+                let mut grid = vec![vec![' '; width]; height];
+                let mut legend = String::new();
+                for (line, symbol, substance) in &all_chart_data {
+                    legend.push_str(&format!("{}: {}  ", *symbol as char, substance));
+                    for &(x, y) in line {
+                        let xi = (x * (width as f32 - 1.0)).round() as usize;
+                        let yi = ((1.0 - y) * (height as f32 - 1.0)).round() as usize;
+                        if xi < width && yi < height {
+                            grid[yi][xi] = *symbol as char;
+                        }
+                    }
+                }
+                for row in &grid {
+                    combined_output.push_str(&row.iter().collect::<String>());
+                    combined_output.push('\n');
+                }
+                combined_output.push_str(&format!("Legend: {}\n", legend));
+            }
+        }
+
+>>>>>>> Stashed changes
         if combined_output.is_empty() {
              "No promienience data points found after filtering.".to_string()
         } else {
@@ -139,4 +193,8 @@ pub async fn handle(args: PromienienceArgs, context: Application<'_>) -> Result<
     output.display(context.stdout_format);
 
     Ok(())
+<<<<<<< Updated upstream
 } 
+=======
+}
+>>>>>>> Stashed changes

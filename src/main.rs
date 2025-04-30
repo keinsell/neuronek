@@ -25,6 +25,8 @@ use crate::ingestion::IngestionActions;
 use crate::cli::analysis::AnalysisSubcommand;
 
 mod r#abstract;
+mod analysis;
+mod analyzer;
 mod cli;
 pub mod config;
 mod database;
@@ -34,7 +36,6 @@ mod ingestion;
 pub(crate) mod logging;
 mod substance;
 mod ui;
-mod analysis;
 
 use crossterm::ExecutableCommand;
 
