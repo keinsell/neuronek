@@ -31,7 +31,8 @@ Ingestion progression should be something like progress bar showing total time o
 
 - [`termplot`](https://github.com/xavierhamel/termplot)
 - [`barchart`](https://github.com/jake-low/barchart)
+- [`textplots`](https://lib.rs/crates/textplots), have a problem in rendering multiple lines.
 - https://crates.io/crates/lowcharts
 - https://crates.io/crates/textcanvas
-
+- https://crates.io/crates/pinax
 - https://crates.io/crates/pandrs
