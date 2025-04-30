@@ -1,9 +1,9 @@
 default:
     @just --list
 
-install-requirements:
+reqs:
     cargo install cargo-binstall
-    cargo binstall -y cargo-machete cargo-sort cargo-nextest cargo-zigbuild cargo-expand cargo-mommy bacon cargo-deny just cargo-tarpaulin xargo cargo-outdated cargo-smart-release cargo-prebuilt cargo-cache present
+    cargo binstall -y cargo-machete cargo-sort cargo-nextest cargo-zigbuild cargo-expand cargo-mommy bacon cargo-deny just cargo-tarpaulin xargo cargo-outdated cargo-smart-release cargo-prebuilt cargo-cache present bacon-ls # rustowl 
 
 lint:
     cargo clippy --summary
