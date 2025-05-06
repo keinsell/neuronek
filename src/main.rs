@@ -28,7 +28,6 @@ mod cli;
 pub mod config;
 mod database;
 pub(crate) mod error_handling;
-mod formulation;
 mod ingestion;
 pub(crate) mod logging;
 mod substance;
@@ -124,10 +123,6 @@ async fn main() -> Result<()>
 			}
 		},
 		| ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
-		| ApplicationCommands::Formulation(cmd) => {
-			cli::formulation::handle(cmd, &context);
-			Ok(())
-		}
 		| ApplicationCommands::Completion { .. } => unreachable!(),
 	}
 }

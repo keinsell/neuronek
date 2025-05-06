@@ -13,7 +13,6 @@ use textplots::Plot;
 use tracing::log::Log;
 
 use crate::config::VERSION;
-pub mod formulation;
 pub mod ingestion;
 pub mod substance;
 
@@ -85,7 +84,6 @@ pub enum ApplicationCommands
 	Ingestion(ingestion::IngestionCommand),
 	#[command(hide = true)]
 	Substance(substance::SubstanceCommand),
-	Formulation(formulation::Command),
 	/// Generate shell completion scripts
 	#[command(hide = true)]
 	Completion

@@ -1,8 +1,0 @@
-- `neuronek formulation 1`, views single formulation
-- `neuronek formulation`, lists formulations
-- `neuronek formulation create -n xd`, create formulation
-- `neuronek formulation update 12 -n xd`, update
-- `neuronek formulation remove 12`,
-- `neuronek formulation 1 ingredient`, views ingredients of formulation
-- `neuronek formulation 1 ingredient create -n xd`, create ingredient
-- `neuronek formulation 1 ingredient update 12 -n xd`, update
