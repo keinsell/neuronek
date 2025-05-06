@@ -1,7 +1,7 @@
 use std::fmt::{Debug, Display};
 
 use atty::Stream;
-use clap::{ColorChoice, CommandFactory, Parser, Subcommand, arg, command};
+use clap::{arg, command, ColorChoice, CommandFactory, Parser, Subcommand};
 use miette::IntoDiagnostic;
 use minimo::Printable;
 use sea_orm::prelude::*;
@@ -11,12 +11,11 @@ use tabled::settings::Style;
 use tabled::{Table, Tabled};
 use textplots::Plot;
 use tracing::log::Log;
-
+use async_trait::async_trait;
+use crate::{application::Application, Session};
 use crate::config::VERSION;
 pub mod ingestion;
 pub mod substance;
-
-use crate::r#abstract::CommandHandler;
 
 pub fn is_interactive() -> bool { atty::is(Stream::Stdout) }
 
@@ -83,7 +82,7 @@ pub enum ApplicationCommands
 	/// Manage ingestion entries
 	Ingestion(ingestion::IngestionCommand),
 	#[command(hide = true)]
-	Substance(substance::SubstanceCommand),
+	Substance(substance::GetSubstance),
 	/// Generate shell completion scripts
 	#[command(hide = true)]
 	Completion
@@ -113,4 +112,9 @@ pub struct CommandLineInterface
 
 	#[command(flatten)]
 	verbose: clap_verbosity_flag::Verbosity,
+}
+
+#[async_trait]
+pub trait Executable<Output: Displayable + Send> {
+	async fn execute(self, ctx: &Session) -> miette::Result<Output>;
 }

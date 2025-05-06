@@ -58,6 +58,7 @@ rust-embed = "8.2.0"
 sea-orm = { version = "1.1.2", features = ["sqlx-sqlite", "runtime-async-std-rustls", "serde_json", "with-chrono"] }
 serde = { version = "1.0.216", features = ["derive", "std", "unstable", "rc", "serde_derive"] }
 tabled = { version = "0.18", features = ["std", "macros", "ansi", "derive", "tabled_derive"] }
+textplots = "0.8.6"
 sea-orm-migration = { version = "1.1.0", features = [
     "sqlx-sqlite",
     "runtime-async-std-rustls"
@@ -78,7 +79,6 @@ human-panic = "2.0.2"
 uuid = { version = "1.12.1", features = ["v4"] }
 etcetera = "0.8.0"
 tracing-appender = "0.2.3"
-textplots = "0.8.6"
 valuable = { version = "0.1.1", features = ["derive"] }
 derive = "1.0.0"
 tuirealm = { version = "2.1.0", features = ["derive", "crossterm"] }

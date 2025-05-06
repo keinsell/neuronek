@@ -12,8 +12,7 @@ use tabled::settings::{Panel, Remove, Style};
 use tabled::{Table, Tabled};
 use tuirealm::ratatui::text::ToText;
 
-use crate::Application;
-use crate::r#abstract::CommandHandler;
+use crate::application::Application;
 use crate::cli::Displayable;
 use crate::database::entities::substance::{Column, Entity as SubstanceEntity};
 use crate::database::{ConnectionTrait, DATABASE_CONNECTION};
@@ -214,42 +213,13 @@ pub async fn get_substance_names() -> Vec<String>
 }
 
 #[async_trait]
-impl CommandHandler<()> for GetSubstance
-{
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
-	{
+impl crate::cli::Executable<Substance> for GetSubstance {
+	async fn execute(self, ctx: &super::Session) -> miette::Result<Substance> {
 		let substance: Substance =
 			crate::substance::repository::get_substance(&self.name, ctx.database_connection)
 				.await?
 				.unwrap_or_else(|| panic!("{}", SubstanceError::NotFound));
-
-		substance.display(ctx.stdout_format);
-
-		Ok(())
-	}
-}
-
-#[derive(Debug, Subcommand)]
-enum SubstanceCommands
-{
-	Get(GetSubstance),
-}
-
-#[derive(Debug, Parser)]
-pub struct SubstanceCommand
-{
-	#[command(subcommand)]
-	commands: SubstanceCommands,
-}
-
-#[async_trait]
-impl CommandHandler for SubstanceCommand
-{
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
-	{
-		match &self.commands {
-			| SubstanceCommands::Get(command) => command.handle(ctx).await.map(|_| ()),
-		}
+		Ok(substance)
 	}
 }
 

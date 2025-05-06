@@ -46,7 +46,6 @@ use tuirealm::props::TextSpan;
 use uuid::Uuid;
 
 use crate::Exception::{DestructiveOperationNotConfirmed, EntityNotFound};
-use crate::r#abstract::CommandHandler;
 use crate::cli::{Displayable, MessageFormat};
 use crate::database::entities::ingestion::{
 	Entity as IngestionEntity,
@@ -73,7 +72,7 @@ use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
 use crate::ui::PhaseIcon;
 use crate::ui::theme::MAD_SKIN;
-use crate::{Application, Exception, database};
+use crate::{application::Application, Exception, database};
 use crate::ingestion::service::list_ingestion;
 
 impl Displayable for crate::ingestion::Ingestion
@@ -233,12 +232,9 @@ impl Displayable for IngestionList
 	}
 }
 
-
 #[async_trait]
-impl CommandHandler for UpdateIngestion
-{
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
-	{
+impl crate::cli::Executable<crate::ingestion::Ingestion> for UpdateIngestion {
+	async fn execute(self, ctx: &super::Session) -> miette::Result<crate::ingestion::Ingestion> {
 		let existing_ingestion = IngestionEntity::find_by_id(self.ingestion_identifier)
 			.one(ctx.database_connection)
 			.await
@@ -288,30 +284,30 @@ impl CommandHandler for UpdateIngestion
 			self.ingestion_identifier
 		);
 
-		updated_record.display(ctx.stdout_format);
-
-		Ok(())
+		Ok(updated_record)
 	}
 }
 
-
 #[async_trait]
-impl CommandHandler for ListIngestion
-{
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
-	{
-		let ingestions = list_ingestion(self).await.unwrap();
-		IngestionList(ingestions).display(ctx.stdout_format);
-		Ok(())
+impl crate::cli::Executable<IngestionList> for ListIngestion {
+	async fn execute(self, ctx: &super::Session) -> miette::Result<IngestionList> {
+		let ingestions = list_ingestion(&self).await.unwrap();
+		Ok(IngestionList(ingestions))
 	}
 }
 
+#[derive(Debug, Serialize)]
+pub struct DeleteResult;
+
+impl Displayable for DeleteResult {
+	fn as_pretty(&self) -> String {
+		"Ingestion deleted".to_string()
+	}
+}
 
 #[async_trait]
-impl CommandHandler for DeleteIngestion
-{
-	async fn handle<'a>(&self, ctx: Application<'a>) -> miette::Result<()>
-	{
+impl crate::cli::Executable<DeleteResult> for DeleteIngestion {
+	async fn execute(self, ctx: &super::Session) -> miette::Result<DeleteResult> {
 		let mut is_confirmed = self.confirmation.unwrap_or(false);
 		let ingestion = IngestionEntity::find_by_id(self.ingestion_id)
 			.one(ctx.database_connection)
@@ -345,11 +341,9 @@ impl CommandHandler for DeleteIngestion
 			})
 			.into_diagnostic()?;
 
-		println!("Ingestion deleted");
-
 		info!(ingestion_id = ingestion.unwrap().id, "Ingestion Deleted");
 
-		Ok(())
+		Ok(DeleteResult)
 	}
 }
 

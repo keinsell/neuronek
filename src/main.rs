@@ -10,28 +10,24 @@
 
 use std::fmt::Display;
 
-use r#abstract::CommandHandler;
 use chrono::{DateTime, Local};
 use chrono_english::Dialect;
 use clap::{CommandFactory, Parser};
-use error_handling::setup_diagnostics;
-use logging::setup_logger;
+use cli::Executable;
 use miette::{Diagnostic, IntoDiagnostic, Result, miette};
 use tracing_subscriber::util::SubscriberInitExt;
 
-use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
+use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat, };
 use crate::database::{DATABASE_CONNECTION, migrate_database};
 use crate::ingestion::IngestionActions;
 
-mod r#abstract;
 mod cli;
 pub mod config;
 mod database;
-pub(crate) mod error_handling;
 mod ingestion;
-pub(crate) mod logging;
 mod substance;
 mod ui;
+mod application;
 
 use crossterm::ExecutableCommand;
 
@@ -62,67 +58,87 @@ pub enum Exception
 	EntityNotFound,
 }
 
-pub struct Application<'a>
-{
-	pub database_connection: &'a sea_orm::DatabaseConnection,
-	pub stdout_format: MessageFormat,
-}
+
 
 use clap::Subcommand;
+use crate::application::{AppResult, Application, ApplicationSession, Phase};
+
+#[derive(Clone)]
+struct Session {
+	database_connection: &'static sea_orm::DatabaseConnection,
+}
+
+impl ApplicationSession for Session {}
+
 
 #[async_std::main]
 async fn main() -> Result<()>
 {
-	let _logger = setup_logger();
-	let _diagnostics = setup_diagnostics();
-
-	migrate_database(&DATABASE_CONNECTION)
-		.await
-		.expect("Database migration failed");
-
 	let cli = CommandLineInterface::parse();
-
-	let context = Application {
+	let mut session = Session {
 		database_connection: &DATABASE_CONNECTION,
-		stdout_format: cli.format,
 	};
 
 	match cli.command {
-		| ApplicationCommands::Ingestion(cmd) => match &cmd.commands {
-			| IngestionActions::Log(log_ingestion) => {
-				let ingestion = crate::ingestion::service::log_ingestion(
-					log_ingestion,
-					context.database_connection,
-				)
-				.await
-				.map_err(|e| miette!(e))?;
-
-				ingestion.display(context.stdout_format);
-				Ok(())
+		ApplicationCommands::Ingestion(cmd) => {
+			use crate::ingestion::IngestionActions;
+			use crate::ingestion::service::{log_ingestion, get_ingestion, list_ingestion};
+			use crate::ingestion::analyzer::analyze_ingestion;
+			match cmd.commands {
+				IngestionActions::Log(log) => {
+					let result = log_ingestion(&log, session.database_connection).await;
+					match result {
+						Ok(output) => output.display(cli.format.clone()),
+						Err(e) => eprintln!("{}", e.to_string()),
+					}
+				}
+				IngestionActions::List(list) => {
+					let result = list_ingestion(&list).await;
+					match result {
+						Ok(output) => crate::cli::ingestion::IngestionList(output).display(cli.format.clone()),
+						Err(e) => eprintln!("{}", e.to_string()),
+					}
+				}
+				IngestionActions::Delete(del) => {
+					// Fallback: print not implemented
+					eprintln!("Delete not implemented in main");
+				}
+				IngestionActions::Update(upd) => {
+					// Fallback: print not implemented
+					eprintln!("Update not implemented in main");
+				}
+				IngestionActions::View(view) => {
+					let result = get_ingestion(view.ingestion_id).await;
+					match result {
+						Ok(Some(output)) => output.display(cli.format.clone()),
+						Ok(None) => {
+							eprintln!("Ingestion not found");
+							std::process::exit(1);
+						}
+						Err(e) => eprintln!("{}", e.to_string()),
+					}
+				}
+				IngestionActions::Analyze(analyze) => {
+					let result = analyze_ingestion(&analyze).await;
+					match result {
+						Ok(output) => output.display(cli.format.clone()),
+						Err(e) => eprintln!("{}", e.to_string()),
+					}
+				}
 			}
-			| IngestionActions::List(list_ingestions) => list_ingestions.handle(context).await,
-			| IngestionActions::Delete(delete_ingestion) => delete_ingestion.handle(context).await,
-			| IngestionActions::Update(update_ingestion) => update_ingestion.handle(context).await,
-			| IngestionActions::View(view_ingestion) => {
-				ingestion::service::get_ingestion(view_ingestion.ingestion_id)
-					.await
-					.map_err(|e| miette!(e))
-					.and_then(|maybe_ingestion| {
-						maybe_ingestion
-							.map(|ingestion| ingestion.display(context.stdout_format))
-							.ok_or_else(|| miette!("Ingestion not found"))
-					})?;
-				Ok(())
+		}
+		ApplicationCommands::Substance(cmd) => {
+			let result = cmd.execute(&session).await;
+			match result {
+				Ok(output) => output.display(cli.format.clone()),
+				Err(e) => eprintln!("{}", e.to_string()),
 			}
-			| IngestionActions::Analyze(analyze_ingestion) => {
-				ingestion::service::analyze_ingestion(analyze_ingestion)
-					.await
-					.map_err(|e| miette!(e))
-					.map(|ingestion| ingestion.display(context.stdout_format))?;
-				Ok(())
-			}
-		},
-		| ApplicationCommands::Substance(cmd) => cmd.handle(context).await,
-		| ApplicationCommands::Completion { .. } => unreachable!(),
+		}
+		ApplicationCommands::Completion { shell } => {
+			let mut cmd = CommandLineInterface::command();
+			clap_complete::generate(shell, &mut cmd, "neuronek", &mut std::io::stdout());
+		}
 	}
+
+	Ok(())
 }
