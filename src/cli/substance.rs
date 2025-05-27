@@ -2,7 +2,7 @@ use std::ops::Deref;
 use std::str::FromStr;
 
 use async_trait::async_trait;
-use clap::{Args, Parser, Subcommand};
+use clap::{Arg, Args, Command, CommandFactory, Parser, Subcommand, ValueHint};
 use crossterm::style::Stylize;
 use minimo::Printable;
 use owo_colors::OwoColorize;
@@ -173,29 +173,19 @@ impl Substance
 pub struct GetSubstance
 {
 	/// The name of the substance to get information about
-	#[arg(index = 1, value_parser = possible_substances)]
+	#[arg(index = 1, value_parser = possible_substances, value_hint = ValueHint::Other)]
 	pub name: String,
+	
+	/// List all substance names (for shell completion)
+	#[arg(long = "list-names", hide = true)]
+	pub list_names: bool,
 }
 
 /// Returns possible substance names for shell completion
 fn possible_substances(partial: &str) -> Result<String, String>
 {
-	// For shell completion, return all substance names
-	if std::env::var("COMP_LINE").is_ok() {
-		// Run in a new runtime since we're in a sync context
-		let rt = tokio::runtime::Runtime::new().unwrap();
-		let names = rt.block_on(get_substance_names());
-
-		// Filter names that match the partial input
-		let matches: Vec<String> = names
-			.into_iter()
-			.filter(|name| name.starts_with(partial))
-			.collect();
-
-		return Ok(matches.join("\n"));
-	}
-
-	// For immediate validation, accept any input
+	// We just validate the input here - dynamic completions are handled by CompleteEnv
+	// during the shell completion callback
 	Ok(partial.to_string())
 }
 
@@ -212,9 +202,23 @@ pub async fn get_substance_names() -> Vec<String>
 		.unwrap_or_default()
 }
 
+#[derive(Debug, Serialize)]
+pub struct SubstanceNameList(Vec<String>);
+
+impl Displayable for SubstanceNameList {
+	fn as_pretty(&self) -> String {
+		self.0.join("\n")
+	}
+}
+
 #[async_trait]
 impl crate::cli::Executable<Substance> for GetSubstance {
 	async fn execute(self, ctx: &super::Session) -> miette::Result<Substance> {
+		if self.list_names {
+			// This branch won't be reached because we handle it in main.rs
+			unreachable!("list-names should be handled in main.rs")
+		}
+		
 		let substance: Substance =
 			crate::substance::repository::get_substance(&self.name, ctx.database_connection)
 				.await?

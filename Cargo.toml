@@ -1,4 +1,4 @@
-cargo-features = ["edition2024", "codegen-backend"]
+cargo-features = ["edition2024"]
 
 [package]
 name = "neuronek"
@@ -39,7 +39,7 @@ async-std = { version = "1.12.0", features = ["attributes", "async-global-execut
 atty = "0.2.14"
 chrono = { version = "0.4", features = ["serde", "std"] }
 chrono-english = "0.1.7"
-clap = { version = "4.5.23", features = ["derive", "wrap_help", "suggestions", "std", "cargo"] }
+clap = { version = "4.5.23", features = ["derive", "wrap_help", "suggestions", "std", "cargo", "env", "unstable-v5"] }
 clap-verbosity-flag = "3.0.1"
 crossterm = "0.27.0"
 delegate = "0.13.1"
@@ -95,7 +95,9 @@ derive-new = "0.7.0"
 strum_macros = "0.27.1"
 json_to_table = "0.10.0"
 o2o = { version = "0.5.3", features = ["o2o-macros", "o2o-impl"] }
-clap_complete = "4.5.46"
+clap_complete = { version = "4.5.50", features = ["unstable-dynamic"] }
+clap_complete_nushell = "4.5.4"
+
 tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
 tempfile = "3.16.0"
 assert_cmd = "2.0.16"
@@ -106,8 +108,6 @@ static_table = "0.6.0"
 figlet-rs = "0.1.5"
 itertools = "0.12.1"
 ryu = "1.0.20"
-
-[profile]
 [profile.wasm-dev]
 inherits = "dev"
 opt-level = 1
@@ -121,6 +121,9 @@ inherits = "dev"
 [profile.dist]
 inherits = "release"
 lto = "fat"
+
+[profile.dev]
+debug = 0
 
 [dev-dependencies]
 predicates = "3.1.3"
