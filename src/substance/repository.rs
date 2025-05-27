@@ -4,6 +4,7 @@ use std::str::FromStr;
 use futures::StreamExt;
 use futures::stream::FuturesUnordered;
 use iso8601_duration::Duration;
+use itertools::Itertools;
 use miette::{IntoDiagnostic, miette};
 use sea_orm::{ColumnTrait, EntityTrait, ModelTrait, QueryFilter};
 
@@ -139,4 +140,27 @@ pub async fn get_substance(
 	}
 
 	Ok(Some(substance))
+}
+
+pub async fn list_substances(
+	database_connection: &DatabaseConnection,
+) -> miette::Result<Vec<Substance>>
+{
+	let substances = substance::Entity::find()
+		.all(database_connection)
+		.await
+		.into_diagnostic()?;
+
+	let substances = substances
+	.into_iter()
+	.map(|substance| {
+		Ok(Substance {
+			name: substance.name.clone(),
+			systematic_name: None,
+			routes_of_administration: RoutesOfAdministration::new(),
+		})
+	})
+	.collect::<miette::Result<Vec<_>>>()?;
+
+	Ok(substances)
 }

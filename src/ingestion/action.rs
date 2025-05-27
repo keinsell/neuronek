@@ -2,10 +2,12 @@ use std::str::FromStr;
 
 use chrono::{DateTime, Local};
 use chrono_english::Dialect;
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueHint};
+use clap_complete::{engine::ArgValueCompleter, ArgValueCandidates};
 use miette::IntoDiagnostic;
 use serde::{Deserialize, Serialize};
 
+use crate::cli::completions::{substance_completer, roa_completer, ingestion_id_completer};
 use crate::cli::is_interactive;
 use crate::ingestion::model::AnalyzeIngestion;
 use crate::substance::route_of_administration::dosage::Dosage;
@@ -42,7 +44,7 @@ providing insights into the long-term effects of different substances on physica
 pub struct LogIngestion
 {
 	/// Name of substance.rs that is being ingested, e.g. "Paracetamol"
-	#[arg(short = 's', long = "substance", required = true)]
+	#[arg(short = 's', long = "substance", required = true, value_hint = ValueHint::Other, add = ArgValueCompleter::new(substance_completer))]
 	pub substance_name: String,
 	/// Dosage of given substance.rs provided as string with unit (e.g., 10 mg)
 	#[arg(
@@ -65,7 +67,7 @@ pub struct LogIngestion
     )]
 	pub ingestion_date: DateTime<Local>,
 	/// Route of administration related to given ingestion (defaults to "oral")
-	#[arg(short = 'r', long = "roa", default_value = "oral", value_enum)]
+	#[arg(short = 'r', long = "roa", default_value = "oral", value_enum, value_hint = ValueHint::Other, add = ArgValueCompleter::new(roa_completer))]
 	pub route_of_administration: RouteOfAdministrationClassification,
 }
 
@@ -74,11 +76,11 @@ pub struct LogIngestion
 pub struct UpdateIngestion
 {
 	/// ID of the ingestion to update
-	#[arg(index = 1, value_name = "INGESTION_ID")]
+	#[arg(index = 1, value_name = "INGESTION_ID", add = ArgValueCompleter::new(ingestion_id_completer))]
 	pub ingestion_identifier: i32,
 
 	/// New name of the substance.rs (optional)
-	#[arg(short = 'n', long = "name", value_name = "SUBSTANCE_NAME")]
+	#[arg(short = 'n', long = "name", value_name = "SUBSTANCE_NAME", value_hint = ValueHint::Other, add = ArgValueCompleter::new(substance_completer))]
 	pub substance_name: Option<String>,
 
 	/// New dosage (optional, e.g., 20 mg)
@@ -91,7 +93,7 @@ pub struct UpdateIngestion
 	pub ingestion_date: Option<DateTime<Local>>,
 
 	/// New route of administration (optional, defaults to "oral")
-	#[arg(short = 'r', long = "roa", value_enum)]
+	#[arg(short = 'r', long = "roa", value_enum, value_hint = ValueHint::Other, add = ArgValueCompleter::new(roa_completer))]
 	pub route_of_administration: Option<RouteOfAdministrationClassification>,
 }
 
@@ -103,7 +105,8 @@ pub struct DeleteIngestion
 	#[arg(
 		index = 1,
 		value_name = "INGESTION_ID",
-		help = "ID of the ingestion to delete"
+		help = "ID of the ingestion to delete",
+		add = ArgValueCompleter::new(ingestion_id_completer)
 	)]
 	pub ingestion_id: i32,
 	#[clap(short, long, default_value_t=is_interactive())]
@@ -124,7 +127,8 @@ pub struct ViewIngestion
 	#[arg(
 		index = 1,
 		value_name = "INGESTION_ID",
-		help = "ID of the ingestion to view"
+		help = "ID of the ingestion to view",
+		add = ArgValueCompleter::new(ingestion_id_completer)
 	)]
 	pub ingestion_id: i32,
 }

@@ -14,8 +14,11 @@ of these compounds on their physical and mental health.
 
 Features offered by application include:
 
-- **Ingestion journaling** with a set of commands which allows for inserting, updating, retrieving and deleting all the
-  data stored as `Ingestion` model.
+### Features
+
+- **📝 Ingestion Journal**, basic functionality allowing for inserting, updating, retrieving and deleting all the
+  data stored as `Ingestion` model, it's structured way of storing information about substance, time, dosage and route of administration.
+- **🍀 Substance Index**, [`psychonautwiki`](https://psychonautwiki.org)-based index of substances with their dosage information, route of administration and other relevant information.
 
 ## Installation
 
@@ -44,11 +47,19 @@ cargo install --git https://github.com/keinsell/neuronek
 **Note:** This method might be best for users who always want the absolute newest version of the application. However,
 it may be less stable than the pre-built binaries.
 
+#### Installing Shell Autocompletion
+
 ```bash
-❯ neuronek --help
+neuronek completion generate bash > ~/.local/share/bash-completion/completions/neuronek
+neuronek completion generate zsh > ~/.zfunc/_neuronek
+neuronek completion generate fish > ~/.config/fish/completions/neuronek.fish
 ```
 
 ## Usage
+
+```bash
+❯ neuronek --help
+```
 
 ### Ingestion Journaling
 
@@ -56,7 +67,7 @@ Ingestions are the cornerstone of the Neuronek tracking system, representing eac
 
 #### Log Ingestion
 
-*Logs the ingestion of a specified substance with the given dosage.*
+_Logs the ingestion of a specified substance with the given dosage._
 
 ```bash
 neuronek ingestion log -s caffeine -d 80mg
@@ -74,7 +85,7 @@ neuronek ingestion log -s caffeine -d 80mg
 
 #### View Ingestion
 
-*Displays detailed information about a specific ingestion identified by its ID.*
+_Displays detailed information about a specific ingestion identified by its ID._
 
 > ![WARNING]
 > Ingestion viewing user interface is a subject to change to one that would be compact yet will contain most important
@@ -96,8 +107,8 @@ neuronek ingestion view <INGESTION_ID>
 
 #### List Ingestions
 
-*Lists all recorded ingestions along with their details such as ID, substance, route of administration, dosage, and
-ingestion date.*
+_Lists all recorded ingestions along with their details such as ID, substance, route of administration, dosage, and
+ingestion date._
 
 ```bash
 neuronek ingestion list
@@ -113,7 +124,7 @@ neuronek ingestion list
 
 #### Update Ingestion
 
-*Updates the dosage of a specific ingestion identified by its ID.*
+_Updates the dosage of a specific ingestion identified by its ID._
 
 ```bash
 neuronek ingestion update 1 -d 90mg
@@ -131,7 +142,7 @@ neuronek ingestion update 1 -d 90mg
 
 #### Delete Ingestion
 
-*Deletes a specific ingestion identified by its ID from the records.*
+_Deletes a specific ingestion identified by its ID from the records._
 
 ```bash
 neuronek ingestion delete 14
