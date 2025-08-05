@@ -52,107 +52,86 @@ jobs:
           
       - name: Create documentation index
         run: |
-          cat > target/doc/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Neuronek Documentation</title>
-              <style>
-                  body {
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                      max-width: 800px;
-                      margin: 0 auto;
-                      padding: 2rem;
-                      background-color: #fafafa;
-                      color: #333;
-                  }
-                  .header {
-                      text-align: center;
-                      margin-bottom: 3rem;
-                      padding-bottom: 2rem;
-                      border-bottom: 2px solid #e0e0e0;
-                  }
-                  .header h1 {
-                      color: #2c3e50;
-                      margin-bottom: 0.5rem;
-                  }
-                  .header p {
-                      color: #7f8c8d;
-                      font-size: 1.1rem;
-                  }
-                  .doc-section {
-                      background: white;
-                      padding: 2rem;
-                      border-radius: 8px;
-                      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                      margin-bottom: 2rem;
-                  }
-                  .doc-section h2 {
-                      color: #34495e;
-                      margin-top: 0;
-                      border-bottom: 1px solid #ecf0f1;
-                      padding-bottom: 0.5rem;
-                  }
-                  .doc-links {
-                      display: grid;
-                      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                      gap: 1rem;
-                      margin-top: 1rem;
-                  }
-                  .doc-link {
-                      display: block;
-                      padding: 1rem;
-                      background: #f8f9fa;
-                      border: 1px solid #e9ecef;
-                      border-radius: 6px;
-                      text-decoration: none;
-                      color: #495057;
-                      transition: all 0.2s ease;
-                  }
-                  .doc-link:hover {
-                      background: #e9ecef;
-                      border-color: #3498db;
-                      transform: translateY(-1px);
-                  }
-                  .doc-link strong {
-                      color: #2c3e50;
-                      display: block;
-                      margin-bottom: 0.5rem;
-                  }
-                  .footer {
-                      text-align: center;
-                      margin-top: 3rem;
-                      padding-top: 2rem;
-                      border-top: 1px solid #e0e0e0;
-                      color: #95a5a6;
-                  }
-              </style>
-          </head>
-          <body>
-              <div class="header">
-                  <h1>🧬 Neuronek Documentation</h1>
-                  <p>Intelligent dosage tracker application for monitoring supplements, nootropics and psychoactive substances</p>
-              </div>
-              
-              <div class="doc-section">
-                  <h2>📚 API Documentation</h2>
-                  <p>Complete Rust API documentation generated from source code comments.</p>
-                  <div class="doc-links">
-                      <a href="./neuronek/index.html" class="doc-link">
-                          <strong>Neuronek Crate</strong>
-                          Main application documentation including all modules, structs, and functions
-                      </a>
-                  </div>
-              </div>
-              
-              <div class="footer">
-                  <p>Generated automatically from source code • <a href="https://github.com/keinsell/neuronek">View on GitHub</a></p>
-              </div>
-          </body>
-          </html>
-          EOF
+            cat > target/doc/index.html << 'EOF'
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Neuronek</title>
+                <style>
+                    body {
+                        font-family: 'Courier New', Courier, monospace;
+                        max-width: 800px;
+                        margin: 0 auto;
+                        padding: 2rem;
+                        background-color: #fff;
+                        color: #000;
+                        line-height: 1.5;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 2rem;
+                        border-bottom: 1px solid #ddd;
+                        padding-bottom: 1rem;
+                    }
+                    .header h1 {
+                        margin-bottom: 0.5rem;
+                    }
+                    .header p {
+                        font-size: 1rem;
+                    }
+                    .section {
+                        margin-bottom: 2rem;
+                    }
+                    .section h2 {
+                        border-bottom: 1px solid #ddd;
+                        padding-bottom: 0.5rem;
+                        margin-top: 0;
+                    }
+                    pre {
+                        background: #f8f8f8;
+                        padding: 1rem;
+                        border: 1px solid #ddd;
+                        overflow: auto;
+                    }
+                    a {
+                        color: #000;
+                        text-decoration: underline;
+                    }
+                    .footer {
+                        text-align: center;
+                        margin-top: 2rem;
+                        border-top: 1px solid #ddd;
+                        padding-top: 1rem;
+                        font-size: 0.9rem;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>🧬 Neuronek</h1>
+                    <p>CLI tool for tracking dosages of supplements, nootropics, and psychoactive substances intelligently.</p>
+                </div>
+                
+                <div class="section">
+                    <h2>Installation</h2>
+                    <p>Install via Cargo:</p>
+                    <pre><code>cargo install neuronek</code></pre>
+                </div>
+                
+                <div class="section">
+                    <h2>Documentation</h2>
+                    <p>View API docs:</p>
+                    <a href="./neuronek/index.html">Neuronek Crate</a>
+                </div>
+                
+                <div class="footer">
+                    <p><a href="https://github.com/keinsell/neuronek">GitHub</a></p>
+                </div>
+            </body>
+            </html>
+            EOF
 
       - name: Setup Pages
         if: github.ref == 'refs/heads/ci/cargo/add-documentation-page'
