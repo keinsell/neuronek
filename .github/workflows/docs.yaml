@@ -1,0 +1,177 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - next
+      - trunk
+      - ci/cargo/add-documentation-page
+  pull_request:
+    branches:
+      - next
+      - trunk
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          target: x86_64-unknown-linux-gnu
+          override: true
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-doc-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-doc-
+            ${{ runner.os }}-cargo-
+
+      - name: Generate Rust documentation
+        run: |
+          cargo doc --no-deps --document-private-items --all-features
+          
+      - name: Create documentation index
+        run: |
+          cat > target/doc/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Neuronek Documentation</title>
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      max-width: 800px;
+                      margin: 0 auto;
+                      padding: 2rem;
+                      background-color: #fafafa;
+                      color: #333;
+                  }
+                  .header {
+                      text-align: center;
+                      margin-bottom: 3rem;
+                      padding-bottom: 2rem;
+                      border-bottom: 2px solid #e0e0e0;
+                  }
+                  .header h1 {
+                      color: #2c3e50;
+                      margin-bottom: 0.5rem;
+                  }
+                  .header p {
+                      color: #7f8c8d;
+                      font-size: 1.1rem;
+                  }
+                  .doc-section {
+                      background: white;
+                      padding: 2rem;
+                      border-radius: 8px;
+                      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                      margin-bottom: 2rem;
+                  }
+                  .doc-section h2 {
+                      color: #34495e;
+                      margin-top: 0;
+                      border-bottom: 1px solid #ecf0f1;
+                      padding-bottom: 0.5rem;
+                  }
+                  .doc-links {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                      gap: 1rem;
+                      margin-top: 1rem;
+                  }
+                  .doc-link {
+                      display: block;
+                      padding: 1rem;
+                      background: #f8f9fa;
+                      border: 1px solid #e9ecef;
+                      border-radius: 6px;
+                      text-decoration: none;
+                      color: #495057;
+                      transition: all 0.2s ease;
+                  }
+                  .doc-link:hover {
+                      background: #e9ecef;
+                      border-color: #3498db;
+                      transform: translateY(-1px);
+                  }
+                  .doc-link strong {
+                      color: #2c3e50;
+                      display: block;
+                      margin-bottom: 0.5rem;
+                  }
+                  .footer {
+                      text-align: center;
+                      margin-top: 3rem;
+                      padding-top: 2rem;
+                      border-top: 1px solid #e0e0e0;
+                      color: #95a5a6;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="header">
+                  <h1>🧬 Neuronek Documentation</h1>
+                  <p>Intelligent dosage tracker application for monitoring supplements, nootropics and psychoactive substances</p>
+              </div>
+              
+              <div class="doc-section">
+                  <h2>📚 API Documentation</h2>
+                  <p>Complete Rust API documentation generated from source code comments.</p>
+                  <div class="doc-links">
+                      <a href="./neuronek/index.html" class="doc-link">
+                          <strong>Neuronek Crate</strong>
+                          Main application documentation including all modules, structs, and functions
+                      </a>
+                  </div>
+              </div>
+              
+              <div class="footer">
+                  <p>Generated automatically from source code • <a href="https://github.com/keinsell/neuronek">View on GitHub</a></p>
+              </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Setup Pages
+        if: github.ref == 'refs/heads/ci/cargo/add-documentation-page'
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/ci/cargo/add-documentation-page'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/doc
+
+  deploy:
+    if: github.ref == 'refs/heads/ci/cargo/add-documentation-page'
+    environment:
+      name: documentation
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-docs
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

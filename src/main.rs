@@ -1,3 +1,39 @@
+//! # Neuronek CLI
+//! 
+//! 🧬 Intelligent dosage tracker application for monitoring supplements, nootropics and psychoactive substances 
+//! along with their long-term influence on one's mind and body.
+//!
+//! ## Features
+//!
+//! - **Substance Management**: Track and manage various supplements, nootropics, and psychoactive substances
+//! - **Ingestion Logging**: Record and monitor substance intake with detailed timing and dosage information
+//! - **Route of Administration**: Support for different administration methods (oral, sublingual, etc.)
+//! - **Data Analysis**: Analyze patterns and trends in substance usage over time
+//! - **Terminal UI**: Rich terminal-based user interface for easy interaction
+//! - **Database Storage**: Persistent storage using SQLite with Sea-ORM
+//!
+//! ## Usage
+//!
+//! ```bash
+//! # Log a new ingestion
+//! neuronek log <substance> <dosage>
+//!
+//! # View ingestion history
+//! neuronek list
+//!
+//! # Get substance information
+//! neuronek substance info <substance_name>
+//! ```
+//!
+//! ## Architecture
+//!
+//! The application is structured around several core modules:
+//! - [`cli`] - Command-line interface and argument parsing
+//! - [`ingestion`] - Ingestion logging and management functionality
+//! - [`substance`] - Substance database and information management
+//! - [`database`] - Database entities, migrations, and ORM setup
+//! - [`ui`] - Terminal user interface components and themes
+
 #![feature(new_range_api)]
 #![allow(unused_imports)]
 #![feature(trivial_bounds)]
