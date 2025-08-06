@@ -108,6 +108,7 @@ static_table = "0.6.0"
 figlet-rs = "0.1.5"
 itertools = "0.12.1"
 ryu = "1.0.20"
+onig_sys = "69.9.1"
 [profile.wasm-dev]
 inherits = "dev"
 opt-level = 1

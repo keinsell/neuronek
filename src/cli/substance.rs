@@ -12,7 +12,6 @@ use tabled::settings::{Panel, Remove, Style};
 use tabled::{Table, Tabled};
 use tuirealm::ratatui::text::ToText;
 
-use crate::application::Application;
 use crate::cli::Displayable;
 use crate::database::entities::substance::{Column, Entity as SubstanceEntity};
 use crate::database::{ConnectionTrait, DATABASE_CONNECTION};
@@ -175,7 +174,7 @@ pub struct GetSubstance
 	/// The name of the substance to get information about
 	#[arg(index = 1, value_parser = possible_substances, value_hint = ValueHint::Other)]
 	pub name: String,
-	
+
 	/// List all substance names (for shell completion)
 	#[arg(long = "list-names", hide = true)]
 	pub list_names: bool,
@@ -184,8 +183,8 @@ pub struct GetSubstance
 /// Returns possible substance names for shell completion
 fn possible_substances(partial: &str) -> Result<String, String>
 {
-	// We just validate the input here - dynamic completions are handled by CompleteEnv
-	// during the shell completion callback
+	// We just validate the input here - dynamic completions are handled by
+	// CompleteEnv during the shell completion callback
 	Ok(partial.to_string())
 }
 
@@ -205,20 +204,21 @@ pub async fn get_substance_names() -> Vec<String>
 #[derive(Debug, Serialize)]
 pub struct SubstanceNameList(Vec<String>);
 
-impl Displayable for SubstanceNameList {
-	fn as_pretty(&self) -> String {
-		self.0.join("\n")
-	}
+impl Displayable for SubstanceNameList
+{
+	fn as_pretty(&self) -> String { self.0.join("\n") }
 }
 
 #[async_trait]
-impl crate::cli::Executable<Substance> for GetSubstance {
-	async fn execute(self, ctx: &super::Session) -> miette::Result<Substance> {
+impl crate::cli::Executable<Substance> for GetSubstance
+{
+	async fn execute(self, ctx: &super::ApplicationContext) -> miette::Result<Substance>
+	{
 		if self.list_names {
 			// This branch won't be reached because we handle it in main.rs
 			unreachable!("list-names should be handled in main.rs")
 		}
-		
+
 		let substance: Substance =
 			crate::substance::repository::get_substance(&self.name, ctx.database_connection)
 				.await?

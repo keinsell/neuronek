@@ -66,14 +66,14 @@ use crate::ingestion::action::{
 	ViewIngestion,
 };
 use crate::ingestion::model::AnalyzeIngestion;
+use crate::ingestion::service::list_ingestion;
 use crate::substance::repository::get_substance;
 use crate::substance::route_of_administration::RouteOfAdministrationClassification;
 use crate::substance::route_of_administration::dosage::Dosage;
 use crate::substance::route_of_administration::phase::{PHASE_ORDER, PhaseClassification};
 use crate::ui::PhaseIcon;
 use crate::ui::theme::MAD_SKIN;
-use crate::{application::Application, Exception, database};
-use crate::ingestion::service::list_ingestion;
+use crate::{Exception, database};
 
 impl Displayable for crate::ingestion::Ingestion
 {
@@ -83,7 +83,7 @@ impl Displayable for crate::ingestion::Ingestion
 	│  Substance:  Caffeine        ┆  ↑ Comeup     13:01±5m    →  13:11±25m    │
 	│  Dosage:     80.0 mg         ┆  ≡ Peak       13:11±25m   →  13:56±1.2h   │
 	│  Route:      Oral            ┆  ↓ Comedown   13:56±1.2h  →  14:56±2.2h   │
-    │  Ingested:   12:56 10/04/25  ┆  ≈ Afterglow  14:56±2.2h  →  18:56±10.2h  │
+	│  Ingested:   12:56 10/04/25  ┆  ≈ Afterglow  14:56±2.2h  →  18:56±10.2h  │
 	╰──────────────────────────────┴───────────────────────────────────────────╯
 	*/
 	fn as_pretty(&self) -> String
@@ -115,10 +115,10 @@ impl Displayable for crate::ingestion::Ingestion
 					&*self.ingestion_date.format("%H:%M %d/%m/%y").to_string(),
 				],
 			])
-				.with(Style::empty())
-				.with(Modify::new(Rows::new(..)).with(Alignment::left()))
-				.with(Modify::new(Columns::new(..)).with(Alignment::left()))
-				.to_string()
+			.with(Style::empty())
+			.with(Modify::new(Rows::new(..)).with(Alignment::left()))
+			.with(Modify::new(Columns::new(..)).with(Alignment::left()))
+			.to_string()
 		};
 
 		/**
@@ -137,7 +137,8 @@ impl Displayable for crate::ingestion::Ingestion
 					.map(|phase| {
 						let icon = PhaseIcon::from(&phase.classification).0;
 
-						let start_uncertainty_duration = phase.start_time.end - phase.start_time.start;
+						let start_uncertainty_duration =
+							phase.start_time.end - phase.start_time.start;
 						let end_uncertainty_duration = phase.end_time.end - phase.end_time.start;
 
 						let start = format!(
@@ -183,7 +184,10 @@ impl Displayable for crate::ingestion::Ingestion
 			.apply_modifier(UTF8_ROUND_CORNERS)
 			.set_content_arrangement(ContentArrangement::Dynamic)
 			.set_width(80)
-			.add_row(vec![ingestion_information_pane_content, phase_information_pane_content]);
+			.add_row(vec![
+				ingestion_information_pane_content,
+				phase_information_pane_content,
+			]);
 
 		out.push_str("\n");
 		out.push_str(&table.to_string());
@@ -233,8 +237,12 @@ impl Displayable for IngestionList
 }
 
 #[async_trait]
-impl crate::cli::Executable<crate::ingestion::Ingestion> for UpdateIngestion {
-	async fn execute(self, ctx: &super::Session) -> miette::Result<crate::ingestion::Ingestion> {
+impl crate::cli::Executable<crate::ingestion::Ingestion> for UpdateIngestion
+{
+	async fn execute(
+		self, ctx: &super::ApplicationContext,
+	) -> miette::Result<crate::ingestion::Ingestion>
+	{
 		let existing_ingestion = IngestionEntity::find_by_id(self.ingestion_identifier)
 			.one(ctx.database_connection)
 			.await
@@ -289,8 +297,10 @@ impl crate::cli::Executable<crate::ingestion::Ingestion> for UpdateIngestion {
 }
 
 #[async_trait]
-impl crate::cli::Executable<IngestionList> for ListIngestion {
-	async fn execute(self, ctx: &super::Session) -> miette::Result<IngestionList> {
+impl crate::cli::Executable<IngestionList> for ListIngestion
+{
+	async fn execute(self, ctx: &super::ApplicationContext) -> miette::Result<IngestionList>
+	{
 		let ingestions = list_ingestion(&self).await.unwrap();
 		Ok(IngestionList(ingestions))
 	}
@@ -299,15 +309,16 @@ impl crate::cli::Executable<IngestionList> for ListIngestion {
 #[derive(Debug, Serialize)]
 pub struct DeleteResult;
 
-impl Displayable for DeleteResult {
-	fn as_pretty(&self) -> String {
-		"Ingestion deleted".to_string()
-	}
+impl Displayable for DeleteResult
+{
+	fn as_pretty(&self) -> String { "Ingestion deleted".to_string() }
 }
 
 #[async_trait]
-impl crate::cli::Executable<DeleteResult> for DeleteIngestion {
-	async fn execute(self, ctx: &super::Session) -> miette::Result<DeleteResult> {
+impl crate::cli::Executable<DeleteResult> for DeleteIngestion
+{
+	async fn execute(self, ctx: &super::ApplicationContext) -> miette::Result<DeleteResult>
+	{
 		let mut is_confirmed = self.confirmation.unwrap_or(false);
 		let ingestion = IngestionEntity::find_by_id(self.ingestion_id)
 			.one(ctx.database_connection)

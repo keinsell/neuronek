@@ -8,20 +8,19 @@
 #![feature(trait_alias)]
 #![feature(extern_types)]
 
-use std::fmt::Display;
 use std::env;
+use std::fmt::Display;
 
 use chrono::{DateTime, Local};
 use chrono_english::Dialect;
 use clap::{CommandFactory, Parser};
-// Use CompleteEnv from clap_complete::env as per documentation
-use clap_complete::env::CompleteEnv;
 use clap_complete::Shell;
+use clap_complete::env::CompleteEnv;
 use cli::Executable;
 use miette::{Diagnostic, IntoDiagnostic, Result, miette};
 use tracing_subscriber::util::SubscriberInitExt;
 
-use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat, };
+use crate::cli::{ApplicationCommands, CommandLineInterface, Displayable, MessageFormat};
 use crate::database::{DATABASE_CONNECTION, migrate_database};
 use crate::ingestion::IngestionActions;
 
@@ -31,7 +30,6 @@ mod database;
 mod ingestion;
 mod substance;
 mod ui;
-mod application;
 
 use crossterm::ExecutableCommand;
 
@@ -63,16 +61,15 @@ pub enum Exception
 }
 
 
-
 use clap::Subcommand;
-use crate::application::{AppResult, Application, ApplicationSession, Phase};
+
 
 #[derive(Clone)]
-struct Session {
+struct ApplicationContext
+{
 	database_connection: &'static sea_orm::DatabaseConnection,
 }
 
-impl ApplicationSession for Session {}
 
 #[async_std::main]
 async fn main() -> Result<()>
@@ -89,70 +86,66 @@ async fn main() -> Result<()>
 	// which signifies it was NOT a completion call, so we proceed with
 	// normal application logic.
 	let cli = CommandLineInterface::parse();
-	let mut session = Session {
+	let mut session = ApplicationContext {
 		database_connection: &DATABASE_CONNECTION,
 	};
 
 	let final_result = match cli.command {
-		ApplicationCommands::Ingestion(cmd) => {
+		| ApplicationCommands::Ingestion(cmd) => {
 			use crate::ingestion::IngestionActions;
-			use crate::ingestion::service::{log_ingestion, get_ingestion, list_ingestion};
 			use crate::ingestion::analyzer::analyze_ingestion;
+			use crate::ingestion::service::{get_ingestion, list_ingestion, log_ingestion};
 			match cmd.commands {
-				IngestionActions::Log(log) => {
+				| IngestionActions::Log(log) => {
 					match log_ingestion(&log, session.database_connection).await {
-						Ok(output) => {
+						| Ok(output) => {
 							output.display(cli.format.clone());
 							Ok(())
 						}
-						Err(e) => Err(miette!("{}", e)),
+						| Err(e) => Err(miette!("{}", e)),
 					}
 				}
-				IngestionActions::List(list) => {
-					match list_ingestion(&list).await {
-						Ok(output) => {
-							crate::cli::ingestion::IngestionList(output).display(cli.format.clone());
-							Ok(())
-						}
-						Err(e) => Err(miette!("{}", e)),
+				| IngestionActions::List(list) => match list_ingestion(&list).await {
+					| Ok(output) => {
+						crate::cli::ingestion::IngestionList(output).display(cli.format.clone());
+						Ok(())
 					}
-				}
-				IngestionActions::Delete(del) => {
+					| Err(e) => Err(miette!("{}", e)),
+				},
+				| IngestionActions::Delete(del) => {
 					// Fallback: print not implemented
 					eprintln!("Delete not implemented in main");
 					Ok(()) // Explicitly return Ok(())
 				}
-				IngestionActions::Update(upd) => {
+				| IngestionActions::Update(upd) => {
 					// Fallback: print not implemented
 					eprintln!("Update not implemented in main");
 					Ok(()) // Explicitly return Ok(())
 				}
-				IngestionActions::View(view) => {
+				| IngestionActions::View(view) => {
 					match get_ingestion(view.ingestion_id).await {
-						Ok(Some(output)) => {
+						| Ok(Some(output)) => {
 							output.display(cli.format.clone());
 							Ok(())
 						}
-						Ok(None) => {
+						| Ok(None) => {
 							// eprintln!("Ingestion not found");
 							// std::process::exit(1);
 							Err(miette!("Ingestion not found"))
 						}
-						Err(e) => Err(miette!("{}", e)),
+						| Err(e) => Err(miette!("{}", e)),
 					}
 				}
-				IngestionActions::Analyze(analyze) => {
-					match analyze_ingestion(&analyze).await {
-						Ok(output) => {
-							output.display(cli.format.clone());
-							Ok(())
-						}
-						Err(e) => Err(miette!("{}", e)),
+				| IngestionActions::Analyze(analyze) => match analyze_ingestion(&analyze).await {
+					| Ok(output) => {
+						output.display(cli.format.clone());
+						Ok(())
 					}
-				}
+					| Err(e) => Err(miette!("{}", e)),
+				},
 			}
 		}
-		ApplicationCommands::Substance(cmd) => {
+		| ApplicationCommands::Substance(cmd) => {
 			// Handle special case for listing substance names
 			if cmd.list_names {
 				let names = crate::cli::substance::get_substance_names().await;
@@ -162,20 +155,18 @@ async fn main() -> Result<()>
 				Ok(())
 			} else {
 				match cmd.execute(&session).await {
-					Ok(output) => {
+					| Ok(output) => {
 						output.display(cli.format.clone());
 						Ok(())
 					}
-					Err(e) => Err(e), // cmd.execute already returns miette::Result
+					| Err(e) => Err(e), // cmd.execute already returns miette::Result
 				}
 			}
 		}
-		ApplicationCommands::Completion(cmd) => {
+		| ApplicationCommands::Completion(cmd) => {
 			match cmd.execute(&session).await {
-				Ok(_) => {
-					Ok(())
-				}
-				Err(e) => Err(e), // cmd.execute already returns miette::Result
+				| Ok(_) => Ok(()),
+				| Err(e) => Err(e), // cmd.execute already returns miette::Result
 			}
 		}
 	};
