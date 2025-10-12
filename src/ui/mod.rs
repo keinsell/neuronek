@@ -1,3 +1,5 @@
+pub mod app;
+pub mod dashboard;
 pub mod theme;
 
 use derive_more::Display;

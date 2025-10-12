@@ -176,7 +176,12 @@ pub enum ApplicationCommands
 	/// Manage shell completions (generation and cache)
 	#[command(about = "Manage shell completion scripts and cache")]
 	Completion(CompletionArgs),
+	/// Display an interactive dashboard
+	Dashboard(DashboardCommand),
 }
+
+#[derive(clap::Args, Clone, Debug)]
+pub struct DashboardCommand {}
 
 #[derive(Parser)]
 #[command(

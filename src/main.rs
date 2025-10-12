@@ -112,12 +112,12 @@ async fn main() -> Result<()>
 					}
 					| Err(e) => Err(miette!("{}", e)),
 				},
-				| IngestionActions::Delete(del) => {
+				| IngestionActions::Delete(_del) => {
 					// Fallback: print not implemented
 					eprintln!("Delete not implemented in main");
 					Ok(()) // Explicitly return Ok(())
 				}
-				| IngestionActions::Update(upd) => {
+				| IngestionActions::Update(_upd) => {
 					// Fallback: print not implemented
 					eprintln!("Update not implemented in main");
 					Ok(()) // Explicitly return Ok(())
@@ -168,6 +168,10 @@ async fn main() -> Result<()>
 				| Ok(_) => Ok(()),
 				| Err(e) => Err(e), // cmd.execute already returns miette::Result
 			}
+		}
+		| ApplicationCommands::Dashboard(_cmd) => {
+			let mut app = ui::app::App::new(session.database_connection);
+			app.run().await
 		}
 	};
 
