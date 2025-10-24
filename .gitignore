@@ -217,3 +217,5 @@ devenv.local.nix
 
 .qodo
 /analysis/.ipynb_checkpoints/
+.stack-work/
+*~
