@@ -68,7 +68,7 @@ owo-colors = "4.1.0"
 chrono-humanize = "0.2.3"
 async-trait = "0.1.85"
 indicatif = "0.17.9"
-tracing-subscriber = "0.3.18"
+tracing-subscriber = "0.3.20"
 tracing-indicatif = "0.3.8"
 tracing = "0.1.40"
 thiserror = "2.0.11"
@@ -98,7 +98,7 @@ o2o = { version = "0.5.3", features = ["o2o-macros", "o2o-impl"] }
 clap_complete = { version = "4.5.50", features = ["unstable-dynamic"] }
 clap_complete_nushell = "4.5.4"
 
-tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
+tokio = { version = "1.44", features = ["rt", "rt-multi-thread"] }
 tempfile = "3.16.0"
 assert_cmd = "2.0.16"
 promkit = "0.8.0"
